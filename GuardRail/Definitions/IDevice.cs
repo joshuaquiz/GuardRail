@@ -1,4 +1,4 @@
-﻿namespace GuardRail.Interfaces
+﻿namespace GuardRail.Definitions
 {
     /// <summary>
     /// A device like a phone, NFC tag, etc.

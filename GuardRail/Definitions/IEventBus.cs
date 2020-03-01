@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace GuardRail.Interfaces
+namespace GuardRail.Definitions
 {
     /// <summary>
     /// Event handling.

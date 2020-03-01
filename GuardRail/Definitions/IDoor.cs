@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using GuardRail.Enums;
 
-namespace GuardRail.Interfaces
+namespace GuardRail.Definitions
 {
     /// <summary>
     /// Represents a door locking device.

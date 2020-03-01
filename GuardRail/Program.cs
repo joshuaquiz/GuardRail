@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using GuardRail.Interfaces;
+using GuardRail.Definitions;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -17,7 +17,7 @@ namespace GuardRail
             var serviceCollection = new ServiceCollection()
                 .AddSingleton<ILogger>(log);
             RegisterAllImplementations(serviceCollection, typeof(IDoor));
-            RegisterAllImplementations(serviceCollection, typeof(IAccessControlDevice));
+            RegisterAllImplementations(serviceCollection, typeof(IAccessControlFactory));
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             var logger = serviceProvider.GetService<ILogger>();
