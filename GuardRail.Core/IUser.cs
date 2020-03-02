@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GuardRail.Interfaces
+namespace GuardRail.Core
 {
     /// <summary>
     /// A user in the system.
