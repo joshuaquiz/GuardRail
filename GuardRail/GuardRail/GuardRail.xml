@@ -1,0 +1,206 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GuardRail</name>
+    </assembly>
+    <members>
+        <member name="T:GuardRail.AccessControlDevices.ACR1252U.Acr1252U">
+            <summary>
+            ACR1252U access control device.
+            </summary>
+        </member>
+        <member name="M:GuardRail.AccessControlDevices.ACR1252U.Acr1252U.Finalize">
+            <summary>
+            Destructor for Acr1252U.
+            </summary>
+        </member>
+        <member name="M:GuardRail.AccessControlDevices.ACR1252U.Acr1252U.Create(System.String,GuardRail.Definitions.IEventBus)">
+            <summary>
+            Creates a new Acr1252U.
+            </summary>
+            <param name="id">The ID of the reader.</param>
+            <param name="eventBus">The event bus.</param>
+            <returns></returns>
+        </member>
+        <member name="M:GuardRail.AccessControlDevices.ACR1252U.Acr1252U.Init">
+            <summary>
+            Starts the watcher process.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:GuardRail.AccessControlDevices.ACR1252U.Acr1252U.GetDeviceId">
+            <summary>
+            Returns the ID if this reader.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:GuardRail.AccessControlDevices.ACR1252U.Acr1252U.Dispose">
+            <summary>
+            Implementing <see cref="T:System.IDisposable"/>
+            </summary>
+        </member>
+        <member name="T:GuardRail.AccessControlDevices.ACR1252U.Acr1252UFactory">
+            <summary>
+            Factory for ACR1252U access control devices.
+            </summary>
+        </member>
+        <member name="M:GuardRail.AccessControlDevices.ACR1252U.Acr1252UFactory.#ctor(GuardRail.Definitions.IEventBus)">
+            <summary>
+            Builds a Acr1252UFactory.
+            </summary>
+            <param name="eventBus"></param>
+        </member>
+        <member name="M:GuardRail.AccessControlDevices.ACR1252U.Acr1252UFactory.GetAccessControlDevices">
+            <summary>
+            Get ACR1252U access control devices.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:GuardRail.Data.GuardRailContext">
+            <summary>
+            Database context for the project.
+            </summary>
+        </member>
+        <member name="M:GuardRail.Data.GuardRailContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions)">
+            <summary>
+            
+            </summary>
+            <param name="options"></param>
+        </member>
+        <member name="T:GuardRail.Data.User">
+            <summary>
+            A system user
+            </summary>
+        </member>
+        <member name="P:GuardRail.Data.User.Id">
+            <summary>
+            The ID of the user.
+            </summary>
+        </member>
+        <member name="M:GuardRail.Data.User.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            
+            </summary>
+            <param name="builder"></param>
+        </member>
+        <member name="T:GuardRail.Definitions.IAccessControlDevice">
+            <summary>
+            Represents an access control device.
+            This could be a keypad, NFC reader, etc.
+            </summary>
+        </member>
+        <member name="M:GuardRail.Definitions.IAccessControlDevice.Init">
+            <summary>
+            Starts up any processes needed to monitor the device.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:GuardRail.Definitions.IAccessControlDevice.GetDeviceId">
+            <summary>
+            Gets an ID for the device.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:GuardRail.Definitions.IAccessControlFactory">
+            <summary>
+            Used to generate a list of <see cref="T:GuardRail.Definitions.IAccessControlDevice"/>.
+            </summary>
+        </member>
+        <member name="M:GuardRail.Definitions.IAccessControlFactory.GetAccessControlDevices">
+            <summary>
+            Gets a list of <see cref="T:GuardRail.Definitions.IAccessControlDevice"/>.
+            </summary>
+            <returns><see cref="T:GuardRail.Definitions.IAccessControlDevice"/></returns>
+        </member>
+        <member name="T:GuardRail.Definitions.IDevice">
+            <summary>
+            A device like a phone, NFC tag, etc.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Definitions.IDevice.Id">
+            <summary>
+            The ID of the device.
+            </summary>
+        </member>
+        <member name="T:GuardRail.Definitions.IDoor">
+            <summary>
+            Represents a door locking device.
+            </summary>
+        </member>
+        <member name="M:GuardRail.Definitions.IDoor.GetLockedStatus(System.Threading.CancellationToken)">
+            <summary>
+            Gets the current locked status for the door.
+            </summary>
+            <param name="cancellationToken"></param>
+            <returns><see cref="T:GuardRail.Enums.LockedStatus"/></returns>
+        </member>
+        <member name="M:GuardRail.Definitions.IDoor.Lock(System.Threading.CancellationToken)">
+            <summary>
+            Sets the door in a locked state.
+            </summary>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GuardRail.Definitions.IDoor.UnLock(System.Threading.CancellationToken)">
+            <summary>
+            Sets the door into an un-locked state.
+            </summary>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="T:GuardRail.Definitions.IEventBus">
+            <summary>
+            Event handling.
+            </summary>
+        </member>
+        <member name="M:GuardRail.Definitions.IEventBus.PublishAccessRequestedEvent(GuardRail.Definitions.IAccessControlDevice,GuardRail.Definitions.IDevice,System.Threading.CancellationToken)">
+            <summary>
+            Publishes an event that a user wants access.
+            </summary>
+            <param name="accessControlDevice">The device the request came from.</param>
+            <param name="device">The device initiating the request.</param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="T:GuardRail.Definitions.IUser">
+            <summary>
+            A user in the system.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Definitions.IUser.Id">
+            <summary>
+            The ID of the user.
+            </summary>
+        </member>
+        <member name="T:GuardRail.Devices.AndroidPhone">
+            <summary>
+            Represents an android phone.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Devices.AndroidPhone.Id">
+            <summary>
+            THe ID of the phone.
+            </summary>
+        </member>
+        <member name="T:GuardRail.Enums.LockedStatus">
+            <summary>
+            The locked states for a door.
+            </summary>
+        </member>
+        <member name="F:GuardRail.Enums.LockedStatus.UnKnown">
+            <summary>
+            The locked status of the door cannot be determined.
+            </summary>
+        </member>
+        <member name="F:GuardRail.Enums.LockedStatus.UnLocked">
+            <summary>
+            The door is unlocked.
+            </summary>
+        </member>
+        <member name="F:GuardRail.Enums.LockedStatus.Locked">
+            <summary>
+            The door is locked.
+            </summary>
+        </member>
+    </members>
+</doc>

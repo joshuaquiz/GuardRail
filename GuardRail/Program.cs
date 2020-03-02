@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using GuardRail.Definitions;
+using System.Threading.Tasks;
+using GuardRail.Core;
+using GuardRail.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -9,21 +13,26 @@ namespace GuardRail
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        private static async Task Main(string[] args)
         {
             var log = new LoggerConfiguration()
                 .WriteTo.Console()
+                .MinimumLevel.Verbose()
                 .CreateLogger();
             var serviceCollection = new ServiceCollection()
                 .AddSingleton<ILogger>(log);
-            RegisterAllImplementations(serviceCollection, typeof(IDoor));
+            RegisterAllImplementations(serviceCollection, typeof(IDoorFactory));
             RegisterAllImplementations(serviceCollection, typeof(IAccessControlFactory));
+            AddDatabaseConfiguration(serviceCollection);
             var serviceProvider = serviceCollection.BuildServiceProvider();
-
-            var logger = serviceProvider.GetService<ILogger>();
+            var logger = serviceProvider.GetRequiredService<ILogger>();
             logger.Debug("Starting application");
-
-            // TODO: Add logic.
+            var coordinator = new Coordinator(
+                logger,
+                serviceProvider.GetRequiredService<IEventBus>(),
+                serviceProvider.GetRequiredService<IEnumerable<IDoorFactory>>(),
+                serviceProvider.GetRequiredService<IEnumerable<IAccessControlFactory>>());
+            await coordinator.StartUp();
         }
 
         private static void RegisterAllImplementations(IServiceCollection serviceCollection, Type type)
@@ -36,5 +45,10 @@ namespace GuardRail
                 serviceCollection.AddSingleton(type, t.AsType());
             }
         }
+
+        private static void AddDatabaseConfiguration(
+            IServiceCollection services) =>
+            services
+                .AddDbContext<GuardRailContext>(options => options.UseInMemoryDatabase(Guid.NewGuid().ToString()));
     }
 }

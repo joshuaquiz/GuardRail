@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace GuardRail.Definitions
+namespace GuardRail.Core
 {
     /// <summary>
     /// Represents an access control device.
@@ -9,11 +9,6 @@ namespace GuardRail.Definitions
     /// </summary>
     public interface IAccessControlDevice : IDisposable
     {
-        /// <summary>
-        /// This event gets raised when access is requested by a device.
-        /// </summary>
-        public event AccessRequestedEventHandlerAsync AccessRequestedEvent;
-
         /// <summary>
         /// Starts up any processes needed to monitor the device.
         /// </summary>
