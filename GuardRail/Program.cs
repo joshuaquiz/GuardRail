@@ -7,6 +7,7 @@ using GuardRail.Core;
 using GuardRail.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using PCSC;
 using Serilog;
 
 namespace GuardRail
@@ -21,6 +22,7 @@ namespace GuardRail
                 .CreateLogger();
             var serviceCollection = new ServiceCollection()
                 .AddSingleton<ILogger>(log);
+            serviceCollection.AddSingleton(typeof(ISCardContext), new SCardContext());
             RegisterAllImplementations(serviceCollection, typeof(IDoorFactory));
             RegisterAllImplementations(serviceCollection, typeof(IAccessControlFactory));
             AddDatabaseConfiguration(serviceCollection);
@@ -29,7 +31,9 @@ namespace GuardRail
             logger.Debug("Starting application");
             var coordinator = new Coordinator(
                 logger,
+                serviceProvider.GetRequiredService<GuardRailContext>(),
                 serviceProvider.GetRequiredService<IEventBus>(),
+                serviceProvider.GetRequiredService<IAuthorizer>(),
                 serviceProvider.GetRequiredService<IEnumerable<IDoorFactory>>(),
                 serviceProvider.GetRequiredService<IEnumerable<IAccessControlFactory>>());
             await coordinator.StartUp();

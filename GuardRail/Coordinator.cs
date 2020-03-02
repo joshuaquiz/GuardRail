@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using GuardRail.Core;
+using GuardRail.Data;
 using Serilog;
 
 namespace GuardRail
@@ -9,18 +11,24 @@ namespace GuardRail
     public sealed class Coordinator
     {
         private readonly ILogger _logger;
+        private readonly GuardRailContext _guardRailContext;
         private readonly IEventBus _eventBus;
+        private readonly IAuthorizer _authorizer;
         private readonly IEnumerable<IDoorFactory> _doorFactories;
         private readonly IEnumerable<IAccessControlFactory> _accessControlFactories;
 
         public Coordinator(
             ILogger logger,
+            GuardRailContext guardRailContext,
             IEventBus eventBus,
+            IAuthorizer authorizer,
             IEnumerable<IDoorFactory> doorFactories,
             IEnumerable<IAccessControlFactory> accessControlFactories)
         {
             _logger = logger;
+            _guardRailContext = guardRailContext;
             _eventBus = eventBus;
+            _authorizer = authorizer;
             _doorFactories = doorFactories;
             _accessControlFactories = accessControlFactories;
         }
@@ -45,8 +53,30 @@ namespace GuardRail
             }
 
             _logger.Debug("Done loading access control devices");
+            _eventBus.AccessAuthorizationEvents.CollectionChanged += async (sender, args) =>
+            {
+                if (args.Action != NotifyCollectionChangedAction.Add)
+                {
+                    return;
+                }
 
-            // TODO: Attach authorizer to event handler.
+                foreach (AccessAuthorizationEvent newItem in args.NewItems)
+                {
+                    if (await _authorizer.IsDeviceAuthorizedAtLocation(
+                        null, // TODO: Get User by device.
+                        newItem.AccessControlDevice))
+                    {
+                        // TODO: Get door and unlock it.
+                    }
+                    else
+                    {
+                        await newItem
+                            .AccessControlDevice
+                            .PresentNoAccessGranted(
+                                "This user is not allowed at this location");
+                    }
+                }
+            };
         }
     }
 }

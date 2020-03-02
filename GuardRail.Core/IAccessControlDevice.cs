@@ -20,5 +20,12 @@ namespace GuardRail.Core
         /// </summary>
         /// <returns></returns>
         Task<string> GetDeviceId();
+
+        /// <summary>
+        /// Present to the user access was not granted.
+        /// </summary>
+        /// <param name="reason"></param>
+        /// <returns></returns>
+        Task PresentNoAccessGranted(string reason);
     }
 }

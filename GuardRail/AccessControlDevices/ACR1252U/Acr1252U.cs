@@ -132,6 +132,11 @@ namespace GuardRail.AccessControlDevices.ACR1252U
         public Task<string> GetDeviceId() =>
             Task.FromResult(_id);
 
+        public Task PresentNoAccessGranted(string reason)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Implementing <see cref="IDisposable"/>
         /// </summary>

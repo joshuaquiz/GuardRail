@@ -45,6 +45,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:GuardRail.Core.IAccessControlDevice.PresentNoAccessGranted(System.String)">
+            <summary>
+            Present to the user access was not granted.
+            </summary>
+            <param name="reason"></param>
+            <returns></returns>
+        </member>
         <member name="T:GuardRail.Core.IAccessControlFactory">
             <summary>
             Used to generate a list of <see cref="T:GuardRail.Core.IAccessControlDevice"/>.
@@ -61,11 +68,11 @@
             Determines if the device is valid at the location.
             </summary>
         </member>
-        <member name="M:GuardRail.Core.IAuthorizer.IsDeviceAuthorizedAtLocation(GuardRail.Core.IDevice,GuardRail.Core.IAccessControlDevice)">
+        <member name="M:GuardRail.Core.IAuthorizer.IsDeviceAuthorizedAtLocation(GuardRail.Core.IUser,GuardRail.Core.IAccessControlDevice)">
             <summary>
-            Determines if the device is valid at the location.
+            Determines if the user is able to get in at the location.
             </summary>
-            <param name="device"></param>
+            <param name="user"></param>
             <param name="accessControlDevice"></param>
             <returns></returns>
         </member>

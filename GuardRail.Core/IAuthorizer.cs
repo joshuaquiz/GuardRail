@@ -8,13 +8,13 @@ namespace GuardRail.Core
     public interface IAuthorizer
     {
         /// <summary>
-        /// Determines if the device is valid at the location.
+        /// Determines if the user is able to get in at the location.
         /// </summary>
-        /// <param name="device"></param>
+        /// <param name="user"></param>
         /// <param name="accessControlDevice"></param>
         /// <returns></returns>
         Task<bool> IsDeviceAuthorizedAtLocation(
-            IDevice device,
+            IUser user,
             IAccessControlDevice accessControlDevice);
     }
 }
