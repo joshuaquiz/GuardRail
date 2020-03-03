@@ -5,7 +5,7 @@ using Moq;
 using PCSC;
 using Xunit;
 
-namespace GuardRail.Tests
+namespace GuardRail.Tests.AccessControlDevices.ACR1252U
 {
     public static class Acr1252UFactoryTests
     {

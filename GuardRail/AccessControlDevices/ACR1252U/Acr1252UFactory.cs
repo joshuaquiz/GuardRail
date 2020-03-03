@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -40,7 +39,7 @@ namespace GuardRail.AccessControlDevices.ACR1252U
                 return (IReadOnlyCollection<IAccessControlDevice>) new ReadOnlyCollection<IAccessControlDevice>(
                     _sCardContext
                         .GetReaders()
-                        .Select(x => Acr1252U.Create(x, _eventBus))
+                        .Select(x => Acr1252UAccessControlDevice.Create(x, _eventBus, _sCardContext))
                         .ToList());
             });
     }

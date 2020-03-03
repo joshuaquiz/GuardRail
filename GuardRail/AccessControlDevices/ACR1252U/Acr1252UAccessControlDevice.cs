@@ -11,7 +11,7 @@ namespace GuardRail.AccessControlDevices.ACR1252U
     /// <summary>
     /// ACR1252U access control device.
     /// </summary>
-    public sealed class Acr1252U : IAccessControlDevice
+    public sealed class Acr1252UAccessControlDevice : IAccessControlDevice
     {
         private readonly string _id;
         private readonly IEventBus _eventBus;
@@ -22,7 +22,7 @@ namespace GuardRail.AccessControlDevices.ACR1252U
         private Task _watcherTask;
         private bool _disposed;
 
-        private Acr1252U(
+        private Acr1252UAccessControlDevice(
             string id,
             IEventBus eventBus,
             ISCardContext sCardContext,
@@ -39,7 +39,7 @@ namespace GuardRail.AccessControlDevices.ACR1252U
         /// <summary>
         /// Destructor for Acr1252U.
         /// </summary>
-        ~Acr1252U()
+        ~Acr1252UAccessControlDevice()
         {
             Dispose(true);
         }
@@ -49,15 +49,24 @@ namespace GuardRail.AccessControlDevices.ACR1252U
         /// </summary>
         /// <param name="id">The ID of the reader.</param>
         /// <param name="eventBus">The event bus.</param>
+        /// <param name="sCardContext"></param>
         /// <returns></returns>
         public static IAccessControlDevice Create(
             string id,
-            IEventBus eventBus) =>
-            new Acr1252U(
+            IEventBus eventBus,
+            ISCardContext sCardContext)
+        {
+            if (sCardContext == null)
+            {
+                throw new ArgumentNullException(nameof(sCardContext));
+            }
+
+            return new Acr1252UAccessControlDevice(
                 id,
                 eventBus,
-                new SCardContext(),
+                sCardContext,
                 c => new SCardReader(c));
+        }
 
         /// <summary>
         /// Starts the watcher process.
@@ -132,9 +141,14 @@ namespace GuardRail.AccessControlDevices.ACR1252U
         public Task<string> GetDeviceId() =>
             Task.FromResult(_id);
 
+        /// <summary>
+        /// Let the user know the authentication request failed.
+        /// </summary>
+        /// <param name="reason"></param>
+        /// <returns></returns>
         public Task PresentNoAccessGranted(string reason)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -156,6 +170,8 @@ namespace GuardRail.AccessControlDevices.ACR1252U
             if (disposing)
             {
                 _cancellationTokenSource.Cancel();
+                _sCardReader.Disconnect(SCardReaderDisposition.Leave);
+                _sCardReader.Dispose();
                 _watcherTask.Dispose();
                 _cancellationTokenSource.Dispose();
                 _sCardContext.Dispose();

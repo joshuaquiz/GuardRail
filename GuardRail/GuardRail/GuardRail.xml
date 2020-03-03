@@ -14,12 +14,13 @@
             Destructor for Acr1252U.
             </summary>
         </member>
-        <member name="M:GuardRail.AccessControlDevices.ACR1252U.Acr1252U.Create(System.String,GuardRail.Core.IEventBus)">
+        <member name="M:GuardRail.AccessControlDevices.ACR1252U.Acr1252U.Create(System.String,GuardRail.Core.IEventBus,PCSC.ISCardContext)">
             <summary>
             Creates a new Acr1252U.
             </summary>
             <param name="id">The ID of the reader.</param>
             <param name="eventBus">The event bus.</param>
+            <param name="sCardContext"></param>
             <returns></returns>
         </member>
         <member name="M:GuardRail.AccessControlDevices.ACR1252U.Acr1252U.Init">
