@@ -4,38 +4,46 @@
         <name>GuardRail</name>
     </assembly>
     <members>
-        <member name="T:GuardRail.AccessControlDevices.ACR1252U.Acr1252U">
+        <member name="T:GuardRail.AccessControlDevices.ACR1252U.Acr1252UAccessControlDevice">
             <summary>
             ACR1252U access control device.
             </summary>
         </member>
-        <member name="M:GuardRail.AccessControlDevices.ACR1252U.Acr1252U.Finalize">
+        <member name="M:GuardRail.AccessControlDevices.ACR1252U.Acr1252UAccessControlDevice.Finalize">
             <summary>
             Destructor for Acr1252U.
             </summary>
         </member>
-        <member name="M:GuardRail.AccessControlDevices.ACR1252U.Acr1252U.Create(System.String,GuardRail.Core.IEventBus,PCSC.ISCardContext)">
+        <member name="M:GuardRail.AccessControlDevices.ACR1252U.Acr1252UAccessControlDevice.Create(System.String,GuardRail.Core.IEventBus,PCSC.ISCardContext,Serilog.ILogger)">
             <summary>
             Creates a new Acr1252U.
             </summary>
             <param name="id">The ID of the reader.</param>
             <param name="eventBus">The event bus.</param>
             <param name="sCardContext"></param>
+            <param name="logger"></param>
             <returns></returns>
         </member>
-        <member name="M:GuardRail.AccessControlDevices.ACR1252U.Acr1252U.Init">
+        <member name="M:GuardRail.AccessControlDevices.ACR1252U.Acr1252UAccessControlDevice.Init">
             <summary>
             Starts the watcher process.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:GuardRail.AccessControlDevices.ACR1252U.Acr1252U.GetDeviceId">
+        <member name="M:GuardRail.AccessControlDevices.ACR1252U.Acr1252UAccessControlDevice.GetDeviceId">
             <summary>
             Returns the ID if this reader.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:GuardRail.AccessControlDevices.ACR1252U.Acr1252U.Dispose">
+        <member name="M:GuardRail.AccessControlDevices.ACR1252U.Acr1252UAccessControlDevice.PresentNoAccessGranted(System.String)">
+            <summary>
+            Let the user know the authentication request failed.
+            </summary>
+            <param name="reason"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GuardRail.AccessControlDevices.ACR1252U.Acr1252UAccessControlDevice.Dispose">
             <summary>
             Implementing <see cref="T:System.IDisposable"/>
             </summary>
@@ -45,12 +53,13 @@
             Factory for ACR1252U access control devices.
             </summary>
         </member>
-        <member name="M:GuardRail.AccessControlDevices.ACR1252U.Acr1252UFactory.#ctor(GuardRail.Core.IEventBus,PCSC.ISCardContext)">
+        <member name="M:GuardRail.AccessControlDevices.ACR1252U.Acr1252UFactory.#ctor(GuardRail.Core.IEventBus,PCSC.ISCardContext,Serilog.ILogger)">
             <summary>
             Builds a Acr1252UFactory.
             </summary>
             <param name="eventBus"></param>
             <param name="sCardContext"></param>
+            <param name="logger"></param>
         </member>
         <member name="M:GuardRail.AccessControlDevices.ACR1252U.Acr1252UFactory.GetAccessControlDevices">
             <summary>

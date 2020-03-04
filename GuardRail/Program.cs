@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using GuardRail.Authorizers.AlwaysAllowAuthorizer;
 using GuardRail.Core;
 using GuardRail.Data;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,8 @@ namespace GuardRail
             var serviceCollection = new ServiceCollection()
                 .AddSingleton<ILogger>(log);
             serviceCollection.AddSingleton(typeof(ISCardContext), new SCardContext());
+            serviceCollection.AddSingleton(typeof(IEventBus), new InMemoryEventBus());
+            serviceCollection.AddSingleton(typeof(IAuthorizer), new AlwaysAllowAuthorizer());
             RegisterAllImplementations(serviceCollection, typeof(IDoorFactory));
             RegisterAllImplementations(serviceCollection, typeof(IAccessControlFactory));
             AddDatabaseConfiguration(serviceCollection);
@@ -37,6 +40,7 @@ namespace GuardRail
                 serviceProvider.GetRequiredService<IEnumerable<IDoorFactory>>(),
                 serviceProvider.GetRequiredService<IEnumerable<IAccessControlFactory>>());
             await coordinator.StartUp();
+            Console.ReadLine();
         }
 
         private static void RegisterAllImplementations(IServiceCollection serviceCollection, Type type)

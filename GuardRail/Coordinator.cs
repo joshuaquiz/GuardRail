@@ -49,7 +49,7 @@ namespace GuardRail
             {
                 await Task.WhenAll(
                     (await accessControlDevices)
-                    .Select(x => x.Init()));
+                    .Select(async x => await x.Init()));
             }
 
             _logger.Debug("Done loading access control devices");
