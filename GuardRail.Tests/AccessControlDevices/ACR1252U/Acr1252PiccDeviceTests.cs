@@ -4,14 +4,16 @@ using Xunit;
 
 namespace GuardRail.Tests.AccessControlDevices.ACR1252U
 {
-    public static class Acr1252UAccessControlDeviceTests
+    public static class Acr1252PiccDeviceTests
     {
         [Fact]
         public static void TestSCardContextNotNull()
         {
             Assert.Throws<ArgumentNullException>(
                 () =>
-                    Acr1252UAccessControlDevice.Create(
+                    Acr1252PiccDevice.Create(
+                        null,
+                        null,
                         null,
                         null,
                         null));

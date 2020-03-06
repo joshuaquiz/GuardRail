@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.Core;
@@ -10,31 +14,34 @@ using Serilog;
 namespace GuardRail.AccessControlDevices.ACR1252U
 {
     /// <summary>
-    /// ACR1252U access control device.
+    /// ACR1252U SAM access control device.
     /// </summary>
-    public sealed class Acr1252UAccessControlDevice : IAccessControlDevice
+    public sealed class Acr1252SamDevice : IAccessControlDevice
     {
         private readonly string _id;
         private readonly IEventBus _eventBus;
         private readonly ISCardContext _sCardContext;
         private readonly ISCardReader _sCardReader;
         private readonly ILogger _logger;
+        private readonly IDeviceProvider _deviceProvider;
         private readonly CancellationTokenSource _cancellationTokenSource;
 
         private Task _watcherTask;
         private bool _disposed;
 
-        private Acr1252UAccessControlDevice(
+        private Acr1252SamDevice(
             string id,
             IEventBus eventBus,
             ISCardContext sCardContext,
             ILogger logger,
+            IDeviceProvider deviceProvider,
             Func<ISCardContext, ISCardReader> createSCardReader)
         {
             _id = id;
             _eventBus = eventBus;
             _sCardContext = sCardContext;
             _logger = logger;
+            _deviceProvider = deviceProvider;
             _sCardContext.Establish(SCardScope.System);
             _sCardReader = createSCardReader(_sCardContext);
             _cancellationTokenSource = new CancellationTokenSource();
@@ -43,7 +50,7 @@ namespace GuardRail.AccessControlDevices.ACR1252U
         /// <summary>
         /// Destructor for Acr1252U.
         /// </summary>
-        ~Acr1252UAccessControlDevice()
+        ~Acr1252SamDevice()
         {
             Dispose(true);
         }
@@ -53,25 +60,28 @@ namespace GuardRail.AccessControlDevices.ACR1252U
         /// </summary>
         /// <param name="id">The ID of the reader.</param>
         /// <param name="eventBus">The event bus.</param>
-        /// <param name="sCardContext"></param>
-        /// <param name="logger"></param>
+        /// <param name="sCardContext">The context for connecting to the card reader.</param>
+        /// <param name="logger">The logger, because.. well, logs :)</param>
+        /// <param name="deviceProvider">The provider to look up devices by their ID.</param>
         /// <returns></returns>
         public static IAccessControlDevice Create(
             string id,
             IEventBus eventBus,
             ISCardContext sCardContext,
-            ILogger logger)
+            ILogger logger,
+            IDeviceProvider deviceProvider)
         {
             if (sCardContext == null)
             {
                 throw new ArgumentNullException(nameof(sCardContext));
             }
 
-            return new Acr1252UAccessControlDevice(
+            return new Acr1252SamDevice(
                 id,
                 eventBus,
                 sCardContext,
                 logger,
+                deviceProvider,
                 c => new SCardReader(c));
         }
 
@@ -93,59 +103,26 @@ namespace GuardRail.AccessControlDevices.ACR1252U
                                 _id,
                                 SCardShareMode.Shared,
                                 SCardProtocol.Any);
-                            if (error != SCardError.Success)
+                            ErrorCheck(error);
+                            TurnBeepOff(_sCardReader);
+                            var id = GetCardId(_sCardReader);
+                            var device = _deviceProvider.GetDeviceByByteId(id);
+                            _eventBus.AccessAuthorizationEvents.Add(
+                                AccessAuthorizationEvent.Create(
+                                    device,
+                                    this));
+                            await WaitForDisconnect();
+                        }
+                        catch (PCSCException e)
+                        {
+                            if (e.SCardError != SCardError.RemovedCard)
                             {
-                                throw new PCSCException(
-                                    error,
-                                    SCardHelper.StringifyError(
-                                        error));
-                            }
-
-                            IntPtr sCardPci;
-                            switch (_sCardReader.ActiveProtocol)
-                            {
-                                case SCardProtocol.T0:
-                                    sCardPci = SCardPCI.T0;
-                                    break;
-                                case SCardProtocol.T1:
-                                    sCardPci = SCardPCI.T1;
-                                    break;
-                                default:
-                                    throw new PCSCException(
-                                        SCardError.ProtocolMismatch,
-                                        $"Protocol not supported: {_sCardReader.ActiveProtocol}");
-                            }
-
-                            var res = GetCardId(_sCardReader);
-
-                            var receiveBuffer = new byte[256];
-                            error = _sCardReader.Transmit(
-                                sCardPci,
-                                new byte[]
-                                {
-                                    0x00, 0xA4, 0x04, 0x00, 0x0A, 0xA0, 0x00, 0x00, 0x00, 0x62, 0x03, 0x01, 0x0C, 0x06,
-                                    0x01
-                                },
-                                ref receiveBuffer);
-                            if (error != SCardError.Success)
-                            {
-                                throw new PCSCException(
-                                    error,
-                                    SCardHelper.StringifyError(
-                                        error));
-                            }
-
-                            if (receiveBuffer.Length > 0)
-                            {
-                                _eventBus.AccessAuthorizationEvents.Add(
-                                    AccessAuthorizationEvent.Create(
-                                        null,
-                                        this));
+                                _logger.Error(e, e.Message);
                             }
                         }
                         catch (Exception e)
                         {
-                            _logger.Debug(e, e.Message);
+                            _logger.Error(e, e.Message);
                         }
 
                         await Task.Delay(TimeSpan.FromMilliseconds(500));
@@ -156,21 +133,65 @@ namespace GuardRail.AccessControlDevices.ACR1252U
             return Task.CompletedTask;
         }
 
-        public static bool GetCardId(ISCardReader cardReader)
+        private async Task WaitForDisconnect()
+        {
+            var status = SCardError.Success;
+            while (status == SCardError.Success)
+            {
+                await Task.Delay(TimeSpan.FromMilliseconds(500));
+                status = _sCardReader.Connect(
+                    _id,
+                    SCardShareMode.Shared,
+                    SCardProtocol.Any);
+            }
+        }
+
+        /// <summary>
+        /// Gets the ID of the device.
+        /// </summary>
+        /// <param name="cardReader"></param>
+        /// <returns>The ID of the device</returns>
+        public static IReadOnlyList<byte> GetCardId(ISCardReader cardReader)
         {
             if (cardReader == null)
             {
                 throw new ArgumentNullException(nameof(cardReader));
             }
 
-            var data = GetData(
+            var result = GetData(
                 cardReader,
                 0xFF,
                 0xCA,
-                0x00,
+                0x01,
                 0x00,
                 0x00);
-            var asdf = $"{data[0]:x0} {data[1]:x0} {data[2]:x0} {data[3]:x0}";
+            var data = result.ToList();
+            // Remote the two bytes indicating success, leaving us with the bytes for the ID.
+            data.Remove(data.Last());
+            data.Remove(data.Last());
+            return new ReadOnlyCollection<byte>(data);
+        }
+
+        public static bool TurnRedLightOn(ISCardReader cardReader)
+        {
+            if (cardReader == null)
+            {
+                throw new ArgumentNullException(nameof(cardReader));
+            }
+
+            var bytearray = new byte[8];
+            var bitArray = new BitArray(bytearray);
+            bitArray.Set(0, true);
+            bitArray.Set(1, false);
+            bitArray.CopyTo(bytearray, 0);
+            TransmitCommand(
+                cardReader,
+                0xE0,
+                0x00,
+                0x00,
+                0x29,
+                0x01,
+                bytearray);
             return true;
         }
 
@@ -214,19 +235,17 @@ namespace GuardRail.AccessControlDevices.ACR1252U
             byte ins,
             byte p1,
             byte p2,
-            byte le)
+            byte le,
+            params byte[] data)
         {
             if (cardReader == null)
             {
                 throw new ArgumentNullException(nameof(cardReader));
             }
 
-            byte[] apdu = { @class, ins, p1, p2, le };
-            var result = new byte[2];
-            var answer = cardReader.Transmit(apdu, ref result);
+            var result = GetData(cardReader, @class, ins, p1, p2, le, data);
             const byte successByte1 = 0x90;
             const byte successByte2 = 0x00;
-            ErrorCheck(answer);
             return result[0] == successByte1
                    && result[1] == successByte2;
         }
@@ -237,20 +256,30 @@ namespace GuardRail.AccessControlDevices.ACR1252U
             byte ins,
             byte p1,
             byte p2,
-            byte le)
+            byte le,
+            params byte[] data)
         {
             if (cardReader == null)
             {
                 throw new ArgumentNullException(nameof(cardReader));
             }
 
-            byte[] apdu = { @class, ins, p1, p2, le };
+            var apdu = new List<byte> {@class, ins, p1, p2, le};
+            if (data == null)
+            {
+                apdu.AddRange(data);
+            }
+
             var result = new byte[256];
-            var answer = cardReader.Transmit(apdu, ref result);
+            var answer = cardReader.Transmit(apdu.ToArray(), ref result);
             ErrorCheck(answer);
             return result;
         }
 
+        /// <summary>
+        /// If the result is an error then throw it.
+        /// </summary>
+        /// <param name="status">The status of the command.</param>
         public static void ErrorCheck(SCardError status)
         {
             if (status == SCardError.Success)
@@ -278,6 +307,7 @@ namespace GuardRail.AccessControlDevices.ACR1252U
         /// <returns></returns>
         public Task PresentNoAccessGranted(string reason)
         {
+            TurnRedLightOn(_sCardReader);
             return Task.CompletedTask;
         }
 
@@ -301,6 +331,7 @@ namespace GuardRail.AccessControlDevices.ACR1252U
             {
                 _cancellationTokenSource.Cancel();
                 _sCardReader.Disconnect(SCardReaderDisposition.Leave);
+                _sCardContext.Release();
                 _sCardReader.Dispose();
                 _watcherTask.Dispose();
                 _cancellationTokenSource.Dispose();

@@ -18,7 +18,8 @@ namespace GuardRail.Tests.AccessControlDevices.ACR1252U
                 .Verifiable();
             var readers = new[]
             {
-                Guid.NewGuid().ToString()
+                "ACS ACR1252 Dual Reader PICC 0",
+                "ACS ACR1252 Dual Reader SAM 0"
             };
             mockSCardContext
                 .Setup(x => x.GetReaders())
@@ -26,10 +27,12 @@ namespace GuardRail.Tests.AccessControlDevices.ACR1252U
                 .Verifiable();
             var acr1252UFactory = new Acr1252UFactory(
                 null,
-                mockSCardContext.Object);
+                mockSCardContext.Object,
+                null,
+                null);
             var devices = await acr1252UFactory.GetAccessControlDevices();
             mockSCardContext.Verify();
-            Assert.Equal(1, devices.Count);
+            Assert.Equal(readers.Length, devices.Count);
         }
     }
 }
