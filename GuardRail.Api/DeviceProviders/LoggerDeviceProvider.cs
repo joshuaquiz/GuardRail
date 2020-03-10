@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using GuardRail.Api.Devices;
 using GuardRail.Core;
-using GuardRail.Devices;
 using Serilog;
 
-namespace GuardRail.DeviceProviders
+namespace GuardRail.Api.DeviceProviders
 {
     /// <summary>
     /// Logs events, that's it.

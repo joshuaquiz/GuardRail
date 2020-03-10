@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GuardRail\GuardRail.csproj" />
+    <ProjectReference Include="..\GuardRail.Api\GuardRail.Api.csproj" />
   </ItemGroup>
 
 </Project>

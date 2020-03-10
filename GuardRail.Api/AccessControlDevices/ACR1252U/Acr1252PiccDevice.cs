@@ -11,12 +11,12 @@ using PCSC.Exceptions;
 using PCSC.Utils;
 using Serilog;
 
-namespace GuardRail.AccessControlDevices.ACR1252U
+namespace GuardRail.Api.AccessControlDevices.ACR1252U
 {
     /// <summary>
-    /// ACR1252U SAM access control device.
+    /// ACR1252U PICC access control device.
     /// </summary>
-    public sealed class Acr1252SamDevice : IAccessControlDevice
+    public sealed class Acr1252PiccDevice : IAccessControlDevice
     {
         private readonly string _id;
         private readonly IEventBus _eventBus;
@@ -29,7 +29,7 @@ namespace GuardRail.AccessControlDevices.ACR1252U
         private Task _watcherTask;
         private bool _disposed;
 
-        private Acr1252SamDevice(
+        private Acr1252PiccDevice(
             string id,
             IEventBus eventBus,
             ISCardContext sCardContext,
@@ -50,7 +50,7 @@ namespace GuardRail.AccessControlDevices.ACR1252U
         /// <summary>
         /// Destructor for Acr1252U.
         /// </summary>
-        ~Acr1252SamDevice()
+        ~Acr1252PiccDevice()
         {
             Dispose(true);
         }
@@ -76,7 +76,7 @@ namespace GuardRail.AccessControlDevices.ACR1252U
                 throw new ArgumentNullException(nameof(sCardContext));
             }
 
-            return new Acr1252SamDevice(
+            return new Acr1252PiccDevice(
                 id,
                 eventBus,
                 sCardContext,

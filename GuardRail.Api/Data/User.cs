@@ -1,18 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using GuardRail.Core;
 using Microsoft.EntityFrameworkCore;
 
-namespace GuardRail.Data
+namespace GuardRail.Api.Data
 {
-    /// <summary>
-    /// A system user
-    /// </summary>
-    public class User : IUser
+    public sealed class User : IUser
     {
-        /// <summary>
-        /// The ID of the user.
-        /// </summary>
         public Guid Id { get; set; }
+
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
 
         /// <summary>
         /// 

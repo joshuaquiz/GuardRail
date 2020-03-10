@@ -1,39 +1,38 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using GuardRail.Api.Data;
 using GuardRail.Core;
-using GuardRail.Data;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 
-namespace GuardRail
+namespace GuardRail.Api
 {
-    public sealed class Coordinator
+    public sealed class CoordinatorService : IHostedService
     {
         private readonly ILogger _logger;
-        private readonly GuardRailContext _guardRailContext;
         private readonly IEventBus _eventBus;
         private readonly IAuthorizer _authorizer;
         private readonly IEnumerable<IDoorFactory> _doorFactories;
         private readonly IEnumerable<IAccessControlFactory> _accessControlFactories;
 
-        public Coordinator(
+        public CoordinatorService(
             ILogger logger,
-            GuardRailContext guardRailContext,
             IEventBus eventBus,
             IAuthorizer authorizer,
             IEnumerable<IDoorFactory> doorFactories,
             IEnumerable<IAccessControlFactory> accessControlFactories)
         {
             _logger = logger;
-            _guardRailContext = guardRailContext;
             _eventBus = eventBus;
             _authorizer = authorizer;
             _doorFactories = doorFactories;
             _accessControlFactories = accessControlFactories;
         }
 
-        public async Task StartUp()
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
             foreach (var doorFactory in _doorFactories)
             {
@@ -78,5 +77,8 @@ namespace GuardRail
                 }
             };
         }
+
+        public Task StopAsync(CancellationToken cancellationToken) =>
+            Task.CompletedTask;
     }
 }

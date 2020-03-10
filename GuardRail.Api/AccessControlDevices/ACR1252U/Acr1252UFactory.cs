@@ -7,7 +7,7 @@ using GuardRail.Core;
 using PCSC;
 using Serilog;
 
-namespace GuardRail.AccessControlDevices.ACR1252U
+namespace GuardRail.Api.AccessControlDevices.ACR1252U
 {
     /// <summary>
     /// Factory for ACR1252U access control devices.

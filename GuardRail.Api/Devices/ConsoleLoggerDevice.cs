@@ -1,7 +1,7 @@
 ﻿using System;
 using GuardRail.Core;
 
-namespace GuardRail.Devices
+namespace GuardRail.Api.Devices
 {
     /// <summary>
     /// Logs stuff, that's it.

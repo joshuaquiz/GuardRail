@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using GuardRail.AccessControlDevices.ACR1252U;
+using GuardRail.Api.AccessControlDevices.ACR1252U;
 using Moq;
 using PCSC;
 using Xunit;
