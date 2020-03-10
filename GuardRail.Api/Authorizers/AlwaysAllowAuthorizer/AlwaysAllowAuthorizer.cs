@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using GuardRail.Core;
 
-namespace GuardRail.Authorizers.AlwaysAllowAuthorizer
+namespace GuardRail.Api.Authorizers.AlwaysAllowAuthorizer
 {
     /// <summary>
     /// Everyone gets in all the time!

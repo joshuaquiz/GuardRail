@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace GuardRail.Data
+namespace GuardRail.Api.Data
 {
     /// <summary>
     /// Database context for the project.

@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using GuardRail.Core;
 
-namespace GuardRail
+namespace GuardRail.Api
 {
     public sealed class InMemoryEventBus : IEventBus
     {

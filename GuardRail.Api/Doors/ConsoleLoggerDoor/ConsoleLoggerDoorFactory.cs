@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using GuardRail.Core;
 using Serilog;
 
-namespace GuardRail.Doors.ConsoleLoggerDoor
+namespace GuardRail.Api.Doors.ConsoleLoggerDoor
 {
     public sealed class ConsoleLoggerDoorFactory : IDoorFactory
     {
