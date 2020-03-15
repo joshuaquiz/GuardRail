@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using GuardRail.Core;
 using Microsoft.EntityFrameworkCore;
 

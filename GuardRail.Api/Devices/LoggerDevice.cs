@@ -6,7 +6,7 @@ namespace GuardRail.Api.Devices
     /// <summary>
     /// Logs stuff, that's it.
     /// </summary>
-    public sealed class ConsoleLoggerDevice : IDevice
+    public sealed class LoggerDevice : IDevice
     {
         private static Guid ID = Guid.NewGuid();
 
