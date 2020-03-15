@@ -37,7 +37,7 @@ namespace GuardRail.Api
             services.AddSingleton(typeof(ISCardContext), new SCardContext());
             services.AddSingleton(typeof(IEventBus), new InMemoryEventBus());
             services.AddSingleton(typeof(IAuthorizer), new AlwaysAllowAuthorizer());
-            services.AddSingleton(typeof(IDeviceProvider), new LoggerDeviceProvider(logger));
+            services.AddSingleton(typeof(IDeviceProvider), new DeviceProvider(logger));
             RegisterAllImplementations(services, typeof(IDoorFactory));
             RegisterAllImplementations(services, typeof(IAccessControlFactory));
             AddDatabaseConfiguration(services);

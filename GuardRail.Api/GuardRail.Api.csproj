@@ -52,4 +52,8 @@
   <ItemGroup>
     <ProjectReference Include="..\GuardRail.Core\GuardRail.Core.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Web\" />
+  </ItemGroup>
 </Project>

@@ -7,10 +7,7 @@ using Serilog;
 
 namespace GuardRail.Api.DeviceProviders
 {
-    /// <summary>
-    /// Logs events, that's it.
-    /// </summary>
-    public sealed class LoggerDeviceProvider : IDeviceProvider
+    public sealed class DeviceProvider : IDeviceProvider
     {
         private readonly ILogger _logger;
 
@@ -18,7 +15,7 @@ namespace GuardRail.Api.DeviceProviders
         /// 
         /// </summary>
         /// <param name="logger"></param>
-        public LoggerDeviceProvider(
+        public DeviceProvider(
             ILogger logger)
         {
             _logger = logger;
@@ -34,7 +31,7 @@ namespace GuardRail.Api.DeviceProviders
             var ints = string.Join(" ", bytes.Select(x => x.ToString("D", CultureInfo.InvariantCulture)));
             var hex = string.Join(" ", bytes.Select(x => x.ToString("X", CultureInfo.InvariantCulture)));
             _logger.Debug($"A request was made for a device (ID as ints {ints}) (ID as hex {hex})");
-            return new ConsoleLoggerDevice();
+            return new LoggerDevice();
         }
     }
 }
