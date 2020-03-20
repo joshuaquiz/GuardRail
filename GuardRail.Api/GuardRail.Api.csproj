@@ -22,10 +22,34 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="Assets\logo_icon.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
+    <Compile Remove="wwwroot\Assets\**" />
+    <Content Remove="wwwroot\Assets\**" />
+    <EmbeddedResource Remove="wwwroot\Assets\**" />
+    <None Remove="wwwroot\Assets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\images\facebook_cover_photo_1.png" />
+    <None Include="wwwroot\images\facebook_cover_photo_2.png" />
+    <None Include="wwwroot\images\facebook_profile_image.png" />
+    <None Include="wwwroot\images\favicon.png" />
+    <None Include="wwwroot\images\instagram_profile_image.png" />
+    <None Include="wwwroot\images\linkedin_banner_image_1.png" />
+    <None Include="wwwroot\images\linkedin_banner_image_2.png" />
+    <None Include="wwwroot\images\linkedin_profile_image.png" />
+    <None Include="wwwroot\images\logo.png" />
+    <None Include="wwwroot\images\logo.svg" />
+    <None Include="wwwroot\images\logo_icon.ico" />
+    <None Include="wwwroot\images\logo_icon.png" />
+    <None Include="wwwroot\images\logo_icon.svg" />
+    <None Include="wwwroot\images\logo_transparent.png" />
+    <None Include="wwwroot\images\pinterest_board_photo.png" />
+    <None Include="wwwroot\images\pinterest_profile_image.png" />
+    <None Include="wwwroot\images\twitter_header_photo_1.png" />
+    <None Include="wwwroot\images\twitter_header_photo_2.png" />
+    <None Include="wwwroot\images\twitter_profile_image.png" />
+    <None Include="wwwroot\images\youtube_profile_image.png" />
+    <None Include="wwwroot\js\homeController.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -54,6 +78,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Web\" />
+    <Folder Include="wwwroot\fonts\" />
   </ItemGroup>
 </Project>

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using GuardRail.Api.Authorizers.AlwaysAllowAuthorizer;
@@ -42,10 +43,13 @@ namespace GuardRail.Api
             RegisterAllImplementations(services, typeof(IAccessControlFactory));
             AddDatabaseConfiguration(services);
             services.AddHostedService<CoordinatorService>();
+            services.AddRazorPages();
             logger.Debug("Starting application");
         }
 
-        private static void RegisterAllImplementations(IServiceCollection serviceCollection, Type type)
+        private static void RegisterAllImplementations(
+            IServiceCollection serviceCollection,
+            Type type)
         {
             foreach (var t in Assembly
                 .GetExecutingAssembly()
@@ -61,7 +65,9 @@ namespace GuardRail.Api
             services
                 .AddDbContext<GuardRailContext>(options => options.UseInMemoryDatabase(Guid.NewGuid().ToString()));
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(
+            IApplicationBuilder app,
+            IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -75,9 +81,11 @@ namespace GuardRail.Api
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
+            app.UseStaticFiles();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapRazorPages();
                 endpoints.MapHealthChecks("/healthz");
             });
         }
