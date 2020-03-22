@@ -1,0 +1,61 @@
+﻿.login_box {
+    font-family: 'teko-regular';
+    height: 300px;
+    width: 400px;
+    position: relative;
+    top: calc(50% - 150px);
+    left: calc(50% - 200px);
+    box-shadow: 5px 5px 10px 0 #ccc;
+}
+
+    .login_box > .title {
+        background-color: #ccc;
+        text-align: center;
+        font-size: 30px;
+        padding: 5px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        border: solid #ccc 1px;
+    }
+
+    .login_box > form {
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        border: solid #f3f3f3 1px;
+        background-color: #f3f3f3;
+        height: calc(100% - 43px);
+        width: 100%;
+    }
+
+        .login_box > form > .form-group {
+            width: 100%;
+            height: 80px;
+            font-size: 20px;
+        }
+
+            .login_box > form > .form-group > label {
+                width: calc(100% - 20px);
+                display: block;
+                padding: 10px 10px 0 10px;
+            }
+
+            .login_box > form > .form-group > input {
+                width: calc(100% - 25px);
+                display: block;
+                margin: 0 5px;
+                padding: 5px;
+            }
+
+            .login_box > form > .form-group > span {
+                width: calc(100% - 20px);
+                display: block;
+                padding: 10px 10px 0 10px;
+                color: #ff0;
+            }
+
+            .login_box > form > .form-group > button {
+                width: calc(100% - 10px);
+                display: block;
+                margin: 5px;
+                padding: 5px;
+            }

@@ -90,3 +90,7 @@ html, body {
         height: calc(100% - 50px);
         width: calc(100% - 200px);
     }
+
+    .page > .body.full {
+        width: 100%;
+    }
