@@ -5,18 +5,20 @@
     <div ng-if="error" class="alert">{{error}}</div>
     <form name="form" ng-submit="login()">
         <div class="form-group">
-            <label for="email">Email</label>
-            <input type="text" name="email" id="email" class="form-control" ng-model="email" required/>
-            <span ng-if="form.email.$dirty && form.email.$error.required" class="help-block">Email is required</span>
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" class="form-control" ng-model="username" required />
+            <span ng-if="form.username.$dirty && form.username.$error.required" class="help-block">Email is required</span>
         </div>
         <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" name="password" id="password" class="form-control" ng-model="password" required/>
+            <input type="password" name="password" id="password" class="form-control" ng-model="password" required />
             <span ng-if="form.password.$dirty && form.password.$error.required" class="help-block">Password is required</span>
         </div>
         <div class="form-group">
             <button type="submit" ng-disabled="form.$invalid || dataLoading" class="btn btn-danger">Login</button>
-            <i ng-if="dataLoading" class="fa fa-spinner-third"></i>
         </div>
     </form>
+    <div class="loading" ng-if="dataLoading">
+        <div class="spinner"></div>
+    </div>
 </div>

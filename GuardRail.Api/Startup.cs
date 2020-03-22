@@ -5,6 +5,7 @@ using GuardRail.Api.Authorizers;
 using GuardRail.Api.Data;
 using GuardRail.Api.DeviceProviders;
 using GuardRail.Core;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PCSC;
 using Serilog;
+using ILogger = Serilog.ILogger;
 
 namespace GuardRail.Api
 {
@@ -43,6 +45,8 @@ namespace GuardRail.Api
             services.AddSingleton<IEventBus, InMemoryEventBus>();
             services.AddSingleton<IAuthorizer, AlwaysAllowAuthorizer>();
             services.AddSingleton<IDeviceProvider, DeviceProvider>();
+            services.AddAuthentication("BasicAuthentication")
+                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
             RegisterAllImplementations(services, typeof(IDoorFactory));
             RegisterAllImplementations(services, typeof(IAccessControlFactory));
             services.AddHostedService<CoordinatorService>();

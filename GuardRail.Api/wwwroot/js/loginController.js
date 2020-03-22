@@ -4,23 +4,21 @@ app.controller(
     "loginController",
     [
         "$scope",
-        "$rootScope",
         "$location",
         "authenticationService",
-        function ($scope, $rootScope, $location, authenticationService) {
-            $rootScope.hideMenus = $routeParams.hideMenus;
+        function ($scope, $location, authenticationService) {
             authenticationService.ClearCredentials();
             $scope.login = () => {
                 $scope.dataLoading = true;
                 authenticationService.Login(
-                    $scope.email,
+                    $scope.username,
                     $scope.password,
                     response => {
-                        if (response.success) {
+                        if (response.data) {
                             authenticationService.SetCredentials(
-                                $scope.email,
+                                $scope.username,
                                 $scope.password);
-                            $location.path("/");
+                            $location.path("/home");
                         } else {
                             $scope.error = response.message;
                             $scope.dataLoading = false;

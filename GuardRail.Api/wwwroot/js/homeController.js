@@ -6,7 +6,7 @@ app.controller(
         "$rootScope",
         "$scope",
         "$http",
-        ($rootScope, $scope, $http) => {
+        function ($rootScope, $scope, $http) {
             $rootScope.$on("message", d => console.log(d));
             const setup = () => {
                 $http.get("/api/logs/latest")

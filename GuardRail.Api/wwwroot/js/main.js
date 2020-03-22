@@ -3,8 +3,7 @@
 var app = angular.module(
     "app",
     [
-        "ngRoute",
-        "ngCookies"
+        "ngRoute"
     ])
     .factory(
         "connection",
@@ -98,35 +97,45 @@ var app = angular.module(
         [
             "base64",
             "$http",
-            "$cookies",
             "$rootScope",
-            function (base64, $http, $cookies, $rootScope) {
-                return {
-                    Login: (email, password, callback) =>
+            function (base64, $http, $rootScope) {
+                var service = {
+                    TryConfigure: (pass, fail) => {
+                        var value = sessionStorage.getItem("globals");
+                        if (value) {
+                            const authData = base64.decode(JSON.parse(value).currentUser.authData).split(":");
+                            service.SetCredentials(authData[0], authData[1]);
+                            pass();
+                        } else {
+                            fail();
+                        }
+                    },
+                    Login: (username, password, callback) =>
                         $http.post(
-                            "/api/authenticate",
+                            "/api/login",
                             {
-                                email: email,
+                                username: username,
                                 password: password
                             })
-                            .success(callback),
-                    SetCredentials: (email, password) => {
-                        var authData = base64.encode(`${email}:${password}`);
+                        .then(callback),
+                    SetCredentials: (username, password) => {
+                        var authData = base64.encode(`${username}:${password}`);
                         $rootScope.globals = {
                             currentUser: {
-                                email: email,
+                                username: username,
                                 authData: authData
                             }
                         };
                         $http.defaults.headers.common["Authorization"] = `Basic ${authData}`;
-                        $cookies.put("globals", $rootScope.globals);
+                        sessionStorage.setItem("globals", JSON.stringify($rootScope.globals));
                     },
                     ClearCredentials: () => {
                         $rootScope.globals = {};
-                        $cookies.remove("globals");
+                        sessionStorage.removeItem("globals");
                         $http.defaults.headers.common.Authorization = "Basic ";
                     }
-                }
+                };
+                return service;
             }])
     .config(
         [
@@ -153,7 +162,7 @@ var app = angular.module(
                         })
                     .otherwise(
                         {
-                            redirectTo: "/login"
+                            redirectTo: "/home"
                         });
             }
         ])
@@ -162,24 +171,23 @@ var app = angular.module(
         [
             "$rootScope",
             "$scope",
-            "$http",
-            "$cookies",
             "$location",
             "connection",
-            ($rootScope, $scope, $http, $cookies, $location, connection) => {
+            "authenticationService",
+            ($rootScope, $scope, $location, connection, authenticationService) => {
                 connection();
-                $rootScope.globals = $cookies.get("globals") || {};
-                if ($rootScope.globals.currentUser) {
-                    $http.defaults.headers.common["Authorization"] = `Basic ${$rootScope.globals.currentUser.authdata}`;
-                }
                 $rootScope.$on("$locationChangeStart", (event, next, current) => {
-                    // redirect to login page if not logged in
-                    if ($location.path() !== "/login" && !$rootScope.globals.currentUser) {
+                    $scope.showMenus = $location.path() !== "/login";
+                    if ($location.path() !== "/login" && $rootScope.globals === undefined && $rootScope.globals.currentUser === undefined) {
                         $location.path("/login");
-                        $scope.showMenus = true;
-                    } else {
-                        $scope.showMenus = false;
                     }
                 });
+                authenticationService.TryConfigure(
+                    () => {
+                        $location.path("/home");
+                    },
+                    () => {
+                        $location.path("/login");
+                    });
             }
         ]);

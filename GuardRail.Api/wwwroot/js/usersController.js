@@ -5,7 +5,7 @@ app.controller(
     [
         "$rootScope",
         "$http",
-        ($rootScope, $http) => {
+        function ($rootScope, $http) {
             $rootScope.$on("message", d => console.log(d));
             const setup = () => {
                 $http.get("/api/users")

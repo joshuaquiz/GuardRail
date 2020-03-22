@@ -1,0 +1,27 @@
+﻿@font-face {
+    font-family: 'teko-regular';
+    src: url('../fonts/teko-regular.ttf') format('truetype');
+}
+
+.home_box {
+    height: 100%;
+    width: 100%;
+}
+
+    .home_box > .left_side {
+        float: left;
+        clear: none;
+        height: 100%;
+        width: 50%;
+    }
+
+    .home_box > .right_side {
+        float: left;
+        clear: none;
+        height: 100%;
+        width: 50%;
+    }
+
+        .home_box > .right_side > table {
+            width: 100%;
+        }
