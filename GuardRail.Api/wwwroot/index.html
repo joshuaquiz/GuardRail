@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="shortcut icon" href="/images/logo_icon.ico" />
+    <title>GuardRail</title>
+    <link href="/css/main.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.28/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.28/angular-route.min.js"></script>
+    <script src="/js/signalr/dist/browser/signalr.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/homeController.js"></script>
+</head>
+<body ng-app="app" ng-controller="mainController">
+<div class="page">
+    <div class="header">
+        <img src="/images/logo_icon.svg" alt="Logo" class="icon"/>
+        <span class="title">GuardRail</span>
+    </div>
+    <div class="menu">
+        <ul>
+            <li>
+                <a href="#home">Home</a>
+            </li>
+            <li>
+                <a href="#users">Users</a>
+            </li>
+            <li>
+                <a href="#devices">Devices</a>
+            </li>
+            <li>
+                <a href="#doors">Doors</a>
+            </li>
+            <li>
+                <a href="#map">Map</a>
+            </li>
+        </ul>
+    </div>
+    <div class="body" ng-view></div>
+</div>
+</body>
+</html>

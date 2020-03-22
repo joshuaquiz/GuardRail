@@ -81,9 +81,19 @@
             A device like a phone, NFC tag, etc.
             </summary>
         </member>
-        <member name="P:GuardRail.Core.IDevice.Id">
+        <member name="P:GuardRail.Core.IDevice.DeviceId">
             <summary>
             The ID of the device.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.IDevice.FriendlyName">
+            <summary>
+            A friendly name for the device.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.IDevice.ByteId">
+            <summary>
+            The bytes used to identify a device.
             </summary>
         </member>
         <member name="T:GuardRail.Core.IDeviceProvider">
@@ -153,6 +163,16 @@
         <member name="P:GuardRail.Core.IUser.Id">
             <summary>
             The ID of the user.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.IUser.FirstName">
+            <summary>
+            The user's first name.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.IUser.LastName">
+            <summary>
+            The user's last name.
             </summary>
         </member>
         <member name="T:GuardRail.Core.LockedStatus">

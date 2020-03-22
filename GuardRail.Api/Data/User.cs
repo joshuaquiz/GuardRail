@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using GuardRail.Core;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,8 @@ namespace GuardRail.Api.Data
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
+
+        public List<Device> Devices { get; set; }
 
         /// <summary>
         /// 

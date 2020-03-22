@@ -1,8 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using GuardRail.Api.Authorizers.AlwaysAllowAuthorizer;
+using GuardRail.Api.Authorizers;
 using GuardRail.Api.Data;
 using GuardRail.Api.DeviceProviders;
 using GuardRail.Core;
@@ -17,7 +16,7 @@ using Serilog;
 
 namespace GuardRail.Api
 {
-    public class Startup
+    public sealed class Startup
     {
         public Startup(IConfiguration configuration)
         {
@@ -34,16 +33,19 @@ namespace GuardRail.Api
                 .WriteTo.Console()
                 .MinimumLevel.Verbose()
                 .CreateLogger();
+            services.AddSignalR();
+            services.AddDbContext<GuardRailContext>(
+                options => options.UseInMemoryDatabase(Guid.NewGuid().ToString()),
+                ServiceLifetime.Singleton,
+                ServiceLifetime.Singleton);
             services.AddSingleton<ILogger>(logger);
-            services.AddSingleton(typeof(ISCardContext), new SCardContext());
-            services.AddSingleton(typeof(IEventBus), new InMemoryEventBus());
-            services.AddSingleton(typeof(IAuthorizer), new AlwaysAllowAuthorizer());
-            services.AddSingleton(typeof(IDeviceProvider), new DeviceProvider(logger));
+            services.AddSingleton<ISCardContext, SCardContext>();
+            services.AddSingleton<IEventBus, InMemoryEventBus>();
+            services.AddSingleton<IAuthorizer, AlwaysAllowAuthorizer>();
+            services.AddSingleton<IDeviceProvider, DeviceProvider>();
             RegisterAllImplementations(services, typeof(IDoorFactory));
             RegisterAllImplementations(services, typeof(IAccessControlFactory));
-            AddDatabaseConfiguration(services);
             services.AddHostedService<CoordinatorService>();
-            services.AddRazorPages();
             logger.Debug("Starting application");
         }
 
@@ -59,11 +61,6 @@ namespace GuardRail.Api
                 serviceCollection.AddSingleton(type, t.AsType());
             }
         }
-
-        private static void AddDatabaseConfiguration(
-            IServiceCollection services) =>
-            services
-                .AddDbContext<GuardRailContext>(options => options.UseInMemoryDatabase(Guid.NewGuid().ToString()));
 
         public void Configure(
             IApplicationBuilder app,
@@ -81,12 +78,13 @@ namespace GuardRail.Api
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
+            app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapRazorPages();
                 endpoints.MapHealthChecks("/healthz");
+                endpoints.MapHub<GuardRailHub>("/guardRailHub");
             });
         }
 

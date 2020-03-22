@@ -1,0 +1,18 @@
+﻿<div>
+    home<br>
+    <table>
+        <caption>Logs</caption>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Logs</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="log in logs">
+                <td>{{log.dateTime}}</td>
+                <td>{{log.logMessage}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
