@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
-using GuardRail.Api.Controllers.Models;
 using GuardRail.Api.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,30 +9,25 @@ using Microsoft.EntityFrameworkCore;
 namespace GuardRail.Api.Controllers
 {
     [Authorize]
-    [Microsoft.AspNetCore.Mvc.Route("api/users")]
+    [Microsoft.AspNetCore.Mvc.Route("api/logs")]
     [ApiController]
-    public sealed class UsersController : ControllerBase
+    public sealed class LogsController : ControllerBase
     {
         private readonly GuardRailContext _guardRailContext;
 
-        public UsersController(
+        public LogsController(
             GuardRailContext guardRailContext)
         {
             _guardRailContext = guardRailContext;
         }
 
-        [Microsoft.AspNetCore.Mvc.Route("")]
+        [Microsoft.AspNetCore.Mvc.Route("latest")]
         [Microsoft.AspNetCore.Mvc.HttpGet]
-        public async Task<List<UserModel>> GetAllUsers() =>
+        public async Task<List<Log>> GetAllUsers() =>
             await _guardRailContext
-                .Users
-                .Select(x =>
-                new UserModel
-                {
-                    Id = x.Id,
-                    FirstName = x.FirstName,
-                    LastName = x.LastName
-                })
+                .Logs
+                .OrderByDescending(x => x.DateTime)
+                .Take(100)
                 .ToListAsync();
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using GuardRail.Api.Data;
 using GuardRail.Core;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -16,19 +17,22 @@ namespace GuardRail.Api
         private readonly IAuthorizer _authorizer;
         private readonly IEnumerable<IDoorFactory> _doorFactories;
         private readonly IEnumerable<IAccessControlFactory> _accessControlFactories;
+        private readonly GuardRailContext _guardRailContext;
 
         public CoordinatorService(
             ILogger logger,
             IEventBus eventBus,
             IAuthorizer authorizer,
             IEnumerable<IDoorFactory> doorFactories,
-            IEnumerable<IAccessControlFactory> accessControlFactories)
+            IEnumerable<IAccessControlFactory> accessControlFactories,
+            GuardRailContext guardRailContext)
         {
             _logger = logger;
             _eventBus = eventBus;
             _authorizer = authorizer;
             _doorFactories = doorFactories;
             _accessControlFactories = accessControlFactories;
+            _guardRailContext = guardRailContext;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -75,6 +79,16 @@ namespace GuardRail.Api
                     }
                 }
             };
+            await _guardRailContext.Users.AddAsync(
+                new User
+                {
+                    FirstName = "Test",
+                    LastName = "User",
+                    Username = "asdf",
+                    Password = "asdf"
+                },
+                cancellationToken);
+            await _guardRailContext.SaveChangesAsync(cancellationToken);
         }
 
         public Task StopAsync(CancellationToken cancellationToken) =>

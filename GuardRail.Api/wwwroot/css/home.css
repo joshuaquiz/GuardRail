@@ -1,0 +1,35 @@
+﻿@font-face {
+    font-family: 'teko-regular';
+    src: url('../fonts/teko-regular.ttf') format('truetype');
+}
+
+.home_box {
+    font-family: 'teko-regular';
+    font-size: 20px;
+    height: 100%;
+    width: 100%;
+}
+
+    .home_box > .left_side {
+        float: left;
+        clear: none;
+        height: 100%;
+        width: calc(50% - 20px);
+        padding: 10px 10px 0 10px;
+    }
+
+    .home_box > .right_side {
+        float: left;
+        clear: none;
+        height: 100%;
+        width: calc(50% - 20px);
+        padding: 10px 10px 0 10px;
+    }
+
+        .home_box > .right_side > table {
+            width: 100%;
+        }
+
+            .home_box > .right_side > table > thead > tr > th:first-of-type {
+                width: 25%;
+            }

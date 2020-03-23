@@ -1,0 +1,91 @@
+﻿.login_box {
+    font-family: 'teko-regular';
+    height: 300px;
+    width: 400px;
+    position: relative;
+    top: calc(50% - 150px);
+    left: calc(50% - 200px);
+    box-shadow: 5px 5px 10px 0 #ccc;
+}
+
+    .login_box > .title {
+        background-color: #ccc;
+        text-align: center;
+        font-size: 30px;
+        padding: 5px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        border: solid #ccc 1px;
+    }
+
+    .login_box > form {
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        border: solid #f3f3f3 1px;
+        background-color: #f3f3f3;
+        height: calc(100% - 43px);
+        width: 100%;
+    }
+
+        .login_box > form > .form-group {
+            width: 100%;
+            height: 80px;
+            font-size: 20px;
+        }
+
+            .login_box > form > .form-group > label {
+                width: calc(100% - 20px);
+                display: block;
+                padding: 10px 10px 0 10px;
+            }
+
+            .login_box > form > .form-group > input {
+                width: calc(100% - 35px);
+                display: block;
+                margin: 0 9px;
+                padding: 5px;
+            }
+
+            .login_box > form > .form-group > span {
+                width: calc(100% - 20px);
+                display: block;
+                padding: 10px 10px 0 10px;
+                color: #f00;
+            }
+
+            .login_box > form > .form-group > button {
+                width: calc(100% - 22px);
+                display: block;
+                margin: 9px;
+                padding: 5px;
+            }
+
+    .login_box > .loading {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background-color: rgba(204, 204, 204, 0.5);
+    }
+
+        .login_box > .loading > .spinner {
+            border-top: #f3f3f3 solid 5px;
+            border-left: #f3f3f3 solid 5px;
+            border-right: #f3f3f3 solid 5px;
+            border-bottom: #a9a9a9 solid 5px;
+            border-radius: 50px;
+            height: 50px;
+            width: 50px;
+            animation: spin 2s linear infinite;
+            position: absolute;
+            top: calc(50% - 25px);
+            left: calc(50% - 25px);
+            background-color: transparent;
+        }
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}

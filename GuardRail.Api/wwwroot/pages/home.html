@@ -1,0 +1,22 @@
+﻿<div class="home_box">
+    <div class="left_side">
+        New stuff can go here!
+    </div>
+    <div class="right_side">
+        <table>
+            <caption>Logs</caption>
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Logs</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="log in logs">
+                <td>{{log.dateTime | date:'medium'}}</td>
+                <td>{{log.logMessage}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

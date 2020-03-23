@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using GuardRail.Core;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,9 +9,15 @@ namespace GuardRail.Api.Data
     {
         public Guid Id { get; set; }
 
+        public string Username { get; set; }
+
+        public string Password { get; set; }
+
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
+
+        public List<Device> Devices { get; set; }
 
         /// <summary>
         /// 

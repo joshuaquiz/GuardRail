@@ -1,7 +1,7 @@
 ﻿"use strict";
 
 app.controller(
-    "homeController",
+    "usersController",
     [
         "$rootScope",
         "$scope",
@@ -9,9 +9,9 @@ app.controller(
         function ($rootScope, $scope, $http) {
             $rootScope.$on("message", d => console.log(d));
             const setup = () => {
-                $http.get("/api/logs/latest")
+                $http.get("/api/users")
                     .then(response => {
-                        $scope.logs = response.data;
+                        $scope.users = response.data;
                     });
             };
             setup();
