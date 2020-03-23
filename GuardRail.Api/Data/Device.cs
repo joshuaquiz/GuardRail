@@ -14,6 +14,8 @@ namespace GuardRail.Api.Data
 
         public byte[] ByteId { get; set; }
 
+        public bool IsConfigured { get; set; }
+
         public User User { get; set; }
 
         public static void OnModelCreating(ModelBuilder builder)

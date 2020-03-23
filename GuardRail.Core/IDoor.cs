@@ -9,6 +9,12 @@ namespace GuardRail.Core
     public interface IDoor
     {
         /// <summary>
+        /// Gets the device ID of the hardware.
+        /// </summary>
+        /// <returns></returns>
+        Task<string> GetDeviceId();
+
+        /// <summary>
         /// Gets the current locked status for the door.
         /// </summary>
         /// <param name="cancellationToken"></param>

@@ -7,10 +7,6 @@ namespace GuardRail.Api.Data
     /// </summary>
     public class GuardRailContext : DbContext
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="options"></param>
         public GuardRailContext(DbContextOptions options)
             : base(options)
         {
@@ -19,6 +15,10 @@ namespace GuardRail.Api.Data
         public DbSet<User> Users { get; set; }
 
         public DbSet<Device> Devices { get; set; }
+
+        public DbSet<AccessControlDevice> AccessControlDevices { get; set; }
+
+        public DbSet<Door> Doors { get; set; }
 
         public DbSet<Log> Logs { get; set; }
     }

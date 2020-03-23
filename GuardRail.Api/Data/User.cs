@@ -19,6 +19,8 @@ namespace GuardRail.Api.Data
 
         public List<Device> Devices { get; set; }
 
+        public List<Door> Doors { get; set; }
+
         /// <summary>
         /// 
         /// </summary>

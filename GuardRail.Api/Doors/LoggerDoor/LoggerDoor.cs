@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.Core;
 using Serilog;
@@ -7,6 +8,8 @@ namespace GuardRail.Api.Doors.LoggerDoor
 {
     public sealed class LoggerDoor : IDoor
     {
+        private static readonly Guid Id = Guid.NewGuid();
+
         private readonly ILogger _logger;
 
         private bool _isLocked;
@@ -16,6 +19,9 @@ namespace GuardRail.Api.Doors.LoggerDoor
         {
             _logger = logger;
         }
+
+        public Task<string> GetDeviceId() =>
+            Task.FromResult(Id.ToString());
 
         public Task<LockedStatus> GetLockedStatus(CancellationToken cancellationToken) =>
             Task.FromResult(_isLocked
