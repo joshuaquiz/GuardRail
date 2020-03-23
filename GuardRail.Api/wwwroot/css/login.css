@@ -40,9 +40,9 @@
             }
 
             .login_box > form > .form-group > input {
-                width: calc(100% - 25px);
+                width: calc(100% - 35px);
                 display: block;
-                margin: 0 5px;
+                margin: 0 9px;
                 padding: 5px;
             }
 
@@ -54,9 +54,9 @@
             }
 
             .login_box > form > .form-group > button {
-                width: calc(100% - 10px);
+                width: calc(100% - 22px);
                 display: block;
-                margin: 5px;
+                margin: 9px;
                 padding: 5px;
             }
 

@@ -1,0 +1,47 @@
+﻿@font-face {
+    font-family: 'teko-regular';
+    src: url('../fonts/teko-regular.ttf') format('truetype');
+}
+
+.users_box {
+    font-family: 'teko-regular';
+    font-size: 20px;
+    height: 100%;
+    width: 100%;
+}
+
+    .users_box > .left_side {
+        float: left;
+        clear: none;
+        height: 100%;
+        width: calc(50% - 20px);
+        padding: 10px 10px 0 10px;
+    }
+
+        .users_box > .left_side > table {
+            width: 100%;
+        }
+
+            .users_box > .left_side > table > thead > tr > th:nth-of-type(1) {
+                width: 40%;
+            }
+
+            .users_box > .left_side > table > thead > tr > th:nth-of-type(2) {
+                width: 30%;
+            }
+
+            .users_box > .left_side > table > thead > tr > th:nth-of-type(3) {
+                width: 15%;
+            }
+
+            .users_box > .left_side > table > thead > tr > th:nth-of-type(0) {
+                width: 15%;
+            }
+
+    .users_box > .right_side {
+        float: left;
+        clear: none;
+        height: 100%;
+        width: calc(50% - 20px);
+        padding: 10px 10px 0 10px;
+    }

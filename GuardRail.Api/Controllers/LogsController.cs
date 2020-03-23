@@ -1,13 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Http;
 using GuardRail.Api.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace GuardRail.Api.Controllers
 {
-    [Route("api/logs")]
+    [Authorize]
+    [Microsoft.AspNetCore.Mvc.Route("api/logs")]
     [ApiController]
     public sealed class LogsController : ControllerBase
     {
@@ -19,8 +21,8 @@ namespace GuardRail.Api.Controllers
             _guardRailContext = guardRailContext;
         }
 
-        [Route("latest")]
-        [HttpGet]
+        [Microsoft.AspNetCore.Mvc.Route("latest")]
+        [Microsoft.AspNetCore.Mvc.HttpGet]
         public async Task<List<Log>> GetAllUsers() =>
             await _guardRailContext
                 .Logs

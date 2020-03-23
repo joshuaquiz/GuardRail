@@ -1,3 +1,31 @@
-﻿<div ng-controller="usersController">
-    users
+﻿<div class="users_box">
+    <div class="left_side">
+        <table>
+            <caption>Users</caption>
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Role</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="user in users">
+                <td>{{user.firstName}} {{user.lastName}}</td>
+                <td>{{user.role}}</td>
+                <td>Edit</td>
+                <td>Delete</td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="3"></td>
+                <td>Add</td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="right_side">
+    </div>
 </div>

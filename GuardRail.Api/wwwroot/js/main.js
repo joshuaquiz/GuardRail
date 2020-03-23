@@ -184,7 +184,9 @@ var app = angular.module(
                 });
                 authenticationService.TryConfigure(
                     () => {
-                        $location.path("/home");
+                        if (!$location.$$path) {
+                            $location.path("/home");
+                        }
                     },
                     () => {
                         $location.path("/login");
