@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.Core;
-using Serilog;
 
 namespace GuardRail.Api.Doors.LoggerDoor
 {
@@ -10,15 +9,7 @@ namespace GuardRail.Api.Doors.LoggerDoor
     {
         private static readonly Guid Id = Guid.NewGuid();
 
-        private readonly ILogger _logger;
-
         private bool _isLocked;
-
-        public LoggerDoor(
-            ILogger logger)
-        {
-            _logger = logger;
-        }
 
         public Task<string> GetDeviceId() =>
             Task.FromResult(Id.ToString());
@@ -30,13 +21,13 @@ namespace GuardRail.Api.Doors.LoggerDoor
 
         public Task Lock(CancellationToken cancellationToken)
         {
-            _logger.Debug("Locking door");
+            _isLocked = true;
             return Task.CompletedTask;
         }
 
         public Task UnLock(CancellationToken cancellationToken)
         {
-            _logger.Debug("Unlocking door");
+            _isLocked = false;
             return Task.CompletedTask;
         }
     }

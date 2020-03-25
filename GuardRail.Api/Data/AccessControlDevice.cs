@@ -12,6 +12,8 @@ namespace GuardRail.Api.Data
 
         public string DeviceId { get; set; }
 
+        public string FriendlyName { get; set; }
+
         public bool IsConfigured { get; set; }
 
         public List<Door> Doors { get; set; }

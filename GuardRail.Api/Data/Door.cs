@@ -13,6 +13,8 @@ namespace GuardRail.Api.Data
 
         public string DeviceId { get; set; }
 
+        public string FriendlyName { get; set; }
+
         public LockedStatus LockedStatus { get; set; }
 
         public AccessControlDevice AccessControlDevice { get; set; }

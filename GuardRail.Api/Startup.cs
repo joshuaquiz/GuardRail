@@ -4,6 +4,7 @@ using System.Reflection;
 using GuardRail.Api.Authorizers;
 using GuardRail.Api.Data;
 using GuardRail.Api.DeviceProviders;
+using GuardRail.Api.Doors;
 using GuardRail.Api.Doors.LoggerDoor;
 using GuardRail.Core;
 using Microsoft.AspNetCore.Authentication;
@@ -49,6 +50,8 @@ namespace GuardRail.Api
             services.AddSingleton<IDoorResolver, DoorResolver>();
             services.AddAuthentication("BasicAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+            services.AddSingleton<GuardRailHub, GuardRailHub>();
+            services.AddSingleton<GuardRailLogger, GuardRailLogger>();
             RegisterAllImplementations(services, typeof(IDoorFactory));
             RegisterAllImplementations(services, typeof(IAccessControlFactory));
             services.AddHostedService<CoordinatorService>();
