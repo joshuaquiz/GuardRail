@@ -5,20 +5,19 @@ using System.Threading.Tasks;
 using GuardRail.Api.Data;
 using GuardRail.Core;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
 
 namespace GuardRail.Api.Doors.LoggerDoor
 {
     public sealed class LoggerDoorFactory : IDoorFactory
     {
-        private readonly ILogger _logger;
+        private readonly GuardRailLogger _guardRailLogger;
         private readonly GuardRailContext _guardRailContext;
 
         public LoggerDoorFactory(
-            ILogger logger,
+            GuardRailLogger guardRailLogger,
             GuardRailContext guardRailContext)
         {
-            _logger = logger;
+            _guardRailLogger = guardRailLogger;
             _guardRailContext = guardRailContext;
         }
 
@@ -27,7 +26,7 @@ namespace GuardRail.Api.Doors.LoggerDoor
             var doors = new ReadOnlyCollection<IDoor>(
                 new List<IDoor>
                 {
-                    new LoggerDoor(_logger)
+                    new LoggerDoor("logger door", _guardRailLogger)
                 });
             foreach (var door in doors)
             {
@@ -39,9 +38,15 @@ namespace GuardRail.Api.Doors.LoggerDoor
                         new Door
                         {
                             DeviceId = doorId,
-                            LockedStatus = await door.GetLockedStatus(CancellationToken.None)
+                            LockedStatus = await door.GetLockedStatus(CancellationToken.None),
+                            FriendlyName = door.FriendlyName,
+                            IsConfigured = false
                         });
                     await _guardRailContext.SaveChangesAsync();
+                }
+                else
+                {
+                    door.FriendlyName = doorInDatabase.FriendlyName;
                 }
             }
             return doors;

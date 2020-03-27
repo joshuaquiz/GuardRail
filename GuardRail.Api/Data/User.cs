@@ -19,15 +19,23 @@ namespace GuardRail.Api.Data
 
         public List<Device> Devices { get; set; }
 
-        public List<Door> Doors { get; set; }
+        public List<DoorUserAccess> DoorUserAccesses { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="builder"></param>
-        public static void OnModelCreating(ModelBuilder builder) =>
+        public static void OnModelCreating(ModelBuilder builder)
+        {
             builder
                 ?.Entity<User>()
                 ?.HasKey(b => b.Id);
+            builder
+                ?.Entity<User>()
+                ?.HasMany<Device>();
+            builder
+                ?.Entity<User>()
+                ?.HasMany<DoorUserAccess>();
+        }
     }
 }

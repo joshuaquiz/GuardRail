@@ -10,25 +10,29 @@ namespace GuardRail.Api
     {
         private readonly ILogger _logger;
         private readonly GuardRailContext _guardRailContext;
+        private readonly GuardRailHub _guardRailHub;
 
         public GuardRailLogger(
             ILogger logger,
-            GuardRailContext guardRailContext)
+            GuardRailContext guardRailContext,
+            GuardRailHub guardRailHub)
         {
             _logger = logger;
             _guardRailContext = guardRailContext;
+            _guardRailHub = guardRailHub;
         }
 
         public async Task LogAsync(string logMessage)
         {
             _logger.Debug(logMessage);
-            await _guardRailContext.Logs.AddAsync(
-                new Log
-                {
-                    DateTime = DateTimeOffset.UtcNow,
-                    LogMessage = logMessage
-                });
+            var log = new Log
+            {
+                DateTime = DateTimeOffset.UtcNow,
+                LogMessage = logMessage
+            };
+            await _guardRailContext.Logs.AddAsync(log);
             await _guardRailContext.SaveChangesAsync();
+            await _guardRailHub.SendLogAsync(logMessage);
         }
 
         public async Task LogErrorAsync(Exception exception)

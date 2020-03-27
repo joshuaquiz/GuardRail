@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace GuardRail.Core
+﻿namespace GuardRail.Core
 {
     /// <summary>
     /// A device like a phone, NFC tag, etc.

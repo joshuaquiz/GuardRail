@@ -9,7 +9,19 @@ namespace GuardRail.Api.Doors.LoggerDoor
     {
         private static readonly Guid Id = Guid.NewGuid();
 
+        private readonly GuardRailLogger _guardRailLogger;
+
         private bool _isLocked;
+
+        public string FriendlyName { get; set; }
+
+        public LoggerDoor(
+            string friendlyName,
+            GuardRailLogger guardRailLogger)
+        {
+            FriendlyName = friendlyName;
+            _guardRailLogger = guardRailLogger;
+        }
 
         public Task<string> GetDeviceId() =>
             Task.FromResult(Id.ToString());
@@ -19,16 +31,21 @@ namespace GuardRail.Api.Doors.LoggerDoor
                 ? LockedStatus.Locked
                 : LockedStatus.UnLocked);
 
-        public Task Lock(CancellationToken cancellationToken)
+        public Task LockAsync(CancellationToken cancellationToken)
         {
             _isLocked = true;
             return Task.CompletedTask;
         }
 
-        public Task UnLock(CancellationToken cancellationToken)
+        public async Task UnLockAsync(CancellationToken cancellationToken)
         {
             _isLocked = false;
-            return Task.CompletedTask;
+            await _guardRailLogger.LogAsync($"{FriendlyName} is unlocked for 5 seconds");
+            var delay = Task.Delay(
+                    TimeSpan.FromSeconds(5),
+                    cancellationToken);
+            await delay;
+            await LockAsync(CancellationToken.None);
         }
     }
 }

@@ -11,7 +11,7 @@ var app = angular.module(
             "$rootScope",
             $rootScope => {
                 var connection = new signalR.HubConnectionBuilder().withUrl("/guardRailHub").build();
-                connection.on("ReceiveMessage", params => $rootScope.$broadcast("message", params));
+                connection.on("NewLog", params => $rootScope.$broadcast("NewLog", params));
                 connection.start().catch(err => console.error(err.toString()));
                 return () => { };
             }
@@ -159,6 +159,12 @@ var app = angular.module(
                         {
                             templateUrl: "/pages/users.html",
                             controller: "usersController"
+                        })
+                    .when(
+                        "/doors",
+                        {
+                            templateUrl: "/pages/doors.html",
+                            controller: "doorsController"
                         })
                     .otherwise(
                         {

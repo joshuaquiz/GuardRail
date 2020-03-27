@@ -7,7 +7,12 @@ app.controller(
         "$scope",
         "$http",
         function ($rootScope, $scope, $http) {
-            $rootScope.$on("message", d => console.log(d));
+            $rootScope.$on(
+                "NewLog",
+                (e, p) => {
+                    console.log(e, p);
+                    $scope.logs.push(p);
+                });
             const setup = () => {
                 $http.get("/api/logs/latest")
                     .then(response => {

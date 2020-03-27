@@ -11,14 +11,14 @@ namespace GuardRail.Api.Authorizers
     /// <summary>
     /// Everyone gets in all the time!
     /// </summary>
-    public sealed class AlwaysAllowAuthorizer : IAuthorizer
+    public sealed class DefaultAuthorizer : IAuthorizer
     {
         private readonly IEventBus _eventBus;
         private readonly GuardRailContext _guardRailContext;
         private readonly GuardRailHub _guardRailHub;
         private readonly GuardRailLogger _guardRailLogger;
 
-        public AlwaysAllowAuthorizer(
+        public DefaultAuthorizer(
             IEventBus eventBus,
             GuardRailContext guardRailContext,
             GuardRailHub guardRailHub,
@@ -71,11 +71,7 @@ namespace GuardRail.Api.Authorizers
                     {
                         foreach (var door in accessControlDevice.Doors)
                         {
-                            await _guardRailLogger.LogAsync($"{door.FriendlyName} is unlocked for 5 seconds");
-                            await door.UnLock(CancellationToken.None);
-                            await Task.Delay(
-                                TimeSpan.FromSeconds(5));
-                            await door.Lock(CancellationToken.None);
+                            await door.UnLockAsync(CancellationToken.None);
                         }
                     }
                     else
@@ -115,14 +111,7 @@ namespace GuardRail.Api.Authorizers
                     nameof(accessControlDevice));
             }
 
-            await _guardRailContext.Logs.AddAsync(
-                new Log
-                {
-                    DateTime = DateTimeOffset.UtcNow,
-                    LogMessage =
-                        $"User {user.FirstName} {user.LastName} is granted access using {accessControlDevice.GetDeviceId()}"
-                });
-            await _guardRailContext.SaveChangesAsync();
+            await _guardRailLogger.LogAsync($"User {user.FirstName} {user.LastName} is granted access using {accessControlDevice.GetDeviceId()}");
             return true;
         }
     }

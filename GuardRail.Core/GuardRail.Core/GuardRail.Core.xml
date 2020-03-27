@@ -113,6 +113,11 @@
             Represents a door locking device.
             </summary>
         </member>
+        <member name="P:GuardRail.Core.IDoor.FriendlyName">
+            <summary>
+            A friendlyName for the door.
+            </summary>
+        </member>
         <member name="M:GuardRail.Core.IDoor.GetDeviceId">
             <summary>
             Gets the device ID of the hardware.
@@ -126,14 +131,14 @@
             <param name="cancellationToken"></param>
             <returns><see cref="T:GuardRail.Core.LockedStatus"/></returns>
         </member>
-        <member name="M:GuardRail.Core.IDoor.Lock(System.Threading.CancellationToken)">
+        <member name="M:GuardRail.Core.IDoor.LockAsync(System.Threading.CancellationToken)">
             <summary>
             Sets the door in a locked state.
             </summary>
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:GuardRail.Core.IDoor.UnLock(System.Threading.CancellationToken)">
+        <member name="M:GuardRail.Core.IDoor.UnLockAsync(System.Threading.CancellationToken)">
             <summary>
             Sets the door into an un-locked state.
             </summary>

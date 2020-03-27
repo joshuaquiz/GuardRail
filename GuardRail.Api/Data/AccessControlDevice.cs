@@ -26,6 +26,9 @@ namespace GuardRail.Api.Data
             builder
                 ?.Entity<AccessControlDevice>()
                 ?.HasIndex(b => b.DeviceId);
+            builder
+                ?.Entity<AccessControlDevice>()
+                ?.HasMany<Door>();
         }
 
         public void Dispose()

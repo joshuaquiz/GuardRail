@@ -29,6 +29,9 @@ namespace GuardRail.Api.Data
             builder
                 ?.Entity<Device>()
                 ?.HasIndex(b => b.ByteId);
+            builder
+                ?.Entity<Device>()
+                ?.HasOne<User>();
         }
     }
 }
