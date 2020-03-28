@@ -1,0 +1,26 @@
+﻿<div class="access_box">
+    <div class="left_side">
+        <table>
+            <caption>Access Control Devices</caption>
+            <thead>
+            <tr>
+                <th>Friendly Name</th>
+                <th>Device ID</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="acd in acds">
+                <td>{{acd.friendlyName}}</td>
+                <td>{{acd.deviceId}}</td>
+                <td ng-click="edit(acd)">Edit</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="right_side" ng-switch="state">
+        <div ng-when="edit">
+            
+        </div>
+    </div>
+</div>

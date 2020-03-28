@@ -1,21 +1,21 @@
 ﻿"use strict";
 
 app.controller(
-    "doorsController",
+    "accessController",
     [
         "$rootScope",
         "$scope",
         "$http",
         function ($rootScope, $scope, $http) {
             const setup = () => {
-                $http.get("/api/doors")
+                $http.get("/api/acd")
                     .then(response => {
-                        $scope.doors = response.data;
+                        $scope.acds = response.data;
                     });
             };
-            $scope.lockDoor = door => {
-                $http.post(
-                    `/api/doors/${door.id}/lock`)
+            $scope.edit = acd => {
+                $http.get(
+                    `/api/acd/${acd.id}`)
                     .then(() => {
                         door.lockedStatus = 2;
                         alert("locked!");
