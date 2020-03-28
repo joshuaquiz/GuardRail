@@ -14,19 +14,36 @@ app.controller(
                     });
             };
             $scope.edit = acd => {
+                $scope.state = "edit";
                 $http.get(
-                    `/api/acd/${acd.id}`)
-                    .then(() => {
-                        door.lockedStatus = 2;
-                        alert("locked!");
+                        `/api/acd/${acd.id}`)
+                    .then(response => {
+                        $scope.device = response.data;
+                        $http.get("/api/doors")
+                            .then(doors => {
+                                $scope.possibleDoors = {
+                                    options: doors.data.filter(
+                                        x => $scope.device.doors.indexOf(d => d.id === x.id) === -1),
+                                    value: {}
+                                };
+                            });
                     });
             };
-            $scope.unlockDoor = door => {
+            $scope.addDoor = () => {
+                if ($scope.possibleDoors.value === null) {
+                    return;
+                }
+                $scope.device.doors.push($scope.possibleDoors.value);
+                const index = $scope.possibleDoors.options.indexOf($scope.possibleDoors.value);
+                $scope.possibleDoors.options.splice(index, 1);
+            };
+            $scope.save = acd => {
                 $http.post(
-                    `/api/doors/${door.id}/unlock`)
+                    `/api/acd/${acd.id}`,
+                    acd)
                     .then(() => {
-                        door.lockedStatus = 1;
-                        alert("unlocked!");
+                        $scope.state = "none";
+                        setup();
                     });
             };
             setup();

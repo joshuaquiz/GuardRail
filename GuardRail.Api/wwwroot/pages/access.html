@@ -19,8 +19,24 @@
         </table>
     </div>
     <div class="right_side" ng-switch="state">
-        <div ng-when="edit">
-            
+        <div ng-switch-when="edit">
+            <form name="form" ng-submit="save(device)">
+                <div class="form-group">
+                    <label for="friendlyName">Name</label>
+                    <input type="text" name="friendlyName" id="friendlyName" class="form-control" ng-model="device.friendlyName" required />
+                    <span ng-if="form.friendlyName.$dirty && form.friendlyName.$error.required" class="help-block">Name is required</span>
+                </div>
+                <div class="form-group">
+                    <label for="doors">Doors</label>
+                    <select name="doors" id="doors" class="form-control" ng-model="possibleDoors.value" ng-options="door.friendlyName for door in possibleDoors.options" ng-change="addDoor(d)"></select>
+                    <div class="group">
+                        <span ng-repeat="door in device.doors">{{door.friendlyName}}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" ng-disabled="form.$invalid || dataLoading" class="btn">save</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

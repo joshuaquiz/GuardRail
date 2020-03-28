@@ -39,7 +39,7 @@ namespace GuardRail.Api
             services.AddSignalR();
             services.AddDbContext<GuardRailContext>(
                 options => options.UseInMemoryDatabase(Guid.NewGuid().ToString()),
-                ServiceLifetime.Singleton,
+                ServiceLifetime.Transient,
                 ServiceLifetime.Singleton);
             services.AddSingleton<ILogger>(logger);
             services.AddSingleton<ISCardContext, SCardContext>();
