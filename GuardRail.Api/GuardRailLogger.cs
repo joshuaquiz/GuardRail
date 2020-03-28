@@ -32,7 +32,7 @@ namespace GuardRail.Api
             };
             await _guardRailContext.Logs.AddAsync(log);
             await _guardRailContext.SaveChangesAsync();
-            await _guardRailHub.SendLogAsync(logMessage);
+            await _guardRailHub.SendLogAsync(log);
         }
 
         public async Task LogErrorAsync(Exception exception)

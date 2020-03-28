@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using GuardRail.Api.Data;
 using Microsoft.AspNetCore.SignalR;
 
 namespace GuardRail.Api
@@ -7,7 +8,7 @@ namespace GuardRail.Api
     public sealed class GuardRailHub : Hub
     {
         public async Task SendLogAsync(
-            string message) =>
+            Log message) =>
             await Clients.All.SendCoreAsync(
                 "NewLog",
                 new object[]

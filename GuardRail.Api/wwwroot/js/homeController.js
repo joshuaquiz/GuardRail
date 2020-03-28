@@ -10,8 +10,8 @@ app.controller(
             $rootScope.$on(
                 "NewLog",
                 (e, p) => {
-                    console.log(e, p);
-                    $scope.logs.push(p);
+                    $scope.logs.splice(0, 0, p);
+                    $scope.$apply();
                 });
             const setup = () => {
                 $http.get("/api/logs/latest")
