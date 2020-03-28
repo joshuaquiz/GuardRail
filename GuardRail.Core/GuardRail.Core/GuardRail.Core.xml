@@ -113,6 +113,17 @@
             Represents a door locking device.
             </summary>
         </member>
+        <member name="P:GuardRail.Core.IDoor.FriendlyName">
+            <summary>
+            A friendlyName for the door.
+            </summary>
+        </member>
+        <member name="M:GuardRail.Core.IDoor.GetDeviceId">
+            <summary>
+            Gets the device ID of the hardware.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:GuardRail.Core.IDoor.GetLockedStatus(System.Threading.CancellationToken)">
             <summary>
             Gets the current locked status for the door.
@@ -120,14 +131,14 @@
             <param name="cancellationToken"></param>
             <returns><see cref="T:GuardRail.Core.LockedStatus"/></returns>
         </member>
-        <member name="M:GuardRail.Core.IDoor.Lock(System.Threading.CancellationToken)">
+        <member name="M:GuardRail.Core.IDoor.LockAsync(System.Threading.CancellationToken)">
             <summary>
             Sets the door in a locked state.
             </summary>
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:GuardRail.Core.IDoor.UnLock(System.Threading.CancellationToken)">
+        <member name="M:GuardRail.Core.IDoor.UnLockAsync(System.Threading.CancellationToken)">
             <summary>
             Sets the door into an un-locked state.
             </summary>
@@ -141,9 +152,30 @@
         </member>
         <member name="M:GuardRail.Core.IDoorFactory.GetDoors">
             <summary>
-            Gets a list of <see cref="T:GuardRail.Core.IAccessControlDevice"/>.
+            Gets a list of <see cref="T:GuardRail.Core.IDoor"/>.
             </summary>
-            <returns><see cref="T:GuardRail.Core.IAccessControlDevice"/></returns>
+            <returns><see cref="T:GuardRail.Core.IDoor"/></returns>
+        </member>
+        <member name="T:GuardRail.Core.IDoorResolver">
+            <summary>
+            Manages the link between the device IDs and the hardware behind them.
+            </summary>
+        </member>
+        <member name="M:GuardRail.Core.IDoorResolver.RegisterDoor(GuardRail.Core.IDoor,System.Threading.CancellationToken)">
+            <summary>
+            Adds a door to the resolver.
+            </summary>
+            <param name="door"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GuardRail.Core.IDoorResolver.GetDoorByDeviceId(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Returns an <see cref="T:GuardRail.Core.IDoor"/> of the hardware for an actual door.
+            </summary>
+            <param name="deviceId"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
         </member>
         <member name="T:GuardRail.Core.IEventBus">
             <summary>

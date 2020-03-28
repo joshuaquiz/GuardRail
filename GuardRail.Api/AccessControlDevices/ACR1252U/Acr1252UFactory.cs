@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GuardRail.Api.Data;
 using GuardRail.Core;
+using Microsoft.EntityFrameworkCore;
 using PCSC;
 using Serilog;
 using Log = GuardRail.Api.Data.Log;
@@ -79,6 +80,23 @@ namespace GuardRail.Api.AccessControlDevices.ACR1252U
                     LogMessage = $"{devices.Count} access control devices were found"
                 });
             await _guardRailContext.SaveChangesAsync();
+            foreach (var accessControlDevice in devices)
+            {
+                var acdId = await accessControlDevice.GetDeviceId();
+                var acd = await _guardRailContext.AccessControlDevices.SingleOrDefaultAsync(x => x.DeviceId == acdId);
+                if (acd == null)
+                {
+                    await _guardRailContext.AccessControlDevices.AddAsync(
+                        new AccessControlDevice
+                        {
+                            DeviceId = acdId,
+                            IsConfigured = false
+                        });
+                    await _guardRailContext.SaveChangesAsync();
+
+                }
+            }
+
             return new ReadOnlyCollection<IAccessControlDevice>(devices);
         }
     }

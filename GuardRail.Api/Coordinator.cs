@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,25 +12,22 @@ namespace GuardRail.Api
     public sealed class CoordinatorService : IHostedService
     {
         private readonly ILogger _logger;
-        private readonly IEventBus _eventBus;
-        private readonly IAuthorizer _authorizer;
         private readonly IEnumerable<IDoorFactory> _doorFactories;
         private readonly IEnumerable<IAccessControlFactory> _accessControlFactories;
+        private readonly IDoorResolver _doorResolver;
         private readonly GuardRailContext _guardRailContext;
 
         public CoordinatorService(
             ILogger logger,
-            IEventBus eventBus,
-            IAuthorizer authorizer,
             IEnumerable<IDoorFactory> doorFactories,
             IEnumerable<IAccessControlFactory> accessControlFactories,
+            IDoorResolver doorResolver,
             GuardRailContext guardRailContext)
         {
             _logger = logger;
-            _eventBus = eventBus;
-            _authorizer = authorizer;
             _doorFactories = doorFactories;
             _accessControlFactories = accessControlFactories;
+            _doorResolver = doorResolver;
             _guardRailContext = guardRailContext;
         }
 
@@ -39,9 +35,9 @@ namespace GuardRail.Api
         {
             foreach (var doorFactory in _doorFactories)
             {
-                foreach (var door in doorFactory.GetDoors())
+                foreach (var door in await doorFactory.GetDoors())
                 {
-                    // TODO: Register door.
+                    await _doorResolver.RegisterDoor(door, cancellationToken);
                 }
             }
 
@@ -55,30 +51,6 @@ namespace GuardRail.Api
             }
 
             _logger.Debug("Done loading access control devices");
-            _eventBus.AccessAuthorizationEvents.CollectionChanged += async (sender, args) =>
-            {
-                if (args.Action != NotifyCollectionChangedAction.Add)
-                {
-                    return;
-                }
-
-                foreach (AccessAuthorizationEvent newItem in args.NewItems)
-                {
-                    if (await _authorizer.IsDeviceAuthorizedAtLocation(
-                        null, // TODO: Get User by device.
-                        newItem.AccessControlDevice))
-                    {
-                        // TODO: Get door and unlock it.
-                    }
-                    else
-                    {
-                        await newItem
-                            .AccessControlDevice
-                            .PresentNoAccessGranted(
-                                "This user is not allowed at this location");
-                    }
-                }
-            };
             await _guardRailContext.Users.AddAsync(
                 new User
                 {

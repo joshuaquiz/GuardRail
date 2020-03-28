@@ -28,12 +28,12 @@ namespace GuardRail.Api.Controllers
             await _guardRailContext
                 .Users
                 .Select(x =>
-                new UserModel
-                {
-                    Id = x.Id,
-                    FirstName = x.FirstName,
-                    LastName = x.LastName
-                })
+                    new UserModel
+                    {
+                        Id = x.Id,
+                        FirstName = x.FirstName,
+                        LastName = x.LastName
+                    })
                 .ToListAsync();
     }
 }

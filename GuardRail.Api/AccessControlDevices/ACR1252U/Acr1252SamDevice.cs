@@ -307,7 +307,22 @@ namespace GuardRail.Api.AccessControlDevices.ACR1252U
         /// <returns></returns>
         public Task PresentNoAccessGranted(string reason)
         {
-            TurnRedLightOn(_sCardReader);
+            try
+            {
+                TurnRedLightOn(_sCardReader);
+            }
+            catch (PCSCException e)
+            {
+                if (e.SCardError != SCardError.RemovedCard)
+                {
+                    _logger.Error(e, e.Message);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, e.Message);
+            }
+
             return Task.CompletedTask;
         }
 

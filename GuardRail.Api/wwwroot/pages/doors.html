@@ -1,0 +1,34 @@
+﻿<div class="doors_box">
+    <div class="left_side">
+        <table>
+            <caption>Doors</caption>
+            <thead>
+            <tr>
+                <th>Friendly Name</th>
+                <th>Device ID</th>
+                <th>Locked Status</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="door in doors">
+                <td>{{door.friendlyName}}</td>
+                <td>{{door.deviceId}}</td>
+                <td>{{door.lockedStatus == 2 ? 'Locked' : door.lockedStatus == 1 ? 'Un-Locked' : 'Unknown'}}</td>
+                <td>Edit</td>
+                <td ng-click="unlockDoor(door)">Unlock</td>
+                <td ng-click="lockDoor(door)">Lock</td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="3"></td>
+                <td>Add</td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="right_side">
+    </div>
+</div>

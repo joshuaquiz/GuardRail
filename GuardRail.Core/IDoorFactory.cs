@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace GuardRail.Core
 {
@@ -8,9 +9,9 @@ namespace GuardRail.Core
     public interface IDoorFactory
     {
         /// <summary>
-        /// Gets a list of <see cref="IAccessControlDevice"/>.
+        /// Gets a list of <see cref="IDoor"/>.
         /// </summary>
-        /// <returns><see cref="IAccessControlDevice"/></returns>
-        IReadOnlyCollection<IDoor> GetDoors();
+        /// <returns><see cref="IDoor"/></returns>
+        Task<IReadOnlyCollection<IDoor>> GetDoors();
     }
 }
