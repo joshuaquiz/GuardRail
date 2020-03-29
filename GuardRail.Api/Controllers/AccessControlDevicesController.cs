@@ -40,7 +40,7 @@ namespace GuardRail.Api.Controllers
 
         [Microsoft.AspNetCore.Mvc.Route("{id}")]
         [Microsoft.AspNetCore.Mvc.HttpGet]
-        public async Task<AccessControlDeviceModel> GetAcdsAsync(
+        public async Task<AccessControlDeviceModel> GetAcdAsync(
             Guid id)
         {
             var acd = await _guardRailContext
@@ -85,9 +85,10 @@ namespace GuardRail.Api.Controllers
                     HttpContext.RequestAborted);
             accessControlDevice.FriendlyName = accessControlDeviceModel.FriendlyName;
             accessControlDevice.IsConfigured = accessControlDeviceModel.IsConfigured;
+            var doorIds = accessControlDeviceModel.Doors.Select(x => x.Id).ToList();
             accessControlDevice.Doors = await _guardRailContext
                 .Doors
-                .Where(x => accessControlDeviceModel.Doors.Any(d => d.Id == x.Id))
+                .Where(x => doorIds.Any(doorId => doorId == x.Id))
                 .ToListAsync(HttpContext.RequestAborted);
             await _guardRailContext.SaveChangesAsync(HttpContext.RequestAborted);
         }

@@ -18,6 +18,10 @@ namespace GuardRail.Api.Data
 
         public List<Door> Doors { get; set; }
 
+        public List<AccessControlDeviceRole> AccessControlDeviceRoles { get; set; }
+
+        public List<UserAccess> UserAccesses { get; set; }
+
         public static void OnModelCreating(ModelBuilder builder)
         {
             builder
@@ -29,6 +33,12 @@ namespace GuardRail.Api.Data
             builder
                 ?.Entity<AccessControlDevice>()
                 ?.HasMany<Door>();
+            builder
+                ?.Entity<AccessControlDevice>()
+                ?.HasMany<AccessControlDeviceRole>();
+            builder
+                ?.Entity<AccessControlDevice>()
+                ?.HasMany<UserAccess>();
         }
 
         public void Dispose()

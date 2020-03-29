@@ -172,6 +172,12 @@ var app = angular.module(
                             templateUrl: "/pages/access.html",
                             controller: "accessController"
                         })
+                    .when(
+                        "/devices",
+                        {
+                            templateUrl: "/pages/devices.html",
+                            controller: "devicesController"
+                        })
                     .otherwise(
                         {
                             redirectTo: "/home"

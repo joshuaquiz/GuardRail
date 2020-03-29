@@ -29,6 +29,7 @@ namespace GuardRail.Tests.AccessControlDevices.ACR1252U
                 mockSCardContext.Object,
                 null,
                 null,
+                null,
                 null);
             var devices = await acr1252UFactory.GetAccessControlDevices();
             mockSCardContext.Verify();

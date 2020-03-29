@@ -19,7 +19,9 @@ namespace GuardRail.Api.Data
 
         public List<Device> Devices { get; set; }
 
-        public List<DoorUserAccess> DoorUserAccesses { get; set; }
+        public List<UserAccess> UserAccesses { get; set; }
+
+        public Role Role { get; set; }
 
         /// <summary>
         /// 
@@ -35,7 +37,10 @@ namespace GuardRail.Api.Data
                 ?.HasMany<Device>();
             builder
                 ?.Entity<User>()
-                ?.HasMany<DoorUserAccess>();
+                ?.HasOne<Role>();
+            builder
+                ?.Entity<User>()
+                ?.HasMany<UserAccess>();
         }
     }
 }

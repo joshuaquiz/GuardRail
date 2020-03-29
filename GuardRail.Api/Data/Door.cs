@@ -21,7 +21,9 @@ namespace GuardRail.Api.Data
 
         public AccessControlDevice AccessControlDevice { get; set; }
 
-        public List<DoorUserAccess> DoorUserAccesses { get; set; }
+        public List<Role> Roles { get; set; }
+
+        public List<UserAccess> UserAccesses { get; set; }
 
         public static void OnModelCreating(ModelBuilder builder)
         {
@@ -36,7 +38,10 @@ namespace GuardRail.Api.Data
                 ?.HasOne<AccessControlDevice>();
             builder
                 ?.Entity<Door>()
-                ?.HasMany<DoorUserAccess>();
+                ?.HasMany<Role>();
+            builder
+                ?.Entity<Door>()
+                ?.HasMany<UserAccess>();
         }
 
         public Task<string> GetDeviceId() =>

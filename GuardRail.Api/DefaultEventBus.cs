@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GuardRail.Api
 {
-    public sealed class InMemoryEventBus : IEventBus
+    public sealed class DefaultEventBus : IEventBus
     {
         public ObservableCollection<AccessAuthorizationEvent> AccessAuthorizationEvents { get; }
 
-        public InMemoryEventBus(
+        public DefaultEventBus(
             IAuthorizer authorizer,
             GuardRailContext guardRailContext,
             GuardRailLogger guardRailLogger)
@@ -45,6 +45,15 @@ namespace GuardRail.Api
                     if (device == null)
                     {
                         var log = $"Device {(string.IsNullOrWhiteSpace(newItem.Device.FriendlyName) ? newItem.Device.DeviceId : newItem.Device.FriendlyName)} is not configured";
+                        await guardRailContext.Devices.AddAsync(
+                            new Device
+                            {
+                                ByteId = newItem.Device.ByteId,
+                                DeviceId = newItem.Device.DeviceId,
+                                FriendlyName = newItem.Device.FriendlyName,
+                                IsConfigured = false
+                            });
+                        await guardRailContext.SaveChangesAsync();
                         await guardRailLogger.LogAsync(log);
                         await newItem.AccessControlDevice.PresentNoAccessGranted(log);
                         AccessAuthorizationEvents.Remove(newItem);

@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.Api.Data;
 using GuardRail.Core;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 
@@ -51,15 +52,32 @@ namespace GuardRail.Api
             }
 
             _logger.Debug("Done loading access control devices");
-            await _guardRailContext.Users.AddAsync(
-                new User
+            var user = new User
+            {
+                FirstName = "Test",
+                LastName = "User",
+                Username = "asdf",
+                Password = "asdf"
+            };
+            var role = new Role
+            {
+                Name = "Admin",
+                Users = new List<User>
                 {
-                    FirstName = "Test",
-                    LastName = "User",
-                    Username = "asdf",
-                    Password = "asdf"
-                },
-                cancellationToken);
+                    user
+                }
+            };
+            role.AccessControlDeviceRoles =
+                (await _guardRailContext.AccessControlDevices.ToListAsync(cancellationToken))
+                .Select(x =>
+                    new AccessControlDeviceRole
+                    {
+                        AccessControlDevice = x,
+                        Role = role
+                    })
+                .ToList();
+            await _guardRailContext.Users.AddAsync(user, cancellationToken);
+            await _guardRailContext.Roles.AddAsync(role, cancellationToken);
             await _guardRailContext.SaveChangesAsync(cancellationToken);
         }
 

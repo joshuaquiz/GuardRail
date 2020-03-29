@@ -43,7 +43,7 @@ namespace GuardRail.Api
                 ServiceLifetime.Singleton);
             services.AddSingleton<ILogger>(logger);
             services.AddSingleton<ISCardContext, SCardContext>();
-            services.AddSingleton<IEventBus, InMemoryEventBus>();
+            services.AddSingleton<IEventBus, DefaultEventBus>();
             services.AddSingleton<IAuthorizer, DefaultAuthorizer>();
             services.AddSingleton<IDeviceProvider, DeviceProvider>();
             services.AddSingleton<IDoorResolver, DoorResolver>();

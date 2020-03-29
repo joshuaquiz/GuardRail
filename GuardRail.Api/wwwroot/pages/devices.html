@@ -1,19 +1,17 @@
-﻿<div class="access_box">
+﻿<div class="devices_box">
     <div class="left_side">
         <table>
-            <caption>Access Control Devices</caption>
+            <caption>Devices</caption>
             <thead>
             <tr>
                 <th>Friendly Name</th>
-                <th>Device ID</th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="acd in acds">
-                <td>{{acd.friendlyName}}</td>
-                <td>{{acd.deviceId}}</td>
-                <td ng-click="edit(acd)">Edit</td>
+            <tr ng-repeat="device in devices">
+                <td>{{device.friendlyName}}</td>
+                <td ng-click="edit(device)">Edit</td>
             </tr>
             </tbody>
         </table>
@@ -27,14 +25,11 @@
                     <span ng-if="form.friendlyName.$dirty && form.friendlyName.$error.required" class="help-block">Name is required</span>
                 </div>
                 <div class="form-group">
-                    <label for="doors">Doors</label>
-                    <select name="doors" id="doors" class="form-control" ng-model="possibleDoors.value" ng-options="door.friendlyName for door in possibleDoors.options" ng-change="addDoor()"></select>
-                    <div class="group">
-                        <span ng-repeat="door in device.doors">{{door.friendlyName}}</span>
-                    </div>
+                    <label for="doors">Users</label>
+                    <select name="users" id="doors" class="form-control" ng-model="possibleUsers.value" ng-options="(user.firstName + ' ' + user.lastName) for user in possibleUsers.options" ng-change="addUser()"></select>
                 </div>
                 <div class="form-group">
-                    <input type="checkbox" name="isConfigured" id="isConfigured" class="form-control" ng-model="device.isConfigured" class="btn" />
+                    <input type="button" name="isConfigured" id="isConfigured" class="form-control" ng-model="device.isConfigured" class="btn" />
                 </div>
                 <div class="form-group">
                     <button type="submit" ng-disabled="form.$invalid || dataLoading" class="btn">save</button>

@@ -8,7 +8,6 @@ using GuardRail.Core;
 using Microsoft.EntityFrameworkCore;
 using PCSC;
 using Serilog;
-using Log = GuardRail.Api.Data.Log;
 
 namespace GuardRail.Api.AccessControlDevices.ACR1252U
 {
@@ -22,6 +21,7 @@ namespace GuardRail.Api.AccessControlDevices.ACR1252U
         private readonly ILogger _logger;
         private readonly IDeviceProvider _deviceProvider;
         private readonly GuardRailContext _guardRailContext;
+        private readonly GuardRailLogger _guardRailLogger;
 
         /// <summary>
         /// Builds a Acr1252UFactory.
@@ -31,18 +31,21 @@ namespace GuardRail.Api.AccessControlDevices.ACR1252U
         /// <param name="logger"></param>
         /// <param name="deviceProvider"></param>
         /// <param name="guardRailContext"></param>
+        /// <param name="guardRailLogger"></param>
         public Acr1252UFactory(
             IEventBus eventBus,
             ISCardContext sCardContext,
             ILogger logger,
             IDeviceProvider deviceProvider,
-            GuardRailContext guardRailContext)
+            GuardRailContext guardRailContext,
+            GuardRailLogger guardRailLogger)
         {
             _eventBus = eventBus;
             _sCardContext = sCardContext;
             _logger = logger;
             _deviceProvider = deviceProvider;
             _guardRailContext = guardRailContext;
+            _guardRailLogger = guardRailLogger;
         }
 
         /// <summary>
@@ -73,13 +76,7 @@ namespace GuardRail.Api.AccessControlDevices.ACR1252U
                             _logger,
                             _deviceProvider)));
             _sCardContext.Release();
-            await _guardRailContext.Logs.AddAsync(
-                new Log
-                {
-                    DateTime = DateTimeOffset.UtcNow,
-                    LogMessage = $"{devices.Count} access control devices were found"
-                });
-            await _guardRailContext.SaveChangesAsync();
+            await _guardRailLogger.LogAsync($"{devices.Count} access control devices were found");
             foreach (var accessControlDevice in devices)
             {
                 var acdId = await accessControlDevice.GetDeviceId();
