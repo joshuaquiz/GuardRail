@@ -35,7 +35,8 @@ namespace GuardRail.Api.Controllers
                         FriendlyName = x.FriendlyName,
                         IsConfigured = x.IsConfigured
                     })
-                .ToListAsync();
+                .ToListAsync(
+                    HttpContext.RequestAborted);
 
         [Microsoft.AspNetCore.Mvc.Route("{id}")]
         [Microsoft.AspNetCore.Mvc.HttpGet]
@@ -82,8 +83,13 @@ namespace GuardRail.Api.Controllers
             device.IsConfigured = deviceModel.IsConfigured;
             device.User = await _guardRailContext
                 .Users
-                .SingleAsync(x => x.Id == deviceModel.User.Id);
-            await _guardRailContext.SaveChangesAsync(HttpContext.RequestAborted);
+                .SingleAsync(
+                    x => x.Id == deviceModel.User.Id,
+                    HttpContext.RequestAborted);
+            _guardRailContext.Devices.Update(
+                device);
+            await _guardRailContext.SaveChangesAsync(
+                HttpContext.RequestAborted);
         }
     }
 }

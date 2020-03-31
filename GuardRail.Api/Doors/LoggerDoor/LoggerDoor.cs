@@ -41,11 +41,9 @@ namespace GuardRail.Api.Doors.LoggerDoor
         {
             _isLocked = false;
             await _guardRailLogger.LogAsync($"{FriendlyName} is unlocked for 5 seconds");
-            var delay = Task.Delay(
+            await Task.Delay(
                     TimeSpan.FromSeconds(5),
                     cancellationToken);
-            await delay;
-            await LockAsync(CancellationToken.None);
         }
     }
 }

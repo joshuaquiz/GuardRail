@@ -36,7 +36,8 @@ namespace GuardRail.Api.Controllers
                         DeviceId = x.DeviceId,
                         IsConfigured = x.IsConfigured
                     })
-                .ToListAsync();
+                .ToListAsync(
+                    HttpContext.RequestAborted);
 
         [Microsoft.AspNetCore.Mvc.Route("{id}")]
         [Microsoft.AspNetCore.Mvc.HttpGet]
@@ -90,7 +91,10 @@ namespace GuardRail.Api.Controllers
                 .Doors
                 .Where(x => doorIds.Any(doorId => doorId == x.Id))
                 .ToListAsync(HttpContext.RequestAborted);
-            await _guardRailContext.SaveChangesAsync(HttpContext.RequestAborted);
+            _guardRailContext.AccessControlDevices.Update(
+                accessControlDevice);
+            await _guardRailContext.SaveChangesAsync(
+                HttpContext.RequestAborted);
         }
     }
 }

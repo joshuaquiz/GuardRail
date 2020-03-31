@@ -22,8 +22,10 @@ app.controller(
                         $http.get("/api/users")
                             .then(users => {
                                 $scope.possibleUsers = {
-                                    options: users.data.filter(
-                                        x => $scope.device.users.indexOf(d => d.id === x.id) === -1),
+                                    options: $scope.device.user === null
+                                        ? users.data
+                                        : users.data.filter(
+                                            x => x.id !== $scope.device.user.id),
                                     value: {}
                                 };
                             });

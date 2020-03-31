@@ -29,7 +29,7 @@
                     <select name="users" id="doors" class="form-control" ng-model="possibleUsers.value" ng-options="(user.firstName + ' ' + user.lastName) for user in possibleUsers.options" ng-change="addUser()"></select>
                 </div>
                 <div class="form-group">
-                    <input type="button" name="isConfigured" id="isConfigured" class="form-control" ng-model="device.isConfigured" class="btn" />
+                    <input type="checkbox" name="isConfigured" id="isConfigured" class="form-control" ng-model="device.isConfigured" class="btn" />
                 </div>
                 <div class="form-group">
                     <button type="submit" ng-disabled="form.$invalid || dataLoading" class="btn">save</button>

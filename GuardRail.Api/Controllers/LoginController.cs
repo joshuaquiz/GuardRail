@@ -25,8 +25,13 @@ namespace GuardRail.Api.Controllers
         public async Task<bool> LoginAsync(
             LoginModel loginModel)
         {
-            var user = await _guardRailContext.Users.SingleOrDefaultAsync(x =>
-                x.Username == loginModel.Username && x.Password == loginModel.Password);
+            var user = await _guardRailContext
+                .Users
+                .SingleOrDefaultAsync(
+                    x =>
+                        x.Username == loginModel.Username
+                        && x.Password == loginModel.Password,
+                    HttpContext.RequestAborted);
             return user != null;
         }
     }

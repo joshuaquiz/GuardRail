@@ -28,6 +28,7 @@ namespace GuardRail.Api.Controllers
                 .Logs
                 .OrderByDescending(x => x.DateTime)
                 .Take(100)
-                .ToListAsync();
+                .ToListAsync(
+                    HttpContext.RequestAborted);
     }
 }

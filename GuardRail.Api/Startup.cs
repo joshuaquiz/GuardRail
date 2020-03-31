@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using GuardRail.Api.Authorizers;
 using GuardRail.Api.Data;
-using GuardRail.Api.DeviceProviders;
 using GuardRail.Api.Doors;
 using GuardRail.Core;
 using Microsoft.AspNetCore.Authentication;
@@ -45,7 +44,6 @@ namespace GuardRail.Api
             services.AddSingleton<ISCardContext, SCardContext>();
             services.AddSingleton<IEventBus, DefaultEventBus>();
             services.AddSingleton<IAuthorizer, DefaultAuthorizer>();
-            services.AddSingleton<IDeviceProvider, DeviceProvider>();
             services.AddSingleton<IDoorResolver, DoorResolver>();
             services.AddAuthentication("BasicAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);

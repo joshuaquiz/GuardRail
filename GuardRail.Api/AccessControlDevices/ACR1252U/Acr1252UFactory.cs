@@ -19,7 +19,6 @@ namespace GuardRail.Api.AccessControlDevices.ACR1252U
         private readonly IEventBus _eventBus;
         private readonly ISCardContext _sCardContext;
         private readonly ILogger _logger;
-        private readonly IDeviceProvider _deviceProvider;
         private readonly GuardRailContext _guardRailContext;
         private readonly GuardRailLogger _guardRailLogger;
 
@@ -29,21 +28,18 @@ namespace GuardRail.Api.AccessControlDevices.ACR1252U
         /// <param name="eventBus"></param>
         /// <param name="sCardContext"></param>
         /// <param name="logger"></param>
-        /// <param name="deviceProvider"></param>
         /// <param name="guardRailContext"></param>
         /// <param name="guardRailLogger"></param>
         public Acr1252UFactory(
             IEventBus eventBus,
             ISCardContext sCardContext,
             ILogger logger,
-            IDeviceProvider deviceProvider,
             GuardRailContext guardRailContext,
             GuardRailLogger guardRailLogger)
         {
             _eventBus = eventBus;
             _sCardContext = sCardContext;
             _logger = logger;
-            _deviceProvider = deviceProvider;
             _guardRailContext = guardRailContext;
             _guardRailLogger = guardRailLogger;
         }
@@ -65,7 +61,7 @@ namespace GuardRail.Api.AccessControlDevices.ACR1252U
                             _eventBus,
                             _sCardContext,
                             _logger,
-                            _deviceProvider)));
+                            _guardRailContext)));
             devices.AddRange(
                 readers.Where(x => x.Contains("SAM", StringComparison.InvariantCultureIgnoreCase))
                     .Select(x =>
@@ -74,7 +70,7 @@ namespace GuardRail.Api.AccessControlDevices.ACR1252U
                             _eventBus,
                             _sCardContext,
                             _logger,
-                            _deviceProvider)));
+                            _guardRailContext)));
             _sCardContext.Release();
             await _guardRailLogger.LogAsync($"{devices.Count} access control devices were found");
             foreach (var accessControlDevice in devices)

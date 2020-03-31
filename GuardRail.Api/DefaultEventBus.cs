@@ -1,9 +1,11 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Threading;
 using GuardRail.Api.Data;
 using GuardRail.Core;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace GuardRail.Api
 {
@@ -12,9 +14,7 @@ namespace GuardRail.Api
         public ObservableCollection<AccessAuthorizationEvent> AccessAuthorizationEvents { get; }
 
         public DefaultEventBus(
-            IAuthorizer authorizer,
-            GuardRailContext guardRailContext,
-            GuardRailLogger guardRailLogger)
+            IServiceProvider serviceProvider)
         {
             AccessAuthorizationEvents = new ObservableCollection<AccessAuthorizationEvent>();
             AccessAuthorizationEvents.CollectionChanged += async (sender, args) =>
@@ -24,6 +24,9 @@ namespace GuardRail.Api
                     return;
                 }
 
+                var authorizer = serviceProvider.GetRequiredService<IAuthorizer>();
+                var guardRailContext = serviceProvider.GetRequiredService<GuardRailContext>();
+                var guardRailLogger = serviceProvider.GetRequiredService<GuardRailLogger>();
                 foreach (AccessAuthorizationEvent newItem in args.NewItems)
                 {
                     var acdId = await newItem.AccessControlDevice.GetDeviceId();

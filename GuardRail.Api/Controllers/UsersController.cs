@@ -34,6 +34,7 @@ namespace GuardRail.Api.Controllers
                         FirstName = x.FirstName,
                         LastName = x.LastName
                     })
-                .ToListAsync();
+                .ToListAsync(
+                    HttpContext.RequestAborted);
     }
 }

@@ -5,7 +5,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using GuardRail.Api.Data;
 using GuardRail.Core;
+using Microsoft.EntityFrameworkCore;
 using PCSC;
 using PCSC.Exceptions;
 using PCSC.Utils;
@@ -23,7 +25,7 @@ namespace GuardRail.Api.AccessControlDevices.ACR1252U
         private readonly ISCardContext _sCardContext;
         private readonly ISCardReader _sCardReader;
         private readonly ILogger _logger;
-        private readonly IDeviceProvider _deviceProvider;
+        private readonly GuardRailContext _guardRailContext;
         private readonly CancellationTokenSource _cancellationTokenSource;
 
         private Task _watcherTask;
@@ -34,14 +36,14 @@ namespace GuardRail.Api.AccessControlDevices.ACR1252U
             IEventBus eventBus,
             ISCardContext sCardContext,
             ILogger logger,
-            IDeviceProvider deviceProvider,
+            GuardRailContext guardRailContext,
             Func<ISCardContext, ISCardReader> createSCardReader)
         {
             _id = id;
             _eventBus = eventBus;
             _sCardContext = sCardContext;
             _logger = logger;
-            _deviceProvider = deviceProvider;
+            _guardRailContext = guardRailContext;
             _sCardContext.Establish(SCardScope.System);
             _sCardReader = createSCardReader(_sCardContext);
             _cancellationTokenSource = new CancellationTokenSource();
@@ -62,14 +64,14 @@ namespace GuardRail.Api.AccessControlDevices.ACR1252U
         /// <param name="eventBus">The event bus.</param>
         /// <param name="sCardContext">The context for connecting to the card reader.</param>
         /// <param name="logger">The logger, because.. well, logs :)</param>
-        /// <param name="deviceProvider">The provider to look up devices by their ID.</param>
+        /// <param name="guardRailContext">The provider to look up devices by their ID.</param>
         /// <returns></returns>
         public static IAccessControlDevice Create(
             string id,
             IEventBus eventBus,
             ISCardContext sCardContext,
             ILogger logger,
-            IDeviceProvider deviceProvider)
+            GuardRailContext guardRailContext)
         {
             if (sCardContext == null)
             {
@@ -81,7 +83,7 @@ namespace GuardRail.Api.AccessControlDevices.ACR1252U
                 eventBus,
                 sCardContext,
                 logger,
-                deviceProvider,
+                guardRailContext,
                 c => new SCardReader(c));
         }
 
@@ -105,11 +107,18 @@ namespace GuardRail.Api.AccessControlDevices.ACR1252U
                                 SCardProtocol.Any);
                             ErrorCheck(error);
                             TurnBeepOff(_sCardReader);
-                            var id = GetCardId(_sCardReader);
-                            var device = _deviceProvider.GetDeviceByByteId(id);
+                            var id = GetCardId(_sCardReader).ToArray();
+                            var device = await _guardRailContext.Devices.SingleOrDefaultAsync(x => x.ByteId.SequenceEqual(id));
                             _eventBus.AccessAuthorizationEvents.Add(
                                 AccessAuthorizationEvent.Create(
-                                    device,
+                                    device
+                                    ?? new Device
+                                    {
+                                        ByteId = id.ToArray(),
+                                        DeviceId = Guid.NewGuid().ToString(),
+                                        FriendlyName = "Unknown Device",
+                                        IsConfigured = false
+                                    },
                                     this));
                             await WaitForDisconnect();
                         }
@@ -139,10 +148,17 @@ namespace GuardRail.Api.AccessControlDevices.ACR1252U
             while (status == SCardError.Success)
             {
                 await Task.Delay(TimeSpan.FromMilliseconds(500));
-                status = _sCardReader.Connect(
-                    _id,
-                    SCardShareMode.Shared,
-                    SCardProtocol.Any);
+                try
+                {
+                    status = _sCardReader.Connect(
+                        _id,
+                        SCardShareMode.Shared,
+                        SCardProtocol.Any);
+                }
+                catch (PCSCException)
+                {
+                    status = SCardError.RemovedCard;
+                }
             }
         }
 

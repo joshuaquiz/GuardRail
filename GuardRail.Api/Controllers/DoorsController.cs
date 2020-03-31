@@ -40,7 +40,8 @@ namespace GuardRail.Api.Controllers
                         DeviceId = x.DeviceId,
                         LockedStatus = x.LockedStatus
                     })
-                .ToListAsync();
+                .ToListAsync(
+                    HttpContext.RequestAborted);
 
         [Microsoft.AspNetCore.Mvc.Route("{doorId}/lock")]
         [Microsoft.AspNetCore.Mvc.HttpPost]
@@ -57,7 +58,9 @@ namespace GuardRail.Api.Controllers
             await door.LockAsync(
                 HttpContext.RequestAborted);
             doorFromDatabase.LockedStatus = LockedStatus.Locked;
-            await _guardRailContext.SaveChangesAsync();
+            _guardRailContext.Doors.Update(doorFromDatabase);
+            await _guardRailContext.SaveChangesAsync(
+                HttpContext.RequestAborted);
             return Ok();
         }
 
@@ -73,10 +76,18 @@ namespace GuardRail.Api.Controllers
             var door = await _doorResolver.GetDoorByDeviceId(
                 doorFromDatabase.DeviceId,
                 HttpContext.RequestAborted);
+            doorFromDatabase.LockedStatus = LockedStatus.UnLocked;
+            _guardRailContext.Doors.Update(doorFromDatabase);
+            await _guardRailContext.SaveChangesAsync(
+                HttpContext.RequestAborted);
             await door.UnLockAsync(
                 HttpContext.RequestAborted);
-            doorFromDatabase.LockedStatus = LockedStatus.UnLocked;
-            await _guardRailContext.SaveChangesAsync();
+            doorFromDatabase.LockedStatus = LockedStatus.Locked;
+            _guardRailContext.Doors.Update(doorFromDatabase);
+            await _guardRailContext.SaveChangesAsync(
+                HttpContext.RequestAborted);
+            await door.LockAsync(
+                HttpContext.RequestAborted);
             return Ok();
         }
     }
