@@ -54,7 +54,10 @@ namespace GuardRail.Api.AccessControlDevices.ACR1252U
             var readers = _sCardContext.GetReaders();
             var devices = new List<IAccessControlDevice>();
             devices.AddRange(
-                readers.Where(x => x.Contains("PICC", StringComparison.InvariantCultureIgnoreCase))
+                readers.Where(x =>
+                        x.Contains("PICC", StringComparison.InvariantCultureIgnoreCase)
+                        && x.Contains("ACR", StringComparison.InvariantCultureIgnoreCase)
+                        && x.Contains("1252", StringComparison.InvariantCultureIgnoreCase))
                     .Select(x =>
                         Acr1252PiccDevice.Create(
                             x,
@@ -63,7 +66,10 @@ namespace GuardRail.Api.AccessControlDevices.ACR1252U
                             _logger,
                             _guardRailContext)));
             devices.AddRange(
-                readers.Where(x => x.Contains("SAM", StringComparison.InvariantCultureIgnoreCase))
+                readers.Where(x =>
+                        x.Contains("SAM", StringComparison.InvariantCultureIgnoreCase)
+                        && x.Contains("ACR", StringComparison.InvariantCultureIgnoreCase)
+                        && x.Contains("1252", StringComparison.InvariantCultureIgnoreCase))
                     .Select(x =>
                         Acr1252SamDevice.Create(
                             x,

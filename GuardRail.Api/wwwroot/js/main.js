@@ -184,6 +184,24 @@ var app = angular.module(
                         });
             }
         ])
+    .directive(
+        "loading",
+        [
+            "$http",
+            $http => {
+                return {
+                    restrict: "E",
+                    template: "<div class=\"loading_box\" ng-if=\"isLoading\"><div class=\"loading\"><div class=\"spinner\"></div></div></div>",
+                    link: ($scope, elm, attrs) => {
+                        $scope.checkLoading = pending => pending.length > 0;
+                        $scope.isLoading = $scope.checkLoading($http);
+                        $scope.$watch(
+                            () => $http,
+                            (newValue, oldValue, scope) => $scope.isLoading = $scope.checkLoading(newValue));
+                    }
+                };
+            }
+        ])
     .controller(
         "mainController",
         [

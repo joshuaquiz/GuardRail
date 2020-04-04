@@ -9,7 +9,6 @@ app.controller(
         function ($scope, $location, authenticationService) {
             authenticationService.ClearCredentials();
             $scope.login = () => {
-                $scope.dataLoading = true;
                 authenticationService.Login(
                     $scope.username,
                     $scope.password,
@@ -21,7 +20,6 @@ app.controller(
                             $location.path("/home");
                         } else {
                             $scope.error = response.message;
-                            $scope.dataLoading = false;
                         }
                     });
             };

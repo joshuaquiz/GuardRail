@@ -59,33 +59,3 @@
                 margin: 9px;
                 padding: 5px;
             }
-
-    .login_box > .loading {
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        background-color: rgba(204, 204, 204, 0.5);
-    }
-
-        .login_box > .loading > .spinner {
-            border-top: #f3f3f3 solid 5px;
-            border-left: #f3f3f3 solid 5px;
-            border-right: #f3f3f3 solid 5px;
-            border-bottom: #a9a9a9 solid 5px;
-            border-radius: 50px;
-            height: 50px;
-            width: 50px;
-            animation: spin 2s linear infinite;
-            position: absolute;
-            top: calc(50% - 25px);
-            left: calc(50% - 25px);
-            background-color: transparent;
-        }
-
-@keyframes spin {
-    100% {
-        transform: rotate(360deg);
-    }
-}

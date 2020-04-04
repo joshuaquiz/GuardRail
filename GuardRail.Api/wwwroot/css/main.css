@@ -3,6 +3,12 @@
     src: url('../fonts/teko-regular.ttf') format('truetype');
 }
 
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 * {
     padding: 0;
     margin: 0;
@@ -12,6 +18,30 @@ html, body {
     height: 100%;
     width: 100%;
 }
+
+.loading_box > .loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(204, 204, 204, 0.5);
+}
+
+    .loading_box > .loading > .spinner {
+        border-top: #f3f3f3 solid 5px;
+        border-left: #f3f3f3 solid 5px;
+        border-right: #f3f3f3 solid 5px;
+        border-bottom: #a9a9a9 solid 5px;
+        border-radius: 50px;
+        height: 50px;
+        width: 50px;
+        animation: spin 2s linear infinite;
+        position: absolute;
+        top: calc(50% - 25px);
+        left: calc(50% - 25px);
+        background-color: transparent;
+    }
 
 .page {
     width: 100%;
@@ -91,6 +121,43 @@ html, body {
         width: calc(100% - 200px);
     }
 
-    .page > .body.full {
-        width: 100%;
-    }
+        .page > .body.full {
+            width: 100%;
+        }
+
+        .page > .body > .page_box {
+            float: left;
+            clear: none;
+            height: calc(100% - 50px);
+            width: calc(100% - 200px);
+        }
+
+            .page > .body > .page_box > .left_side {
+                float: left;
+                clear: none;
+                height: 100%;
+                width: calc(50% - 20px);
+                padding: 10px 10px 0 10px;
+            }
+
+                .page > .body > .page_box > .left_side > table {
+                    width: 100%;
+                }
+
+            .page > .body > .page_box > .right_side {
+                float: left;
+                clear: none;
+                height: 100%;
+                width: calc(50% - 20px);
+                padding: 10px 10px 0 10px;
+            }
+
+                .page > .body > .page_box > .right_side > div {
+                    height: 100%;
+                    width: 100%;
+                }
+
+                    .page > .body > .page_box > .right_side > div > form {
+                        height: 100%;
+                        width: 100%;
+                    }
