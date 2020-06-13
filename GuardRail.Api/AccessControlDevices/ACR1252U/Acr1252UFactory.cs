@@ -20,7 +20,7 @@ namespace GuardRail.Api.AccessControlDevices.ACR1252U
         private readonly ISCardContext _sCardContext;
         private readonly ILogger _logger;
         private readonly GuardRailContext _guardRailContext;
-        private readonly GuardRailLogger _guardRailLogger;
+        private readonly IGuardRailLogger _guardRailLogger;
 
         /// <summary>
         /// Builds a Acr1252UFactory.
@@ -35,7 +35,7 @@ namespace GuardRail.Api.AccessControlDevices.ACR1252U
             ISCardContext sCardContext,
             ILogger logger,
             GuardRailContext guardRailContext,
-            GuardRailLogger guardRailLogger)
+            IGuardRailLogger guardRailLogger)
         {
             _eventBus = eventBus;
             _sCardContext = sCardContext;

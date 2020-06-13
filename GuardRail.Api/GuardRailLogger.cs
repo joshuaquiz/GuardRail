@@ -6,7 +6,7 @@ using Log = GuardRail.Api.Data.Log;
 
 namespace GuardRail.Api
 {
-    public sealed class GuardRailLogger
+    public sealed class GuardRailLogger : IGuardRailLogger
     {
         private readonly ILogger _logger;
         private readonly GuardRailContext _guardRailContext;

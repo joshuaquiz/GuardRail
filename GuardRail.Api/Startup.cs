@@ -48,7 +48,7 @@ namespace GuardRail.Api
             services.AddAuthentication("BasicAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
             services.AddSingleton<GuardRailHub, GuardRailHub>();
-            services.AddSingleton<GuardRailLogger, GuardRailLogger>();
+            services.AddSingleton<IGuardRailLogger, GuardRailLogger>();
             RegisterAllImplementations(services, typeof(IDoorFactory));
             RegisterAllImplementations(services, typeof(IAccessControlFactory));
             services.AddHostedService<CoordinatorService>();
