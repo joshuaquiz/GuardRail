@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>GuardRail.LocalUpdater</name>
+        <name>GuardRailUpdater</name>
     </assembly>
     <members>
         <member name="T:GuardRail.LocalUpdater.App">
@@ -10,6 +10,11 @@
             </summary>
             <summary>
             App
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalUpdater.App.#ctor">
+            <summary>
+            Initial app startup configuration.
             </summary>
         </member>
         <member name="M:GuardRail.LocalUpdater.App.InitializeComponent">
@@ -28,6 +33,11 @@
             </summary>
             <summary>
             MainWindow
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalUpdater.MainWindow.#ctor(System.Boolean)">
+            <summary>
+            Setup window.
             </summary>
         </member>
         <member name="M:GuardRail.LocalUpdater.MainWindow.InitializeComponent">

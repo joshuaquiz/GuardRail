@@ -14,7 +14,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuardRail.Tests", "GuardRai
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuardRail.Api", "GuardRail.Api\GuardRail.Api.csproj", "{E996AE63-1DF1-4B02-A096-11F2083FE82A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuardRail.LocalUpdater", "GuardRail.LocalUpdater\GuardRail.LocalUpdater.csproj", "{EA8D0DEB-EDED-4630-B76E-7538E11007E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuardRail.LocalUpdater", "GuardRail.LocalUpdater\GuardRail.LocalUpdater.csproj", "{EA8D0DEB-EDED-4630-B76E-7538E11007E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuardRail.LocalClient", "GuardRail.LocalClient\GuardRail.LocalClient.csproj", "{A5A48F1C-8132-4567-8C10-204DD55733E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +40,10 @@ Global
 		{EA8D0DEB-EDED-4630-B76E-7538E11007E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA8D0DEB-EDED-4630-B76E-7538E11007E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA8D0DEB-EDED-4630-B76E-7538E11007E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5A48F1C-8132-4567-8C10-204DD55733E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5A48F1C-8132-4567-8C10-204DD55733E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5A48F1C-8132-4567-8C10-204DD55733E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5A48F1C-8132-4567-8C10-204DD55733E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -187,6 +187,46 @@
             The events.
             </summary>
         </member>
+        <member name="T:GuardRail.Core.InstallConfiguration">
+            <summary>
+            The configuration for an update/install.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.InstallConfiguration.LatestVersion">
+            <summary>
+            The latest version of the software.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.InstallConfiguration.InstallFiles">
+            <summary>
+            The files for the upload.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.InstallConfiguration.RestartCommand">
+            <summary>
+            The command to run that will do any last cleanups and start the updated application.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.InstallConfiguration.UpdateDirectory">
+            <summary>
+            The directory that the updates are to be stored in.
+            </summary>
+        </member>
+        <member name="T:GuardRail.Core.InstallFile">
+            <summary>
+            Represents a file to be downloaded for the install.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.InstallFile.DownloadUri">
+            <summary>
+            The Location of the file on the web.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.InstallFile.LocalPath">
+            <summary>
+            Where the file goes locally.
+            </summary>
+        </member>
         <member name="T:GuardRail.Core.IUser">
             <summary>
             A user in the system.
