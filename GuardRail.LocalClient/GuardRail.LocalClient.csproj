@@ -46,6 +46,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GuardRail.EventBus\GuardRail.EventBus.csproj" />
     <ProjectReference Include="..\GuardRail.LocalUpdater\GuardRail.LocalUpdater.csproj" />
   </ItemGroup>
 
