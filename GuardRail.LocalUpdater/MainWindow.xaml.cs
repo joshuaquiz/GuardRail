@@ -21,7 +21,7 @@ namespace GuardRail.LocalUpdater
     /// </summary>
     public partial class MainWindow
     {
-        private readonly bool _isInstall;
+        private readonly bool _isFirstInstall;
         private readonly string _currentDir;
         private readonly CancellationTokenSource _cancellationTokenSource;
 
@@ -30,12 +30,12 @@ namespace GuardRail.LocalUpdater
         /// <summary>
         /// Setup window.
         /// </summary>
-        public MainWindow(bool isInstall)
+        public MainWindow(bool isFirstInstall)
         {
-            _isInstall = isInstall;
+            _isFirstInstall = isFirstInstall;
             InitializeComponent();
-            _currentDir = _isInstall
-                ? "c:\\Program Files\\GuardRail"
+            _currentDir = _isFirstInstall
+                ? Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
                 : Environment.CurrentDirectory;
             _cancellationTokenSource = new CancellationTokenSource();
             Status.Content = "Checking for updates...";
@@ -148,7 +148,7 @@ namespace GuardRail.LocalUpdater
                                 File.Move(x, x.Replace(_currentDir + _installConfiguration.UpdateDirectory, _currentDir));
                                 ProgressBar.Value++;
                             })));
-            if (_isInstall)
+            if (_isFirstInstall)
             {
                 var shell = new WshShell();
                 var desktopFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
@@ -177,11 +177,11 @@ namespace GuardRail.LocalUpdater
             var finalProcess = new Process
             {
                 StartInfo = new ProcessStartInfo
-                    {
-                        WindowStyle = ProcessWindowStyle.Hidden,
-                        FileName = "cmd.exe",
-                        Arguments = _installConfiguration.RestartCommand
-                    }
+                {
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    FileName = "cmd.exe",
+                    Arguments = _installConfiguration.RestartCommand
+                }
             };
             finalProcess.Start();
         }

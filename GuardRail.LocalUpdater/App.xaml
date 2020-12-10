@@ -6,6 +6,6 @@
     StartupUri="MainWindow.xaml">
     <Application.Resources>
         <FontFamily x:Key="TekoRegular">./Assets/teko-regular.tts#teko-regular</FontFamily>
-        <system:String x:Key="UpdateUri">https://api.guardrail.com/install/latest</system:String>
+        <system:String x:Key="UpdateUri">https://api.guardrailhq.com/install/latest</system:String>
     </Application.Resources>
 </Application>
