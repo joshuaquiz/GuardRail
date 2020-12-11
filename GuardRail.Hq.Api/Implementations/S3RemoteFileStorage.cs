@@ -15,14 +15,14 @@ namespace GuardRail.Hq.Api.Implementations
         private readonly AmazonS3Client _amazonS3Client;
         private readonly TransferUtility _transferUtility;
 
-        public S3RemoteFileStorage(string accessKey, string secretKey)
+        public S3RemoteFileStorage(S3FileSettings s3FileSettings)
         {
             _amazonS3Client = new AmazonS3Client(
-                new BasicAWSCredentials(accessKey, secretKey),
+                new BasicAWSCredentials(s3FileSettings.AccessKey, s3FileSettings.SecretKey),
                 RegionEndpoint.USEast1);
             _transferUtility = new TransferUtility(
-                accessKey,
-                secretKey,
+                s3FileSettings.AccessKey,
+                s3FileSettings.SecretKey,
                 RegionEndpoint.USEast1);
         }
 

@@ -1,3 +1,5 @@
+using GuardRail.Hq.Api.Implementations;
+using GuardRail.Hq.Api.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -24,6 +26,9 @@ namespace GuardRail.Hq.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            var s3FileSettings = Configuration.GetSection("S3").Get<S3FileSettings>();
+            services.AddSingleton<IFileSettings>(s3FileSettings);
+            services.AddSingleton<IRemoteFileStorage>(new S3RemoteFileStorage(s3FileSettings));
         }
 
         /// <summary>

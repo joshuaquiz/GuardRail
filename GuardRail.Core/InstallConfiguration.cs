@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace GuardRail.Core
 {
@@ -11,7 +10,7 @@ namespace GuardRail.Core
         /// <summary>
         /// The latest version of the software.
         /// </summary>
-        public Version LatestVersion { get; set; }
+        public string LatestVersion { get; set; }
 
         /// <summary>
         /// The files for the upload.

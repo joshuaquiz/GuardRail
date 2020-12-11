@@ -1,13 +1,18 @@
-﻿using System.IO;
+﻿using System;
+using System.Globalization;
+using System.IO;
 using Newtonsoft.Json;
 
 namespace GuardRail.Core.Helpers
 {
     /// <summary>
-    /// Extensions for serialization and deserialization.
+    /// Extensions!
     /// </summary>
-    public static class SerializationExtensions
+    public static class Extensions
     {
+
+        #region Serialization Extensions
+
         /// <summary>
         /// Outputs the object as a JSON string.
         /// </summary>
@@ -15,7 +20,9 @@ namespace GuardRail.Core.Helpers
         /// <param name="item">The item to serialize.</param>
         /// <param name="jsonSerializerSettings">Defaulted to only ignores nulls.</param>
         /// <returns>string</returns>
-        public static string ToJson<T>(this T item, JsonSerializerSettings jsonSerializerSettings = null) =>
+        public static string ToJson<T>(
+            this T item,
+            JsonSerializerSettings jsonSerializerSettings = null) =>
             JsonConvert.SerializeObject(
                 item,
                 jsonSerializerSettings
@@ -34,8 +41,9 @@ namespace GuardRail.Core.Helpers
         {
             using var stringReader = new StringReader(s);
             using JsonReader reader = new JsonTextReader(stringReader);
-            return new JsonSerializer()
-                .Deserialize<T>(reader);
+            var jsonSerializer = new JsonSerializer();
+            jsonSerializer.Converters.Add(new VersionConverter());
+            return jsonSerializer.Deserialize<T>(reader);
         }
 
         /// <summary>
@@ -48,8 +56,30 @@ namespace GuardRail.Core.Helpers
         {
             using var streamReader = new StreamReader(s);
             using JsonReader reader = new JsonTextReader(streamReader);
-            return new JsonSerializer()
-                .Deserialize<T>(reader);
+            var jsonSerializer = new JsonSerializer();
+            jsonSerializer.Converters.Add(new VersionConverter());
+            return jsonSerializer.Deserialize<T>(reader);
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Converts one type to another type.
+        /// </summary>
+        /// <typeparam name="TOut">The type to return.</typeparam>
+        /// <param name="from">The value to convert.</param>
+        /// <returns>TOut</returns>
+        public static TOut Convert<TOut>(this string from)
+        {
+            if (from == null)
+            {
+                return default;
+            }
+
+            return (TOut)System.Convert.ChangeType(
+                from,
+                Nullable.GetUnderlyingType(typeof(TOut)) ?? typeof(TOut),
+                CultureInfo.InvariantCulture);
         }
     }
 }

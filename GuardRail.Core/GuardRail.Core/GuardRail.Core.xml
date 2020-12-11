@@ -27,6 +27,56 @@
             The access point the request was triggered at.
             </summary>
         </member>
+        <member name="T:GuardRail.Core.Helpers.Extensions">
+            <summary>
+            Extensions!
+            </summary>
+        </member>
+        <member name="M:GuardRail.Core.Helpers.Extensions.ToJson``1(``0,Newtonsoft.Json.JsonSerializerSettings)">
+            <summary>
+            Outputs the object as a JSON string.
+            </summary>
+            <typeparam name="T">The type of the item to serialize.</typeparam>
+            <param name="item">The item to serialize.</param>
+            <param name="jsonSerializerSettings">Defaulted to only ignores nulls.</param>
+            <returns>string</returns>
+        </member>
+        <member name="M:GuardRail.Core.Helpers.Extensions.FromJson``1(System.String)">
+            <summary>
+            Deserialize JSON to type.
+            </summary>
+            <typeparam name="T">The type of the item to deserialize.</typeparam>
+            <param name="s">The JSON string.</param>
+            <returns>T</returns>
+        </member>
+        <member name="M:GuardRail.Core.Helpers.Extensions.FromJson``1(System.IO.Stream)">
+            <summary>
+            Deserialize JSON to type.
+            </summary>
+            <typeparam name="T">The type of the item to deserialize.</typeparam>
+            <param name="s">The JSON string.</param>
+            <returns>T</returns>
+        </member>
+        <member name="M:GuardRail.Core.Helpers.Extensions.Convert``1(System.String)">
+            <summary>
+            Converts one type to another type.
+            </summary>
+            <typeparam name="TOut">The type to return.</typeparam>
+            <param name="from">The value to convert.</param>
+            <returns>TOut</returns>
+        </member>
+        <member name="T:GuardRail.Core.Helpers.VersionConverter">
+            <inheritdoc/>
+        </member>
+        <member name="M:GuardRail.Core.Helpers.VersionConverter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <inheritdoc/>
+        </member>
+        <member name="M:GuardRail.Core.Helpers.VersionConverter.ReadJson(Newtonsoft.Json.JsonReader,System.Type,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <inheritdoc/>
+        </member>
+        <member name="M:GuardRail.Core.Helpers.VersionConverter.CanConvert(System.Type)">
+            <inheritdoc/>
+        </member>
         <member name="T:GuardRail.Core.IAccessControlDevice">
             <summary>
             Represents an access control device.

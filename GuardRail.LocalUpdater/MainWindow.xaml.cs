@@ -10,8 +10,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using GuardRail.Core;
+using GuardRail.Core.Helpers;
 using IWshRuntimeLibrary;
-using Newtonsoft.Json;
 using File = System.IO.File;
 
 namespace GuardRail.LocalUpdater
@@ -71,8 +71,8 @@ namespace GuardRail.LocalUpdater
             }
 
             var configuration = Encoding.Unicode.GetString(await GetData(new Uri(uriString, UriKind.Absolute)));
-            _installConfiguration = JsonConvert.DeserializeObject<InstallConfiguration>(configuration);
-            return Assembly.GetExecutingAssembly().GetName().Version < _installConfiguration.LatestVersion;
+            _installConfiguration = configuration.FromJson<InstallConfiguration>();
+            return Assembly.GetExecutingAssembly().GetName().Version < new Version(_installConfiguration.LatestVersion);
         }
 
         private Task<bool> UpdateDownloaded() =>
