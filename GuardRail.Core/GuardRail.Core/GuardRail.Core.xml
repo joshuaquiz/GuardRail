@@ -9,7 +9,7 @@
             The data defining the access authorization event
             </summary>
         </member>
-        <member name="M:GuardRail.Core.AccessAuthorizationEvent.Create(GuardRail.Core.IDevice,GuardRail.Core.IAccessControlDevice)">
+        <member name="M:GuardRail.Core.AccessAuthorizationEvent.Parse(GuardRail.Core.IDevice,GuardRail.Core.IAccessControlDevice)">
             <summary>
             Creates a new AccessAuthorizationEvent.
             </summary>
