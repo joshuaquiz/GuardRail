@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GuardRail.Core.CommandLine;
 
 namespace GuardRail.Core
 {
@@ -20,7 +21,7 @@ namespace GuardRail.Core
         /// <summary>
         /// The command to run that will do any last cleanups and start the updated application.
         /// </summary>
-        public string RestartCommand { get; set; }
+        public CommandLineArguments RestartCommand { get; set; }
 
         /// <summary>
         /// The directory that the updates are to be stored in.

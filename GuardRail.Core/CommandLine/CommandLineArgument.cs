@@ -18,31 +18,32 @@ namespace GuardRail.Core.CommandLine
         /// </summary>
         public string Value { get; set; }
 
+        /// <summary>
+        /// Parses a CommandLineArgument from a string
+        /// </summary>
+        /// <param name="argument"></param>
+        /// <returns></returns>
         public static CommandLineArgument Parse(string argument)
         {
-            if (argument == null || !Regex.IsMatch(argument, "/[a-z0-9]+ [a-z0-9\\-\\._]", RegexOptions.IgnoreCase))
+            if (argument == null || !Regex.IsMatch(argument, "/[a-z0-9]+(?: [a-z0-9\\-\\._])?", RegexOptions.IgnoreCase))
             {
                 throw new InvalidCommandLineArgumentFormatException(argument);
             }
 
             var arg = argument.Split(" ");
-            if (Enum.TryParse(typeof(CommandLineArgumentType), arg[0].Substring(1), true, out var type))
-            {
-                return new CommandLineArgument
+            return Enum.TryParse(typeof(CommandLineArgumentType), arg[0][1..], true, out var type)
+                ? new CommandLineArgument
                 {
-                    Type = (CommandLineArgumentType)type,
-                    Value = arg[1]
-                };
-            }
+                    Type = (CommandLineArgumentType) type,
+                    Value = arg.Length == 2
+                        ? arg[1]
+                        : null
+                }
+                : throw new InvalidCommandLineArgumentException(arg[0]);
         }
 
         /// <inheritdoc />
         public override string ToString() =>
             $"/{Type:G} {Value}";
-    }
-
-    public enum CommandLineArgumentType
-    {
-
     }
 }

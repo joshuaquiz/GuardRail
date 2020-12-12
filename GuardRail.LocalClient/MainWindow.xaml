@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:tb="http://www.hardcodet.net/taskbar"
+        xmlns:setup="clr-namespace:GuardRail.LocalClient.Setup"
         mc:Ignorable="d"
         Title="MainWindow"
         WindowState="Maximized">
@@ -20,5 +21,6 @@
                 </ContextMenu>
             </tb:TaskbarIcon.ContextMenu>
         </tb:TaskbarIcon>
+        <setup:SetupUserControl x:Name="SetupUserControl" Visibility="Hidden" />
     </Grid>
 </Window>

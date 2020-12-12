@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Windows;
 
 namespace GuardRail.LocalClient
 {
@@ -15,7 +16,7 @@ namespace GuardRail.LocalClient
 
         protected override void OnStateChanged(EventArgs e)
         {
-            if (WindowState == System.Windows.WindowState.Minimized)
+            if (WindowState == WindowState.Minimized)
             {
                 Hide();
             }
@@ -30,10 +31,15 @@ namespace GuardRail.LocalClient
             base.OnClosing(e);
         }
 
-        private void TaskBarIcon_TrayMouseDoubleClick(object sender, System.Windows.RoutedEventArgs e) =>
+        private void TaskBarIcon_TrayMouseDoubleClick(object sender, RoutedEventArgs e) =>
             Show();
 
-        private void CloseMenuItem_Click(object sender, System.Windows.RoutedEventArgs e) =>
-            System.Windows.Application.Current.Shutdown();
+        private void CloseMenuItem_Click(object sender, RoutedEventArgs e) =>
+            Application.Current.Shutdown();
+
+        internal void ActivateSetupScreen()
+        {
+            SetupUserControl.Visibility = Visibility.Visible;
+        }
     }
 }

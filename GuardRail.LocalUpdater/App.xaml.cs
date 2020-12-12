@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using GuardRail.Core.CommandLine;
 
 namespace GuardRail.LocalUpdater
 {
@@ -16,7 +17,7 @@ namespace GuardRail.LocalUpdater
         }
 
         private static void Application_Startup(object sender, StartupEventArgs e) =>
-            new MainWindow(e.Args.Length == 0)
+            new MainWindow(CommandLineArguments.Create(e.Args))
                 .Show();
     }
 }

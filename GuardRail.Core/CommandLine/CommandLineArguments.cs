@@ -5,22 +5,51 @@ using System.Linq;
 namespace GuardRail.Core.CommandLine
 {
     /// <summary>
-    /// Defined command line arguments.
+    /// Command line arguments.
     /// </summary>
     public sealed class CommandLineArguments : IList<CommandLineArgument>
     {
         private readonly IList<CommandLineArgument> _backingDataStore;
 
+        /// <summary>
+        /// Creates a new CommandLineArguments.
+        /// </summary>
         public CommandLineArguments()
             : this(Enumerable.Empty<string>())
         {
 
         }
 
-        public CommandLineArguments(IEnumerable<string> args)
-        {
+        /// <summary>
+        /// Creates a CommandLineArguments from the strings passed in.
+        /// </summary>
+        /// <param name="args">The arguments to parse.</param>
+        public CommandLineArguments(IEnumerable<string> args) =>
             _backingDataStore = args.Select(CommandLineArgument.Parse).ToList();
-        }
+
+        /// <summary>
+        /// Creates a CommandLineArguments from the strings passed in.
+        /// </summary>
+        /// <param name="args">The arguments to parse.</param>
+        public static CommandLineArguments Create(IEnumerable<string> args) =>
+            new CommandLineArguments(args);
+
+        /// <summary>
+        /// Checks to see if the CommandLineArgumentType was defined.
+        /// </summary>
+        /// <param name="commandLineArgumentType">The type to check for.</param>
+        /// <returns>bool</returns>
+        public bool ContainsKey(CommandLineArgumentType commandLineArgumentType) =>
+            _backingDataStore.Any(x => x.Type == commandLineArgumentType);
+
+        /// <summary>
+        /// Tries to get the CommandLineArgumentType for the type passed in.
+        /// Returns null if no value is found.
+        /// </summary>
+        /// <param name="commandLineArgumentType">The type to check for.</param>
+        /// <returns>CommandLineArgument</returns>
+        public CommandLineArgument TryGetByKey(CommandLineArgumentType commandLineArgumentType) =>
+            _backingDataStore.FirstOrDefault(x => x.Type == commandLineArgumentType);
 
         /// <inheritdoc />
         public IEnumerator<CommandLineArgument> GetEnumerator() =>

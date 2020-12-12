@@ -9,7 +9,7 @@
             The data defining the access authorization event
             </summary>
         </member>
-        <member name="M:GuardRail.Core.AccessAuthorizationEvent.Parse(GuardRail.Core.IDevice,GuardRail.Core.IAccessControlDevice)">
+        <member name="M:GuardRail.Core.AccessAuthorizationEvent.Create(GuardRail.Core.IDevice,GuardRail.Core.IAccessControlDevice)">
             <summary>
             Creates a new AccessAuthorizationEvent.
             </summary>
@@ -26,6 +26,149 @@
             <summary>
             The access point the request was triggered at.
             </summary>
+        </member>
+        <member name="T:GuardRail.Core.CommandLine.CommandLineArgument">
+            <summary>
+            A single command line argument.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.CommandLine.CommandLineArgument.Type">
+            <summary>
+            The type of the argument.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.CommandLine.CommandLineArgument.Value">
+            <summary>
+            The value of the argument as a string.
+            </summary>
+        </member>
+        <member name="M:GuardRail.Core.CommandLine.CommandLineArgument.Parse(System.String)">
+            <summary>
+            Parses a CommandLineArgument from a string
+            </summary>
+            <param name="argument"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GuardRail.Core.CommandLine.CommandLineArgument.ToString">
+            <inheritdoc />
+        </member>
+        <member name="T:GuardRail.Core.CommandLine.CommandLineArguments">
+            <summary>
+            Command line arguments.
+            </summary>
+        </member>
+        <member name="M:GuardRail.Core.CommandLine.CommandLineArguments.#ctor">
+            <summary>
+            Creates a new CommandLineArguments.
+            </summary>
+        </member>
+        <member name="M:GuardRail.Core.CommandLine.CommandLineArguments.#ctor(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Creates a CommandLineArguments from the strings passed in.
+            </summary>
+            <param name="args">The arguments to parse.</param>
+        </member>
+        <member name="M:GuardRail.Core.CommandLine.CommandLineArguments.Create(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Creates a CommandLineArguments from the strings passed in.
+            </summary>
+            <param name="args">The arguments to parse.</param>
+        </member>
+        <member name="M:GuardRail.Core.CommandLine.CommandLineArguments.ContainsKey(GuardRail.Core.CommandLine.CommandLineArgumentType)">
+            <summary>
+            Checks to see if the CommandLineArgumentType was defined.
+            </summary>
+            <param name="commandLineArgumentType">The type to check for.</param>
+            <returns>bool</returns>
+        </member>
+        <member name="M:GuardRail.Core.CommandLine.CommandLineArguments.TryGetByKey(GuardRail.Core.CommandLine.CommandLineArgumentType)">
+            <summary>
+            Tries to get the CommandLineArgumentType for the type passed in.
+            Returns null if no value is found.
+            </summary>
+            <param name="commandLineArgumentType">The type to check for.</param>
+            <returns>CommandLineArgument</returns>
+        </member>
+        <member name="M:GuardRail.Core.CommandLine.CommandLineArguments.GetEnumerator">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.Core.CommandLine.CommandLineArguments.Add(GuardRail.Core.CommandLine.CommandLineArgument)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.Core.CommandLine.CommandLineArguments.Clear">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.Core.CommandLine.CommandLineArguments.Contains(GuardRail.Core.CommandLine.CommandLineArgument)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.Core.CommandLine.CommandLineArguments.CopyTo(GuardRail.Core.CommandLine.CommandLineArgument[],System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.Core.CommandLine.CommandLineArguments.Remove(GuardRail.Core.CommandLine.CommandLineArgument)">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.Core.CommandLine.CommandLineArguments.Count">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.Core.CommandLine.CommandLineArguments.IsReadOnly">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.Core.CommandLine.CommandLineArguments.IndexOf(GuardRail.Core.CommandLine.CommandLineArgument)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.Core.CommandLine.CommandLineArguments.Insert(System.Int32,GuardRail.Core.CommandLine.CommandLineArgument)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.Core.CommandLine.CommandLineArguments.RemoveAt(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.Core.CommandLine.CommandLineArguments.Item(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.Core.CommandLine.CommandLineArguments.ToString">
+            <inheritdoc />
+        </member>
+        <member name="T:GuardRail.Core.CommandLine.CommandLineArgumentType">
+            <summary>
+            All valid command line arguments.
+            </summary>
+        </member>
+        <member name="F:GuardRail.Core.CommandLine.CommandLineArgumentType.FreshInstall">
+            <summary>
+            Denotes that a fresh install should be done.
+            </summary>
+        </member>
+        <member name="F:GuardRail.Core.CommandLine.CommandLineArgumentType.Update">
+            <summary>
+            Denotes that an update should be done.
+            </summary>
+        </member>
+        <member name="F:GuardRail.Core.CommandLine.CommandLineArgumentType.ShouldShowSetup">
+            <summary>
+            Denotes that the main application should show the setup screen.
+            </summary>
+        </member>
+        <member name="T:GuardRail.Core.CommandLine.InvalidCommandLineArgumentException">
+            <summary>
+            The exception happens when a command line argument is not in the defined list of arguments.
+            </summary>
+        </member>
+        <member name="M:GuardRail.Core.CommandLine.InvalidCommandLineArgumentException.#ctor(System.String)">
+            <summary>
+            The exception happens when a command line argument is not in the defined list of arguments.
+            </summary>
+            <param name="invalidArgument"></param>
+        </member>
+        <member name="T:GuardRail.Core.CommandLine.InvalidCommandLineArgumentFormatException">
+            <summary>
+            The exception happens when a command line argument is not well formatted.
+            </summary>
+        </member>
+        <member name="M:GuardRail.Core.CommandLine.InvalidCommandLineArgumentFormatException.#ctor(System.String)">
+            <summary>
+            The exception happens when a command line argument is not well formatted.
+            </summary>
+            <param name="invalidArgument"></param>
         </member>
         <member name="T:GuardRail.Core.Helpers.Extensions">
             <summary>

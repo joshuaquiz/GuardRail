@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using GuardRail.Core;
+using GuardRail.Core.CommandLine;
 using GuardRail.Core.Helpers;
 using IWshRuntimeLibrary;
 using File = System.IO.File;
@@ -30,9 +31,10 @@ namespace GuardRail.LocalUpdater
         /// <summary>
         /// Setup window.
         /// </summary>
-        public MainWindow(bool isFirstInstall)
+        public MainWindow(CommandLineArguments commandLineArguments)
         {
-            _isFirstInstall = isFirstInstall;
+            _isFirstInstall = !commandLineArguments.Any()
+                || commandLineArguments.ContainsKey(CommandLineArgumentType.FreshInstall);
             InitializeComponent();
             _currentDir = _isFirstInstall
                 ? Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
@@ -180,7 +182,7 @@ namespace GuardRail.LocalUpdater
                 {
                     WindowStyle = ProcessWindowStyle.Hidden,
                     FileName = "cmd.exe",
-                    Arguments = _installConfiguration.RestartCommand
+                    Arguments = _installConfiguration.RestartCommand.ToString()
                 }
             };
             finalProcess.Start();

@@ -35,7 +35,7 @@
             MainWindow
             </summary>
         </member>
-        <member name="M:GuardRail.LocalUpdater.MainWindow.#ctor(System.Boolean)">
+        <member name="M:GuardRail.LocalUpdater.MainWindow.#ctor(GuardRail.Core.CommandLine.CommandLineArguments)">
             <summary>
             Setup window.
             </summary>

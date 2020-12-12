@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using GuardRail.Core.CommandLine;
 
 namespace GuardRail.LocalClient
 {
@@ -17,9 +18,11 @@ namespace GuardRail.LocalClient
 
         private static void Application_Startup(object sender, StartupEventArgs e)
         {
+            var mainWindow = new MainWindow();
             StartupHelper.Startup(
-                e,
-                new MainWindow());
+                CommandLineArguments.Create(e.Args),
+                mainWindow);
+            mainWindow.Show();
         }
     }
 }
