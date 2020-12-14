@@ -182,7 +182,7 @@ namespace GuardRail.LocalUpdater
                 {
                     WindowStyle = ProcessWindowStyle.Hidden,
                     FileName = "cmd.exe",
-                    Arguments = _installConfiguration.RestartCommand.ToString()
+                    Arguments = _installConfiguration.RestartCommand
                 }
             };
             finalProcess.Start();

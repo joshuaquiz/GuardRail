@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+	<StartWorkingDirectory>$(MSBuildProjectDirectory)</StartWorkingDirectory>
     <UseWPF>true</UseWPF>
     <AssemblyName>GuardRail</AssemblyName>
     <StartupObject>GuardRail.LocalClient.App</StartupObject>
@@ -21,7 +22,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DocumentationFile>C:\Users\joshua.galloway\source\repos\GuardRail\GuardRail.LocalClient\GuardRail.xml</DocumentationFile>
+    <DocumentationFile>GuardRail.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -33,6 +34,7 @@
     <None Remove="Assets\teko-medium.ttf" />
     <None Remove="Assets\teko-regular.ttf" />
     <None Remove="Assets\teko-semibold.ttf" />
+    <None Remove="LocalDataStore.db-shm" />
     <None Remove="logo_icon.ico" />
     <None Include="Assets\logo_icon.png">
       <Pack>True</Pack>
@@ -42,6 +44,15 @@
 
   <ItemGroup>
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
   </ItemGroup>
 
@@ -103,6 +114,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Data\Remote\" />
     <Folder Include="Resources\" />
   </ItemGroup>
 

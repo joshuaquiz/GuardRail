@@ -14,10 +14,21 @@ namespace GuardRail.LocalClient
         /// <param name="mainWindow">The application's main window.</param>
         public static void Startup(CommandLineArguments commandLineArguments, MainWindow mainWindow)
         {
+            if (commandLineArguments.ContainsKey(CommandLineArgumentType.FreshInstall))
+            {
+                SetupDatabase();
+            }
+            
             if (commandLineArguments.ContainsKey(CommandLineArgumentType.ShouldShowSetup))
             {
                 mainWindow.ActivateSetupScreen();
             }
+        }
+
+        private static void SetupDatabase()
+        {
+            var createAccounts = "CREATE TABLE [dbo].[Accounts] ([Id] INT NOT NULL, [Guid] UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(), [Name] NVARCHAR(10) NULL, PRIMARY KEY CLUSTERED([Id] ASC));";
+            
         }
     }
 }

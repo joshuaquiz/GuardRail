@@ -21,7 +21,7 @@ namespace GuardRail.Core
         /// <summary>
         /// The command to run that will do any last cleanups and start the updated application.
         /// </summary>
-        public CommandLineArguments RestartCommand { get; set; }
+        public string RestartCommand { get; set; }
 
         /// <summary>
         /// The directory that the updates are to be stored in.
