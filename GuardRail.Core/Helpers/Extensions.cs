@@ -81,5 +81,13 @@ namespace GuardRail.Core.Helpers
                 Nullable.GetUnderlyingType(typeof(TOut)) ?? typeof(TOut),
                 CultureInfo.InvariantCulture);
         }
+
+        /// <summary>
+        /// Extension for IsNullOrWhiteSpace.
+        /// </summary>
+        /// <param name="str">The value to use</param>
+        /// <returns>bool</returns>
+        public static bool IsNullOrWhiteSpace(this string str) =>
+            string.IsNullOrWhiteSpace(str);
     }
 }

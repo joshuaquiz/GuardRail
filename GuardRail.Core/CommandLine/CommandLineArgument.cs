@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using GuardRail.Core.Helpers;
 
 namespace GuardRail.Core.CommandLine
 {
@@ -16,7 +17,7 @@ namespace GuardRail.Core.CommandLine
         /// <summary>
         /// The value of the argument as a string.
         /// </summary>
-        public string Value { get; set; }
+        public string Value { get; private set; }
 
         /// <summary>
         /// Parses a CommandLineArgument from a string
@@ -25,25 +26,45 @@ namespace GuardRail.Core.CommandLine
         /// <returns></returns>
         public static CommandLineArgument Parse(string argument)
         {
-            if (argument == null || !Regex.IsMatch(argument, "/[a-z0-9]+(?: [a-z0-9\\-\\._])?", RegexOptions.IgnoreCase))
+            if (argument == null || !Regex.IsMatch(argument, "/[a-z0-9]+(?: [a-z0-9\\-\\._\"])?", RegexOptions.IgnoreCase))
             {
                 throw new InvalidCommandLineArgumentFormatException(argument);
             }
 
-            var arg = argument.Split(" ");
-            return Enum.TryParse(typeof(CommandLineArgumentType), arg[0][1..], true, out var type)
+            var indexOfSpace = argument.IndexOf(" ", StringComparison.InvariantCultureIgnoreCase);
+            var arg = indexOfSpace > -1
+                ? argument[1..indexOfSpace]
+                : argument[1..];
+            var val = indexOfSpace > -1
+                ? argument[(indexOfSpace+1)..].Trim('"')
+                : null;
+            return Enum.TryParse(typeof(CommandLineArgumentType), arg, true, out var type)
                 ? new CommandLineArgument
                 {
                     Type = (CommandLineArgumentType) type,
-                    Value = arg.Length == 2
-                        ? arg[1]
-                        : null
+                    Value = val
                 }
-                : throw new InvalidCommandLineArgumentException(arg[0]);
+                : throw new InvalidCommandLineArgumentException(arg);
         }
 
         /// <inheritdoc />
-        public override string ToString() =>
-            $"/{Type:G} {Value}";
+        public override string ToString()
+        {
+            var type = Type.ToString();
+            string value;
+            if (Value.IsNullOrWhiteSpace())
+            {
+                value = null;
+            }
+            else if (Value.Contains(" ", StringComparison.InvariantCultureIgnoreCase))
+            {
+                value = $" \"{Value}\"";
+            }
+            else
+            {
+                value = $" {Value}";
+            }
+            return $"/{type}{value}";
+        }
     }
 }

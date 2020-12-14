@@ -57,17 +57,6 @@
             Command line arguments.
             </summary>
         </member>
-        <member name="M:GuardRail.Core.CommandLine.CommandLineArguments.#ctor">
-            <summary>
-            Creates a new CommandLineArguments.
-            </summary>
-        </member>
-        <member name="M:GuardRail.Core.CommandLine.CommandLineArguments.#ctor(System.Collections.Generic.IEnumerable{System.String})">
-            <summary>
-            Creates a CommandLineArguments from the strings passed in.
-            </summary>
-            <param name="args">The arguments to parse.</param>
-        </member>
         <member name="M:GuardRail.Core.CommandLine.CommandLineArguments.Create(System.Collections.Generic.IEnumerable{System.String})">
             <summary>
             Creates a CommandLineArguments from the strings passed in.
@@ -133,6 +122,11 @@
             All valid command line arguments.
             </summary>
         </member>
+        <member name="F:GuardRail.Core.CommandLine.CommandLineArgumentType.Default">
+            <summary>
+            Default
+            </summary>
+        </member>
         <member name="F:GuardRail.Core.CommandLine.CommandLineArgumentType.FreshInstall">
             <summary>
             Denotes that a fresh install should be done.
@@ -153,6 +147,11 @@
             The exception happens when a command line argument is not in the defined list of arguments.
             </summary>
         </member>
+        <member name="P:GuardRail.Core.CommandLine.InvalidCommandLineArgumentException.InvalidArgument">
+            <summary>
+            The invalid argument that was passed in.
+            </summary>
+        </member>
         <member name="M:GuardRail.Core.CommandLine.InvalidCommandLineArgumentException.#ctor(System.String)">
             <summary>
             The exception happens when a command line argument is not in the defined list of arguments.
@@ -162,6 +161,11 @@
         <member name="T:GuardRail.Core.CommandLine.InvalidCommandLineArgumentFormatException">
             <summary>
             The exception happens when a command line argument is not well formatted.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.CommandLine.InvalidCommandLineArgumentFormatException.InvalidArgument">
+            <summary>
+            The invalid argument that was passed in.
             </summary>
         </member>
         <member name="M:GuardRail.Core.CommandLine.InvalidCommandLineArgumentFormatException.#ctor(System.String)">
@@ -207,6 +211,13 @@
             <typeparam name="TOut">The type to return.</typeparam>
             <param name="from">The value to convert.</param>
             <returns>TOut</returns>
+        </member>
+        <member name="M:GuardRail.Core.Helpers.Extensions.IsNullOrWhiteSpace(System.String)">
+            <summary>
+            Extension for IsNullOrWhiteSpace.
+            </summary>
+            <param name="str">The value to use</param>
+            <returns>bool</returns>
         </member>
         <member name="T:GuardRail.Core.Helpers.VersionConverter">
             <inheritdoc/>

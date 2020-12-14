@@ -6,6 +6,11 @@
     public enum CommandLineArgumentType
     {
         /// <summary>
+        /// Default
+        /// </summary>
+        Default = -1,
+        
+        /// <summary>
         /// Denotes that a fresh install should be done.
         /// </summary>
         FreshInstall = 0,
