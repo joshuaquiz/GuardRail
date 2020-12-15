@@ -89,6 +89,10 @@ namespace GuardRail.LocalClient.Data.Remote
         }
 
         /// <inheritdoc />
+        public void StartSync() =>
+            _guardRailRemoteSyncBackgroundWorker.Start();
+
+        /// <inheritdoc />
         public Task<T> SaveNew<T>(
             T item,
             CancellationToken cancellationToken) where T : class

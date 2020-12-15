@@ -9,6 +9,12 @@ namespace GuardRail.LocalClient.Data.Local
         
         public DbSet<User> Users { get; set; }
 
+        public GuardRailContext(DbContextOptions<GuardRailContext> dbContextOptions)
+            : base(dbContextOptions)
+        {
+
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder options)
             => options.UseSqlite("Data Source=LocalDataStore.db");
     }

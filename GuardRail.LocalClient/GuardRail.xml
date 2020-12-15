@@ -12,6 +12,16 @@
             App
             </summary>
         </member>
+        <member name="P:GuardRail.LocalClient.App.ServiceProvider">
+            <summary>
+            Service provider for the application.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.App.Configuration">
+            <summary>
+            Configuration for the application.
+            </summary>
+        </member>
         <member name="M:GuardRail.LocalClient.App.#ctor">
             <summary>
             Initial app startup configuration.
@@ -21,6 +31,45 @@
             <summary>
             Application Entry Point.
             </summary>
+        </member>
+        <member name="T:GuardRail.LocalClient.Controls.ValidatedEmailTextBox">
+            <summary>
+            A custom TextBox that validates for emails.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Controls.ValidatedEmailTextBox.#ctor">
+            <summary>
+            A custom TextBox that validates for emails.
+            </summary>
+        </member>
+        <member name="T:GuardRail.LocalClient.Controls.ValidatedPhoneTextBox">
+            <summary>
+            A custom TextBox that validates for phones.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Controls.ValidatedPhoneTextBox.#ctor">
+            <summary>
+            A custom TextBox that validates for phones.
+            </summary>
+        </member>
+        <member name="T:GuardRail.LocalClient.Controls.ValidatedTextBox">
+            <summary>
+            A custom TextBox that validates its contents.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Controls.ValidatedTextBox.HasValidationError">
+            <summary>
+            Whether or not the TextBox has a valid value.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Controls.ValidatedTextBox.#ctor(System.Func{System.String,System.Threading.CancellationToken,System.Threading.Tasks.Task{System.Boolean}})">
+            <summary>
+            A custom TextBox that validates its contents.
+            </summary>
+            <param name="validate">The function to validate the contents of the TextBox.</param>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.DataStore.StartSync">
+            <inheritdoc />
         </member>
         <member name="M:GuardRail.LocalClient.Data.DataStore.SaveNew``1(``0,System.Threading.CancellationToken)">
             <inheritdoc />
@@ -52,6 +101,11 @@
         <member name="T:GuardRail.LocalClient.Data.Interfaces.IDataSink">
             <summary>
             A definition for a data sink.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Interfaces.IDataSink.StartSync">
+            <summary>
+            Starts the syncing for this sink.
             </summary>
         </member>
         <member name="M:GuardRail.LocalClient.Data.Interfaces.IDataSink.SaveNew``1(``0,System.Threading.CancellationToken)">
@@ -95,6 +149,11 @@
             A definition for a data store.
             </summary>
         </member>
+        <member name="M:GuardRail.LocalClient.Data.Interfaces.IDataStore.StartSync">
+            <summary>
+            Starts the syncing for all sinks.
+            </summary>
+        </member>
         <member name="M:GuardRail.LocalClient.Data.Interfaces.IDataStore.SaveNew``1(``0,System.Threading.CancellationToken)">
             <summary>
             Save a new item of type T.
@@ -136,10 +195,13 @@
             An EntityFrameWork IDataSink implementation.
             </summary>
         </member>
-        <member name="M:GuardRail.LocalClient.Data.Local.EntityFrameWorkDataSink.#ctor">
+        <member name="M:GuardRail.LocalClient.Data.Local.EntityFrameWorkDataSink.#ctor(GuardRail.LocalClient.Data.Local.GuardRailContext)">
             <summary>
             Creates an EntityFrameWorkDataSink.
             </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Local.EntityFrameWorkDataSink.StartSync">
+            <inheritdoc />
         </member>
         <member name="M:GuardRail.LocalClient.Data.Local.EntityFrameWorkDataSink.SaveNew``1(``0,System.Threading.CancellationToken)">
             <inheritdoc />
@@ -172,6 +234,9 @@
             A remote stored IDataSink implementation.
             </summary>
         </member>
+        <member name="M:GuardRail.LocalClient.Data.Remote.RemoteDataSink.StartSync">
+            <inheritdoc />
+        </member>
         <member name="M:GuardRail.LocalClient.Data.Remote.RemoteDataSink.SaveNew``1(``0,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
@@ -187,12 +252,103 @@
         <member name="M:GuardRail.LocalClient.Data.Remote.RemoteDataSink.Dispose">
             <inheritdoc />
         </member>
+        <member name="T:GuardRail.LocalClient.Data.Remote.RemoteSinkAction">
+            <summary>
+            Defines a sink action.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Remote.RemoteSinkAction.RemoteSinkActionType">
+            <summary>
+            The type of action.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Remote.RemoteSinkAction.Type">
+            <summary>
+            The type of the item.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Remote.RemoteSinkAction.Item">
+            <summary>
+            The item.
+            </summary>
+        </member>
+        <member name="T:GuardRail.LocalClient.Data.Remote.RemoteSinkActionType">
+            <summary>
+            The type of sink action.
+            </summary>
+        </member>
+        <member name="F:GuardRail.LocalClient.Data.Remote.RemoteSinkActionType.Add">
+            <summary>
+            Add an item.
+            </summary>
+        </member>
+        <member name="F:GuardRail.LocalClient.Data.Remote.RemoteSinkActionType.Update">
+            <summary>
+            Update an item.
+            </summary>
+        </member>
+        <member name="F:GuardRail.LocalClient.Data.Remote.RemoteSinkActionType.Delete">
+            <summary>
+            Delete an item.
+            </summary>
+        </member>
+        <member name="T:GuardRail.LocalClient.Implementations.GuardRailApiClient">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Implementations.GuardRailApiClient.UploadChangesAsync(System.Collections.Generic.IEnumerable{GuardRail.LocalClient.Data.Remote.RemoteSinkAction},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Implementations.GuardRailApiClient.GetDataFromQuery``1(System.Linq.Expressions.Expression{System.Func{System.Linq.IQueryable{``0}}},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Implementations.GuardRailApiClient.CreateNewAccount(System.String,System.String,System.String,System.String,System.String,System.String)">
+            <inheritdoc />
+        </member>
+        <member name="T:GuardRail.LocalClient.Interfaces.IGuardRailApiClient">
+            <summary>
+            A wrapper for the API.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Interfaces.IGuardRailApiClient.UploadChangesAsync(System.Collections.Generic.IEnumerable{GuardRail.LocalClient.Data.Remote.RemoteSinkAction},System.Threading.CancellationToken)">
+            <summary>
+            Upload data changes for syncing.
+            </summary>
+            <param name="changes">The changes to sync.</param>
+            <param name="cancellationToken">A CancellationToken.</param>
+            <returns>Task</returns>
+        </member>
+        <member name="M:GuardRail.LocalClient.Interfaces.IGuardRailApiClient.GetDataFromQuery``1(System.Linq.Expressions.Expression{System.Func{System.Linq.IQueryable{``0}}},System.Threading.CancellationToken)">
+            <summary>
+            Get data from the remote data store.
+            </summary>
+            <typeparam name="T">The type of data to get.</typeparam>
+            <param name="getExpression">The expression to use to pull data.</param>
+            <param name="cancellationToken">A CancellationToken.</param>
+            <returns>Task of IQueryable of T</returns>
+        </member>
+        <member name="M:GuardRail.LocalClient.Interfaces.IGuardRailApiClient.CreateNewAccount(System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Create a new account.
+            </summary>
+            <param name="accountName">The name of the account.</param>
+            <param name="location">The location of the account.</param>
+            <param name="firstName">The first name of the main user.</param>
+            <param name="lastName">The last name of the main user.</param>
+            <param name="phone">The phone number of the main user.</param>
+            <param name="email">The email of the main user.</param>
+            <returns>Task of Account</returns>
+        </member>
         <member name="T:GuardRail.LocalClient.MainWindow">
             <summary>
             Interaction logic for MainWindow.xaml
             </summary>
             <summary>
             MainWindow
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.MainWindow.#ctor(GuardRail.LocalClient.Interfaces.IGuardRailApiClient)">
+            <summary>
+            Interaction logic for MainWindow.xaml
             </summary>
         </member>
         <member name="M:GuardRail.LocalClient.MainWindow.InitializeComponent">
@@ -222,6 +378,11 @@
             </summary>
             <summary>
             SetupUserControl
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Setup.SetupUserControl.#ctor(GuardRail.LocalClient.Interfaces.IGuardRailApiClient)">
+            <summary>
+            Interaction logic for SetupUserControl.xaml
             </summary>
         </member>
         <member name="M:GuardRail.LocalClient.Setup.SetupUserControl.InitializeComponent">

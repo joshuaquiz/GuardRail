@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows;
+using GuardRail.LocalClient.Interfaces;
+using GuardRail.LocalClient.Setup;
 
 namespace GuardRail.LocalClient
 {
@@ -9,8 +11,14 @@ namespace GuardRail.LocalClient
     /// </summary>
     public partial class MainWindow
     {
-        public MainWindow()
+        private readonly IGuardRailApiClient _guardRailApiClient;
+
+        /// <summary>
+        /// Interaction logic for MainWindow.xaml
+        /// </summary>
+        public MainWindow(IGuardRailApiClient guardRailApiClient)
         {
+            _guardRailApiClient = guardRailApiClient;
             InitializeComponent();
         }
 
@@ -37,9 +45,7 @@ namespace GuardRail.LocalClient
         private void CloseMenuItem_Click(object sender, RoutedEventArgs e) =>
             Application.Current.Shutdown();
 
-        internal void ActivateSetupScreen()
-        {
-            SetupUserControl.Visibility = Visibility.Visible;
-        }
+        internal void ActivateSetupScreen() =>
+            Grid.Children.Add(new SetupUserControl(_guardRailApiClient));
     }
 }

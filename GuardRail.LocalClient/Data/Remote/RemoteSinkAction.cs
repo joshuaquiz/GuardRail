@@ -2,13 +2,24 @@
 
 namespace GuardRail.LocalClient.Data.Remote
 {
-    internal sealed class RemoteSinkAction
+    /// <summary>
+    /// Defines a sink action.
+    /// </summary>
+    public sealed class RemoteSinkAction
     {
-        internal RemoteSinkActionType RemoteSinkActionType { get; set; }
-        
-        internal Type Type { get; set; }
+        /// <summary>
+        /// The type of action.
+        /// </summary>
+        public RemoteSinkActionType RemoteSinkActionType { get; set; }
 
-        internal object Item { get; set; }
-        
+        /// <summary>
+        /// The type of the item.
+        /// </summary>
+        public Type Type { get; set; }
+
+        /// <summary>
+        /// The item.
+        /// </summary>
+        public object Item { get; set; }
     }
 }

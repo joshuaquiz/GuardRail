@@ -4,26 +4,25 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    mc:Ignorable="d" 
-    d:DesignHeight="450"
-    d:DesignWidth="800">
+    xmlns:controls="clr-namespace:GuardRail.LocalClient.Controls"
+    mc:Ignorable="d">
     <Grid ScrollViewer.VerticalScrollBarVisibility="Auto">
         <Grid.RowDefinitions>
-            <RowDefinition></RowDefinition>
-            <RowDefinition Height="40"></RowDefinition>
-            <RowDefinition Height="40"></RowDefinition>
-            <RowDefinition Height="40"></RowDefinition>
-            <RowDefinition Height="40"></RowDefinition>
-            <RowDefinition Height="40"></RowDefinition>
-            <RowDefinition Height="40"></RowDefinition>
-            <RowDefinition Height="40"></RowDefinition>
-            <RowDefinition></RowDefinition>
+            <RowDefinition />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition Width="300"></ColumnDefinition>
-            <ColumnDefinition Width="300"></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition />
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Label
             Grid.Column="1"
@@ -72,39 +71,43 @@
             FontFamily="Teko Bold"
             FontSize="20" />
         <TextBox
+            x:Name="AccountNameTextBox"
             Grid.Column="2"
             Grid.Row="1"
             FontFamily="Teko Bold"
             FontSize="20"
             Margin="5,5,5,5" />
         <TextBox
+            x:Name="LocationTextBox"
             Grid.Column="2"
             Grid.Row="2"
             FontFamily="Teko Bold"
             FontSize="20"
             Margin="5,5,5,5" />
         <TextBox
+            x:Name="FirstNameTextBox"
             Grid.Column="2"
             Grid.Row="3"
             FontFamily="Teko Bold"
             FontSize="20"
             Margin="5,5,5,5" />
         <TextBox
+            x:Name="LastNameTextBox"
             Grid.Column="2"
             Grid.Row="4"
             FontFamily="Teko Bold"
             FontSize="20"
             Margin="5,5,5,5" />
-        <TextBox
+        <controls:ValidatedPhoneTextBox
+            x:Name="PhoneTextBox"
             Grid.Column="2"
             Grid.Row="5"
-            FontFamily="Teko Bold"
             FontSize="20"
             Margin="5,5,5,5" />
-        <TextBox
+        <controls:ValidatedEmailTextBox
+            x:Name="EmailTextBox"
             Grid.Column="2"
             Grid.Row="6"
-            FontFamily="Teko Bold"
             FontSize="20"
             Margin="5,5,5,5" />
         <Button
@@ -114,6 +117,7 @@
             FontFamily="Teko Bold"
             FontSize="20"
             Content="Save"
-            Margin="5,5,5,5" />
+            Margin="5,5,5,5"
+            Click="Button_Click" />
     </Grid>
 </UserControl>

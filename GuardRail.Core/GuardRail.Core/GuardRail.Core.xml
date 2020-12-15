@@ -504,5 +504,24 @@
             The door is locked.
             </summary>
         </member>
+        <member name="T:GuardRail.Core.Validator">
+            <summary>
+            Validation extensions.
+            </summary>
+        </member>
+        <member name="M:GuardRail.Core.Validator.IsValidPhoneFormat(System.String)">
+            <summary>
+            Validates that the string is formatted as a valid phone number.
+            </summary>
+            <param name="value">The value to validate.</param>
+            <returns>bool</returns>
+        </member>
+        <member name="M:GuardRail.Core.Validator.IsValidEmailFormat(System.String)">
+            <summary>
+            Validates that the string is formatted as a valid email.
+            </summary>
+            <param name="value">The value to validate.</param>
+            <returns>bool</returns>
+        </member>
     </members>
 </doc>

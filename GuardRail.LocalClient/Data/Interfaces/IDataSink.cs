@@ -12,6 +12,11 @@ namespace GuardRail.LocalClient.Data.Interfaces
     public interface IDataSink : IDisposable
     {
         /// <summary>
+        /// Starts the syncing for this sink.
+        /// </summary>
+        void StartSync();
+        
+        /// <summary>
         /// Save a new item of type T.
         /// </summary>
         /// <typeparam name="T">The type to save a new of.</typeparam>

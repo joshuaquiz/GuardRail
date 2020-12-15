@@ -12,9 +12,18 @@ namespace GuardRail.LocalClient.Data
     {
         private readonly List<IDataSink> _dataSinks;
 
-        internal DataStore(List<IDataSink> dataSinks)
+        internal DataStore(IEnumerable<IDataSink> dataSinks)
         {
-            _dataSinks = dataSinks;
+            _dataSinks = dataSinks.ToList();
+        }
+
+        /// <inheritdoc />
+        public void StartSync()
+        {
+            foreach (var dataSink in _dataSinks)
+            {
+                dataSink.StartSync();
+            }
         }
 
         /// <inheritdoc />

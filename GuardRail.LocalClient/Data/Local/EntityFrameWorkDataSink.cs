@@ -19,15 +19,19 @@ namespace GuardRail.LocalClient.Data.Local
         /// <summary>
         /// Creates an EntityFrameWorkDataSink.
         /// </summary>
-        internal EntityFrameWorkDataSink()
+        internal EntityFrameWorkDataSink(GuardRailContext guardRailContext)
         {
-            _guardRailContext = new GuardRailContext();
+            _guardRailContext = guardRailContext;
             _guardRailBackgroundWorker = GuardRailBackgroundWorker.Create(
                 "EF Sink Save Changes",
                 TimeSpan.FromMilliseconds(500),
                 ct => _guardRailContext.SaveChangesAsync(ct),
                 CancellationToken.None);
         }
+
+        /// <inheritdoc />
+        public void StartSync() =>
+            _guardRailBackgroundWorker.Start();
 
         /// <inheritdoc />
         public async Task<T> SaveNew<T>(

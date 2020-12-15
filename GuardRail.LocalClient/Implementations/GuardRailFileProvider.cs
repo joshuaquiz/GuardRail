@@ -13,7 +13,8 @@ namespace GuardRail.LocalClient.Implementations
         {
         }
 
-        public GuardRailFileProvider(string root, ExclusionFilters filters) : base(root, filters)
+        public GuardRailFileProvider(string root, ExclusionFilters filters)
+            : base(root, filters)
         {
         }
 
