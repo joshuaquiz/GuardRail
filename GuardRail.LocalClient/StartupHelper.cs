@@ -27,7 +27,6 @@ namespace GuardRail.LocalClient
 
         private static void SetupDatabase()
         {
-            var createAccounts = "CREATE TABLE [dbo].[Accounts] ([Id] INT NOT NULL, [Guid] UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(), [Name] NVARCHAR(10) NULL, PRIMARY KEY CLUSTERED([Id] ASC));";
             
         }
     }
