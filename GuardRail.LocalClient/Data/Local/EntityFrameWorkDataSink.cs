@@ -4,56 +4,67 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.Core.Helpers;
-using GuardRail.LocalClient.Data.Local;
+using GuardRail.LocalClient.Data.Interfaces;
 
-namespace GuardRail.LocalClient.Data
+namespace GuardRail.LocalClient.Data.Local
 {
     /// <summary>
-    /// An EntityFrameWork IDataSink implementation. 
+    /// An EntityFrameWork IDataSink implementation.
     /// </summary>
-    public sealed class EntityFrameWorkDataSink : IDataSink
+    internal sealed class EntityFrameWorkDataSink : IDataSink
     {
         private readonly GuardRailContext _guardRailContext;
-        private readonly CancellationTokenSource _cancellationTokenSource;
         private readonly GuardRailBackgroundWorker _guardRailBackgroundWorker;
 
         /// <summary>
         /// Creates an EntityFrameWorkDataSink.
         /// </summary>
-        public EntityFrameWorkDataSink()
+        internal EntityFrameWorkDataSink()
         {
             _guardRailContext = new GuardRailContext();
-            _cancellationTokenSource = new CancellationTokenSource();
             _guardRailBackgroundWorker = GuardRailBackgroundWorker.Create(
-                "EF Sick",
+                "EF Sink Save Changes",
                 TimeSpan.FromMilliseconds(500),
                 ct => _guardRailContext.SaveChangesAsync(ct),
                 CancellationToken.None);
         }
 
         /// <inheritdoc />
-        public async Task<T> SaveNew<T>(T item) where T : class
+        public async Task<T> SaveNew<T>(
+            T item,
+            CancellationToken cancellationToken) where T : class
         {
-            var result = await _guardRailContext.AddAsync(item, _cancellationTokenSource.Token);
+            var result = await _guardRailContext.AddAsync(item, cancellationToken);
             return result.Entity;
         }
 
         /// <inheritdoc />
-        public Task UpdateExisting<T>(T item) =>
-            Task.FromResult(_guardRailContext.Update(item).Entity);
+        public Task UpdateExisting<T>(
+            T item,
+            CancellationToken cancellationToken)
+        {
+            _guardRailContext.Update(item);
+            return Task.CompletedTask;
+        }
 
         /// <inheritdoc />
-        public Task DeleteExisting<T>(T item) =>
-            Task.FromResult(_guardRailContext.Remove(item).Entity);
+        public Task DeleteExisting<T>(
+            T item,
+            CancellationToken cancellationToken)
+        {
+            _guardRailContext.Remove(item);
+            return Task.CompletedTask;
+        }
 
         /// <inheritdoc />
-        public Task<IQueryable<T>> Get<T>(Expression<Func<IQueryable<T>>> getExpression) =>
+        public Task<IQueryable<T>> Get<T>(
+            Expression<Func<IQueryable<T>>> getExpression,
+            CancellationToken cancellationToken) =>
             Task.FromResult(_guardRailContext.FromExpression(getExpression));
 
         /// <inheritdoc />
         public void Dispose()
         {
-            _cancellationTokenSource.Dispose();
             _guardRailBackgroundWorker.Dispose();
             _guardRailContext?.Dispose();
         }

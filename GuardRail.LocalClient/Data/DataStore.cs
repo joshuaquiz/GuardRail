@@ -2,60 +2,54 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
+using GuardRail.LocalClient.Data.Interfaces;
 
 namespace GuardRail.LocalClient.Data
 {
-    public interface IAddableItem
-    {
-        Guid Guid { get; set; }
-    }
-    public interface IDataStore : IDisposable
-    {
-        Task<T> SaveNew<T>(T item)
-            where T : class, IAddableItem;
-
-        Task UpdateExisting<T>(T item);
-
-        Task DeleteExisting<T>(T item);
-
-        Task<IQueryable<T>> Get<T>(Expression<Func<IQueryable<T>>> getExpression);
-    }
-
-    public sealed class DataStore : IDataStore
+    internal sealed class DataStore : IDataStore
     {
         private readonly List<IDataSink> _dataSinks;
 
-        public DataStore(List<IDataSink> dataSinks)
+        internal DataStore(List<IDataSink> dataSinks)
         {
             _dataSinks = dataSinks;
         }
 
         /// <inheritdoc />
-        public async Task<T> SaveNew<T>(T item)
+        public async Task<T> SaveNew<T>(
+            T item,
+            CancellationToken cancellationToken)
             where T : class, IAddableItem
         {
             item.Guid = Guid.NewGuid();
             await Task.WhenAll(
-                _dataSinks.Select(x => x.SaveNew(item)));
+                _dataSinks.Select(x => x.SaveNew(item, cancellationToken)));
             return item;
         }
 
         /// <inheritdoc />
-        public async Task UpdateExisting<T>(T item) =>
+        public async Task UpdateExisting<T>(
+            T item,
+            CancellationToken cancellationToken) =>
             await Task.WhenAll(
-                _dataSinks.Select(x => x.UpdateExisting(item)));
+                _dataSinks.Select(x => x.UpdateExisting(item, cancellationToken)));
 
         /// <inheritdoc />
-        public async Task DeleteExisting<T>(T item) =>
+        public async Task DeleteExisting<T>(
+            T item,
+            CancellationToken cancellationToken) =>
             await Task.WhenAll(
-                _dataSinks.Select(x => x.DeleteExisting(item)));
+                _dataSinks.Select(x => x.DeleteExisting(item, cancellationToken)));
 
         /// <inheritdoc />
-        public async Task<IQueryable<T>> Get<T>(Expression<Func<IQueryable<T>>> getExpression)
+        public async Task<IQueryable<T>> Get<T>(
+            Expression<Func<IQueryable<T>>> getExpression,
+            CancellationToken cancellationToken)
         {
             var resultQuery = await Task.WhenAny(
-                _dataSinks.Select(x => x.Get(getExpression)));
+                _dataSinks.Select(x => x.Get(getExpression, cancellationToken)));
             return await resultQuery;
         }
 
@@ -67,17 +61,5 @@ namespace GuardRail.LocalClient.Data
                 dataSink.Dispose();
             }
         }
-    }
-
-    public interface IDataSink : IDisposable
-    {
-        Task<T> SaveNew<T>(T item)
-            where T : class;
-
-        Task UpdateExisting<T>(T item);
-
-        Task DeleteExisting<T>(T item);
-
-        Task<IQueryable<T>> Get<T>(Expression<Func<IQueryable<T>>> getExpression);
     }
 }

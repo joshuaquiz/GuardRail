@@ -22,6 +22,164 @@
             Application Entry Point.
             </summary>
         </member>
+        <member name="M:GuardRail.LocalClient.Data.DataStore.SaveNew``1(``0,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.DataStore.UpdateExisting``1(``0,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.DataStore.DeleteExisting``1(``0,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.DataStore.Get``1(System.Linq.Expressions.Expression{System.Func{System.Linq.IQueryable{``0}}},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.DataStore.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="T:GuardRail.LocalClient.Data.Interfaces.IAddableItem">
+            <summary>
+            An item that can be added.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Interfaces.IAddableItem.Guid">
+            <summary>
+            Guid is to be used in all systems for the global ID.
+            This value is set automatically and should not be passed in for adds.
+            </summary>
+        </member>
+        <member name="T:GuardRail.LocalClient.Data.Interfaces.IDataSink">
+            <summary>
+            A definition for a data sink.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Interfaces.IDataSink.SaveNew``1(``0,System.Threading.CancellationToken)">
+            <summary>
+            Save a new item of type T.
+            </summary>
+            <typeparam name="T">The type to save a new of.</typeparam>
+            <param name="item">The item to save a new of.</param>
+            <param name="cancellationToken">The CancellationToken that can cancel the request.</param>
+            <returns>Task of T</returns>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Interfaces.IDataSink.UpdateExisting``1(``0,System.Threading.CancellationToken)">
+            <summary>
+            Update an existing item.
+            </summary>
+            <typeparam name="T">The type of item to update.</typeparam>
+            <param name="item">The item to update.</param>
+            <param name="cancellationToken">The CancellationToken that can cancel the request.</param>
+            <returns>Task</returns>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Interfaces.IDataSink.DeleteExisting``1(``0,System.Threading.CancellationToken)">
+            <summary>
+            Delete and existing item.
+            </summary>
+            <typeparam name="T">The type of item to delete.</typeparam>
+            <param name="item">The item to update.</param>
+            <param name="cancellationToken">The CancellationToken that can cancel the request.</param>
+            <returns></returns>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Interfaces.IDataSink.Get``1(System.Linq.Expressions.Expression{System.Func{System.Linq.IQueryable{``0}}},System.Threading.CancellationToken)">
+            <summary>
+            Retrieve data from the data sick.
+            </summary>
+            <typeparam name="T">The type to get.</typeparam>
+            <param name="getExpression">The expression for how to get data.</param>
+            <param name="cancellationToken">The CancellationToken that can cancel the request.</param>
+            <returns>Task of IQueryable of T</returns>
+        </member>
+        <member name="T:GuardRail.LocalClient.Data.Interfaces.IDataStore">
+            <summary>
+            A definition for a data store.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Interfaces.IDataStore.SaveNew``1(``0,System.Threading.CancellationToken)">
+            <summary>
+            Save a new item of type T.
+            </summary>
+            <typeparam name="T">The type to save a new of.</typeparam>
+            <param name="item">The item to save a new of.</param>
+            <param name="cancellationToken">The CancellationToken that can cancel the request.</param>
+            <returns>Task of T</returns>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Interfaces.IDataStore.UpdateExisting``1(``0,System.Threading.CancellationToken)">
+            <summary>
+            Update an existing item.
+            </summary>
+            <typeparam name="T">The type of item to update.</typeparam>
+            <param name="item">The item to update.</param>
+            <param name="cancellationToken">The CancellationToken that can cancel the request.</param>
+            <returns>Task</returns>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Interfaces.IDataStore.DeleteExisting``1(``0,System.Threading.CancellationToken)">
+            <summary>
+            Delete and existing item.
+            </summary>
+            <typeparam name="T">The type of item to delete.</typeparam>
+            <param name="item">The item to update.</param>
+            <param name="cancellationToken">The CancellationToken that can cancel the request.</param>
+            <returns></returns>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Interfaces.IDataStore.Get``1(System.Linq.Expressions.Expression{System.Func{System.Linq.IQueryable{``0}}},System.Threading.CancellationToken)">
+            <summary>
+            Retrieve data from the data sick.
+            </summary>
+            <typeparam name="T">The type to get.</typeparam>
+            <param name="getExpression">The expression for how to get data.</param>
+            <param name="cancellationToken">The CancellationToken that can cancel the request.</param>
+            <returns>Task of IQueryable of T</returns>
+        </member>
+        <member name="T:GuardRail.LocalClient.Data.Local.EntityFrameWorkDataSink">
+            <summary>
+            An EntityFrameWork IDataSink implementation.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Local.EntityFrameWorkDataSink.#ctor">
+            <summary>
+            Creates an EntityFrameWorkDataSink.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Local.EntityFrameWorkDataSink.SaveNew``1(``0,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Local.EntityFrameWorkDataSink.UpdateExisting``1(``0,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Local.EntityFrameWorkDataSink.DeleteExisting``1(``0,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Local.EntityFrameWorkDataSink.Get``1(System.Linq.Expressions.Expression{System.Func{System.Linq.IQueryable{``0}}},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Local.EntityFrameWorkDataSink.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="T:GuardRail.LocalClient.Data.Remote.RemoteDataSink">
+            <summary>
+            A remote stored IDataSink implementation.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Remote.RemoteDataSink.#ctor(GuardRail.LocalClient.Interfaces.IGuardRailFileProvider,GuardRail.LocalClient.Interfaces.IGuardRailApiClient)">
+            <summary>
+            A remote stored IDataSink implementation.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Remote.RemoteDataSink.SaveNew``1(``0,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Remote.RemoteDataSink.UpdateExisting``1(``0,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Remote.RemoteDataSink.DeleteExisting``1(``0,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Remote.RemoteDataSink.Get``1(System.Linq.Expressions.Expression{System.Func{System.Linq.IQueryable{``0}}},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Remote.RemoteDataSink.Dispose">
+            <inheritdoc />
+        </member>
         <member name="T:GuardRail.LocalClient.MainWindow">
             <summary>
             Interaction logic for MainWindow.xaml
@@ -75,36 +233,6 @@
             </summary>
             <param name="commandLineArguments">Command line arguments passed to the main app.</param>
             <param name="mainWindow">The application's main window.</param>
-        </member>
-        <member name="T:XamlGeneratedNamespace.GeneratedInternalTypeHelper">
-            <summary>
-            GeneratedInternalTypeHelper
-            </summary>
-        </member>
-        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateInstance(System.Type,System.Globalization.CultureInfo)">
-            <summary>
-            CreateInstance
-            </summary>
-        </member>
-        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.GetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Globalization.CultureInfo)">
-            <summary>
-            GetPropertyValue
-            </summary>
-        </member>
-        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.SetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Object,System.Globalization.CultureInfo)">
-            <summary>
-            SetPropertyValue
-            </summary>
-        </member>
-        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateDelegate(System.Type,System.Object,System.String)">
-            <summary>
-            CreateDelegate
-            </summary>
-        </member>
-        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.AddEventHandler(System.Reflection.EventInfo,System.Object,System.Delegate)">
-            <summary>
-            AddEventHandler
-            </summary>
         </member>
     </members>
 </doc>

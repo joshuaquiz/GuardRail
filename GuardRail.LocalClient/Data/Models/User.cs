@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GuardRail.LocalClient.Data.Local
+namespace GuardRail.LocalClient.Data.Models
 {
     public class User
     {

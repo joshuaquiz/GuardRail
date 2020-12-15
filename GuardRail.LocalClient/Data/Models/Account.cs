@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GuardRail.LocalClient.Data.Local
+namespace GuardRail.LocalClient.Data.Models
 {
     public class Account
     {

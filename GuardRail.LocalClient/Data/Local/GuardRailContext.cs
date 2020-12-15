@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using GuardRail.LocalClient.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace GuardRail.LocalClient.Data.Local
 {

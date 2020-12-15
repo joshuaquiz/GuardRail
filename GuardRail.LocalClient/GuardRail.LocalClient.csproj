@@ -114,7 +114,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Remote\" />
     <Folder Include="Resources\" />
   </ItemGroup>
 
