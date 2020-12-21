@@ -1,8 +1,9 @@
 ﻿using System.Windows;
 using GuardRail.Core.Helpers;
 using GuardRail.LocalClient.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace GuardRail.LocalClient.Setup
+namespace GuardRail.LocalClient.Controls.Setup
 {
     /// <summary>
     /// Interaction logic for SetupUserControl.xaml
@@ -14,9 +15,9 @@ namespace GuardRail.LocalClient.Setup
         /// <summary>
         /// Interaction logic for SetupUserControl.xaml
         /// </summary>
-        internal SetupUserControl(IGuardRailApiClient guardRailApiClient)
+        public SetupUserControl()
         {
-            _guardRailApiClient = guardRailApiClient;
+            _guardRailApiClient = App.ServiceProvider.GetRequiredService<IGuardRailApiClient>();
             InitializeComponent();
         }
 

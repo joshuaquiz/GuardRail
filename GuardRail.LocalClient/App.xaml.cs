@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
 using System.Windows;
 using GuardRail.Core.CommandLine;
 using GuardRail.LocalClient.Data;
@@ -24,12 +23,12 @@ namespace GuardRail.LocalClient
         /// <summary>
         /// Service provider for the application.
         /// </summary>
-        public IServiceProvider ServiceProvider { get; private set; }
+        public static IServiceProvider ServiceProvider { get; private set; }
 
         /// <summary>
         /// Configuration for the application.
         /// </summary>
-        public IConfiguration Configuration { get; private set; }
+        public static IConfiguration Configuration { get; private set; }
 
         /// <summary>
         /// Initial app startup configuration.
@@ -50,9 +49,8 @@ namespace GuardRail.LocalClient
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
             ServiceProvider = serviceCollection.BuildServiceProvider();
-            await ConfigureDatabase();
             var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
-            StartupHelper.Startup(
+            await StartupHelper.StartupAsync(
                 CommandLineArguments.Create(e.Args),
                 mainWindow);
             mainWindow.Show();
@@ -69,13 +67,6 @@ namespace GuardRail.LocalClient
             services.AddSingleton<IDataSink, RemoteDataSink>();
             services.AddSingleton<IDisposable, RemoteDataSink>();
             services.AddHostedService<DataStore>();
-        }
-        
-        private async Task ConfigureDatabase()
-        {
-            using var serviceScope = ServiceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
-            var context = serviceScope.ServiceProvider.GetRequiredService<GuardRailContext>();
-            await context.Database.MigrateAsync();
         }
 
         private void Application_Exit(object sender, ExitEventArgs e)

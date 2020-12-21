@@ -32,24 +32,6 @@
             Application Entry Point.
             </summary>
         </member>
-        <member name="T:GuardRail.LocalClient.Controls.HomePageUserControl">
-            <summary>
-            Interaction logic for HomePageUserControl.xaml
-            </summary>
-            <summary>
-            HomePageUserControl
-            </summary>
-        </member>
-        <member name="M:GuardRail.LocalClient.Controls.HomePageUserControl.#ctor">
-            <summary>
-            Interaction logic for HomePageUserControl.xaml
-            </summary>
-        </member>
-        <member name="M:GuardRail.LocalClient.Controls.HomePageUserControl.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
         <member name="T:GuardRail.LocalClient.Controls.MenuItemControl">
             <summary>
             A menu item for the UI.
@@ -80,6 +62,86 @@
             OnPropertyChanged handler.
             </summary>
             <param name="propertyName">The name of the property that changed.</param>
+        </member>
+        <member name="T:GuardRail.LocalClient.Controls.Pages.Home.HomePageLogItem">
+            <summary>
+            A log item in the home page UI.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Controls.Pages.Home.HomePageLogItem.TimeStamp">
+            <summary>
+            The timestamp of the log.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Controls.Pages.Home.HomePageLogItem.Log">
+            <summary>
+            The log itself.
+            </summary>
+        </member>
+        <member name="T:GuardRail.LocalClient.Controls.Pages.Home.HomePageUserControl">
+            <summary>
+            Interaction logic for HomePageUserControl.xaml
+            </summary>
+            <summary>
+            HomePageUserControl
+            </summary>
+        </member>
+        <member name="F:GuardRail.LocalClient.Controls.Pages.Home.HomePageUserControl.ViewModel">
+            <summary>
+            The viewModel.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Controls.Pages.Home.HomePageUserControl.#ctor">
+            <summary>
+            Interaction logic for HomePageUserControl.xaml
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Controls.Pages.Home.HomePageUserControl.AddLogAsync(System.DateTime,System.String)">
+            <summary>
+            Add a log to the display.
+            </summary>
+            <param name="timeStamp">When the log happened.</param>
+            <param name="log">The log itself.</param>
+        </member>
+        <member name="M:GuardRail.LocalClient.Controls.Pages.Home.HomePageUserControl.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GuardRail.LocalClient.Controls.Pages.Home.HomePageViewModel">
+            <summary>
+            View model for the home page user control.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Controls.Pages.Home.HomePageViewModel.Logs">
+            <summary>
+            For viewing logs in the application.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Controls.Pages.Home.HomePageViewModel.AddLog(System.DateTime,System.String)">
+            <summary>
+            Add a log to the display.
+            </summary>
+            <param name="timeStamp">When the log happened.</param>
+            <param name="log">The log itself.</param>
+        </member>
+        <member name="T:GuardRail.LocalClient.Controls.Setup.SetupUserControl">
+            <summary>
+            Interaction logic for SetupUserControl.xaml
+            </summary>
+            <summary>
+            SetupUserControl
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Controls.Setup.SetupUserControl.#ctor">
+            <summary>
+            Interaction logic for SetupUserControl.xaml
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Controls.Setup.SetupUserControl.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
         </member>
         <member name="T:GuardRail.LocalClient.Controls.ValidatedEmailTextBox">
             <summary>
@@ -395,10 +457,22 @@
             Shows the loading icon.
             </summary>
         </member>
-        <member name="M:GuardRail.LocalClient.MainWindow.#ctor(GuardRail.LocalClient.Interfaces.IGuardRailApiClient)">
+        <member name="M:GuardRail.LocalClient.MainWindow.#ctor">
             <summary>
             Interaction logic for MainWindow.xaml
             </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.MainWindow.OnStateChanged(System.EventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:GuardRail.LocalClient.MainWindow.OnClosing(System.ComponentModel.CancelEventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="e"></param>
         </member>
         <member name="M:GuardRail.LocalClient.MainWindow.InitializeComponent">
             <summary>
@@ -421,30 +495,12 @@
               resource lookups using this strongly typed resource class.
             </summary>
         </member>
-        <member name="T:GuardRail.LocalClient.Setup.SetupUserControl">
-            <summary>
-            Interaction logic for SetupUserControl.xaml
-            </summary>
-            <summary>
-            SetupUserControl
-            </summary>
-        </member>
-        <member name="M:GuardRail.LocalClient.Setup.SetupUserControl.#ctor(GuardRail.LocalClient.Interfaces.IGuardRailApiClient)">
-            <summary>
-            Interaction logic for SetupUserControl.xaml
-            </summary>
-        </member>
-        <member name="M:GuardRail.LocalClient.Setup.SetupUserControl.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
         <member name="T:GuardRail.LocalClient.StartupHelper">
             <summary>
             Helps with any startup actions or setup that needs to happen.
             </summary>
         </member>
-        <member name="M:GuardRail.LocalClient.StartupHelper.Startup(GuardRail.Core.CommandLine.CommandLineArguments,GuardRail.LocalClient.MainWindow)">
+        <member name="M:GuardRail.LocalClient.StartupHelper.StartupAsync(GuardRail.Core.CommandLine.CommandLineArguments,GuardRail.LocalClient.MainWindow)">
             <summary>
             Helps with any startup actions or setup that needs to happen.
             </summary>

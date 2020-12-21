@@ -1,4 +1,8 @@
-﻿using GuardRail.Core.CommandLine;
+﻿using System.Threading.Tasks;
+using GuardRail.Core.CommandLine;
+using GuardRail.LocalClient.Data.Local;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace GuardRail.LocalClient
 {
@@ -12,22 +16,26 @@ namespace GuardRail.LocalClient
         /// </summary>
         /// <param name="commandLineArguments">Command line arguments passed to the main app.</param>
         /// <param name="mainWindow">The application's main window.</param>
-        public static void Startup(CommandLineArguments commandLineArguments, MainWindow mainWindow)
+        public static async Task StartupAsync(
+            CommandLineArguments commandLineArguments,
+            MainWindow mainWindow)
         {
-            if (commandLineArguments.ContainsKey(CommandLineArgumentType.FreshInstall))
+            if (commandLineArguments.ContainsKey(CommandLineArgumentType.FreshInstall)
+                || commandLineArguments.ContainsKey(CommandLineArgumentType.ShouldShowSetup))
             {
-                SetupDatabase();
-            }
-            
-            if (commandLineArguments.ContainsKey(CommandLineArgumentType.ShouldShowSetup))
-            {
+                await SetupDatabaseAsync();
                 mainWindow.ActivateSetupScreen();
+                return;
             }
+
+            mainWindow.ActivateHomeScreen();
         }
 
-        private static void SetupDatabase()
+        private static async Task SetupDatabaseAsync()
         {
-            
+            using var serviceScope = App.ServiceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
+            var context = serviceScope.ServiceProvider.GetRequiredService<GuardRailContext>();
+            await context.Database.MigrateAsync();
         }
     }
 }
