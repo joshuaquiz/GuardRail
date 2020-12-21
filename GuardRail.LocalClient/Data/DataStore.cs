@@ -5,25 +5,30 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.LocalClient.Data.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace GuardRail.LocalClient.Data
 {
     internal sealed class DataStore : IDataStore
     {
-        private readonly List<IDataSink> _dataSinks;
+        private readonly IServiceProvider _serviceProvider;
+        private List<IDataSink> _dataSinks;
 
-        internal DataStore(IEnumerable<IDataSink> dataSinks)
+        internal DataStore(IServiceProvider serviceProvider)
         {
-            _dataSinks = dataSinks.ToList();
+            _serviceProvider = serviceProvider;
         }
 
         /// <inheritdoc />
-        public void StartSync()
+        public Task StartAsync(CancellationToken cancellationToken)
         {
+            _dataSinks = _serviceProvider.GetServices<IDataSink>().ToList();
             foreach (var dataSink in _dataSinks)
             {
                 dataSink.StartSync();
             }
+            
+            return Task.CompletedTask;
         }
 
         /// <inheritdoc />
@@ -63,12 +68,14 @@ namespace GuardRail.LocalClient.Data
         }
 
         /// <inheritdoc />
-        public void Dispose()
+        public Task StopAsync(CancellationToken cancellationToken)
         {
             foreach (var dataSink in _dataSinks)
             {
                 dataSink.Dispose();
             }
+            
+            return Task.CompletedTask;
         }
     }
 }

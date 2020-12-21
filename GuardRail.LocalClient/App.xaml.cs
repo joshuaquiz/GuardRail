@@ -56,8 +56,6 @@ namespace GuardRail.LocalClient
                 CommandLineArguments.Create(e.Args),
                 mainWindow);
             mainWindow.Show();
-            var dataStore = ServiceProvider.GetRequiredService<IDataStore>();
-            dataStore.StartSync();
         }
         
         private void ConfigureServices(IServiceCollection services)
@@ -70,14 +68,7 @@ namespace GuardRail.LocalClient
             services.AddSingleton<IDisposable, EntityFrameWorkDataSink>();
             services.AddSingleton<IDataSink, RemoteDataSink>();
             services.AddSingleton<IDisposable, RemoteDataSink>();
-            services.AddSingleton<IEnumerable<IDataSink>>(x =>
-                new IDataSink[]
-                {
-                    x.GetRequiredService<EntityFrameWorkDataSink>(),
-                    x.GetRequiredService<RemoteDataSink>()
-                });
-            services.AddSingleton<IDataStore, DataStore>();
-            services.AddSingleton<IDisposable, DataStore>();
+            services.AddHostedService<DataStore>();
         }
         
         private async Task ConfigureDatabase()

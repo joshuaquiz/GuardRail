@@ -36,6 +36,7 @@
     <None Remove="Assets\teko-semibold.ttf" />
     <None Remove="LocalDataStore.db-shm" />
     <None Remove="logo_icon.ico" />
+    <None Remove="logo_icon.png" />
     <None Include="Assets\logo_icon.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
@@ -97,6 +98,7 @@
     <Resource Include="logo_icon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="logo_icon.png" />
   </ItemGroup>
 
   <ItemGroup>

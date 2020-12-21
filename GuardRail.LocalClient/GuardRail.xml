@@ -32,6 +32,55 @@
             Application Entry Point.
             </summary>
         </member>
+        <member name="T:GuardRail.LocalClient.Controls.HomePageUserControl">
+            <summary>
+            Interaction logic for HomePageUserControl.xaml
+            </summary>
+            <summary>
+            HomePageUserControl
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Controls.HomePageUserControl.#ctor">
+            <summary>
+            Interaction logic for HomePageUserControl.xaml
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Controls.HomePageUserControl.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GuardRail.LocalClient.Controls.MenuItemControl">
+            <summary>
+            A menu item for the UI.
+            </summary>
+        </member>
+        <member name="E:GuardRail.LocalClient.Controls.MenuItemControl.PropertyChanged">
+            <summary>
+            PropertyChanged event.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Controls.MenuItemControl.Icon">
+            <summary>
+            The icon of the menu item.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Controls.MenuItemControl.Title">
+            <summary>
+            The title of the menu item.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Controls.MenuItemControl.#ctor">
+            <summary>
+            A menu item for the UI.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Controls.MenuItemControl.OnPropertyChanged(System.String)">
+            <summary>
+            OnPropertyChanged handler.
+            </summary>
+            <param name="propertyName">The name of the property that changed.</param>
+        </member>
         <member name="T:GuardRail.LocalClient.Controls.ValidatedEmailTextBox">
             <summary>
             A custom TextBox that validates for emails.
@@ -68,7 +117,7 @@
             </summary>
             <param name="validate">The function to validate the contents of the TextBox.</param>
         </member>
-        <member name="M:GuardRail.LocalClient.Data.DataStore.StartSync">
+        <member name="M:GuardRail.LocalClient.Data.DataStore.StartAsync(System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:GuardRail.LocalClient.Data.DataStore.SaveNew``1(``0,System.Threading.CancellationToken)">
@@ -83,7 +132,7 @@
         <member name="M:GuardRail.LocalClient.Data.DataStore.Get``1(System.Linq.Expressions.Expression{System.Func{System.Linq.IQueryable{``0}}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:GuardRail.LocalClient.Data.DataStore.Dispose">
+        <member name="M:GuardRail.LocalClient.Data.DataStore.StopAsync(System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="T:GuardRail.LocalClient.Data.Interfaces.IAddableItem">
@@ -147,11 +196,6 @@
         <member name="T:GuardRail.LocalClient.Data.Interfaces.IDataStore">
             <summary>
             A definition for a data store.
-            </summary>
-        </member>
-        <member name="M:GuardRail.LocalClient.Data.Interfaces.IDataStore.StartSync">
-            <summary>
-            Starts the syncing for all sinks.
             </summary>
         </member>
         <member name="M:GuardRail.LocalClient.Data.Interfaces.IDataStore.SaveNew``1(``0,System.Threading.CancellationToken)">
@@ -344,6 +388,11 @@
             </summary>
             <summary>
             MainWindow
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.MainWindow.Loading">
+            <summary>
+            Shows the loading icon.
             </summary>
         </member>
         <member name="M:GuardRail.LocalClient.MainWindow.#ctor(GuardRail.LocalClient.Interfaces.IGuardRailApiClient)">

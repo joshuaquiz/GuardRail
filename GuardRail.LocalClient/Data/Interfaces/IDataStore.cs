@@ -3,19 +3,15 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
 
 namespace GuardRail.LocalClient.Data.Interfaces
 {
     /// <summary>
     /// A definition for a data store.
     /// </summary>
-    internal interface IDataStore : IDisposable
+    internal interface IDataStore : IHostedService
     {
-        /// <summary>
-        /// Starts the syncing for all sinks.
-        /// </summary>
-        void StartSync();
-        
         /// <summary>
         /// Save a new item of type T.
         /// </summary>

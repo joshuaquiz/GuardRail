@@ -5,11 +5,25 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:tb="http://www.hardcodet.net/taskbar"
+    xmlns:controls="clr-namespace:GuardRail.LocalClient.Controls"
     mc:Ignorable="d"
     Title="MainWindow"
-    WindowState="Maximized">
+    WindowState="Maximized"
+    FontFamily="Teko Bold">
     <Grid
-        x:Name="Grid">
+        x:Name="Grid"
+        VerticalAlignment="Stretch"
+        HorizontalAlignment="Stretch"
+        Margin="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
         <tb:TaskbarIcon
             IconSource="logo_icon.ico"
             ToolTipText="GuardRail is still active"
@@ -22,5 +36,68 @@
                 </ContextMenu>
             </tb:TaskbarIcon.ContextMenu>
         </tb:TaskbarIcon>
+        <StackPanel
+            x:Name="Header"
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Orientation="Horizontal"
+            Background="#FFF3F3F3"
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch">
+            <Image
+                Source="/logo_icon.png"
+                Height="40"
+                Width="40"
+                Margin="5" />
+            <Label
+                Content="GuardRail"
+                VerticalContentAlignment="Center"
+                VerticalAlignment="Stretch" />
+        </StackPanel>
+        <StackPanel
+            x:Name="Menu"
+            Grid.Row="1"
+            Grid.Column="0"
+            Orientation="Vertical"
+            Background="#FFCCCCCC"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
+            <controls:MenuItemControl
+                Title="Home"
+                PreviewMouseDown="HomeMenuItemControl_OnPreviewMouseDown" />
+            <controls:MenuItemControl
+                Title="Users" />
+            <controls:MenuItemControl
+                Title="Devices" />
+            <controls:MenuItemControl
+                Title="Doors" />
+            <controls:MenuItemControl
+                Title="Map" />
+        </StackPanel>
+        <StackPanel
+            x:Name="Body"
+            Grid.Row="1"
+            Grid.Column="1"
+            Orientation="Vertical">
+            <controls:HomePageUserControl
+                x:Name="HomePageUserControl"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch" />
+        </StackPanel>
+        <StackPanel
+            x:Name="Footer"
+            Grid.Row="2"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Orientation="Horizontal"
+            Background="#FFF3F3F3"
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+            FlowDirection="RightToLeft">
+            <Label
+                x:Name="VersionTag"
+                VerticalContentAlignment="Center" />
+        </StackPanel>
     </Grid>
 </Window>
