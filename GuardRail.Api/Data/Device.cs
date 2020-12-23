@@ -1,20 +1,10 @@
-﻿using System;
-using GuardRail.Core;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace GuardRail.Api.Data
 {
-    public sealed class Device : IDevice
+    public sealed class Device : Core.DataModels.Device
     {
-        public Guid Id { get; set; }
-
-        public string DeviceId { get; set; }
-
-        public string FriendlyName { get; set; }
-
-        public byte[] ByteId { get; set; }
-
-        public bool IsConfigured { get; set; }
+        public int Id { get; set; }
 
         public User User { get; set; }
 

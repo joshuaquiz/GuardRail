@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace GuardRail.LocalClient.Data.Models
 {
     /// <inheritdoc />
-    public class Account : Core.DataModels.Account
+    public sealed class Device : Core.DataModels.Device
     {
         /// <summary>
         /// The ID used for EF.
@@ -12,9 +11,9 @@ namespace GuardRail.LocalClient.Data.Models
         public int Id { get; set; }
 
         /// <summary>
-        /// Users on the account.
+        /// The user that owns the device.
         /// </summary>
-        public List<User> Users { get; } = new List<User>();
+        public User User { get; set; }
 
         /// <summary>
         /// EF creation helper.
@@ -23,14 +22,20 @@ namespace GuardRail.LocalClient.Data.Models
         public static void OnModelCreating(ModelBuilder builder)
         {
             builder
-                ?.Entity<Account>()
+                ?.Entity<Device>()
                 ?.HasKey(x => x.Id);
             builder
-                ?.Entity<Account>()
+                ?.Entity<Device>()
                 ?.HasIndex(x => x.Guid);
             builder
-                ?.Entity<Account>()
-                ?.HasMany<User>();
+                ?.Entity<Device>()
+                ?.HasIndex(x => x.DeviceId);
+            builder
+                ?.Entity<Device>()
+                ?.HasIndex(x => x.ByteId);
+            builder
+                ?.Entity<Device>()
+                ?.HasOne<User>();
         }
     }
 }

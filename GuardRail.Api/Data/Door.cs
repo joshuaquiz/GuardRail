@@ -3,21 +3,14 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.Core;
+using GuardRail.Core.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace GuardRail.Api.Data
 {
-    public sealed class Door : IDoor
+    public class Door : Core.DataModels.Door
     {
         public Guid Id { get; set; }
-
-        public string DeviceId { get; set; }
-
-        public string FriendlyName { get; set; }
-
-        public LockedStatus LockedStatus { get; set; }
-
-        public bool IsConfigured { get; set; }
 
         public AccessControlDevice AccessControlDevice { get; set; }
 

@@ -5,13 +5,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.Core.Helpers;
 using GuardRail.LocalClient.Data.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace GuardRail.LocalClient.Data.Local
 {
     /// <summary>
     /// An EntityFrameWork IDataSink implementation.
     /// </summary>
-    internal sealed class EntityFrameWorkDataSink : IDataSink
+    public sealed class EntityFrameWorkDataSink : IDataSink
     {
         private readonly GuardRailContext _guardRailContext;
         private readonly GuardRailBackgroundWorker _guardRailBackgroundWorker;
@@ -19,7 +20,7 @@ namespace GuardRail.LocalClient.Data.Local
         /// <summary>
         /// Creates an EntityFrameWorkDataSink.
         /// </summary>
-        internal EntityFrameWorkDataSink(GuardRailContext guardRailContext)
+        public EntityFrameWorkDataSink(GuardRailContext guardRailContext)
         {
             _guardRailContext = guardRailContext;
             _guardRailBackgroundWorker = GuardRailBackgroundWorker.Create(
@@ -61,10 +62,25 @@ namespace GuardRail.LocalClient.Data.Local
         }
 
         /// <inheritdoc />
-        public Task<IQueryable<T>> Get<T>(
-            Expression<Func<IQueryable<T>>> getExpression,
-            CancellationToken cancellationToken) =>
-            Task.FromResult(_guardRailContext.FromExpression(getExpression));
+        public async Task<T> GetSingleOrDefault<T>(
+            Expression<Func<T, bool>> getExpression,
+            CancellationToken cancellationToken)
+            where T : class =>
+            await _guardRailContext.Set<T>().SingleOrDefaultAsync(getExpression, cancellationToken);
+
+        /// <inheritdoc />
+        public async Task<T> GetFirstOrDefault<T>(
+            Expression<Func<T, bool>> getExpression,
+            CancellationToken cancellationToken)
+            where T : class =>
+            await _guardRailContext.Set<T>().FirstOrDefaultAsync(getExpression, cancellationToken);
+
+        /// <inheritdoc />
+        public Task<IQueryable<T>> GetData<T>(
+            Expression<Func<T, bool>> getExpression,
+            CancellationToken cancellationToken)
+            where T : class =>
+            Task.FromResult(_guardRailContext.Set<T>().Where(getExpression));
 
         /// <inheritdoc />
         public void Dispose()

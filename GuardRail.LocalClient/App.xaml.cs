@@ -6,6 +6,7 @@ using GuardRail.Core.CommandLine;
 using GuardRail.LocalClient.Data;
 using GuardRail.LocalClient.Data.Interfaces;
 using GuardRail.LocalClient.Data.Local;
+using GuardRail.LocalClient.Data.Models;
 using GuardRail.LocalClient.Data.Remote;
 using GuardRail.LocalClient.Implementations;
 using GuardRail.LocalClient.Interfaces;
@@ -31,6 +32,11 @@ namespace GuardRail.LocalClient
         public static IConfiguration Configuration { get; private set; }
 
         /// <summary>
+        /// The account for this installation. 
+        /// </summary>
+        public static Account Account { get; private set; }
+
+        /// <summary>
         /// Initial app startup configuration.
         /// </summary>
         public App()
@@ -46,6 +52,13 @@ namespace GuardRail.LocalClient
                 .AddJsonFile("appsettings.json", false, true)
                 .AddJsonFile("appsettings.Development.json", false, true);
             Configuration = builder.Build();
+            Account = new Account
+            {
+                Id = 1,
+                Guid = Guid.NewGuid(),
+                Location = "Here",
+                Name = "Test"
+            };
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
             ServiceProvider = serviceCollection.BuildServiceProvider();
@@ -66,6 +79,7 @@ namespace GuardRail.LocalClient
             services.AddSingleton<IDisposable, EntityFrameWorkDataSink>();
             services.AddSingleton<IDataSink, RemoteDataSink>();
             services.AddSingleton<IDisposable, RemoteDataSink>();
+            services.AddSingleton<IDataStore, DataStore>();
             services.AddHostedService<DataStore>();
         }
 

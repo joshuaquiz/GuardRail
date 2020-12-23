@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 namespace GuardRail.LocalClient.Data.Models
 {
     /// <inheritdoc />
-    public sealed class User : Core.DataModels.User
+    public sealed class AccessPointGroup : Core.DataModels.AccessPointGroup
     {
         /// <summary>
         /// The ID used for EF.
@@ -12,29 +12,19 @@ namespace GuardRail.LocalClient.Data.Models
         public int Id { get; set; }
 
         /// <summary>
-        /// The account the user is in.
+        /// The users in the group.
         /// </summary>
-        public Account Account { get; set; }
+        public List<User> Users { get; } = new List<User>();
 
         /// <summary>
-        /// The devices a user has.
-        /// </summary>
-        public List<Device> Devices { get; } = new List<Device>();
-
-        /// <summary>
-        /// The AccessPoints a user has direct access to.
+        /// The AccessPoints the group has direct access to.
         /// </summary>
         public List<AccessPoint> AccessPoints { get; } = new List<AccessPoint>();
 
         /// <summary>
-        /// The UserGroups a user is in.
+        /// The UserGroups the user group has access to.
         /// </summary>
         public List<UserGroup> UserGroups { get; } = new List<UserGroup>();
-
-        /// <summary>
-        /// The AccessPointGroups a user has access to.
-        /// </summary>
-        public List<AccessPointGroup> AccessPointGroups { get; } = new List<AccessPointGroup>();
 
         /// <summary>
         /// EF creation helper.
@@ -43,26 +33,20 @@ namespace GuardRail.LocalClient.Data.Models
         public static void OnModelCreating(ModelBuilder builder)
         {
             builder
-                ?.Entity<User>()
+                ?.Entity<UserGroup>()
                 ?.HasKey(x => x.Id);
             builder
-                ?.Entity<User>()
+                ?.Entity<UserGroup>()
                 ?.HasIndex(x => x.Guid);
             builder
-                ?.Entity<User>()
-                ?.HasOne<Account>();
+                ?.Entity<UserGroup>()
+                ?.HasMany<User>();
             builder
-                ?.Entity<User>()
-                ?.HasMany<Device>();
-            builder
-                ?.Entity<User>()
+                ?.Entity<UserGroup>()
                 ?.HasMany<AccessPoint>();
             builder
-                ?.Entity<User>()
+                ?.Entity<UserGroup>()
                 ?.HasMany<UserGroup>();
-            builder
-                ?.Entity<User>()
-                ?.HasMany<AccessPointGroup>();
         }
     }
 }

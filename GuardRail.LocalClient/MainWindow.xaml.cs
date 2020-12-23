@@ -1,8 +1,13 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Reflection;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
+using GuardRail.LocalClient.Controls;
+using GuardRail.LocalClient.Data.Interfaces;
+using GuardRail.LocalClient.Data.Models;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace GuardRail.LocalClient
 {
@@ -59,6 +64,14 @@ namespace GuardRail.LocalClient
             }
         }
 
+        internal void ResetMenu()
+        {
+            foreach (MenuItemControl menuItem in Menu.Children)
+            {
+                menuItem.SetNotActive();
+            }
+        }
+
         internal void ActivateSetupScreen()
         {
             SetupControl.Visibility = Visibility.Visible;
@@ -69,11 +82,25 @@ namespace GuardRail.LocalClient
         internal void ActivateHomeScreen()
         {
             ResetBody();
+            ResetMenu();
             HomePageUserControl.Visibility = Visibility.Visible;
+            HomeMenuItem.SetActive();
+            UpdateLayout();
+        }
+
+        internal void ActivateUsersScreen()
+        {
+            ResetBody();
+            ResetMenu();
+            HomePageUserControl.Visibility = Visibility.Visible;
+            UsersMenuItem.SetActive();
             UpdateLayout();
         }
 
         private void HomeMenuItemControl_OnPreviewMouseDown(object sender, MouseButtonEventArgs e) =>
             ActivateHomeScreen();
+
+        private void UsersMenuItemControl_OnPreviewMouseDown(object sender, MouseButtonEventArgs e) =>
+            ActivateUsersScreen();
     }
 }

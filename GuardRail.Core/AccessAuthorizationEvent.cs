@@ -1,4 +1,6 @@
-﻿namespace GuardRail.Core
+﻿using GuardRail.Core.DataModels;
+
+namespace GuardRail.Core
 {
     /// <summary>
     /// The data defining the access authorization event
@@ -6,7 +8,7 @@
     public sealed class AccessAuthorizationEvent
     {
         private AccessAuthorizationEvent(
-            IDevice device,
+            Device device,
             IAccessControlDevice accessControlDevice)
         {
             Device = device;
@@ -20,7 +22,7 @@
         /// <param name="accessControlDevice">The access point the request was triggered at.</param>
         /// <returns></returns>
         public static AccessAuthorizationEvent Create(
-            IDevice device,
+            Device device,
             IAccessControlDevice accessControlDevice) =>
             new AccessAuthorizationEvent(
                 device,
@@ -29,7 +31,7 @@
         /// <summary>
         /// The device that triggered the request.
         /// </summary>
-        public IDevice Device { get; }
+        public Device Device { get; }
 
         /// <summary>
         /// The access point the request was triggered at.

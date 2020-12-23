@@ -30,7 +30,7 @@ namespace GuardRail.Api.Controllers
                 .Select(x =>
                     new UserModel
                     {
-                        Id = x.Id,
+                        Id = x.Guid,
                         FirstName = x.FirstName,
                         LastName = x.LastName
                     })

@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using GuardRail.Api.Devices;
 using GuardRail.Core;
+using GuardRail.Core.DataModels;
 using Serilog;
 
 namespace GuardRail.Api.DeviceProviders
@@ -26,7 +27,7 @@ namespace GuardRail.Api.DeviceProviders
         /// </summary>
         /// <param name="bytes"></param>
         /// <returns></returns>
-        public IDevice GetDeviceByByteId(IReadOnlyList<byte> bytes)
+        public Device GetDeviceByByteId(IReadOnlyList<byte> bytes)
         {
             var ints = string.Join(" ", bytes.Select(x => x.ToString("D", CultureInfo.InvariantCulture)));
             var hex = string.Join(" ", bytes.Select(x => x.ToString("X", CultureInfo.InvariantCulture)));

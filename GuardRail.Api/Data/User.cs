@@ -1,23 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using GuardRail.Core;
+﻿using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
 namespace GuardRail.Api.Data
 {
-    public sealed class User : IUser
+    public sealed class User : Core.DataModels.User
     {
-        public Guid Id { get; set; }
-
-        public string Username { get; set; }
-
-        public string Password { get; set; }
-
-        public string FirstName { get; set; }
-
-        public string LastName { get; set; }
-
-        public List<Device> Devices { get; set; }
+        public int Id { get; set; }
 
         public List<DoorUserAccess> DoorUserAccesses { get; set; }
 
@@ -29,7 +17,7 @@ namespace GuardRail.Api.Data
         {
             builder
                 ?.Entity<User>()
-                ?.HasKey(b => b.Id);
+                ?.HasKey(b => b.Guid);
             builder
                 ?.Entity<User>()
                 ?.HasMany<Device>();

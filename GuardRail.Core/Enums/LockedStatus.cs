@@ -1,4 +1,4 @@
-﻿namespace GuardRail.Core
+﻿namespace GuardRail.Core.Enums
 {
     /// <summary>
     /// The locked states for a door.

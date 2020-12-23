@@ -3,6 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using GuardRail.Core.DataModels;
 using Microsoft.Extensions.Hosting;
 
 namespace GuardRail.LocalClient.Data.Interfaces
@@ -47,14 +48,39 @@ namespace GuardRail.LocalClient.Data.Interfaces
             CancellationToken cancellationToken);
 
         /// <summary>
-        /// Retrieve data from the data sick.
+        /// Retrieves a single matching record from the data sink.
         /// </summary>
         /// <typeparam name="T">The type to get.</typeparam>
         /// <param name="getExpression">The expression for how to get data.</param>
         /// <param name="cancellationToken">The CancellationToken that can cancel the request.</param>
         /// <returns>Task of IQueryable of T</returns>
-        Task<IQueryable<T>> Get<T>(
-            Expression<Func<IQueryable<T>>> getExpression,
-            CancellationToken cancellationToken);
+        Task<T> GetSingleOrDefault<T>(
+            Expression<Func<T, bool>> getExpression,
+            CancellationToken cancellationToken)
+            where T : class;
+
+        /// <summary>
+        /// Retrieves the first matching record from the data sink.
+        /// </summary>
+        /// <typeparam name="T">The type to get.</typeparam>
+        /// <param name="getExpression">The expression for how to get data.</param>
+        /// <param name="cancellationToken">The CancellationToken that can cancel the request.</param>
+        /// <returns>Task of IQueryable of T</returns>
+        Task<T> GetFirstOrDefault<T>(
+            Expression<Func<T, bool>> getExpression,
+            CancellationToken cancellationToken)
+            where T : class;
+
+        /// <summary>
+        /// Retrieve data from the data sink.
+        /// </summary>
+        /// <typeparam name="T">The type to get.</typeparam>
+        /// <param name="getExpression">The expression for how to get data.</param>
+        /// <param name="cancellationToken">The CancellationToken that can cancel the request.</param>
+        /// <returns>Task of IQueryable of T</returns>
+        Task<IQueryable<T>> GetData<T>(
+            Expression<Func<T, bool>> getExpression,
+            CancellationToken cancellationToken)
+            where T : class;
     }
 }

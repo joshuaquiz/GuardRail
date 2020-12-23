@@ -1,17 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using GuardRail.Core.DataModels;
 
 namespace GuardRail.Core
 {
     /// <summary>
-    /// Used to generate a list of <see cref="IDoor"/>.
+    /// Used to generate a list of <see cref="Door"/>.
     /// </summary>
     public interface IDoorFactory
     {
         /// <summary>
-        /// Gets a list of <see cref="IDoor"/>.
+        /// Gets a list of <see cref="Door"/>.
         /// </summary>
-        /// <returns><see cref="IDoor"/></returns>
-        Task<IReadOnlyCollection<IDoor>> GetDoors();
+        /// <returns><see cref="Door"/></returns>
+        Task<IReadOnlyCollection<Door>> GetDoors();
     }
 }

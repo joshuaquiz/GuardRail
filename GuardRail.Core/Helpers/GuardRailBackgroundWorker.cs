@@ -9,24 +9,29 @@ namespace GuardRail.Core.Helpers
     /// </summary>
     public sealed class GuardRailBackgroundWorker : IDisposable
     {
-        private readonly string _name;
         private readonly TimeSpan _delay;
         private readonly Func<CancellationToken, Task> _work;
         private readonly CancellationToken _cancellationToken;
         private Task _worker;
 
         /// <summary>
+        /// Prevents all workers from doing their work.
+        /// Workers are still active and will resume as soon as the global stop is lifted.
+        /// </summary>
+        public static bool GlobalStop { get; set; }
+
+        /// <summary>
         /// The name of the worker.
         /// </summary>
-        public string Name => _name;
-        
+        public string Name { get; }
+
         private GuardRailBackgroundWorker(
             string name,
             TimeSpan delay,
             Func<CancellationToken, Task> work,
             CancellationToken cancellationToken)
         {
-            _name = name;
+            Name = name;
             _delay = delay;
             _work = work;
             _cancellationToken = cancellationToken;
@@ -59,10 +64,20 @@ namespace GuardRail.Core.Helpers
             _worker = new TaskFactory().StartNew(
                 async () =>
                 {
-                    while (!_cancellationToken.IsCancellationRequested)
+                    while (!_cancellationToken.IsCancellationRequested && !GlobalStop)
                     {
-                        await _work(_cancellationToken);
-                        await Task.Delay(_delay, _cancellationToken);
+                        try
+                        {
+                            await _work(_cancellationToken);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                        }
+                        finally
+                        {
+                            await Task.Delay(_delay, _cancellationToken);
+                        }
                     }
                 },
                 _cancellationToken,

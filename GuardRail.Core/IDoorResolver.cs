@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using GuardRail.Core.DataModels;
 
 namespace GuardRail.Core
 {
@@ -14,14 +15,14 @@ namespace GuardRail.Core
         /// <param name="door"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task RegisterDoor(IDoor door, CancellationToken cancellationToken);
+        Task RegisterDoor(Door door, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Returns an <see cref="IDoor"/> of the hardware for an actual door.
+        /// Returns an <see cref="Door"/> of the hardware for an actual door.
         /// </summary>
         /// <param name="deviceId"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<IDoor> GetDoorByDeviceId(string deviceId, CancellationToken cancellationToken);
+        Task<Door> GetDoorByDeviceId(string deviceId, CancellationToken cancellationToken);
     }
 }

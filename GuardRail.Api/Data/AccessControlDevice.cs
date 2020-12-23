@@ -16,7 +16,7 @@ namespace GuardRail.Api.Data
 
         public bool IsConfigured { get; set; }
 
-        public List<Door> Doors { get; set; }
+        public Door Door { get; set; }
 
         public static void OnModelCreating(ModelBuilder builder)
         {

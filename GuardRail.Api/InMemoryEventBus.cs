@@ -64,10 +64,7 @@ namespace GuardRail.Api
                         device.User,
                         newItem.AccessControlDevice))
                     {
-                        foreach (var door in accessControlDevice.Doors)
-                        {
-                            await door.UnLockAsync(CancellationToken.None);
-                        }
+                        await accessControlDevice.Door.UnLockAsync(CancellationToken.None);
                     }
                     else
                     {

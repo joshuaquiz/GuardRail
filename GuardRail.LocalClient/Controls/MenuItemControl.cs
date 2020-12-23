@@ -4,16 +4,18 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace GuardRail.LocalClient.Controls
 {
     /// <summary>
     /// A menu item for the UI.
     /// </summary>
-    public class MenuItemControl : Grid, INotifyPropertyChanged
+    public sealed class MenuItemControl : Grid, INotifyPropertyChanged
     {
         private ImageSource _icon;
         private string _title;
+        private Rectangle _activeIndicator;
 
         /// <summary>
         /// PropertyChanged event.
@@ -54,15 +56,27 @@ namespace GuardRail.LocalClient.Controls
             HorizontalAlignment = HorizontalAlignment.Stretch;
             Height = 50;
             Cursor = Cursors.Hand;
+            ColumnDefinitions.Add(
+                new ColumnDefinition
+                {
+                    Width = new GridLength(50)
+                });
+            ColumnDefinitions.Add(
+                new ColumnDefinition());
+            ColumnDefinitions.Add(
+                new ColumnDefinition
+                {
+                    Width = new GridLength(5)
+                });
             var iconBinding = new Binding(nameof(Icon))
             {
                 Source = this
             };
             var image = new Image
             {
-                Height = 40,
-                Width = 40,
-                Margin = new Thickness(5)
+                Height = 30,
+                Width = 30,
+                Margin = new Thickness(10)
             };
             image.SetBinding(Image.SourceProperty, iconBinding);
             image.SetValue(RowProperty, 0);
@@ -84,8 +98,18 @@ namespace GuardRail.LocalClient.Controls
             label.SetBinding(ContentControl.ContentProperty, titleBinding);
             label.SetValue(RowProperty, 0);
             label.SetValue(ColumnProperty, 1);
+            _activeIndicator = new Rectangle
+            {
+                Visibility = Visibility.Hidden,
+                Fill = new SolidColorBrush(Color.FromRgb(0, 156, 204)),
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch,
+            };
+            _activeIndicator.SetValue(RowProperty, 0);
+            _activeIndicator.SetValue(ColumnProperty, 2);
             Children.Add(image);
             Children.Add(label);
+            Children.Add(_activeIndicator);
             MouseEnter += OnMouseEnter;
             MouseLeave += OnMouseLeave;
         }
@@ -99,12 +123,20 @@ namespace GuardRail.LocalClient.Controls
         {
             Background = Brushes.Transparent;
         }
+        
+        private void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         /// <summary>
-        /// OnPropertyChanged handler.
+        /// Enable the active indicator.
         /// </summary>
-        /// <param name="propertyName">The name of the property that changed.</param>
-        protected void OnPropertyChanged(string propertyName) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        public void SetActive() =>
+            _activeIndicator.Visibility = Visibility.Visible;
+
+        /// <summary>
+        /// Disable the active indicator.
+        /// </summary>
+        public void SetNotActive() =>
+            _activeIndicator.Visibility = Visibility.Hidden;
     }
 }

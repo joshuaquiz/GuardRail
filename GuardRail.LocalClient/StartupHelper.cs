@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using GuardRail.Core.CommandLine;
+using GuardRail.Core.Helpers;
 using GuardRail.LocalClient.Data.Local;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,11 +24,13 @@ namespace GuardRail.LocalClient
             if (commandLineArguments.ContainsKey(CommandLineArgumentType.FreshInstall)
                 || commandLineArguments.ContainsKey(CommandLineArgumentType.ShouldShowSetup))
             {
+                GuardRailBackgroundWorker.GlobalStop = true;
                 await SetupDatabaseAsync();
                 mainWindow.ActivateSetupScreen();
                 return;
             }
 
+            GuardRailBackgroundWorker.GlobalStop = false;
             mainWindow.ActivateHomeScreen();
         }
 

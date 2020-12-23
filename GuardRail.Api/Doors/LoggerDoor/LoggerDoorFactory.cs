@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using GuardRail.Api.Data;
 using GuardRail.Core;
 using Microsoft.EntityFrameworkCore;
+using Door = GuardRail.Api.Data.Door;
 
 namespace GuardRail.Api.Doors.LoggerDoor
 {
@@ -21,10 +22,10 @@ namespace GuardRail.Api.Doors.LoggerDoor
             _guardRailContext = guardRailContext;
         }
 
-        public async Task<IReadOnlyCollection<IDoor>> GetDoors()
+        public async Task<IReadOnlyCollection<Core.DataModels.Door>> GetDoors()
         {
-            var doors = new ReadOnlyCollection<IDoor>(
-                new List<IDoor>
+            var doors = new ReadOnlyCollection<Door>(
+                new List<Door>
                 {
                     new LoggerDoor("logger door", _guardRailLogger)
                 });

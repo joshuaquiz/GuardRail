@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using GuardRail.Core;
+using GuardRail.Core.DataModels;
 
 namespace GuardRail.Api.Authorizers
 {
@@ -24,7 +25,7 @@ namespace GuardRail.Api.Authorizers
         /// <param name="accessControlDevice"></param>
         /// <returns></returns>
         public async Task<bool> IsDeviceAuthorizedAtLocation(
-            IUser user,
+            User user,
             IAccessControlDevice accessControlDevice)
         {
             if (user == null)

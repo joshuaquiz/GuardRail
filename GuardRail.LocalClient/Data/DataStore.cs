@@ -4,25 +4,28 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using GuardRail.Core.DataModels;
 using GuardRail.LocalClient.Data.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace GuardRail.LocalClient.Data
 {
-    internal sealed class DataStore : IDataStore
+    /// <inheritdoc />
+    public sealed class DataStore : IDataStore
     {
-        private readonly IServiceProvider _serviceProvider;
-        private List<IDataSink> _dataSinks;
+        private readonly List<IDataSink> _dataSinks;
 
-        internal DataStore(IServiceProvider serviceProvider)
+        /// <summary>
+        /// A data store.
+        /// </summary>
+        public DataStore(IServiceProvider serviceProvider)
         {
-            _serviceProvider = serviceProvider;
+            _dataSinks = serviceProvider.GetServices<IDataSink>().ToList();
         }
 
         /// <inheritdoc />
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _dataSinks = _serviceProvider.GetServices<IDataSink>().ToList();
             foreach (var dataSink in _dataSinks)
             {
                 dataSink.StartSync();
@@ -58,12 +61,35 @@ namespace GuardRail.LocalClient.Data
                 _dataSinks.Select(x => x.DeleteExisting(item, cancellationToken)));
 
         /// <inheritdoc />
-        public async Task<IQueryable<T>> Get<T>(
-            Expression<Func<IQueryable<T>>> getExpression,
+        public async Task<T> GetSingleOrDefault<T>(
+            Expression<Func<T, bool>> getExpression,
             CancellationToken cancellationToken)
+            where T : class
         {
             var resultQuery = await Task.WhenAny(
-                _dataSinks.Select(x => x.Get(getExpression, cancellationToken)));
+                _dataSinks.Select(x => x.GetSingleOrDefault(getExpression, cancellationToken)));
+            return await resultQuery;
+        }
+
+        /// <inheritdoc />
+        public async Task<T> GetFirstOrDefault<T>(
+            Expression<Func<T, bool>> getExpression,
+            CancellationToken cancellationToken)
+            where T : class
+        {
+            var resultQuery = await Task.WhenAny(
+                _dataSinks.Select(x => x.GetFirstOrDefault(getExpression, cancellationToken)));
+            return await resultQuery;
+        }
+
+        /// <inheritdoc />
+        public async Task<IQueryable<T>> GetData<T>(
+            Expression<Func<T, bool>> getExpression,
+            CancellationToken cancellationToken)
+            where T : class
+        {
+            var resultQuery = await Task.WhenAny(
+                _dataSinks.Select(x => x.GetData(getExpression, cancellationToken)));
             return await resultQuery;
         }
 

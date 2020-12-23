@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GuardRail.LocalClient.Data.Interfaces
+namespace GuardRail.Core.DataModels
 {
     /// <summary>
     /// An item that can be added.

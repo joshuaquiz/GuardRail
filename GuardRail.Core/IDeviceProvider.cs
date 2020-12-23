@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GuardRail.Core.DataModels;
 
 namespace GuardRail.Core
 {
@@ -12,6 +13,6 @@ namespace GuardRail.Core
         /// </summary>
         /// <param name="bytes">The ATS of the connected PICC.</param>
         /// <returns></returns>
-        IDevice GetDeviceByByteId(IReadOnlyList<byte> bytes);
+        Device GetDeviceByByteId(IReadOnlyList<byte> bytes);
     }
 }

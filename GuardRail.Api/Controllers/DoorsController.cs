@@ -6,6 +6,7 @@ using System.Web.Http;
 using GuardRail.Api.Controllers.Models;
 using GuardRail.Api.Data;
 using GuardRail.Core;
+using GuardRail.Core.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -54,8 +55,8 @@ namespace GuardRail.Api.Controllers
             var door = await _doorResolver.GetDoorByDeviceId(
                 doorFromDatabase.DeviceId,
                 HttpContext.RequestAborted);
-            await door.LockAsync(
-                HttpContext.RequestAborted);
+            /*await door.LockAsync(
+                HttpContext.RequestAborted);*/
             doorFromDatabase.LockedStatus = LockedStatus.Locked;
             await _guardRailContext.SaveChangesAsync();
             return Ok();
@@ -73,8 +74,8 @@ namespace GuardRail.Api.Controllers
             var door = await _doorResolver.GetDoorByDeviceId(
                 doorFromDatabase.DeviceId,
                 HttpContext.RequestAborted);
-            await door.UnLockAsync(
-                HttpContext.RequestAborted);
+            /*await door.UnLockAsync(
+                HttpContext.RequestAborted);*/
             doorFromDatabase.LockedStatus = LockedStatus.UnLocked;
             await _guardRailContext.SaveChangesAsync();
             return Ok();

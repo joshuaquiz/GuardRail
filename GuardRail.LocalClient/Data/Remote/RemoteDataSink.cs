@@ -15,7 +15,7 @@ namespace GuardRail.LocalClient.Data.Remote
     /// <summary>
     /// A remote stored IDataSink implementation.
     /// </summary>
-    internal sealed class RemoteDataSink : IDataSink
+    public sealed class RemoteDataSink : IDataSink
     {
         private readonly IGuardRailFileProvider _guardRailFileProvider;
         private readonly IGuardRailApiClient _guardRailApiClient;
@@ -27,7 +27,7 @@ namespace GuardRail.LocalClient.Data.Remote
         /// <summary>
         /// A remote stored IDataSink implementation.
         /// </summary>
-        internal RemoteDataSink(
+        public RemoteDataSink(
             IGuardRailFileProvider guardRailFileProvider,
             IGuardRailApiClient guardRailApiClient)
         {
@@ -138,10 +138,34 @@ namespace GuardRail.LocalClient.Data.Remote
         }
 
         /// <inheritdoc />
-        public Task<IQueryable<T>> Get<T>(
-            Expression<Func<IQueryable<T>>> getExpression,
-            CancellationToken cancellationToken) =>
-            _guardRailApiClient.GetDataFromQuery(getExpression, cancellationToken);
+        public async Task<T> GetSingleOrDefault<T>(
+            Expression<Func<T, bool>> getExpression,
+            CancellationToken cancellationToken)
+            where T : class
+        {
+            await Task.Delay(TimeSpan.FromMinutes(1), cancellationToken);
+            return default;
+        }
+
+        /// <inheritdoc />
+        public async Task<T> GetFirstOrDefault<T>(
+            Expression<Func<T, bool>> getExpression,
+            CancellationToken cancellationToken)
+            where T : class
+        {
+            await Task.Delay(TimeSpan.FromMinutes(1), cancellationToken);
+            return default;
+        }
+
+        /// <inheritdoc />
+        public async Task<IQueryable<T>> GetData<T>(
+            Expression<Func<T, bool>> getExpression,
+            CancellationToken cancellationToken)
+            where T : class
+        {
+            await Task.Delay(TimeSpan.FromMinutes(1), cancellationToken);
+            return default;
+        }
 
         /// <inheritdoc />
         public void Dispose()

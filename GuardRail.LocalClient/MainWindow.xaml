@@ -8,6 +8,7 @@
     xmlns:controls="clr-namespace:GuardRail.LocalClient.Controls"
     xmlns:home="clr-namespace:GuardRail.LocalClient.Controls.Pages.Home"
     xmlns:setup="clr-namespace:GuardRail.LocalClient.Controls.Setup"
+    xmlns:users="clr-namespace:GuardRail.LocalClient.Controls.Pages.Users"
     mc:Ignorable="d"
     Title="GuardRail Client"
     WindowState="Maximized">
@@ -37,14 +38,15 @@
             HorizontalAlignment="Stretch"
             HorizontalContentAlignment="Center"
             VerticalAlignment="Stretch"
-            VerticalContentAlignment="Center" />
+            VerticalContentAlignment="Center"
+            Visibility="Collapsed" />
         <Grid
             x:Name="MainGrid"
             VerticalAlignment="Stretch"
             HorizontalAlignment="Stretch"
             Margin="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="150" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -93,10 +95,13 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch">
                 <controls:MenuItemControl
+                    x:Name="HomeMenuItem"
                     Title="Home"
                     PreviewMouseDown="HomeMenuItemControl_OnPreviewMouseDown" />
                 <controls:MenuItemControl
-                    Title="Users" />
+                    x:Name="UsersMenuItem"
+                    Title="Users"
+                    PreviewMouseDown="UsersMenuItemControl_OnPreviewMouseDown" />
                 <controls:MenuItemControl
                     Title="Devices" />
                 <controls:MenuItemControl
@@ -114,7 +119,13 @@
                 <home:HomePageUserControl
                     x:Name="HomePageUserControl"
                     VerticalAlignment="Stretch"
-                    HorizontalAlignment="Stretch" />
+                    HorizontalAlignment="Stretch"
+                    Visibility="Collapsed" />
+                <users:UsersPageUserControl
+                    x:Name="UsersPageUserControl"
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch"
+                    Visibility="Collapsed" />
             </StackPanel>
             <StackPanel
                 x:Name="Footer"

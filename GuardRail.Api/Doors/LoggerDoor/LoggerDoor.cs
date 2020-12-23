@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using GuardRail.Api.Data;
 using GuardRail.Core;
+using GuardRail.Core.Enums;
 
 namespace GuardRail.Api.Doors.LoggerDoor
 {
-    public sealed class LoggerDoor : IDoor
+    public sealed class LoggerDoor : Door
     {
         private static readonly Guid Id = Guid.NewGuid();
 
