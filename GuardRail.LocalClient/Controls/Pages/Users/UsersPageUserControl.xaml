@@ -5,26 +5,54 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:users="clr-namespace:GuardRail.LocalClient.Controls.Pages.Users"
-    mc:Ignorable="d">
+    xmlns:controls="clr-namespace:GuardRail.LocalClient.Controls"
+    mc:Ignorable="d"
+    HorizontalAlignment="Stretch"
+    VerticalAlignment="Stretch"
+    HorizontalContentAlignment="Stretch"
+    VerticalContentAlignment="Stretch">
     <UserControl.DataContext>
-        <users:UsersPageViewModel/>
+        <users:UsersPageViewModel />
     </UserControl.DataContext>
-    <Grid>
+    <Grid
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch">
         <Grid.RowDefinitions>
+            <RowDefinition Height="5" />
+            <RowDefinition />
             <RowDefinition Height="5" />
             <RowDefinition />
             <RowDefinition Height="5" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="500" />
-            <ColumnDefinition Width="500" />
+            <ColumnDefinition />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <ItemsControl
-            x:Name="LogStream"
+        <StackPanel
             Grid.Column="0"
             Grid.Row="1"
+            Grid.ColumnSpan="2"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
+            FlowDirection="LeftToRight"
+            Orientation="Horizontal">
+            <Label
+                Content="Search:" />
+            <TextBox
+                x:Name="SearchBox"
+                Width="200"
+                TextChanged="SearchBox_OnTextChanged_TextChanged"
+                VerticalAlignment="Center"
+                VerticalContentAlignment="Center" />
+        </StackPanel>
+        <ItemsControl
+            x:Name="UsersDisplay"
+            Grid.Column="0"
+            Grid.Row="3"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            HorizontalContentAlignment="Stretch"
+            VerticalContentAlignment="Stretch"
             ItemsSource="{Binding Users}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -33,14 +61,20 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
+                    <Grid
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="80" />
                             <ColumnDefinition Width="80" />
                             <ColumnDefinition Width="80" />
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="20" />
                         </Grid.ColumnDefinitions>
                         <TextBlock
-                            Grid.Column="0">
+                            Grid.Column="0"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center">
                             <TextBlock.Text>
                                 <MultiBinding StringFormat="{}{0} {1}">
                                     <Binding Path="FirstName" />
@@ -50,13 +84,132 @@
                         </TextBlock>
                         <Label
                             Grid.Column="1"
-                            Content="{Binding Email}" />
+                            Content="{Binding Email}"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            VerticalContentAlignment="Center"/>
                         <Label
                             Grid.Column="2"
-                            Content="{Binding Phone}" />
+                            Content="{Binding Phone}"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            VerticalContentAlignment="Center"/>
+                        <Image
+                            Grid.Column="3"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Stretch"
+                            Height="10"
+                            Width="10"
+                            Margin="5"
+                            Source="/Assets/paper-and-pencil.png" />
+                        <Image
+                            Grid.Column="4"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Stretch"
+                            Height="10"
+                            Width="10"
+                            Margin="5"
+                            Source="/Assets/x.png" />
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+        <Grid
+            Grid.Column="1"
+            Grid.Row="3"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition Height="5" />
+                <RowDefinition />
+                <RowDefinition Height="5" />
+                <RowDefinition />
+                <RowDefinition Height="5" />
+                <RowDefinition />
+                <RowDefinition Height="5" />
+                <RowDefinition />
+                <RowDefinition Height="5" />
+                <RowDefinition />
+                <RowDefinition Height="5" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="5" />
+            </Grid.ColumnDefinitions>
+            <Label
+                Grid.Column="1"
+                Grid.Row="0"
+                Grid.ColumnSpan="3"
+                Content="Add new user" />
+            <Label
+                Grid.Column="1"
+                Grid.Row="1"
+                Grid.ColumnSpan="3"
+                Content="Users without a username or password will not be able to login" />
+            <Label
+                Grid.Column="1"
+                Grid.Row="2"
+                Content="First Name:" />
+            <Label
+                Grid.Column="3"
+                Grid.Row="2"
+                Content="Last Name:" />
+            <TextBox
+                x:Name="FirstNameTextBox"
+                Grid.Column="1"
+                Grid.Row="4" />
+            <TextBox
+                x:Name="LastNameTextBox"
+                Grid.Column="3"
+                Grid.Row="4" />
+            <Label
+                Grid.Column="1"
+                Grid.Row="6"
+                Content="Username:" />
+            <Label
+                Grid.Column="3"
+                Grid.Row="6"
+                Content="Password:" />
+            <TextBox
+                x:Name="UsernameTextBox"
+                Grid.Column="1"
+                Grid.Row="8" />
+            <TextBox
+                x:Name="PasswordTextBox"
+                Grid.Column="3"
+                Grid.Row="8" />
+            <Label
+                Grid.Column="1"
+                Grid.Row="10"
+                Content="Cell Phone:" />
+            <Label
+                Grid.Column="3"
+                Grid.Row="10"
+                Content="Email:" />
+            <controls:ValidatedPhoneTextBox
+                x:Name="PhoneTextBox"
+                Grid.Column="1"
+                Grid.Row="12" />
+            <controls:ValidatedEmailTextBox
+                x:Name="EmailTextBox"
+                Grid.Column="3"
+                Grid.Row="12" />
+            <Button
+                x:Name="SaveButton"
+                Grid.Column="1"
+                Grid.Row="14"
+                Grid.ColumnSpan="3"
+                Content="Save"
+                Click="SaveButton_OnClick" />
+        </Grid>
     </Grid>
 </UserControl>

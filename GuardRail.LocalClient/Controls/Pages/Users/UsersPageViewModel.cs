@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 using GuardRail.Core.Helpers;
@@ -43,10 +42,10 @@ namespace GuardRail.LocalClient.Controls.Pages.Users
                         }
                     }
                 },
-                CancellationToken.None);
+                App.CancellationTokenSource.Token);
             _guardRailBackgroundWorker.Start();
         }
-        
+
         /// <inheritdoc />
         public void Dispose()
         {

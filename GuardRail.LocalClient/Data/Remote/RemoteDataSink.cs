@@ -39,8 +39,8 @@ namespace GuardRail.LocalClient.Data.Remote
                 "Remote Sink Try Push Changes",
                 TimeSpan.FromSeconds(2),
                 TryPushChanges,
-                CancellationToken.None);
-            _dataStoreFilePath = Path.Combine("Data", "Remote", "store.gr");
+                _cancellationTokenSource.Token);
+            _dataStoreFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Data", "Remote", "store.gr");
         }
 
         private ConcurrentQueue<RemoteSinkAction> LoadSavedQueue()

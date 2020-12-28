@@ -1,8 +1,7 @@
 {
   "profiles": {
     "GuardRail.LocalClient": {
-      "commandName": "Project",
-      "commandLineArgs": "/FreshInstall"
+      "commandName": "Project"
     }
   }
 }

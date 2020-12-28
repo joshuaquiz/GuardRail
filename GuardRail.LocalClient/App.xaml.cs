@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Windows;
 using GuardRail.Core.CommandLine;
 using GuardRail.LocalClient.Data;
@@ -32,6 +32,11 @@ namespace GuardRail.LocalClient
         public static IConfiguration Configuration { get; private set; }
 
         /// <summary>
+        /// The CancellationTokenSource for the application.
+        /// </summary>
+        public static CancellationTokenSource CancellationTokenSource { get; private set; }
+
+        /// <summary>
         /// The account for this installation. 
         /// </summary>
         public static Account Account { get; private set; }
@@ -59,13 +64,17 @@ namespace GuardRail.LocalClient
                 Location = "Here",
                 Name = "Test"
             };
+            CancellationTokenSource = new CancellationTokenSource();
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
             ServiceProvider = serviceCollection.BuildServiceProvider();
+            var dataStore = ServiceProvider.GetRequiredService<IDataStore>();
+            await dataStore.StartAsync(CancellationTokenSource.Token);
             var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
             await StartupHelper.StartupAsync(
                 CommandLineArguments.Create(e.Args),
-                mainWindow);
+                mainWindow,
+                CancellationTokenSource.Token);
             mainWindow.Show();
         }
         
@@ -76,16 +85,15 @@ namespace GuardRail.LocalClient
             services.AddSingleton<IGuardRailApiClient, GuardRailApiClient>();
             services.AddDbContext<GuardRailContext>(x => x.UseSqlite("Data Source=LocalDataStore.db"));
             services.AddSingleton<IDataSink, EntityFrameWorkDataSink>();
-            services.AddSingleton<IDisposable, EntityFrameWorkDataSink>();
             services.AddSingleton<IDataSink, RemoteDataSink>();
-            services.AddSingleton<IDisposable, RemoteDataSink>();
             services.AddSingleton<IDataStore, DataStore>();
             services.AddHostedService<DataStore>();
         }
 
-        private void Application_Exit(object sender, ExitEventArgs e)
+        private static void Application_Exit(object sender, ExitEventArgs e)
         {
-            var disposables = ServiceProvider.GetRequiredService<IEnumerable<IDisposable>>();
+            CancellationTokenSource.Cancel();
+            var disposables = ServiceProvider.GetServices<IDisposable>();
             foreach (var disposable in disposables)
             {
                 disposable.Dispose();

@@ -64,5 +64,17 @@ namespace GuardRail.LocalClient.Data.Models
                 ?.Entity<User>()
                 ?.HasMany<AccessPointGroup>();
         }
+
+        /// <summary>
+        /// Returns a string that contains text that can be searched against.
+        /// </summary>
+        /// <returns>string</returns>
+        public string GetSearchString() =>
+            string.Join(
+                " ",
+                FirstName,
+                LastName,
+                Email,
+                Phone);
     }
 }

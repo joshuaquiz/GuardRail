@@ -1,13 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Reflection;
-using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using GuardRail.LocalClient.Controls;
-using GuardRail.LocalClient.Data.Interfaces;
-using GuardRail.LocalClient.Data.Models;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace GuardRail.LocalClient
 {
@@ -92,7 +88,7 @@ namespace GuardRail.LocalClient
         {
             ResetBody();
             ResetMenu();
-            HomePageUserControl.Visibility = Visibility.Visible;
+            UsersPageUserControl.Visibility = Visibility.Visible;
             UsersMenuItem.SetActive();
             UpdateLayout();
         }

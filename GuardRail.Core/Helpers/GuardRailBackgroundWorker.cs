@@ -93,6 +93,6 @@ namespace GuardRail.Core.Helpers
 
         /// <inheritdoc />
         public void Dispose() =>
-            _worker.Dispose();
+            _worker?.Dispose();
     }
 }

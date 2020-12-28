@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using GuardRail.Core.CommandLine;
 using GuardRail.Core.Helpers;
 using GuardRail.LocalClient.Data.Local;
@@ -17,15 +19,17 @@ namespace GuardRail.LocalClient
         /// </summary>
         /// <param name="commandLineArguments">Command line arguments passed to the main app.</param>
         /// <param name="mainWindow">The application's main window.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         public static async Task StartupAsync(
             CommandLineArguments commandLineArguments,
-            MainWindow mainWindow)
+            MainWindow mainWindow,
+            CancellationToken cancellationToken)
         {
             if (commandLineArguments.ContainsKey(CommandLineArgumentType.FreshInstall)
                 || commandLineArguments.ContainsKey(CommandLineArgumentType.ShouldShowSetup))
             {
                 GuardRailBackgroundWorker.GlobalStop = true;
-                await SetupDatabaseAsync();
+                await SetupDatabaseAsync(cancellationToken);
                 mainWindow.ActivateSetupScreen();
                 return;
             }
@@ -34,11 +38,15 @@ namespace GuardRail.LocalClient
             mainWindow.ActivateHomeScreen();
         }
 
-        private static async Task SetupDatabaseAsync()
+        private static async Task SetupDatabaseAsync(CancellationToken cancellationToken)
         {
             using var serviceScope = App.ServiceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
             var context = serviceScope.ServiceProvider.GetRequiredService<GuardRailContext>();
-            await context.Database.MigrateAsync();
+            var pendingMigrations = await context.Database.GetPendingMigrationsAsync(cancellationToken);
+            if (pendingMigrations.Any())
+            {
+                await context.Database.MigrateAsync(cancellationToken);
+            }
         }
     }
 }

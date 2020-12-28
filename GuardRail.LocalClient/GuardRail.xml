@@ -22,6 +22,11 @@
             Configuration for the application.
             </summary>
         </member>
+        <member name="P:GuardRail.LocalClient.App.CancellationTokenSource">
+            <summary>
+            The CancellationTokenSource for the application.
+            </summary>
+        </member>
         <member name="P:GuardRail.LocalClient.App.Account">
             <summary>
             The account for this installation. 
@@ -639,6 +644,12 @@
             </summary>
             <param name="builder">EF model builder.</param>
         </member>
+        <member name="M:GuardRail.LocalClient.Data.Models.User.GetSearchString">
+            <summary>
+            Returns a string that contains text that can be searched against.
+            </summary>
+            <returns>string</returns>
+        </member>
         <member name="T:GuardRail.LocalClient.Data.Models.UserGroup">
             <inheritdoc />
         </member>
@@ -868,12 +879,13 @@
             Helps with any startup actions or setup that needs to happen.
             </summary>
         </member>
-        <member name="M:GuardRail.LocalClient.StartupHelper.StartupAsync(GuardRail.Core.CommandLine.CommandLineArguments,GuardRail.LocalClient.MainWindow)">
+        <member name="M:GuardRail.LocalClient.StartupHelper.StartupAsync(GuardRail.Core.CommandLine.CommandLineArguments,GuardRail.LocalClient.MainWindow,System.Threading.CancellationToken)">
             <summary>
             Helps with any startup actions or setup that needs to happen.
             </summary>
             <param name="commandLineArguments">Command line arguments passed to the main app.</param>
             <param name="mainWindow">The application's main window.</param>
+            <param name="cancellationToken">The cancellation token.</param>
         </member>
     </members>
 </doc>

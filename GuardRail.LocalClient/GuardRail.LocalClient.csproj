@@ -132,7 +132,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Local\Migrations\" />
     <Folder Include="Resources\" />
   </ItemGroup>
 
