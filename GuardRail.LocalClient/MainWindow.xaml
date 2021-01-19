@@ -109,11 +109,10 @@
                 <controls:MenuItemControl
                     Title="Map" />
             </StackPanel>
-            <StackPanel
+            <Grid
                 x:Name="Body"
                 Grid.Row="1"
                 Grid.Column="1"
-                Orientation="Vertical"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch">
                 <home:HomePageUserControl
@@ -126,7 +125,7 @@
                     VerticalAlignment="Stretch"
                     HorizontalAlignment="Stretch"
                     Visibility="Collapsed" />
-            </StackPanel>
+            </Grid>
             <StackPanel
                 x:Name="Footer"
                 Grid.Row="2"

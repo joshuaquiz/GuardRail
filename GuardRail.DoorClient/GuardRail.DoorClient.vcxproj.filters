@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\button.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\led.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pin.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pin_pad.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\task.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\value_task.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\value_task.h" />
+    <ClInclude Include="include\button.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\led.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pin.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pin_pad.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\task.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{01a24405-18f1-4d03-8689-37bb4ce33105}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{d004130c-d4a2-4a81-8d11-2d8cde234d81}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

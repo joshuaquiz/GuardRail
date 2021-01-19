@@ -172,6 +172,11 @@
             For viewing users in the application.
             </summary>
         </member>
+        <member name="P:GuardRail.LocalClient.Controls.Pages.Users.UsersPageViewModel.EditingUser">
+            <summary>
+            The user being edited.
+            </summary>
+        </member>
         <member name="M:GuardRail.LocalClient.Controls.Pages.Users.UsersPageViewModel.#ctor">
             <summary>
             View model for the users page user control.
@@ -872,6 +877,21 @@
             <summary>
               Overrides the current thread's CurrentUICulture property for all
               resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Properties.Resources.paper_and_pencil">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Properties.Resources.plus">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Properties.Resources.x">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
         <member name="T:GuardRail.LocalClient.StartupHelper">

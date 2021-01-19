@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using GuardRail.Core.Helpers;
 using GuardRail.LocalClient.Data.Interfaces;
 using GuardRail.LocalClient.Data.Models;
@@ -48,6 +49,17 @@ namespace GuardRail.LocalClient.Controls.Pages.Users
         private void SearchBox_OnTextChanged_TextChanged(object sender, TextChangedEventArgs e) =>
             CollectionViewSource.GetDefaultView(UsersDisplay.ItemsSource).Refresh();
 
+        private void AddNewButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            ViewModel.EditingUser = new User
+            {
+                Account = App.Account
+            };
+            EditViewLabel.Content = "Add new user";
+            EditGrid.Visibility = Visibility.Visible;
+            UpdateLayout();
+        }
+
         private void SaveButton_OnClick(object sender, RoutedEventArgs e)
         {
             if (FirstNameTextBox.Text.IsNullOrWhiteSpace()
@@ -62,20 +74,54 @@ namespace GuardRail.LocalClient.Controls.Pages.Users
                     MessageBoxButton.OK,
                     MessageBoxImage.Error,
                     MessageBoxResult.OK);
+                return;
+            }
+            
+            var dataStore = App.ServiceProvider.GetRequiredService<IDataStore>();
+            if (ViewModel.EditingUser.Id > 0)
+            {
+                dataStore.UpdateExisting(ViewModel.EditingUser, App.CancellationTokenSource.Token);
+            }
+            else
+            {
+                dataStore.SaveNew(ViewModel.EditingUser, App.CancellationTokenSource.Token);
             }
 
-            var user = new User
-            {
-                Account = App.Account,
-                Email = EmailTextBox.Text,
-                FirstName = FirstNameTextBox.Text,
-                LastName = LastNameTextBox.Text,
-                Password = PasswordTextBox.Text,
-                Phone = PhoneTextBox.Text,
-                Username = UsernameTextBox.Text
-            };
+            EditGrid.Visibility = Visibility.Collapsed;
+            UpdateLayout();
+        }
+
+        private void EditButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            ViewModel.EditingUser = (sender as Button)?.Tag as User;
+            EditViewLabel.Content = "Edit user";
+
+            EditGrid.Visibility = Visibility.Visible;
+            UpdateLayout();
+        }
+
+        private void DeleteViewButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            DeleteView.Visibility = Visibility.Collapsed;
+            UpdateLayout();
+        }
+
+        private void YesDeleteButton_OnClick(object sender, RoutedEventArgs e)
+        {
             var dataStore = App.ServiceProvider.GetRequiredService<IDataStore>();
-            dataStore.SaveNew(user, App.CancellationTokenSource.Token);
+            dataStore.DeleteExisting(ViewModel.EditingUser, App.CancellationTokenSource.Token);
+        }
+
+        private void DeleteButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            ViewModel.EditingUser = (sender as Button)?.Tag as User;
+            DeleteNameLabel.Content = ViewModel.EditingUser?.FirstName + " " + ViewModel.EditingUser?.LastName;
+            DeleteView.Visibility = Visibility.Visible;
+            UpdateLayout();
+        }
+
+        private void DoNothingPanel_OnClick(object sender, MouseButtonEventArgs e)
+        {
         }
     }
 }

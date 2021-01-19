@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using GuardRail.Core.Helpers;
 using GuardRail.LocalClient.Data.Interfaces;
 using GuardRail.LocalClient.Interfaces;
+using Newtonsoft.Json;
 
 namespace GuardRail.LocalClient.Data.Remote
 {
@@ -84,7 +85,14 @@ namespace GuardRail.LocalClient.Data.Remote
             }
             catch
             {
-                await _guardRailFileProvider.AppendOrCreateAsync(_dataStoreFilePath, changesToPush.ToJson(), ct);
+                await _guardRailFileProvider.AppendOrCreateAsync(
+                    _dataStoreFilePath,
+                    changesToPush.ToJson(
+                        new JsonSerializerSettings
+                        {
+                            MaxDepth = 2
+                        }),
+                    ct);
             }
         }
 

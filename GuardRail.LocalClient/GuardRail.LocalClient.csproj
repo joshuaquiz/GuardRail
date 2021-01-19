@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
 	<StartWorkingDirectory>$(MSBuildProjectDirectory)</StartWorkingDirectory>
     <UseWPF>true</UseWPF>
     <AssemblyName>GuardRail</AssemblyName>
@@ -37,6 +37,9 @@
     <None Remove="LocalDataStore.db-shm" />
     <None Remove="logo_icon.ico" />
     <None Remove="logo_icon.png" />
+    <None Remove="Resources\paper-and-pencil.png" />
+    <None Remove="Resources\plus.png" />
+    <None Remove="Resources\x.png" />
     <None Include="Assets\logo_icon.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
@@ -99,6 +102,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="logo_icon.png" />
+    <Resource Include="Resources\paper-and-pencil.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\plus.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
@@ -129,10 +141,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Resources\" />
   </ItemGroup>
 
   <ItemGroup>

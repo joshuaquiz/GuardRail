@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
 using GuardRail.Core.Helpers;
@@ -22,28 +25,72 @@ namespace GuardRail.LocalClient.Controls.Pages.Users
         public ObservableCollection<User> Users { get; set; } = new ObservableCollection<User>();
 
         /// <summary>
+        /// The user being edited.
+        /// </summary>
+        public User EditingUser { get; set; }
+
+        /// <summary>
         /// View model for the users page user control.
         /// </summary>
         public UsersPageViewModel()
         {
-            _guardRailBackgroundWorker = GuardRailBackgroundWorker.Create(
-                "Users display sync",
-                TimeSpan.FromSeconds(1),
-                async ct =>
-                {
-                    var dataStore = App.ServiceProvider.GetRequiredService<IDataStore>();
-                    foreach (var user in await dataStore.GetData<User>(x => x.Account == App.Account, ct))
+            if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+            {
+                Users = new ObservableCollection<User>(
+                    new List<User>
                     {
-                        if (!Users.Contains(user))
+                        new User
                         {
-                            await Application.Current.Dispatcher.InvokeAsync(
-                                () => Users.Add(user),
-                                DispatcherPriority.DataBind);
+                            FirstName = "Joshua1",
+                            LastName = "Galloway1",
+                            Username = "username1",
+                            Password = "password1",
+                            Email = "asdf@asdf1.com",
+                            Phone = "3213213214"
+                        },
+                        new User
+                        {
+                            FirstName = "Joshua2",
+                            LastName = "Galloway2",
+                            Username = "username2",
+                            Password = "password2",
+                            Email = "asdf@asdf2.com",
+                            Phone = "3213213214"
+                        },
+                        new User
+                        {
+                            FirstName = "Joshua3",
+                            LastName = "Galloway3",
+                            Username = "username3",
+                            Password = "password3",
+                            Email = "asdf@asdf3.com",
+                            Phone = "3213213214"
                         }
-                    }
-                },
-                App.CancellationTokenSource.Token);
-            _guardRailBackgroundWorker.Start();
+                    });
+                EditingUser = Users.First();
+            }
+            else
+            {
+
+                _guardRailBackgroundWorker = GuardRailBackgroundWorker.Create(
+                    "Users display sync",
+                    TimeSpan.FromSeconds(1),
+                    async ct =>
+                    {
+                        var dataStore = App.ServiceProvider.GetRequiredService<IDataStore>();
+                        foreach (var user in await dataStore.GetData<User>(x => x.Account == App.Account, ct))
+                        {
+                            if (!Users.Contains(user))
+                            {
+                                await Application.Current.Dispatcher.InvokeAsync(
+                                    () => Users.Add(user),
+                                    DispatcherPriority.DataBind);
+                            }
+                        }
+                    },
+                    App.CancellationTokenSource.Token);
+                _guardRailBackgroundWorker.Start();
+            }
         }
 
         /// <inheritdoc />
