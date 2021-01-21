@@ -1,3 +1,4 @@
+#include <functional>
 #include "../include/task.h"
 
 task::task()
@@ -18,8 +19,8 @@ void task::wait() const
 	thread_->join();
 }
 
-task task::run(std::function<void> f)
+task task::run(std::function<void()> func)
 {
-	std::thread thread(f);
-	return task(&thread);
+	std::thread t(func);
+	return task(&t);
 }

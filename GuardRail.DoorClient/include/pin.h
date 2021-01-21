@@ -1,4 +1,5 @@
 #pragma once
+
 class pin
 {
 	int wiring_pi_pin_number_;
@@ -16,6 +17,5 @@ public:
 	void turn_on() const;
 	void turn_off() const;
 	bool is_on() const;
-	template<typename T>
-	void on_change(void (T::*)()) const;
+	void on_change(void(*)()) const;
 };

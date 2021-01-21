@@ -36,7 +36,10 @@ public:
 		pin row_1_pin,
 		pin row_2_pin,
 		pin row_3_pin,
-		pin row_4_pin);
+		pin row_4_pin,
+
+		button*,
+		void(*)());
 
 	void on_button_press(std::function<void(char)>);
 };

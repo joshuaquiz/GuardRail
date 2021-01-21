@@ -2,14 +2,18 @@
 #include "../include/button.h"
 
 pin_pad::pin_pad(
-	pin col_1_pin,
-	pin col_2_pin,
-	pin col_3_pin,
-	pin col_4_pin,
-	pin row_1_pin,
-	pin row_2_pin,
-	pin row_3_pin,
-	pin row_4_pin)
+    const pin col_1_pin,
+	const pin col_2_pin,
+	const pin col_3_pin,
+	const pin col_4_pin,
+
+	const pin row_1_pin,
+	const pin row_2_pin,
+	const pin row_3_pin,
+	const pin row_4_pin,
+
+	button* b,
+	void(*func)())
 	: one_(row_1_pin, col_1_pin),
 	two_(row_1_pin, col_2_pin),
 	three_(row_1_pin, col_3_pin),
@@ -30,70 +34,71 @@ pin_pad::pin_pad(
 	pound_(row_4_pin, col_3_pin),
 	d_(row_4_pin, col_4_pin)
 {
-	one_.button_click(
-		[this]() {
-			this->func_('1');
-		});
-	two_.button_click(
-		[this]() {
-			this->func_('2');
-		});
-	three_.button_click(
-		[this]() {
-			this->func_('3');
-		});
-	a_.button_click(
-		[this]() {
-			this->func_('A');
-		});
-	four_.button_click(
-		[this]() {
-			this->func_('4');
-		});
-	five_.button_click(
-		[this]() {
-			this->func_('5');
-		});
-	six_.button_click(
-		[this]() {
-			this->func_('6');
-		});
-	b_.button_click(
-		[this]() {
-			this->func_('B');
-		});
-	seven_.button_click(
-		[this]() {
-			this->func_('7');
-		});
-	eight_.button_click(
-		[this]() {
-			this->func_('8');
-		});
-	nine_.button_click(
-		[this]() {
-			this->func_('9');
-		});
-	c_.button_click(
-		[this]() {
-			this->func_('c');
-		});
-	star_.button_click(
-		[this]() {
-			this->func_('*');
-		});
-	zero_.button_click(
-		[this]() {
-			this->func_('0');
-		});
-	pound_.button_click(
-		[this]() {
-			this->func_('#');
-		});
-	d_.button_click(
-		[this]() {
-			this->func_('D');
-		});
+	one_.button_click_func = [this, &b]() {
+		b = &one_;
+		this->func_('1');
+	};
+	one_.setup(func);
+	two_.button_click_func = [this]() {
+		this->func_('2');
+	};
+	two_.setup(func);
+	three_.button_click_func = [this]() {
+		this->func_('3');
+	};
+	three_.setup(func);
+	a_.button_click_func = [this]() {
+		this->func_('A');
+	};
+	a_.setup(func);
+	four_.button_click_func = [this]() {
+		this->func_('4');
+	};
+	four_.setup(func);
+	five_.button_click_func = [this]() {
+		this->func_('5');
+	};
+	five_.setup(func);
+	six_.button_click_func = [this]() {
+		this->func_('6');
+	};
+	six_.setup(func);
+	b_.button_click_func = [this]() {
+		this->func_('B');
+	};
+	b_.setup(func);
+	seven_.button_click_func = [this]() {
+		this->func_('7');
+	};
+	seven_.setup(func);
+	eight_.button_click_func = [this]() {
+		this->func_('8');
+	};
+	eight_.setup(func);
+	nine_.button_click_func = [this]() {
+		this->func_('9');
+	};
+	nine_.setup(func);
+	c_.button_click_func = [this]() {
+		this->func_('c');
+	};
+	c_.setup(func);
+	star_.button_click_func = [this]() {
+		this->func_('*');
+	};
+	star_.setup(func);
+	zero_.button_click_func = [this]() {
+		this->func_('0');
+	};
+	zero_.setup(func);
+	pound_.button_click_func = [this]() {
+		this->func_('#');
+	};
+	pound_.setup(func);
+	d_.button_click_func = [this]() {
+		this->func_('D');
+	};
+	d_.setup(func);
 }
 
 void pin_pad::on_button_press(const std::function<void(char)> func)

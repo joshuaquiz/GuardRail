@@ -1,4 +1,5 @@
 #pragma once
+#include <functional>
 #include <thread>
 
 class task
@@ -9,7 +10,7 @@ class task
 public:
 	void wait() const;
 
-	static task run(std::function<void>);
+	static task run(std::function<void()>);
 
 private:
 	task();
