@@ -48,7 +48,7 @@ int main()
     const pin buzz_pin(7);
     buzz_pin.set_write_mode();
     const auto red_light_pin = led(pin(0));
-    const auto green_light_pin = led(pin(0));
+    const auto green_light_pin = led(pin(2));
     auto pad = pin_pad(
         pin(26),
         pin(27),
@@ -80,6 +80,11 @@ int main()
     green_light_pin.turn_on();
     delay(500);
     green_light_pin.turn_off();
-	
+
+    while (true)
+    {
+        
+    }
+
     return 0;
 }

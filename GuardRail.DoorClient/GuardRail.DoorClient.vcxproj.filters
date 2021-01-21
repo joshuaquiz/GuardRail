@@ -22,7 +22,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\value_task.h" />
     <ClInclude Include="include\button.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -36,6 +35,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\task.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\value_task.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
