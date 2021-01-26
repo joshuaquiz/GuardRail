@@ -18,9 +18,8 @@
     along with Rpi-hw. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-#ifndef _RPI_HW_KEYPAD_BASE_HPP_
-#define _RPI_HW_KEYPAD_BASE_HPP_
+#ifndef RPI_HW_KEYPAD_BASE_HPP
+#define RPI_HW_KEYPAD_BASE_HPP
 
 #include <functional>
 #include <vector>
@@ -39,179 +38,194 @@
 #include "../iface/iface_base.hpp"
 #include "../iface/input.hpp"
 
-namespace rpihw { // Begin main namespace
-
-/*!
-	@namespace rpihw::keypad
-	@brief Namespace of the keypads.
-*/
-
-namespace keypad { // Begin keypads namespace
-
-// Prototypes
-class keypad_base;
-
-//! The type of the keypad event listener.
-typedef std::function< void ( keypad::keypad_base& ) > T_EventListener;
-
-/*!
-	@class base
-	@brief Generic keypad controller.
-*/
-class keypad_base {
-
-public:
-
-	//! The keymap type.
-	typedef std::map< uint8_t, uint8_t > T_Keymap;
-
+namespace rpihw
+{
 	/*!
-		@brief Constructor method.
-		@param[in] total Number of the buttons.
-		@param[in] pins Sequence of `uint8_t` containing the input GPIOs.
+		@namespace rpihw::keypad
+		@brief Namespace of the keypads.
 	*/
-	keypad_base( size_t total, std::initializer_list< uint8_t > pins );
+	namespace keypad
+	{
+		// Prototypes
+		class keypad_base;
 
-	/*!
-		@brief Constructor method.
-		@param[in] total Number of the buttons.
-		@param[in] pins Sequence of `uint8_t` containing the input GPIOs.
-		@param[in] keymap The keymap vector.
-	*/
-	keypad_base( size_t total, std::initializer_list< uint8_t > pins, const std::vector< uint8_t > &keymap );
+		//! The type of the keypad event listener.
+		typedef std::function<void(keypad_base&)> t_event_listener;
 
-	/*!
-		@brief Constructor method.
-		@param[in] total Number of the buttons.
-		@param[in] pins Vector containing the input GPIO pins.
-	*/
-	keypad_base( size_t total, const std::vector< uint8_t > &pins );
+		/*!
+			@class keypad_base
+			@brief Generic keypad controller.
+		*/
+		class keypad_base
+		{
 
-	/*!
-		@brief Constructor method.
-		@param[in] total Number of the buttons.
-		@param[in] pins Vector containing the input GPIO pins.
-		@param[in] keymap The keymap vector.
-	*/
-	keypad_base( size_t total, const std::vector< uint8_t > &pins, const std::vector< uint8_t > &keymap );
+		public:
 
-	//! Destructor method.
-	virtual ~keypad_base();
+			//! The keymap type.
+			typedef std::map<uint8_t, uint8_t> t_keymap;
 
-	/*!
-		@brief Sets the keymap.
-		@param[in] keymap The keymap vector.
-	*/
-	virtual void setKeymap( const std::vector< uint8_t > &keymap );
+			/*!
+				@brief Constructor method.
+				@param[in] total Number of the buttons.
+				@param[in] pins Sequence of `uint8_t` containing the input GPIOs.
+			*/
+			keypad_base(
+				size_t total,
+				std::initializer_list<uint8_t> pins);
 
-	/*!
-		@brief Sets the keypad event listener.
-		@param[in] listener The event listener.
-	*/
-	virtual void addEventListener( T_EventListener listener );
+			/*!
+				@brief Constructor method.
+				@param[in] total Number of the buttons.
+				@param[in] pins Sequence of `uint8_t` containing the input GPIOs.
+				@param[in] keymap The keymap vector.
+			*/
+			keypad_base(
+				size_t total,
+				std::initializer_list<uint8_t> pins,
+				const std::vector<uint8_t>& keymap);
 
-	/*!
-		@brief Sets the frequency with which buttons are read.
-		@param[in] frequency The refresh rate in Hz.
-	*/
-	virtual void setRefreshRate( float frequency );
+			/*!
+				@brief Constructor method.
+				@param[in] total Number of the buttons.
+				@param[in] pins Vector containing the input GPIO pins.
+			*/
+			keypad_base(
+				size_t total,
+				const std::vector<uint8_t>& pins);
 
-	//! Returns the frequency with which buttons are read.
-	virtual float getRefreshRate() const;
+			/*!
+				@brief Constructor method.
+				@param[in] total Number of the buttons.
+				@param[in] pins Vector containing the input GPIO pins.
+				@param[in] keymap The keymap vector.
+			*/
+			keypad_base(
+				size_t total,
+				const std::vector<uint8_t>& pins,
+				const std::vector<uint8_t>& keymap);
 
-	/*!
-		@brief Returns a button state.
-		@param[in] index The index position of the input pin.
-		@return The state of the button.
-	*/
-	virtual bool state( size_t index ) const;
+			keypad_base() = delete;
+			keypad_base(keypad_base&) = delete;
+			keypad_base(const keypad_base&) = delete;
+			keypad_base(keypad_base&&) = delete;
+			keypad_base& operator=(keypad_base&) = delete;
+			keypad_base& operator=(const keypad_base&) = delete;
+			keypad_base& operator=(const keypad_base&&) = delete;
 
-	/*!
-		@brief Checks if a button is pressed.
-		@param[in] index The index position of the input pin.
-		@return Return \c true if button is pressed.
-	*/
-	virtual bool pressed( size_t index ) const;
+			//! Destructor method.
+			virtual ~keypad_base();
 
-	/*!
-		@brief Checks if a button is released.
-		@param[in] index The index position of the input pin.
-		@return Return \c true if button is released.
-	*/
-	virtual bool released( size_t index ) const;
+			/*!
+				@brief Sets the keymap.
+				@param[in] keymap The keymap vector.
+			*/
+			virtual void set_keymap(const std::vector<uint8_t>& keymap);
 
-	//! Returns the list of button states.
-	virtual const std::vector< bool > &state() const;
+			/*!
+				@brief Sets the keypad event listener.
+				@param[in] listener The event listener.
+			*/
+			virtual void add_event_listener(t_event_listener listener);
 
-	/*!
-		@brief Returns a key state.
-		@param[in] key The key button.
-		@return The state of the button.
-	*/
-	virtual bool keyState( uint8_t key ) const;
+			/*!
+				@brief Sets the frequency with which buttons are read.
+				@param[in] frequency The refresh rate in Hz.
+			*/
+			virtual void set_refresh_rate(float frequency);
 
-	/*!
-		@brief Checks if a key is pressed.
-		@param[in] key The key button.
-		@return Return \c true if button is pressed.
-	*/
-	virtual bool keyPressed( uint8_t key ) const;
+			//! Returns the frequency with which buttons are read.
+			virtual float get_refresh_rate() const;
 
-	/*!
-		@brief Checks if a key is released.
-		@param[in] key The key button.
-		@return Return \c true if button is released.
-	*/
-	virtual bool keyReleased( uint8_t key ) const;
+			/*!
+				@brief Returns a button state.
+				@param[in] index The index position of the input pin.
+				@return The state of the button.
+			*/
+			virtual bool state(size_t index) const;
 
-	//! Returns the list of pressed keys.
-	virtual std::vector< uint8_t > keyState() const;
+			/*!
+				@brief Checks if a button is pressed.
+				@param[in] index The index position of the input pin.
+				@return Return \c true if button is pressed.
+			*/
+			virtual bool pressed(size_t index) const;
 
-	//! Returns the number of keys.
-	virtual size_t numOfKeys() const;
+			/*!
+				@brief Checks if a button is released.
+				@param[in] index The index position of the input pin.
+				@return Return \c true if button is released.
+			*/
+			virtual bool released(size_t index) const;
 
-protected:
+			//! Returns the list of button states.
+			virtual const std::vector<bool>& state() const;
 
-	//! Number of the keys.
-	size_t m_nkeys;
+			/*!
+				@brief Returns a key state.
+				@param[in] key The key button.
+				@return The state of the button.
+			*/
+			virtual bool key_state(uint8_t key) const;
 
-	//! Buttons input interface.
-	iface::input *m_input{};
+			/*!
+				@brief Checks if a key is pressed.
+				@param[in] key The key button.
+				@return Return \c true if button is pressed.
+			*/
+			virtual bool key_pressed(uint8_t key) const;
 
-	//! The keymap vector.
-	T_Keymap m_keymap{};
+			/*!
+				@brief Checks if a key is released.
+				@param[in] key The key button.
+				@return Return \c true if button is released.
+			*/
+			virtual bool key_released(uint8_t key) const;
 
-	//! Button states (0 = up, 1 = down).
-	std::vector< bool > m_keystate{};
+			//! Returns the list of pressed keys.
+			virtual std::vector< uint8_t > key_state() const;
 
-	//! Pressed buttons (0 = none, 1 = pressed).
-	std::vector< bool > m_pressed{};
+			//! Returns the number of keys.
+			virtual size_t num_of_keys() const;
 
-	//! Pressed buttons (0 = none, 1 = released).
-	std::vector< bool > m_released{};
+		protected:
 
-	//! The refresh rate.
-	float m_frequency;
+			//! Number of the keys.
+			size_t m_number_of_keys_;
 
-	//! Updating thread.
-	std::thread *m_thread{};
+			//! Buttons input interface.
+			iface::input* m_input_{};
 
-	//! Mutex of the updating thread.
-	std::mutex *m_mutex;
+			//! The keymap vector.
+			t_keymap m_keymap_{};
 
-	//! The keypad event listener.
-	T_EventListener m_event_listener;
+			//! Button states (0 = up, 1 = down).
+			std::vector< bool > m_keystate_{};
 
-	//! Updates the state of buttons (threading function).
-	virtual void update() = 0;
-};
+			//! Pressed buttons (0 = none, 1 = pressed).
+			std::vector< bool > m_pressed_{};
 
-} // End of keypads namespace
+			//! Pressed buttons (0 = none, 1 = released).
+			std::vector< bool > m_released_{};
 
-} // End of main namespace
+			//! The refresh rate.
+			float m_frequency_;
 
+			//! Updating thread.
+			std::thread* m_thread_{};
+
+			//! Mutex of the updating thread.
+			std::mutex* m_mutex_;
+
+			//! The keypad event listener.
+			t_event_listener m_event_listener_;
+
+			//! Updates the state of buttons (threading function).
+			virtual void update() = 0;
+		};
+	}
+}
 
 // Include inline methods 
 #include "keypad_base-inl.hpp"
 
-#endif /* _RPI_HW_KEYPAD_BASE_HPP_ */
+#endif /* RPI_HW_KEYPAD_BASE_HPP */

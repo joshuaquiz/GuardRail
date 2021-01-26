@@ -34,7 +34,7 @@ shiftIn::shiftIn( uint8_t data_pin, uint8_t clock_pin, BitOrder order, size_t de
 
 	// Initialize the interface pins
 	m_gpio->setup( m_pins[ DATA ], INPUT );
-	m_gpio->setPullUpDown( m_pins[ DATA ], PULL_DOWN );
+	m_gpio->set_pull_up_down( m_pins[ DATA ], PULL_DOWN );
 
 	m_gpio->write( m_pins[ CLOCK ], LOW );
 	m_gpio->setup( m_pins[ CLOCK ], OUTPUT );

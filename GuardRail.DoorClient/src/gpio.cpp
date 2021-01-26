@@ -18,164 +18,173 @@
     along with Rpi-hw. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-#ifndef _RPI_HW_GPIO_CPP_
-#define _RPI_HW_GPIO_CPP_
+#ifndef RPI_HW_GPIO_CPP
+#define RPI_HW_GPIO_CPP
 
 #include "../include/rpi-hw/gpio.hpp"
 
-namespace rpihw { // Begin main namespace
+namespace rpihw
+{
+	gpio& gpio::get()
+	{
+		// Return the singleton instance
+		static gpio instance;
+		return instance;
+	}
 
-gpio &
-gpio::get() {
+	gpio::gpio()
+		: m_bcm2835_(new driver::bcm2835)
+	{
+	}
 
-	// Return the singleton instance
-	static gpio instance;
-	return instance;
-}
+	gpio::~gpio()
+	{
+		// Destroy the BCM2835 controller
+		delete m_bcm2835_;
+	}
 
-gpio::gpio() : m_bcm2835( new driver::bcm2835 ) {
+	expander_slot& gpio::find_expander(const uint8_t pin)
+	{
+		// Find the I/O expander with the specific pin index
+		for (auto it = m_expanders_.rbegin(); it != m_expanders_.rend(); ++it)
+		{
+			if (pin >= it->pin_base)
+			{
+				return *it;
+			}
+		}
 
-}
+		// Else throw an exception
+		throw exception(
+			utils::format(
+				"(Fatal) `gpio::findExpander`: there's not I/O expander for pin %u\n",
+				pin));
+	}
 
-gpio::~gpio() {
+	void gpio::setup(
+		const uint8_t pin,
+		const uint8_t mode,
+		const uint8_t pull_mode)
+	{
+		// Set the mode of a GPIO pin
+		if (pin <= reserved_pins)
+		{
+			m_bcm2835_->setup(pin, mode, pull_mode);
+		}
+		else
+		{
+			auto& slot = find_expander(pin);
+			slot.expander->setup(pin - slot.pin_base, mode, pull_mode);
+		}
+	}
 
-	// Destroy the BCM2835 controller
-	delete m_bcm2835;
-}
+	void gpio::write(const uint8_t pin, const bool value)
+	{
+		// Set the value of a output pin
+		if (pin <= reserved_pins)
+		{
+			m_bcm2835_->write(pin, value);
+		}
+		else
+		{
+			auto& slot = find_expander(pin);
+			slot.expander->write(pin - slot.pin_base, value);
+		}
+	}
 
-expander_slot &
-gpio::findExpander( uint8_t pin ) {
+	bool gpio::read(const uint8_t pin)
+	{
+		// Return the value of a input pin
+		if (pin <= reserved_pins)
+		{
+			return m_bcm2835_->read(pin);
+		}
 
-	// Find the I/O expander with the specific pin index
-	for ( auto it = m_expanders.rbegin(); it != m_expanders.rend(); ++it )
-		if ( pin >= it->pin_base )
-			return *it;
+		auto& slot = find_expander(pin);
+		return slot.expander->read(pin - slot.pin_base);
+	}
 
-	// Else throw an exception
-	throw exception( utils::format( "(Fatal) `gpio::findExpander`: there's not I/O expander for pin %u\n", pin ) );
-}
+	bool gpio::check_event(const uint8_t pin)
+	{
+		// Return the event state of a GPIO pin
+		if (pin <= reserved_pins)
+		{
+			return m_bcm2835_->checkEvent(pin);
+		}
 
-void
-gpio::setup( uint8_t pin, uint8_t mode, uint8_t pull_mode ) {
+		auto& slot = find_expander(pin);
+		return slot.expander->checkEvent(pin - slot.pin_base);
+	}
 
-	// Set the mode of a GPIO pin
-	if ( pin <= RESERVED_PINS )
-		m_bcm2835->setup( pin, mode, pull_mode );
+	void gpio::set_rising_event(const uint8_t pin, const bool enabled)
+	{
+		// Enable/disable the rising edge event on a GPIO pin
+		if (pin <= reserved_pins)
+		{
+			m_bcm2835_->setRisingEvent(pin, enabled);
+		}
+		else
+		{
+			auto& slot = find_expander(pin);
+			slot.expander->setRisingEvent(pin - slot.pin_base, enabled);
+		}
+	}
 
-	else {
+	void gpio::set_falling_event(const uint8_t pin, const bool enabled)
+	{
+		// Enable/disable the falling edge event on a GPIO pin
+		if (pin <= reserved_pins)
+		{
+			m_bcm2835_->setFallingEvent(pin, enabled);
+		}
+		else
+		{
+			auto& slot = find_expander(pin);
+			slot.expander->setFallingEvent(pin - slot.pin_base, enabled);
+		}
+	}
 
-		expander_slot &slot = findExpander( pin );
-		slot.expander->setup( pin - slot.pin_base, mode, pull_mode );
+	void gpio::set_high_event(const uint8_t pin, const bool enabled)
+	{
+		// Enable/disable the high event on a GPIO pin
+		if (pin <= reserved_pins)
+		{
+			m_bcm2835_->setHighEvent(pin, enabled);
+		}
+		else
+		{
+			auto& slot = find_expander(pin);
+			slot.expander->setHighEvent(pin - slot.pin_base, enabled);
+		}
+	}
+
+	void gpio::set_low_event(const uint8_t pin, const bool enabled)
+	{
+		// Enable/disable the low event on a GPIO pin
+		if (pin <= reserved_pins)
+		{
+			m_bcm2835_->setLowEvent(pin, enabled);
+		}
+		else
+		{
+			auto& slot = find_expander(pin);
+			slot.expander->setLowEvent(pin - slot.pin_base, enabled);
+		}
+	}
+
+	void gpio::set_pull_up_down(const uint8_t pin, const uint8_t mode)
+	{
+		// Enable/disable the pull-up/down control on a GPIO pin
+		if (pin <= reserved_pins)
+		{
+			m_bcm2835_->setPullUpDown(pin, mode);
+		}
+		else
+		{
+			auto& slot = find_expander(pin);
+			slot.expander->setPullUpDown(pin - slot.pin_base, mode);
+		}
 	}
 }
 
-void
-gpio::write( uint8_t pin, bool value ) {
-
-	// Set the value of a output pin
-	if ( pin <= RESERVED_PINS )
-		m_bcm2835->write( pin, value );
-
-	else {
-
-		expander_slot &slot = findExpander( pin );
-		slot.expander->write( pin - slot.pin_base, value );
-	}
-}
-
-bool
-gpio::read( uint8_t pin ) {
-
-	// Return the value of a input pin
-	if ( pin <= RESERVED_PINS )
-		return m_bcm2835->read( pin );
-
-	expander_slot &slot = findExpander( pin );
-	return slot.expander->read( pin - slot.pin_base );
-}
-
-bool
-gpio::checkEvent( uint8_t pin ) {
-
-	// Return the event state of a GPIO pin
-	if ( pin <= RESERVED_PINS )
-		return m_bcm2835->checkEvent( pin );
-
-	expander_slot &slot = findExpander( pin );
-	return slot.expander->checkEvent( pin - slot.pin_base );
-}
-
-void
-gpio::setRisingEvent( uint8_t pin, bool enabled ) {
-
-	// Enable/disable the rising edge event on a GPIO pin
-	if ( pin <= RESERVED_PINS )
-		m_bcm2835->setRisingEvent( pin, enabled );
-
-	else {
-
-		expander_slot &slot = findExpander( pin );
-		slot.expander->setRisingEvent( pin - slot.pin_base, enabled );
-	}
-}
-
-void
-gpio::setFallingEvent( uint8_t pin, bool enabled ) {
-
-	// Enable/disable the falling edge event on a GPIO pin
-	if ( pin <= RESERVED_PINS )
-		m_bcm2835->setFallingEvent( pin, enabled );
-
-	else {
-
-		expander_slot &slot = findExpander( pin );
-		slot.expander->setFallingEvent( pin - slot.pin_base, enabled );
-	}
-}
-
-void
-gpio::setHighEvent( uint8_t pin, bool enabled ) {
-
-	// Enable/disable the high event on a GPIO pin
-	if ( pin <= RESERVED_PINS )
-		m_bcm2835->setHighEvent( pin, enabled );
-
-	else {
-
-		expander_slot &slot = findExpander( pin );
-		slot.expander->setHighEvent( pin - slot.pin_base, enabled );
-	}
-}
-
-void
-gpio::setLowEvent( uint8_t pin, bool enabled ) {
-
-	// Enable/disable the low event on a GPIO pin
-	if ( pin <= RESERVED_PINS )
-		m_bcm2835->setLowEvent( pin, enabled );
-
-	else {
-
-		expander_slot &slot = findExpander( pin );
-		slot.expander->setLowEvent( pin - slot.pin_base, enabled );
-	}
-}
-
-void
-gpio::setPullUpDown( uint8_t pin, uint8_t mode ) {
-
-	// Enable/disable the pull-up/down control on a GPIO pin
-	if ( pin <= RESERVED_PINS )
-		m_bcm2835->setPullUpDown( pin, mode );
-
-	else {
-
-		expander_slot &slot = findExpander( pin );
-		slot.expander->setPullUpDown( pin - slot.pin_base, mode );
-	}
-}
-
-} // End of main namespace
-
-#endif /* _RPI_HW_GPIO_CPP_ */
+#endif /* RPI_HW_GPIO_CPP */

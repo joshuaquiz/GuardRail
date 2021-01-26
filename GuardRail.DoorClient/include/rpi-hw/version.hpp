@@ -18,14 +18,13 @@
     along with Rpi-hw. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-#ifndef _RPI_HW_VERSION_HPP_
-#define _RPI_HW_VERSION_HPP_
+#ifndef RPI_HW_VERSION_HPP
+#define RPI_HW_VERSION_HPP
 
 // Version of the Rpi-hw library
-#define RPI_HW_VERSION			"0.7.3"
-#define RPI_HW_VERSION_MAJOR	0
-#define RPI_HW_VERSION_MINOR	7
-#define RPI_HW_VERSION_PATCH	3
+constexpr char rpi_hw_version[] = "0.7.3";
+constexpr int rpi_hw_version_major = 0;
+constexpr int rpi_hw_version_minor = 7;
+constexpr int rpi_hw_version_patch = 3;
 
-#endif /* _RPI_HW_VERSION_HPP_ */
+#endif /* RPI_HW_VERSION_HPP */

@@ -59,7 +59,7 @@ output::write( size_t data ) {
 	size_t i = 0;
 
 	for ( ; i < size(); ++i )
-		m_gpio->write( m_pins[i], data & ( 1 << i ) );
+		m_gpio->write( m_pins[i], data & 1 << i );
 }
 
 void

@@ -18,9 +18,8 @@
 	along with Rpi-hw. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-#ifndef _RPI_HW_GPIO_HPP_
-#define _RPI_HW_GPIO_HPP_
+#ifndef RPI_HW_GPIO_HPP
+#define RPI_HW_GPIO_HPP
 
 #include <vector>
 
@@ -33,144 +32,146 @@
 #include "driver/bcm2835.hpp"
 #include "driver/io-expander.hpp"
 
-#define RESERVED_PINS	30
+constexpr int reserved_pins = 30;
 
-namespace rpihw { // Begin main namespace
+namespace rpihw
+{
+	/*!
+		@class expander_slot
+		@brief Slot to store the I/O expander.
+	*/
+	struct expander_slot
+	{
+		//! Constructor method.
+		expander_slot(
+			const uint8_t b,
+			driver::io_expander* e)
+			: pin_base(b),
+			expander(e)
+		{
+		}
 
-/*!
-	@class expander_slot
-	@brief Slot to store the I/O expander.
-*/
-struct expander_slot {
+		//! The pin base for the I/O expander.
+		int pin_base;
 
-	//! Constructor method.
-	expander_slot( uint8_t b, driver::io_expander *e ) : pin_base(b), expander(e) {}
-
-	//! The pin base for the I/O expander.
-	int pin_base;
-
-	//! Pointer to the I/O expander.
-	driver::io_expander *expander;
-};
-
-
-/*!
-	@class gpio
-	@brief Virtual GPIO controller.
-
-	@example blink.cpp
-*/
-class gpio {
-
-public:
-
-	//! Returns the singleton instance.
-	static gpio &get();
-
-	//! Destructor method.
-	virtual ~gpio();
+		//! Pointer to the I/O expander.
+		driver::io_expander* expander;
+	};
 
 	/*!
-		@brief Adds a I/O expander to the standard GPIO connector.
-		@param[in] pin_base The user-defined pin base for the I/O expander.
-		@param[in] expander The I/O expander.
+		@class gpio
+		@brief Virtual GPIO controller.
 	*/
-	template < typename T >
-	void expand( uint8_t pin_base, T &expander );
+	class gpio final
+	{
+	public:
 
-	/*!
-		@brief Sets the mode of a GPIO pin.
-		@param[in] pin The GPIO pin.
-		@param[in] mode The GPIO mode.
-		@param[in] pull_mode The pull resistor mode.
-	*/
-	void setup( uint8_t pin, uint8_t mode, uint8_t pull_mode = PULL_OFF );
+		//! Returns the singleton instance.
+		static gpio& get();
+		
+		gpio(gpio&) = delete;
+		gpio(const gpio&) = delete;
+		gpio(gpio&&) = delete;
+		gpio& operator=(gpio&) = delete;
+		gpio& operator=(const gpio&) = delete;
+		gpio& operator=(const gpio&&) = delete;
 
-	/*!
-		@brief Sets the value of a output pin.
-		@param[in] pin The output pin.
-		@param[in] value The value of output pin.
-	*/
-	void write( uint8_t pin, bool value );
+		//! Destructor method.
+		~gpio();
 
-	/*!
-		@brief Returns the value of a input pin.
-		@param[in] pin The input pin.
-		@return The value of input pin.
-	*/
-	bool read( uint8_t pin );
+		/*!
+			@brief Adds a I/O expander to the standard GPIO connector.
+			@param[in] pin_base The user-defined pin base for the I/O expander.
+			@param[in] expander The I/O expander.
+		*/
+		template<typename T>
+		void expand(uint8_t pin_base, T& expander);
 
-	/*!
-		@brief Returns the event state of a GPIO pin.
-		@param[in] pin The GPIO pin.
-		@return The event state.
-	*/
-	bool checkEvent( uint8_t pin );
+		/*!
+			@brief Sets the mode of a GPIO pin.
+			@param[in] pin The GPIO pin.
+			@param[in] mode The GPIO mode.
+			@param[in] pull_mode The pull resistor mode.
+		*/
+		void setup(uint8_t pin, uint8_t mode, uint8_t pull_mode = PULL_OFF);
 
-	/*!
-		@brief Enables/disables the rising edge event on a GPIO pin.
-		@param[in] pin The GPIO pin.
-		@param[in] enabled If \c true enable the rising edge event.
-	*/
-	void setRisingEvent( uint8_t pin, bool enabled );
+		/*!
+			@brief Sets the value of a output pin.
+			@param[in] pin The output pin.
+			@param[in] value The value of output pin.
+		*/
+		void write(uint8_t pin, bool value);
 
-	/*!
-		@brief Enables/disables the falling edge event on a GPIO pin.
-		@param[in] pin The GPIO pin.
-		@param[in] enabled If \c true enable the falling edge event.
-	*/
-	void setFallingEvent( uint8_t pin, bool enabled );
+		/*!
+			@brief Returns the value of a input pin.
+			@param[in] pin The input pin.
+			@return The value of input pin.
+		*/
+		bool read(uint8_t pin);
 
-	/*!
-		@brief Enables/disables the high event on a GPIO pin.
-		@param[in] pin The GPIO pin.
-		@param[in] enabled If \c true enable the high event.
-	*/
-	void setHighEvent( uint8_t pin, bool enabled );
+		/*!
+			@brief Returns the event state of a GPIO pin.
+			@param[in] pin The GPIO pin.
+			@return The event state.
+		*/
+		bool check_event(uint8_t pin);
 
-	/*!
-		@brief Enables/disables the low event on a GPIO pin.
-		@param[in] pin The GPIO pin.
-		@param[in] enabled If \c true enable the low event.
-	*/
-	void setLowEvent( uint8_t pin, bool enabled );
+		/*!
+			@brief Enables/disables the rising edge event on a GPIO pin.
+			@param[in] pin The GPIO pin.
+			@param[in] enabled If \c true enable the rising edge event.
+		*/
+		void set_rising_event(uint8_t pin, bool enabled);
 
-	/*!
-		@brief Enables/disables the pull-up/down control on a GPIO pin.
-		@param[in] pin The GPIO pin.
-		@param[in] mode The pull resistor mode.
-	*/
-	void setPullUpDown( uint8_t pin, uint8_t mode );
+		/*!
+			@brief Enables/disables the falling edge event on a GPIO pin.
+			@param[in] pin The GPIO pin.
+			@param[in] enabled If \c true enable the falling edge event.
+		*/
+		void set_falling_event(uint8_t pin, bool enabled);
 
-private:
+		/*!
+			@brief Enables/disables the high event on a GPIO pin.
+			@param[in] pin The GPIO pin.
+			@param[in] enabled If \c true enable the high event.
+		*/
+		void set_high_event(uint8_t pin, bool enabled);
 
-	//! Broadcom BCM2835 controller.
-	driver::bcm2835 *m_bcm2835;
+		/*!
+			@brief Enables/disables the low event on a GPIO pin.
+			@param[in] pin The GPIO pin.
+			@param[in] enabled If \c true enable the low event.
+		*/
+		void set_low_event(uint8_t pin, bool enabled);
 
-	//! List of I/O expanders.
-	std::vector< expander_slot > m_expanders;
+		/*!
+			@brief Enables/disables the pull-up/down control on a GPIO pin.
+			@param[in] pin The GPIO pin.
+			@param[in] mode The pull resistor mode.
+		*/
+		void set_pull_up_down(uint8_t pin, uint8_t mode);
 
-	/*!
-		@brief Finds the I/O expander with a specific pin index.
-		@param[in] pin The GPIO pin.
-		@return A pointer to the I/O expander.
-	*/
-	expander_slot &findExpander( uint8_t pin );
+	private:
 
-	//! Constructor method.
-	gpio();
+		//! Broadcom BCM2835 controller.
+		driver::bcm2835* m_bcm2835_;
 
-	//! Disables the copy constructor.
-	gpio( const gpio &other ) = delete;
+		//! List of I/O expanders.
+		std::vector<expander_slot> m_expanders_{};
 
-	//! Disables the copy constructor.
-	void operator=( const gpio &other ) = delete;
-};
+		/*!
+			@brief Finds the I/O expander with a specific pin index.
+			@param[in] pin The GPIO pin.
+			@return A pointer to the I/O expander.
+		*/
+		expander_slot& find_expander(uint8_t pin);
 
-} // End of main namespace
-
+		//! Constructor method.
+		gpio();
+	};
+}
 
 // Include inline methods 
 #include "gpio-inl.hpp"
 
-#endif /* _RPI_HW_GPIO_HPP_ */
+#endif /* RPI_HW_GPIO_HPP */

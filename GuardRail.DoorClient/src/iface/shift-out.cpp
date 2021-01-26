@@ -54,7 +54,7 @@ shiftOut::write( uint8_t data ) {
 		for ( i = 7; i >= 0; --i ) {
 
 			// Write the data to the output pin
-			m_gpio->write( m_pins[ DATA ], data & ( 1 << i ) );
+			m_gpio->write( m_pins[ DATA ], data & 1 << i );
 
 			// Toggle the clock
 			strobe();
@@ -65,7 +65,7 @@ shiftOut::write( uint8_t data ) {
 		for ( i = 0; i < 8; ++i ) {
 
 			// Write the data to the output pin
-			m_gpio->write( m_pins[ DATA ], data & ( 1 << i ) );
+			m_gpio->write( m_pins[ DATA ], data & 1 << i );
 
 			// Toggle the clock
 			strobe();

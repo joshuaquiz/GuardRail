@@ -89,23 +89,23 @@ bcm2835::setup( uint8_t pin, uint8_t mode, uint8_t pull_mode ) {
 		setPullUpDown( pin, pull_mode );
 
 	// Calculate the bit position
-	uint8_t shift = ( pin % 10 ) * 3;
+	uint8_t shift = pin % 10 * 3;
 
 	// Get GPIO controller register
-	volatile uint32_t &reg = *( m_gpio + GPFSEL0 + ( pin / 10 ) );
+	volatile auto& reg = *( m_gpio + GPFSEL0 + pin / 10 );
 
 	// Sets the GPIO pin mode
 	// 000 = Input
 	// 001 = Output
-	reg = ( reg & ~( 7 << shift ) ) | ( static_cast<uint32_t>(mode) << shift );
+	reg = reg & ~( 7 << shift ) | static_cast<uint32_t>(mode) << shift;
 }
 
 void
 bcm2835::setPullUpDown( uint8_t pin, uint8_t mode ) {
 
 	// Get the GPIO controller registers
-	volatile uint32_t	&reg_pullupdown	= *( m_gpio + GPPUD0 ),
-						&reg_clock		= *( m_gpio + GPPUDCLK0 + ( pin / 32 ) );
+	volatile auto & reg_pullupdown	= *( m_gpio + GPPUD0 ),
+                  & reg_clock		= *( m_gpio + GPPUDCLK0 + pin / 32 );
 
 	// Enable/disable pull-up/down control on the GPIO pin
 	// 00 = Disable pull-up/down
@@ -116,7 +116,7 @@ bcm2835::setPullUpDown( uint8_t pin, uint8_t mode ) {
 
 	// Set clock con pin
     waitCycles( 150 );
-	reg_clock = 1 << ( pin % 32 );
+	reg_clock = 1 << pin % 32;
     waitCycles( 150 );
 
 	// Restore the registers

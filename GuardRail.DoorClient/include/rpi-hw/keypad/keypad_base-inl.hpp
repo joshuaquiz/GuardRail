@@ -1,4 +1,4 @@
-/* 
+/*
     Title --- keypad/base-inl.hpp
 
     Copyright (C) 2013 Giacomo Trudu - wicker25[at]gmail[dot]com
@@ -18,46 +18,43 @@
     along with Rpi-hw. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef RPI_HW_KEYPAD_BASE_INL_HPP
+#define RPI_HW_KEYPAD_BASE_INL_HPP
 
-#ifndef _RPI_HW_KEYPAD_BASE_INL_HPP_
-#define _RPI_HW_KEYPAD_BASE_INL_HPP_
+namespace rpihw
+{
+    namespace keypad
+    {
+        inline void keypad_base::add_event_listener(const t_event_listener listener)
+        {
+            // Set the keypad event listener
+            m_event_listener_ = listener;
+        }
 
-namespace rpihw { // Begin main namespace
+        inline void keypad_base::set_refresh_rate(const float frequency)
+        {
+            // Set the frequency with which buttons are read
+            m_frequency_ = frequency;
+        }
 
-namespace keypad { // Begin keypads namespace
+        inline float keypad_base::get_refresh_rate() const
+        {
+            // Returns the frequency with which buttons are read
+            return m_frequency_;
+        }
 
-inline void keypad_base::addEventListener( T_EventListener listener ) {
+        inline const std::vector<bool>& keypad_base::state() const
+        {
+            // Return the list of button states
+            return m_keystate_;
+        }
 
-	// Set the keypad event listener
-	m_event_listener = listener;
+        inline size_t keypad_base::num_of_keys() const
+        {
+            // Return the number of keys
+            return m_number_of_keys_;
+        }
+    }
 }
 
-inline void keypad_base::setRefreshRate( float frequency ) {
-
-	// Set the frequency with which buttons are read
-	m_frequency = frequency;
-}
-
-inline float keypad_base::getRefreshRate() const {
-
-	// Returns the frequency with which buttons are read
-	return m_frequency;
-}
-
-inline const std::vector<bool>& keypad_base::state() const {
-
-	// Return the list of button states
-	return m_keystate;
-}
-
-inline size_t keypad_base::numOfKeys() const {
-
-	// Return the number of keys
-	return m_nkeys;
-}
-
-} // End of keypads namespace
-
-} // End of main namespace
-
-#endif /* _RPI_HW_KEYPAD_BASE_INL_HPP_ */
+#endif /* RPI_HW_KEYPAD_BASE_INL_HPP */

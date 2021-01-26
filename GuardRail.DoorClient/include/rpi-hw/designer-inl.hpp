@@ -101,7 +101,7 @@ designer< T, C, N >::drawLine( T x0, T y0, T x1, T y1 ) {
 	int dx = math::abs( static_cast<int>(x1) - static_cast<int>(x0) ),
 		dy = math::abs( static_cast<int>(y1) - static_cast<int>(y0) );
 
-	const bool steep = ( dy > dx );
+	const bool steep = dy > dx;
 
 	// Move the line to the first positive octant
 	// (algorithm works only with m <= 1 and dx > dy)
@@ -123,7 +123,7 @@ designer< T, C, N >::drawLine( T x0, T y0, T x1, T y1 ) {
 
 	// Calculate initial error and vertical step
 	int e = dx / 2,
-		q = ( y0 < y1 ? 1 : -1 );
+		q = y0 < y1 ? 1 : -1;
 
 	// Draw the line in the original octant
 	if ( steep ) {
@@ -211,11 +211,11 @@ designer< T, C, N >::drawEllipse( T cx, T cy, T a, T b ) {
 
 	int	dE	= 0,
 		dSE	= aa2 * y,
-		d	= math::round( static_cast<float>(bb) - (aa * b) + (0.25) * aa );
+		d	= math::round( static_cast<float>(bb) - aa * b + 0.25 * aa );
 
 
 	// Draw the first region
-	for ( ; dE <= dSE; ++x, dE += bb2, d += (bb + dE) ) {
+	for ( ; dE <= dSE; ++x, dE += bb2, d += bb + dE ) {
 
 		drawEllipsePoints( cx, cy, x, y );
 
@@ -230,7 +230,7 @@ designer< T, C, N >::drawEllipse( T cx, T cy, T a, T b ) {
 
 	--y;
 
-	for ( ; y >= 0; y--, dSE -= aa2, d += (aa - dSE) ) {
+	for ( ; y >= 0; y--, dSE -= aa2, d += aa - dSE ) {
 
 		if ( d < 0 )
 			++x, d += dE += bb2;
@@ -254,7 +254,7 @@ designer< T, C, N >::fillRect( T x0, T y0, T x1, T y1 ) {
 	int w = x1 - x0,
 		h = y1 - y0;
 
-	size_t total = static_cast<size_t>(w) * static_cast<size_t>(h);
+    auto total = static_cast<size_t>(w) * static_cast<size_t>(h);
 
 	// Draw the filled rectangle
 	size_t i = 0;
@@ -301,11 +301,11 @@ designer< T, C, N >::fillEllipse( T cx, T cy, T a, T b ) {
 
 	int	dE	= 0,
 		dSE	= aa2 * y,
-		d	= math::round( static_cast<float>(bb) - (aa * b) + (0.25) * aa );
+		d	= math::round( static_cast<float>(bb) - aa * b + 0.25 * aa );
 
 
 	// Draw the first region
-	for ( ; dE <= dSE; ++x, dE += bb2, d += (bb + dE) ) {
+	for ( ; dE <= dSE; ++x, dE += bb2, d += bb + dE ) {
 
 		drawEllipseAreas( cx, cy, x, y );
 
@@ -320,7 +320,7 @@ designer< T, C, N >::fillEllipse( T cx, T cy, T a, T b ) {
 
 	y--;
 
-	for ( ; y >= 0; y--, dSE -= aa2, d += (aa - dSE) ) {
+	for ( ; y >= 0; y--, dSE -= aa2, d += aa - dSE ) {
 
 		if ( d < 0 )
 			++x, d += dE += bb2;
@@ -462,7 +462,7 @@ designer< T, C, N >::drawChar( char32_t charcode ) {
 		for ( j = 0; j < height; ++j )
 			for ( i = 0; i < pitch; ++i, byte += step )
 				for ( k = 0; k < 8; ++k )
-					if ( *byte & ( 1 << ( 7 - k ) ) )
+					if ( *byte & 1 << 7 - k )
 						drawPixel( offx + i * 8 + k, offy + j, m_color.cbegin() );
 	}
 
@@ -574,7 +574,7 @@ designer< T, C, N >::drawText( iterator it, iterator end, T width, T height, uin
 				m_pos_x = old_x;
 				m_pos_y += m_font->getHeight();
 
-				if ( ( m_pos_y - old_y ) + m_font->getHeight() > height )
+				if ( m_pos_y - old_y + m_font->getHeight() > height )
 					break;
 
 				++off;
@@ -592,7 +592,7 @@ designer< T, C, N >::drawText( iterator it, iterator end, T width, T height, uin
 				m_pos_x = old_x;
 				m_pos_y += m_font->getHeight();
 
-				if ( ( m_pos_y - old_y ) + m_font->getHeight() > height )
+				if ( m_pos_y - old_y + m_font->getHeight() > height )
 					break;
 
 				line_len = letter_len;
@@ -661,7 +661,7 @@ designer< T, C, N >::drawText( iterator it, iterator end, T width, T height, uin
 					line_len = 0;
 				}
 
-				if ( ( m_pos_y - old_y ) + m_font->getHeight() > height )
+				if ( m_pos_y - old_y + m_font->getHeight() > height )
 					break;
 			}
 
@@ -677,7 +677,7 @@ designer< T, C, N >::drawText( iterator it, iterator end, T width, T height, uin
 				m_pos_x = old_x;
 				m_pos_y += m_font->getHeight();
 
-				if ( ( m_pos_y - old_y ) + m_font->getHeight() > height )
+				if ( m_pos_y - old_y + m_font->getHeight() > height )
 					break;
 
 				off = word_start = it + 1;

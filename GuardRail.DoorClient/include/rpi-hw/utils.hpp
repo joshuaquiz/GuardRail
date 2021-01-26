@@ -18,9 +18,8 @@
     along with Rpi-hw. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-#ifndef _RPI_HW_UTILS_HPP_
-#define _RPI_HW_UTILS_HPP_
+#ifndef RPI_HW_UTILS_HPP
+#define RPI_HW_UTILS_HPP
 
 #include <cstdio>
 #include <cstdarg>
@@ -31,84 +30,80 @@
 
 #include "types.hpp"
 
-namespace rpihw { // Begin main namespace
+namespace rpihw
+{
+    /*!
+	    @namespace rpihw::utils
+	    @brief Namespace of the utils functions.
+    */
+	namespace utils
+    {
+    	//! Parameters of text.
+		enum text_flags {
+			align_left = 0x01,
+			align_center = 0x02,
+			align_right = 0x04,
+			word_wrap = 0x08,
+			word_break = 0x10
+		};
 
-/*!
-	@namespace rpihw::utils
-	@brief Namespace of the utils functions.
-*/
+		/*!
+			@brief Sets a bit in a variable.
+			@param[in] buffer The buffer containing the data.
+			@param[in] offset The offset position in the buffer.
+			@param[in] index The bit position.
+			@param[in] value The bit value.
+		*/
+		template<typename T>
+		void set_bit(T& buffer, size_t offset, uint8_t index, bool value = 1);
 
-namespace utils { // Begin utils namespace
+		/*!
+			@brief Clears a bit in a variable.
+			@param[in] buffer The buffer containing the data.
+			@param[in] offset The offset position in the buffer.
+			@param[in] index The bit position.
+		*/
+		template<typename T>
+		void clear_bit(T& buffer, size_t offset, uint8_t index);
 
-//! Parameters of text.
-enum TextFlags {
+		/*!
+			@brief Flips a bit value in a variable.
+			@param[in] buffer The buffer containing the data.
+			@param[in] offset The offset position in the buffer.
+			@param[in] index The bit position.
+		*/
+		template<typename T>
+		void flip_bit(T& buffer, size_t offset, uint8_t index);
 
-	ALIGN_LEFT		= 0x01,
-	ALIGN_CENTER	= 0x02,
-	ALIGN_RIGHT		= 0x04,
-	WORD_WRAP		= 0x08,
-	WORD_BREAK		= 0x10
-};
+		/*!
+			@brief Returns a bit value in a variable.
+			@param[in] buffer The buffer containing the data.
+			@param[in] offset The offset position in the buffer.
+			@param[in] index The bit position.
+			@return The bit value.
+		*/
+		template<typename T>
+		bool get_bit(T& buffer, size_t offset, uint8_t index);
 
+		//! Returns a formatted string like `printf`.
+		std::string format(const char* format, ...);
 
-/*!
-	@brief Sets a bit in a variable.
-	@param[in] buffer The buffer containing the data.
-	@param[in] offset The offset position in the buffer.
-	@param[in] index The bit position.
-	@param[in] value The bit value.
-*/
-template < typename T >
-void set_bit( T &buffer, size_t offset, uint8_t index, bool value = 1 );
-
-/*!
-	@brief Clears a bit in a variable.
-	@param[in] buffer The buffer containing the data.
-	@param[in] offset The offset position in the buffer.
-	@param[in] index The bit position.
-*/
-template < typename T >
-void clear_bit( T &buffer, size_t offset, uint8_t index );
-
-/*!
-	@brief Flips a bit value in a variable.
-	@param[in] buffer The buffer containing the data.
-	@param[in] offset The offset position in the buffer.
-	@param[in] index The bit position.
-*/
-template < typename T >
-void flip_bit( T &buffer, size_t offset, uint8_t index );
-
-/*!
-	@brief Retuns a bit value in a variable.
-	@param[in] buffer The buffer containing the data.
-	@param[in] offset The offset position in the buffer.
-	@param[in] index The bit position.
-	@return The bit value.
-*/
-template < typename T >
-bool get_bit( T &buffer, size_t offset, uint8_t index );
-
-
-//! Returns a formatted string like `printf`.
-std::string format( const char *format, ... );
-
-/*!
-	@brief Aligns a text.
-	@param[in] text The string to align.
-	@param[in] width The width of the text.
-	@param[in] flags The parameters of the text.
-	@return The aligned text.
-*/
-template < typename T >
-std::basic_string< T > align( const std::basic_string< T > &text, size_t width, uint8_t flags = ALIGN_LEFT );
-
-} // End of utils namespace
-
-} // End of main namespace
-
+		/*!
+			@brief Aligns a text.
+			@param[in] text The string to align.
+			@param[in] width The width of the text.
+			@param[in] flags The parameters of the text.
+			@return The aligned text.
+		*/
+		template <typename T>
+		std::basic_string<T> align(
+			const std::basic_string<T>& text,
+			size_t width,
+			uint8_t flags = align_left);
+	}
+}
 
 // Include inline methods 
 #include "utils-inl.hpp"
 
-#endif /* _RPI_HW_UTILS_HPP_ */
+#endif /* RPI_HW_UTILS_HPP */

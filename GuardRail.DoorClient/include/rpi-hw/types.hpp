@@ -18,32 +18,27 @@
     along with Rpi-hw. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-#ifndef _RPI_HW_TYPES_HPP_
-#define _RPI_HW_TYPES_HPP_
+#ifndef RPI_HW_TYPES_HPP
+#define RPI_HW_TYPES_HPP
 
 #include <cstdint>
 #include <vector>
 
-namespace rpihw { // Begin main namespace
+namespace rpihw
+{
+    using std::int8_t;
+    using std::int16_t;
+    using std::int32_t;
+    using std::int64_t;
 
-//@{
-//! The basic types.
-using std::int8_t;
-using std::int16_t;
-using std::int32_t;
-using std::int64_t;
+    using std::uint8_t;
+    using std::uint16_t;
+    using std::uint32_t;
+    using std::uint64_t;
 
-using std::uint8_t;
-using std::uint16_t;
-using std::uint32_t;
-using std::uint64_t;
-//@}
-
-//! Color iterator.
-template < typename T >
-using color_iterator = typename std::vector< T >::const_iterator;
-
-} // End of main namespace
+    //! Color iterator.
+    template<typename T>
+    using color_iterator = typename std::vector<T>::const_iterator;
+}
 
 #endif /* _RPI_HW_TYPES_HPP_ */

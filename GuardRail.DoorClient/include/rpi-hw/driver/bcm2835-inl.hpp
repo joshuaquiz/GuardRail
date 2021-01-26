@@ -53,7 +53,7 @@ bcm2835::write( uint8_t pin, bool value ) {
 	// Set the value of the output pin
 	// 0 = Low
 	// 1 = High
-	*( m_gpio + ( value ? GPSET0 : GPCLR0 ) + pin / 32 ) = 1 << ( pin % 32 );
+	*( m_gpio + ( value ? GPSET0 : GPCLR0 ) + pin / 32 ) = 1 << pin % 32;
 }
 
 inline bool

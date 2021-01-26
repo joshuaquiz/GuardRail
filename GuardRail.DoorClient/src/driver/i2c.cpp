@@ -93,7 +93,7 @@ i2c::writeReg16( uint8_t reg, uint16_t data ) {
 	// Build the buffer to send
 	m_buffer[0] = reg;
 	m_buffer[1] = data & 0xFF;
-	m_buffer[2] = (data >> 8) & 0xFF;
+	m_buffer[2] = data >> 8 & 0xFF;
 
 	// Write the data on the device
 	write( m_buffer, 2 );
@@ -109,7 +109,7 @@ i2c::readReg16( uint8_t reg ) {
 	read( m_buffer, 2 );
 
 	// Merge the 16 bit data
-	return static_cast<uint16_t>(m_buffer[0]) | ( static_cast<uint16_t>(m_buffer[1]) << 8 );
+	return static_cast<uint16_t>(m_buffer[0]) | static_cast<uint16_t>(m_buffer[1]) << 8;
 }
 
 } // End of drivers namespace

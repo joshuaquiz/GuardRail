@@ -18,16 +18,15 @@
     along with Rpi-hw. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef RPI_HW_KEYPAD_MATRIX_INL_HPP
+#define RPI_HW_KEYPAD_MATRIX_INL_HPP
 
-#ifndef _RPI_HW_KEYPAD_MATRIX_INL_HPP_
-#define _RPI_HW_KEYPAD_MATRIX_INL_HPP_
+namespace rpihw
+{
+    namespace keypad
+    {
 
-namespace rpihw { // Begin main namespace
+    }
+}
 
-namespace keypad { // Begin keypads namespace
-
-} // End of keypads namespace
-
-} // End of main namespace
-
-#endif /* _RPI_HW_KEYPAD_MATRIX_INL_HPP_ */
+#endif /* RPI_HW_KEYPAD_MATRIX_INL_HPP */

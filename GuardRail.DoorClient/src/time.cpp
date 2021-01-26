@@ -34,7 +34,7 @@ nsleep( size_t nseconds ) {
 	using timer	= std::chrono::high_resolution_clock;
 
 	size_t elapsed;
-	time_point< timer > start = timer::now();
+    auto start = timer::now();
 
 	do {
 

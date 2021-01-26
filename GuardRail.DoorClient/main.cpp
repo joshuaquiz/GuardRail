@@ -18,13 +18,10 @@
 	along with Rpi-hw. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #include <iostream>
 #include <memory>
 
 // Include Rpi-hw headers
-#include "include/rpi-hw.hpp"
-#include "include/rpi-hw/time.hpp"
 #include "include/rpi-hw/keypad/matrix.hpp"
 
 // Use Rpi-hw namespace
@@ -46,14 +43,12 @@ using namespace rpihw;
 	   (24, 25, 8, 7)  rows = 4
 */
 
-/** The class of my application **/
-class MyApp {
+class my_app {
 
 public:
 
 	// Define the keymap
-	std::vector< uint8_t > keymap = {
-
+	std::vector<uint8_t> keymap = {
 		'1', '2', '3', 'A',
 		'4', '5', '6', 'B',
 		'7', '8', '9', 'C',
@@ -61,53 +56,60 @@ public:
 	};
 
 	/** Constructor method **/
-	MyApp() : m_keypad(new keypad::matrix({ 7, 8, 25, 24 }, { 21, 20, 16, 12 }, keymap)) {
-
-		keypad::T_EventListener listener = std::bind(&MyApp::eventListener, this, std::placeholders::_1);
+	my_app()
+    : m_keypad_(
+		new keypad::matrix(
+			// cols
+			{ 7, 8, 25, 24 },
+			// rows
+			{ 21, 20, 16, 12 },
+			keymap))
+    {
+        const keypad::t_event_listener listener = std::bind(&my_app::event_listener, this, std::placeholders::_1);
 
 		// Add the keypad event listener
-		m_keypad->addEventListener(listener);
+		m_keypad_->add_event_listener(listener);
 	}
 
-	/** Destructor method **/
-	~MyApp() = default;
+	my_app(my_app&) = delete;
+	my_app(const my_app&) = delete;
+	my_app(my_app&&) = delete;
+	my_app& operator=(my_app&) = delete;
+	my_app& operator=(const my_app&) = delete;
+	my_app& operator=(const my_app&&) = delete;
+
+	~my_app() = default;
 
     /** A simple keypad event listener **/
-	void eventListener(keypad::keypad_base& dev) {
-
-		const auto& keystate = dev.keyState();
-
+	void event_listener(keypad::keypad_base& dev)
+    {
+		const auto& keystate = dev.key_state();
 		for (auto c : keystate)
 		{
 			std::cout << static_cast<char>(c) << std::flush;
 		}
 
-		std::cout << std::endl;
+        std::cout << std::string(keystate.size(), '\b');
 	}
 
-	/** Main loop **/
-	void run() {
-
+	static void run()
+	{
 		while (true)
 		{
-
-			/* ... */
 		}
 	}
 
 private:
 
 	// The keypad instance.
-	std::unique_ptr< keypad::matrix > m_keypad;
+	std::unique_ptr< keypad::matrix > m_keypad_{};
 };
 
+int main(int argc, char* args[]) {
 
-int
-main(int argc, char* args[]) {
+	my_app app;
 
-	MyApp app;
-
-	app.run();
+    my_app::run();
 
 	return 0;
 }

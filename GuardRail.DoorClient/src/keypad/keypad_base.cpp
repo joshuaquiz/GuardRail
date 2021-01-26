@@ -18,187 +18,225 @@
     along with Rpi-hw. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-#ifndef _RPI_HW_KEYPAD_BASE_CPP_
-#define _RPI_HW_KEYPAD_BASE_CPP_
+#ifndef RPI_HW_KEYPAD_BASE_CPP
+#define RPI_HW_KEYPAD_BASE_CPP
 
 #include "../../include/rpi-hw/keypad/keypad_base.hpp"
 
-namespace rpihw { // Begin main namespace
+namespace rpihw
+{
+	namespace keypad
+	{
+		keypad_base::keypad_base(
+			const size_t total,
+			const std::initializer_list<uint8_t> pins)
+			: m_number_of_keys_(total),
+			m_input_(new iface::input(pins, PULL_UP)),
+			m_keystate_(m_number_of_keys_, false),
+			m_pressed_(m_number_of_keys_, false),
+			m_released_(m_number_of_keys_, false),
+			m_frequency_(10.0),
+			m_thread_(new std::thread(&keypad_base::update, this)),
+			m_mutex_(new std::mutex)
+		{
+		}
 
-namespace keypad { // Begin keypads namespace
+		keypad_base::keypad_base(
+			const size_t total,
+			const std::initializer_list<uint8_t> pins,
+			const std::vector<uint8_t>& keymap)
+			: m_number_of_keys_(total),
+			m_input_(new iface::input(pins, PULL_UP)),
+			m_keystate_(m_number_of_keys_, false),
+			m_pressed_(m_number_of_keys_, false),
+			m_released_(m_number_of_keys_, false),
+			m_frequency_(10.0),
+			m_thread_(new std::thread([this]()
+				{
+					update();
+				})),
+			m_mutex_(new std::mutex())
+		{
+			// Set the keymap
+			set_keymap(keymap);
+		}
 
-	keypad_base::keypad_base( size_t total, std::initializer_list< uint8_t > pins )
+		keypad_base::keypad_base(
+			const size_t total,
+			const std::vector<uint8_t>& pins)
+			: m_number_of_keys_(total),
+			m_input_(new iface::input(pins, PULL_UP)),
+			m_keystate_(m_number_of_keys_, false),
+			m_pressed_(m_number_of_keys_, false),
+			m_released_(m_number_of_keys_, false),
+			m_frequency_(10.0),
+			m_thread_(new std::thread(&keypad_base::update, this)),
+			m_mutex_(new std::mutex)
+		{
+		}
 
-	: m_nkeys		( total )
-	, m_input		( new iface::input( pins, PULL_UP ) )
-	, m_keystate	( m_nkeys, 0 )
-	, m_pressed		( m_nkeys, 0 )
-	, m_released	( m_nkeys, 0 )
-	, m_frequency	( 10.0 )
-	, m_thread		( new std::thread( &keypad::keypad_base::update, this ) )
-	, m_mutex		( new std::mutex ) {
+		keypad_base::keypad_base(
+			const size_t total,
+			const std::vector<uint8_t>& pins,
+			const std::vector<uint8_t>& keymap)
+			: m_number_of_keys_(total),
+			m_input_(new iface::input(pins, PULL_UP)),
+			m_keystate_(m_number_of_keys_, false),
+			m_pressed_(m_number_of_keys_, false),
+			m_released_(m_number_of_keys_, false),
+			m_frequency_(10.0),
+			m_thread_(new std::thread(&keypad_base::update, this)),
+			m_mutex_(new std::mutex)
+		{
+			// Set the keymap
+			set_keymap(keymap);
+		}
 
-}
+		keypad_base::~keypad_base()
+		{
+			// Destroy the interfaces
+			delete m_input_;
 
-	keypad_base::keypad_base(const size_t total, const std::initializer_list< uint8_t > pins, const std::vector< uint8_t > &keymap )
+			// Destroy the thread and mutex instances 
+			delete m_thread_;
+			delete m_mutex_;
+		}
 
-	: m_nkeys		( total )
-	, m_input		( new iface::input( pins, PULL_UP ) )
-	, m_keystate	( m_nkeys, 0 )
-	, m_pressed		( m_nkeys, 0 )
-	, m_released	( m_nkeys, 0 )
-	, m_frequency	( 10.0 )
-		, m_thread(new std::thread([this]()
+		void keypad_base::set_keymap(const std::vector<uint8_t>& keymap)
+		{
+			// Check the keymap
+			if (keymap.size() != m_number_of_keys_)
 			{
-				update();
-			}))
-	, m_mutex		( new std::mutex() ) {
+				throw exception(utils::format("(Fatal) `keypad::setKeymap`: bad keymap\n"));
+			}
 
-	// Set the keymap
-	setKeymap( keymap );
+			// Store the keymap
+			uint8_t index = 0;
+			for (auto& key : keymap)
+			{
+				m_keymap_[key] = index++;
+			}
+		}
+
+		bool keypad_base::state(const size_t index) const
+		{
+			// Check if the button exists
+			if (index >= m_number_of_keys_)
+			{
+				throw exception(
+					utils::format(
+						"(Fatal) `keypad::state`: keypad %p has only %lu buttons\n",
+						this,
+						static_cast<unsigned long>(m_number_of_keys_)));
+			}
+
+			// Return the button state
+			return m_keystate_[index];
+		}
+
+		bool keypad_base::pressed(const size_t index) const
+		{
+			// Check if the button exists
+			if (index >= m_number_of_keys_)
+			{
+				throw exception(
+					utils::format(
+						"(Fatal) `keypad::pressed`: keypad %p has only %lu buttons\n",
+						this,
+						static_cast<unsigned long>(m_number_of_keys_)));
+			}
+
+			// Return `true` if the button is pressed
+			return m_pressed_[index];
+		}
+
+		bool keypad_base::released(const size_t index) const
+		{
+			// Check if the button exists
+			if (index >= m_number_of_keys_)
+			{
+				throw exception(
+					utils::format(
+						"(Fatal) `keypad::released`: keypad %p has only %lu buttons\n",
+						this,
+						static_cast<unsigned long>(m_number_of_keys_)));
+			}
+
+			// Return `true` if the button is released
+			return m_released_[index];
+		}
+
+		bool keypad_base::key_state(const uint8_t key) const
+		{
+			// Check if the key exists
+			const auto it = m_keymap_.find(key);
+			if (it == m_keymap_.end())
+			{
+				throw exception(
+					utils::format(
+						"(Fatal) `keypad::state`: keypad %p doesn't have key '%c'\n",
+						this,
+						static_cast<char>(key)));
+			}
+
+			// Return the button state
+			return m_keystate_[it->second];
+		}
+
+		bool keypad_base::key_pressed(const uint8_t key) const
+		{
+			// Check if the key exists
+			const auto it = m_keymap_.find(key);
+			if (it == m_keymap_.end())
+			{
+				throw exception(
+					utils::format(
+						"(Fatal) `keypad::pressed`: keypad %p doesn't have key '%c'\n",
+						this,
+						static_cast<char>(key)));
+			}
+
+			// Return `true` if the button is pressed
+			return m_pressed_[it->second];
+		}
+
+		bool keypad_base::key_released(const uint8_t key) const
+		{
+			// Check if the key exists
+			const auto it = m_keymap_.find(key);
+			if (it == m_keymap_.end())
+			{
+				throw exception(
+					utils::format(
+						"(Fatal) `keypad::released`: keypad %p doesn't have key '%c'\n",
+						this,
+						static_cast<char>(key)));
+			}
+
+			// Return `true` if the button is released
+			return m_released_[it->second];
+		}
+
+		std::vector<uint8_t> keypad_base::key_state() const
+		{
+			// List of pressed keys
+			std::vector< uint8_t > keys;
+			keys.reserve(m_number_of_keys_);
+
+			// Find pressed keys
+			for (auto& key : m_keymap_)
+			{
+				if (m_keystate_[key.second])
+				{
+					keys.push_back(key.first);
+				}
+			}
+
+			// Return the list of pressed keys
+			return keys;
+		}
+
+	}
 }
 
-	keypad_base::keypad_base( size_t total, const std::vector< uint8_t > &pins )
-
-	: m_nkeys		( total )
-	, m_input		( new iface::input( pins, PULL_UP ) )
-	, m_keystate	( m_nkeys, 0 )
-	, m_pressed		( m_nkeys, 0 )
-	, m_released	( m_nkeys, 0 )
-	, m_frequency	( 10.0 )
-	, m_thread		( new std::thread( &keypad::keypad_base::update, this ) )
-	, m_mutex		( new std::mutex ) {
-
-}
-
-	keypad_base::keypad_base( size_t total, const std::vector< uint8_t > &pins, const std::vector< uint8_t > &keymap )
-
-	: m_nkeys		( total )
-	, m_input		( new iface::input( pins, PULL_UP ) )
-	, m_keystate	( m_nkeys, 0 )
-	, m_pressed		( m_nkeys, 0 )
-	, m_released	( m_nkeys, 0 )
-	, m_frequency	( 10.0 )
-	, m_thread		( new std::thread( &keypad::keypad_base::update, this ) )
-	, m_mutex		( new std::mutex ) {
-
-	// Set the keymap
-	setKeymap( keymap );
-}
-
-	keypad_base::~keypad_base() {
-
-	// Destroy the interfaces
-	delete m_input;
-
-	// Destroy the thread and mutex instances 
-	delete m_thread;
-	delete m_mutex;
-}
-
-void keypad_base::setKeymap( const std::vector< uint8_t > &keymap ) {
-
-	// Check the keymap
-	if ( keymap.size() != m_nkeys )
-		throw exception( utils::format( "(Fatal) `keypad::setKeymap`: bad keymap\n" ) );
-
-	// Store the keymap
-	uint8_t index = 0;
-
-	for ( auto &key : keymap )
-		m_keymap[ key ] = index++;
-}
-
-bool keypad_base::state( size_t index ) const {
-
-	// Check if the button exists
-	if ( index >= m_nkeys )
-		throw exception( utils::format( "(Fatal) `keypad::state`: keypad %p has only %lu buttons\n",
-										this, static_cast<unsigned long>(m_nkeys) ) );
-
-	// Return the button state
-	return m_keystate[ index ];
-}
-
-bool keypad_base::pressed( size_t index ) const {
-
-	// Check if the button exists
-	if ( index >= m_nkeys )
-		throw exception( utils::format( "(Fatal) `keypad::pressed`: keypad %p has only %lu buttons\n",
-										this, static_cast<unsigned long>(m_nkeys) ) );
-
-	// Return `true` if the button is pressed
-	return m_pressed[ index ];
-}
-
-bool keypad_base::released( size_t index ) const {
-
-	// Check if the button exists
-	if ( index >= m_nkeys )
-		throw exception( utils::format( "(Fatal) `keypad::released`: keypad %p has only %lu buttons\n",
-										this, static_cast<unsigned long>(m_nkeys) ) );
-
-	// Return `true` if the button is released
-	return m_released[ index ];
-}
-
-bool keypad_base::keyState( uint8_t key ) const {
-
-	// Check if the key exists
-	T_Keymap::const_iterator it = m_keymap.find( key );
-
-	if ( it == m_keymap.end() )
-		throw exception( utils::format( "(Fatal) `keypad::state`: keypad %p doesn't have key '%c'\n",
-										this, static_cast<char>(key) ) );
-
-	// Return the button state
-	return m_keystate[ it->second ];
-}
-
-bool keypad_base::keyPressed( uint8_t key ) const {
-
-	// Check if the key exists
-	T_Keymap::const_iterator it = m_keymap.find( key );
-
-	if ( it == m_keymap.end() )
-		throw exception( utils::format( "(Fatal) `keypad::pressed`: keypad %p doesn't have key '%c'\n",
-										this, static_cast<char>(key) ) );
-
-	// Return `true` if the button is pressed
-	return m_pressed[ it->second ];
-}
-
-bool keypad_base::keyReleased( uint8_t key ) const {
-
-	// Check if the key exists
-	T_Keymap::const_iterator it = m_keymap.find( key );
-
-	if ( it == m_keymap.end() )
-		throw exception( utils::format( "(Fatal) `keypad::released`: keypad %p doesn't have key '%c'\n",
-										this, static_cast<char>(key) ) );
-
-	// Return `true` if the button is released
-	return m_released[ it->second ];
-}
-
-std::vector<uint8_t> keypad_base::keyState() const {
-
-	// List of pressed keys
-	std::vector< uint8_t > keys;
-	keys.reserve( m_nkeys );
-
-	// Find pressed keys
-	for ( auto &key : m_keymap )
-		if ( m_keystate[ key.second ] )
-			keys.push_back( key.first );
-
-	// Return the list of pressed keys
-	return keys;
-}
-
-} // End of keypads namespace
-
-} // End of main namespace
-
-#endif /* _RPI_HW_KEYPAD_BASE_CPP_ */
+#endif /* RPI_HW_KEYPAD_BASE_CPP */

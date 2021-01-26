@@ -18,11 +18,10 @@
     along with Rpi-hw. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-#ifndef _RPI_HW_RPI_HPP_
-#define _RPI_HW_RPI_HPP_
+#ifndef RPI_HW_RPI_HPP
+#define RPI_HW_RPI_HPP
 
 // Raspberry Pi revision number
-#define RPI_REVISION	0x1234
+constexpr int rpi_revision = 0x1234;
 
-#endif /* _RPI_HW_RPI_HPP_ */
+#endif /* RPI_HW_RPI_HPP */

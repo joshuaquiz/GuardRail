@@ -48,7 +48,7 @@ void
 mcp23s08::send( uint8_t reg, uint8_t data ) {
 
 	// Build the buffer to send
-	m_buffer[0] = WRITE | ( m_dev_id << 1 );
+	m_buffer[0] = WRITE | m_dev_id << 1;
 	m_buffer[1] = reg;
 	m_buffer[2] = data;
 
@@ -60,7 +60,7 @@ uint8_t
 mcp23s08::receive( uint8_t reg ) {
 
 	// Build the buffer to send
-	m_buffer[0] = READ | ( m_dev_id << 1 );
+	m_buffer[0] = READ | m_dev_id << 1;
 	m_buffer[1] = reg;
 
 	// Receive data from the device

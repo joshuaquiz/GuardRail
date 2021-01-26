@@ -18,9 +18,8 @@
     along with Rpi-hw. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-#ifndef _RPI_HW_KEYPAD_MATRIX_HPP_
-#define _RPI_HW_KEYPAD_MATRIX_HPP_
+#ifndef RPI_HW_KEYPAD_MATRIX_HPP
+#define RPI_HW_KEYPAD_MATRIX_HPP
 
 #include "../types.hpp"
 #include "../exception.hpp"
@@ -35,57 +34,60 @@
 
 #include "keypad_base.hpp"
 
-namespace rpihw { // Begin main namespace
+namespace rpihw {
+	namespace keypad {
+		/*!
+			@class matrix
+			@brief Matrix keypad controller.
+		*/
+		class matrix final : public keypad_base
+		{
 
-namespace keypad { // Begin keypads namespace
+		public:
 
-/*!
-	@class matrix
-	@brief Matrix keypad controller.
+			/*!
+				@brief Constructor method.
+				@param[in] cols Sequence of `uint8_t` containing the column GPIOs.
+				@param[in] rows Sequence of `uint8_t` containing the rows GPIOs.
+			*/
+			matrix(
+				std::initializer_list<uint8_t> cols,
+				std::initializer_list<uint8_t> rows);
 
-	@example keypad/12keys0.cpp
-	@example keypad/12keys1.cpp
-	@example keypad/16keys0.cpp
-	@example keypad/16keys1.cpp
-	@example keypad/16keys2.cpp
-*/
-class matrix : public keypad::keypad_base {
+			/*!
+				@brief Constructor method.
+				@param[in] cols Sequence of `uint8_t` containing the column GPIOs.
+				@param[in] rows Sequence of `uint8_t` containing the rows GPIOs.
+				@param[in] keymap The keymap vector.
+			*/
+			matrix(
+				std::initializer_list<uint8_t> cols,
+				std::initializer_list<uint8_t> rows,
+				const std::vector<uint8_t>& keymap);
 
-public:
+			matrix() = delete;
+			matrix(matrix&) = delete;
+			matrix(const matrix&) = delete;
+			matrix(matrix&&) = delete;
+			matrix& operator=(matrix&) = delete;
+			matrix& operator=(const matrix&) = delete;
+			matrix& operator=(const matrix&&) = delete;
 
-	/*!
-		@brief Constructor method.
-		@param[in] cols Sequence of `uint8_t` containing the column GPIOs.
-		@param[in] rows Sequence of `uint8_t` containing the rows GPIOs.
-	*/
-	matrix( std::initializer_list< uint8_t > cols, std::initializer_list< uint8_t > rows );
+			//! Destructor method.
+			virtual ~matrix();
 
-	/*!
-		@brief Constructor method.
-		@param[in] cols Sequence of `uint8_t` containing the column GPIOs.
-		@param[in] rows Sequence of `uint8_t` containing the rows GPIOs.
-		@param[in] keymap The keymap vector.
-	*/
-	matrix( std::initializer_list< uint8_t > cols, std::initializer_list< uint8_t > rows, const std::vector< uint8_t > &keymap );
+		protected:
 
-	//! Destructor method.
-	virtual ~matrix();
+			//! Columns output interface.
+			iface::output* m_output_{};
 
-protected:
-
-	//! Columns output interface.
-	iface::output *m_output;
-
-	//! Updates the state of buttons.
-	virtual void update();
-};
-
-} // End of keypads namespace
-
-} // End of main namespace
-
+			//! Updates the state of buttons.
+			void update() override;
+		};
+	}
+}
 
 // Include inline methods 
 #include "matrix-inl.hpp"
 
-#endif /* _RPI_HW_KEYPAD_MATRIX_HPP_ */
+#endif /* RPI_HW_KEYPAD_MATRIX_HPP */
