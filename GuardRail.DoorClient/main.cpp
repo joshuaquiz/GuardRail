@@ -1,90 +1,113 @@
-#include <wiringPi.h>
+/*
+	Title --- 16keys2.cpp [examples]
 
-#include "include/led.h"
-#include "include/pin.h"
-#include "include/pin_pad.h"
+	Copyright (C) 2013 Giacomo Trudu - wicker25[at]gmail[dot]com
 
-using namespace std;
+	This file is part of Rpi-hw.
 
-button *b = nullptr;
+	Rpi-hw is free software: you can redistribute it and/or modify
+	it under the terms of the GNU Lesser General Public License as published by
+	the Free Software Foundation version 3 of the License.
 
-void on_button_pressed()
-{
-    static unsigned long button_pressed_timestamp;
-    const auto is_pin_on = (*b).neg_pin.is_on();
-    if (is_pin_on) {
-        button_pressed_timestamp = millis();
-        if ((*b).button_down_func)
-        {
-            (*b).button_down_func();
-        }
+	Rpi-hw is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU Lesser General Public License for more details.
 
-        (*b).currently_on = true;
-    }
-    else {
-        const auto duration = millis() - button_pressed_timestamp;
-        if ((*b).button_up_func)
-        {
-            (*b).button_up_func();
-        }
+	You should have received a copy of the GNU Lesser General Public License
+	along with Rpi-hw. If not, see <http://www.gnu.org/licenses/>.
+*/
 
-        button_pressed_timestamp = millis();
-        if (duration < 100) {
-            return;
-        }
 
-        if ((*b).button_click_func)
-        {
-            (*b).button_click_func();
-        }
+#include <iostream>
+#include <memory>
 
-        (*b).currently_on = false;
-    }
-}
+// Include Rpi-hw headers
+#include "include/rpi-hw.hpp"
+#include "include/rpi-hw/time.hpp"
+#include "include/rpi-hw/keypad/matrix.hpp"
 
-int main()
-{
-    wiringPiSetup();
-    const pin buzz_pin(7);
-    buzz_pin.set_write_mode();
-    const auto red_light_pin = led(pin(0));
-    const auto green_light_pin = led(pin(2));
-    auto pad = pin_pad(
-        pin(26),
-        pin(27),
-        pin(28),
-        pin(29),
+// Use Rpi-hw namespace
+using namespace rpihw;
 
-        pin(1),
-        pin(4),
-        pin(5),
-        pin(6),
+/*
+	  (14, 15, 18, 23)   colums = 4
+			||||
+   ----------------------
+   | (1)  (2)  (3)  (A) |
+   |                    |
+   | (4)  (5)  (6)  (B) |
+   |                    |
+   | (7)  (8)  (9)  (C) |
+   |                    |
+   | (*)  (0)  (#)  (D) |
+   ----------------------
+			||||
+	   (24, 25, 8, 7)  rows = 4
+*/
 
-        b,
-        on_button_pressed);
-    pad.on_button_press([green_light_pin](const char c)
-    {
-	    if (c == '9') {
-            green_light_pin.turn_on();
-	    } else {
-            green_light_pin.turn_off();
-        }
-    });
+/** The class of my application **/
+class MyApp {
 
-    buzz_pin.turn_on();
-    delay(500);
-    buzz_pin.turn_off();
-    red_light_pin.turn_on();
-    delay(500);
-    red_light_pin.turn_off();
-    green_light_pin.turn_on();
-    delay(500);
-    green_light_pin.turn_off();
+public:
 
-    while (true)
-    {
-        
-    }
+	// Define the keymap
+	std::vector< uint8_t > keymap = {
 
-    return 0;
+		'1', '2', '3', 'A',
+		'4', '5', '6', 'B',
+		'7', '8', '9', 'C',
+		'*', '0', '#', 'D'
+	};
+
+	/** Constructor method **/
+	MyApp() : m_keypad(new keypad::matrix({ 7, 8, 25, 24 }, { 21, 20, 16, 12 }, keymap)) {
+
+		keypad::T_EventListener listener = std::bind(&MyApp::eventListener, this, std::placeholders::_1);
+
+		// Add the keypad event listener
+		m_keypad->addEventListener(listener);
+	}
+
+	/** Destructor method **/
+	~MyApp() = default;
+
+    /** A simple keypad event listener **/
+	void eventListener(keypad::keypad_base& dev) {
+
+		const auto& keystate = dev.keyState();
+
+		for (auto c : keystate)
+		{
+			std::cout << static_cast<char>(c) << std::flush;
+		}
+
+		std::cout << std::endl;
+	}
+
+	/** Main loop **/
+	void run() {
+
+		while (true)
+		{
+
+			/* ... */
+		}
+	}
+
+private:
+
+	// The keypad instance.
+	std::unique_ptr< keypad::matrix > m_keypad;
+};
+
+
+int
+main(int argc, char* args[]) {
+
+	MyApp app;
+
+	app.run();
+
+	return 0;
 }

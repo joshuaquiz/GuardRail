@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{209c759c-532c-44d0-97cc-216138edabcf}</ProjectGuid>
+    <ProjectGuid>{96b8cf86-bc0c-445b-9c8c-fcb79bf49582}</ProjectGuid>
     <Keyword>Linux</Keyword>
     <RootNamespace>GuardRail_DoorClient</RootNamespace>
     <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
@@ -48,7 +48,7 @@
   <PropertyGroup Label="UserMacros" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <Link>
-      <LibraryDependencies>wiringPi;pthread</LibraryDependencies>
+      <LibraryDependencies>pthread</LibraryDependencies>
     </Link>
     <RemotePostBuildEvent>
       <Command>gpio export 17 out</Command>
@@ -65,21 +65,94 @@
     </RemotePostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\led.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="src\button.cpp" />
-    <ClCompile Include="src\pin.cpp" />
-    <ClCompile Include="src\pin_pad.cpp" />
-    <ClCompile Include="src\task.cpp" />
-    <ClCompile Include="src\value_task.cpp" />
+    <ClCompile Include="src\driver\bcm2835.cpp" />
+    <ClCompile Include="src\driver\i2c.cpp" />
+    <ClCompile Include="src\driver\io-expander.cpp" />
+    <ClCompile Include="src\driver\mcp23008.cpp" />
+    <ClCompile Include="src\driver\mcp23017.cpp" />
+    <ClCompile Include="src\driver\mcp23s08.cpp" />
+    <ClCompile Include="src\driver\mcp23s17.cpp" />
+    <ClCompile Include="src\driver\mcp23x08.cpp" />
+    <ClCompile Include="src\driver\mcp23x17.cpp" />
+    <ClCompile Include="src\driver\spi.cpp" />
+    <ClCompile Include="src\gpio.cpp" />
+    <ClCompile Include="src\iface\iface_base.cpp" />
+    <ClCompile Include="src\iface\decoder-in.cpp" />
+    <ClCompile Include="src\iface\decoder-out.cpp" />
+    <ClCompile Include="src\iface\encoder-in.cpp" />
+    <ClCompile Include="src\iface\encoder-out.cpp" />
+    <ClCompile Include="src\iface\input.cpp" />
+    <ClCompile Include="src\iface\output.cpp" />
+    <ClCompile Include="src\iface\shift-base.cpp" />
+    <ClCompile Include="src\iface\shift-in.cpp" />
+    <ClCompile Include="src\iface\shift-out.cpp" />
+    <ClCompile Include="src\keypad\keypad_base.cpp" />
+    <ClCompile Include="src\keypad\matrix.cpp" />
+    <ClCompile Include="src\time.cpp" />
+    <ClCompile Include="src\utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\button.h" />
-    <ClInclude Include="include\pin.h" />
-    <ClInclude Include="include\task.h" />
-    <ClInclude Include="include\value_task.h" />
-    <ClInclude Include="include\pin_pad.h" />
-    <ClInclude Include="include\led.h" />
+    <ClInclude Include="include\rpi-hw.hpp" />
+    <ClInclude Include="include\rpi-hw\config.hpp" />
+    <ClInclude Include="include\rpi-hw\consts.hpp" />
+    <ClInclude Include="include\rpi-hw\designer-inl.hpp" />
+    <ClInclude Include="include\rpi-hw\designer.hpp" />
+    <ClInclude Include="include\rpi-hw\driver\bcm2835-inl.hpp" />
+    <ClInclude Include="include\rpi-hw\driver\bcm2835.hpp" />
+    <ClInclude Include="include\rpi-hw\driver\i2c-inl.hpp" />
+    <ClInclude Include="include\rpi-hw\driver\i2c.hpp" />
+    <ClInclude Include="include\rpi-hw\driver\io-expander-inl.hpp" />
+    <ClInclude Include="include\rpi-hw\driver\io-expander.hpp" />
+    <ClInclude Include="include\rpi-hw\driver\mcp23008-inl.hpp" />
+    <ClInclude Include="include\rpi-hw\driver\mcp23008.hpp" />
+    <ClInclude Include="include\rpi-hw\driver\mcp23017-inl.hpp" />
+    <ClInclude Include="include\rpi-hw\driver\mcp23017.hpp" />
+    <ClInclude Include="include\rpi-hw\driver\mcp23s08-inl.hpp" />
+    <ClInclude Include="include\rpi-hw\driver\mcp23s08.hpp" />
+    <ClInclude Include="include\rpi-hw\driver\mcp23s17-inl.hpp" />
+    <ClInclude Include="include\rpi-hw\driver\mcp23s17.hpp" />
+    <ClInclude Include="include\rpi-hw\driver\mcp23x08-inl.hpp" />
+    <ClInclude Include="include\rpi-hw\driver\mcp23x08.hpp" />
+    <ClInclude Include="include\rpi-hw\driver\mcp23x17-inl.hpp" />
+    <ClInclude Include="include\rpi-hw\driver\mcp23x17.hpp" />
+    <ClInclude Include="include\rpi-hw\driver\spi-inl.hpp" />
+    <ClInclude Include="include\rpi-hw\driver\spi.hpp" />
+    <ClInclude Include="include\rpi-hw\exception.hpp" />
+    <ClInclude Include="include\rpi-hw\gpio-inl.hpp" />
+    <ClInclude Include="include\rpi-hw\gpio.hpp" />
+    <ClInclude Include="include\rpi-hw\iface\iface_base-inl.hpp" />
+    <ClInclude Include="include\rpi-hw\iface\iface_base.hpp" />
+    <ClInclude Include="include\rpi-hw\iface\decoder-in-inl.hpp" />
+    <ClInclude Include="include\rpi-hw\iface\decoder-in.hpp" />
+    <ClInclude Include="include\rpi-hw\iface\decoder-out-inl.hpp" />
+    <ClInclude Include="include\rpi-hw\iface\decoder-out.hpp" />
+    <ClInclude Include="include\rpi-hw\iface\encoder-in-inl.hpp" />
+    <ClInclude Include="include\rpi-hw\iface\encoder-in.hpp" />
+    <ClInclude Include="include\rpi-hw\iface\encoder-out-inl.hpp" />
+    <ClInclude Include="include\rpi-hw\iface\encoder-out.hpp" />
+    <ClInclude Include="include\rpi-hw\iface\input-inl.hpp" />
+    <ClInclude Include="include\rpi-hw\iface\input.hpp" />
+    <ClInclude Include="include\rpi-hw\iface\output-inl.hpp" />
+    <ClInclude Include="include\rpi-hw\iface\output.hpp" />
+    <ClInclude Include="include\rpi-hw\iface\shift-base-inl.hpp" />
+    <ClInclude Include="include\rpi-hw\iface\shift-base.hpp" />
+    <ClInclude Include="include\rpi-hw\iface\shift-in-inl.hpp" />
+    <ClInclude Include="include\rpi-hw\iface\shift-in.hpp" />
+    <ClInclude Include="include\rpi-hw\iface\shift-out-inl.hpp" />
+    <ClInclude Include="include\rpi-hw\iface\shift-out.hpp" />
+    <ClInclude Include="include\rpi-hw\keypad\keypad_base-inl.hpp" />
+    <ClInclude Include="include\rpi-hw\keypad\keypad_base.hpp" />
+    <ClInclude Include="include\rpi-hw\keypad\matrix-inl.hpp" />
+    <ClInclude Include="include\rpi-hw\keypad\matrix.hpp" />
+    <ClInclude Include="include\rpi-hw\math.hpp" />
+    <ClInclude Include="include\rpi-hw\rpi.hpp" />
+    <ClInclude Include="include\rpi-hw\time-inl.hpp" />
+    <ClInclude Include="include\rpi-hw\time.hpp" />
+    <ClInclude Include="include\rpi-hw\types.hpp" />
+    <ClInclude Include="include\rpi-hw\utils-inl.hpp" />
+    <ClInclude Include="include\rpi-hw\utils.hpp" />
+    <ClInclude Include="include\rpi-hw\version.hpp" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
