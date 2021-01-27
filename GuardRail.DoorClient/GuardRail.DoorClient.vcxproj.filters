@@ -27,6 +27,32 @@
     <ClCompile Include="src\utils.cpp" />
     <ClCompile Include="src\keypad\keypad_base.cpp" />
     <ClCompile Include="src\iface\iface_base.cpp" />
+    <ClCompile Include="libnfc\buses\empty.c" />
+    <ClCompile Include="libnfc\buses\i2c.c" />
+    <ClCompile Include="libnfc\buses\spi.c" />
+    <ClCompile Include="libnfc\buses\uart.c" />
+    <ClCompile Include="libnfc\buses\usbbus.c" />
+    <ClCompile Include="libnfc\chips\pn53x.c" />
+    <ClCompile Include="libnfc\drivers\acr122_pcsc.c" />
+    <ClCompile Include="libnfc\drivers\acr122_usb.c" />
+    <ClCompile Include="libnfc\drivers\acr122s.c" />
+    <ClCompile Include="libnfc\drivers\arygon.c" />
+    <ClCompile Include="libnfc\drivers\pcsc.c" />
+    <ClCompile Include="libnfc\drivers\pn53x_usb.c" />
+    <ClCompile Include="libnfc\drivers\pn71xx.c" />
+    <ClCompile Include="libnfc\drivers\pn532_i2c.c" />
+    <ClCompile Include="libnfc\drivers\pn532_spi.c" />
+    <ClCompile Include="libnfc\drivers\pn532_uart.c" />
+    <ClCompile Include="libnfc\conf.c" />
+    <ClCompile Include="libnfc\iso14443-subr.c" />
+    <ClCompile Include="libnfc\log.c" />
+    <ClCompile Include="libnfc\log-internal.c" />
+    <ClCompile Include="libnfc\mirror-subr.c" />
+    <ClCompile Include="libnfc\nfc.c" />
+    <ClCompile Include="libnfc\nfc-device.c" />
+    <ClCompile Include="libnfc\nfc-emulation.c" />
+    <ClCompile Include="libnfc\nfc-internal.c" />
+    <ClCompile Include="libnfc\target-subr.c" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="include">
@@ -94,5 +120,34 @@
     <ClInclude Include="include\rpi-hw\iface\iface_base-inl.hpp" />
     <ClInclude Include="include\rpi-hw\keypad\keypad_base.hpp" />
     <ClInclude Include="include\rpi-hw\keypad\keypad_base-inl.hpp" />
+    <ClInclude Include="include\chips\pn53x.hpp" />
+    <ClInclude Include="include\chips\pn53x-internal.hpp" />
+    <ClInclude Include="include\nfc\nfc.h" />
+    <ClInclude Include="include\nfc\nfc-emulation.h" />
+    <ClInclude Include="include\nfc\nfc-types.h" />
+    <ClInclude Include="libnfc\buses\i2c.h" />
+    <ClInclude Include="libnfc\buses\spi.h" />
+    <ClInclude Include="libnfc\buses\uart.h" />
+    <ClInclude Include="libnfc\buses\usbbus.h" />
+    <ClInclude Include="libnfc\chips\pn53x.h" />
+    <ClInclude Include="libnfc\chips\pn53x-internal.h" />
+    <ClInclude Include="libnfc\drivers\acr122_pcsc.h" />
+    <ClInclude Include="libnfc\drivers\acr122_usb.h" />
+    <ClInclude Include="libnfc\drivers\acr122s.h" />
+    <ClInclude Include="libnfc\drivers\arygon.h" />
+    <ClInclude Include="libnfc\drivers\pcsc.h" />
+    <ClInclude Include="libnfc\drivers\pn53x_usb.h" />
+    <ClInclude Include="libnfc\drivers\pn71xx.h" />
+    <ClInclude Include="libnfc\drivers\pn532_i2c.h" />
+    <ClInclude Include="libnfc\drivers\pn532_spi.h" />
+    <ClInclude Include="libnfc\drivers\pn532_uart.h" />
+    <ClInclude Include="libnfc\conf.h" />
+    <ClInclude Include="libnfc\drivers.h" />
+    <ClInclude Include="libnfc\iso7816.h" />
+    <ClInclude Include="libnfc\log.h" />
+    <ClInclude Include="libnfc\log-internal.h" />
+    <ClInclude Include="libnfc\mirror-subr.h" />
+    <ClInclude Include="libnfc\nfc-internal.h" />
+    <ClInclude Include="libnfc\target-subr.h" />
   </ItemGroup>
 </Project>

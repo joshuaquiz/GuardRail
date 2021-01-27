@@ -58,7 +58,7 @@ namespace rpihw
 			m_mutex_(new std::mutex())
 		{
 			// Set the keymap
-			set_keymap(keymap);
+			keypad_base::set_keymap(keymap);
 		}
 
 		keypad_base::keypad_base(
@@ -89,7 +89,7 @@ namespace rpihw
 			m_mutex_(new std::mutex)
 		{
 			// Set the keymap
-			set_keymap(keymap);
+			keypad_base::set_keymap(keymap);
 		}
 
 		keypad_base::~keypad_base()
@@ -220,7 +220,7 @@ namespace rpihw
 		std::vector<uint8_t> keypad_base::key_state() const
 		{
 			// List of pressed keys
-			std::vector< uint8_t > keys;
+			std::vector<uint8_t> keys;
 			keys.reserve(m_number_of_keys_);
 
 			// Find pressed keys
