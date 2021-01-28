@@ -2,152 +2,270 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="src\driver\bcm2835.cpp" />
-    <ClCompile Include="src\driver\i2c.cpp" />
-    <ClCompile Include="src\driver\io-expander.cpp" />
-    <ClCompile Include="src\driver\mcp23s08.cpp" />
-    <ClCompile Include="src\driver\mcp23s17.cpp" />
-    <ClCompile Include="src\driver\mcp23x08.cpp" />
-    <ClCompile Include="src\driver\mcp23x17.cpp" />
-    <ClCompile Include="src\driver\mcp23008.cpp" />
-    <ClCompile Include="src\driver\mcp23017.cpp" />
-    <ClCompile Include="src\driver\spi.cpp" />
-    <ClCompile Include="src\iface\decoder-in.cpp" />
-    <ClCompile Include="src\iface\decoder-out.cpp" />
-    <ClCompile Include="src\iface\encoder-in.cpp" />
-    <ClCompile Include="src\iface\encoder-out.cpp" />
-    <ClCompile Include="src\iface\input.cpp" />
-    <ClCompile Include="src\iface\output.cpp" />
-    <ClCompile Include="src\iface\shift-base.cpp" />
-    <ClCompile Include="src\iface\shift-in.cpp" />
-    <ClCompile Include="src\iface\shift-out.cpp" />
-    <ClCompile Include="src\keypad\matrix.cpp" />
-    <ClCompile Include="src\gpio.cpp" />
-    <ClCompile Include="src\time.cpp" />
-    <ClCompile Include="src\utils.cpp" />
-    <ClCompile Include="src\keypad\keypad_base.cpp" />
-    <ClCompile Include="src\iface\iface_base.cpp" />
-    <ClCompile Include="libnfc\buses\empty.c" />
-    <ClCompile Include="libnfc\buses\i2c.c" />
-    <ClCompile Include="libnfc\buses\spi.c" />
-    <ClCompile Include="libnfc\buses\uart.c" />
-    <ClCompile Include="libnfc\buses\usbbus.c" />
-    <ClCompile Include="libnfc\chips\pn53x.c" />
-    <ClCompile Include="libnfc\drivers\acr122_pcsc.c" />
-    <ClCompile Include="libnfc\drivers\acr122_usb.c" />
-    <ClCompile Include="libnfc\drivers\acr122s.c" />
-    <ClCompile Include="libnfc\drivers\arygon.c" />
-    <ClCompile Include="libnfc\drivers\pcsc.c" />
-    <ClCompile Include="libnfc\drivers\pn53x_usb.c" />
-    <ClCompile Include="libnfc\drivers\pn71xx.c" />
-    <ClCompile Include="libnfc\drivers\pn532_i2c.c" />
-    <ClCompile Include="libnfc\drivers\pn532_spi.c" />
-    <ClCompile Include="libnfc\drivers\pn532_uart.c" />
-    <ClCompile Include="libnfc\conf.c" />
-    <ClCompile Include="libnfc\iso14443-subr.c" />
-    <ClCompile Include="libnfc\log.c" />
-    <ClCompile Include="libnfc\log-internal.c" />
-    <ClCompile Include="libnfc\mirror-subr.c" />
-    <ClCompile Include="libnfc\nfc.c" />
-    <ClCompile Include="libnfc\nfc-device.c" />
-    <ClCompile Include="libnfc\nfc-emulation.c" />
-    <ClCompile Include="libnfc\nfc-internal.c" />
-    <ClCompile Include="libnfc\target-subr.c" />
+    <ClCompile Include="src\driver\bcm2835.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\iface\decoder-in.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\iface\decoder-out.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\iface\encoder-in.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\iface\encoder-out.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gpio.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\driver\i2c.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\iface\iface_base.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\iface\input.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\driver\io-expander.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\keypad\keypad_base.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\keypad\matrix.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\driver\mcp23s08.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\driver\mcp23s17.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\driver\mcp23x08.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\driver\mcp23x17.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\driver\mcp23008.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\driver\mcp23017.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\iface\output.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\iface\shift-base.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\iface\shift-in.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\iface\shift-out.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\driver\spi.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\time.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="include">
       <UniqueIdentifier>{489edb8c-2798-44e1-a0f6-f36862f65976}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{0810cdfe-c14a-4ac5-a017-7e9240a09663}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\rpi-hw\driver\bcm2835.hpp" />
-    <ClInclude Include="include\rpi-hw\driver\bcm2835-inl.hpp" />
-    <ClInclude Include="include\rpi-hw\driver\i2c.hpp" />
-    <ClInclude Include="include\rpi-hw\driver\i2c-inl.hpp" />
-    <ClInclude Include="include\rpi-hw\driver\io-expander.hpp" />
-    <ClInclude Include="include\rpi-hw\driver\io-expander-inl.hpp" />
-    <ClInclude Include="include\rpi-hw\driver\mcp23s08.hpp" />
-    <ClInclude Include="include\rpi-hw\driver\mcp23s08-inl.hpp" />
-    <ClInclude Include="include\rpi-hw\driver\mcp23s17.hpp" />
-    <ClInclude Include="include\rpi-hw\driver\mcp23s17-inl.hpp" />
-    <ClInclude Include="include\rpi-hw\driver\mcp23x08.hpp" />
-    <ClInclude Include="include\rpi-hw\driver\mcp23x08-inl.hpp" />
-    <ClInclude Include="include\rpi-hw\driver\mcp23x17.hpp" />
-    <ClInclude Include="include\rpi-hw\driver\mcp23x17-inl.hpp" />
-    <ClInclude Include="include\rpi-hw\driver\mcp23008.hpp" />
-    <ClInclude Include="include\rpi-hw\driver\mcp23008-inl.hpp" />
-    <ClInclude Include="include\rpi-hw\driver\mcp23017.hpp" />
-    <ClInclude Include="include\rpi-hw\driver\mcp23017-inl.hpp" />
-    <ClInclude Include="include\rpi-hw\driver\spi.hpp" />
-    <ClInclude Include="include\rpi-hw\driver\spi-inl.hpp" />
-    <ClInclude Include="include\rpi-hw\iface\decoder-in.hpp" />
-    <ClInclude Include="include\rpi-hw\iface\decoder-in-inl.hpp" />
-    <ClInclude Include="include\rpi-hw\iface\decoder-out.hpp" />
-    <ClInclude Include="include\rpi-hw\iface\decoder-out-inl.hpp" />
-    <ClInclude Include="include\rpi-hw\iface\encoder-in.hpp" />
-    <ClInclude Include="include\rpi-hw\iface\encoder-in-inl.hpp" />
-    <ClInclude Include="include\rpi-hw\iface\encoder-out.hpp" />
-    <ClInclude Include="include\rpi-hw\iface\encoder-out-inl.hpp" />
-    <ClInclude Include="include\rpi-hw\iface\input.hpp" />
-    <ClInclude Include="include\rpi-hw\iface\input-inl.hpp" />
-    <ClInclude Include="include\rpi-hw\iface\output.hpp" />
-    <ClInclude Include="include\rpi-hw\iface\output-inl.hpp" />
-    <ClInclude Include="include\rpi-hw\iface\shift-base.hpp" />
-    <ClInclude Include="include\rpi-hw\iface\shift-base-inl.hpp" />
-    <ClInclude Include="include\rpi-hw\iface\shift-in.hpp" />
-    <ClInclude Include="include\rpi-hw\iface\shift-in-inl.hpp" />
-    <ClInclude Include="include\rpi-hw\iface\shift-out.hpp" />
-    <ClInclude Include="include\rpi-hw\iface\shift-out-inl.hpp" />
-    <ClInclude Include="include\rpi-hw\keypad\matrix.hpp" />
-    <ClInclude Include="include\rpi-hw\keypad\matrix-inl.hpp" />
-    <ClInclude Include="include\rpi-hw\config.hpp" />
-    <ClInclude Include="include\rpi-hw\consts.hpp" />
-    <ClInclude Include="include\rpi-hw\designer.hpp" />
-    <ClInclude Include="include\rpi-hw\designer-inl.hpp" />
-    <ClInclude Include="include\rpi-hw\exception.hpp" />
-    <ClInclude Include="include\rpi-hw\gpio.hpp" />
-    <ClInclude Include="include\rpi-hw\gpio-inl.hpp" />
-    <ClInclude Include="include\rpi-hw\math.hpp" />
-    <ClInclude Include="include\rpi-hw\rpi.hpp" />
-    <ClInclude Include="include\rpi-hw\time.hpp" />
-    <ClInclude Include="include\rpi-hw\time-inl.hpp" />
-    <ClInclude Include="include\rpi-hw\types.hpp" />
-    <ClInclude Include="include\rpi-hw\utils.hpp" />
-    <ClInclude Include="include\rpi-hw\utils-inl.hpp" />
-    <ClInclude Include="include\rpi-hw\version.hpp" />
-    <ClInclude Include="include\rpi-hw.hpp" />
-    <ClInclude Include="include\rpi-hw\iface\iface_base.hpp" />
-    <ClInclude Include="include\rpi-hw\iface\iface_base-inl.hpp" />
-    <ClInclude Include="include\rpi-hw\keypad\keypad_base.hpp" />
-    <ClInclude Include="include\rpi-hw\keypad\keypad_base-inl.hpp" />
-    <ClInclude Include="include\chips\pn53x.hpp" />
-    <ClInclude Include="include\chips\pn53x-internal.hpp" />
-    <ClInclude Include="include\nfc\nfc.h" />
-    <ClInclude Include="include\nfc\nfc-emulation.h" />
-    <ClInclude Include="include\nfc\nfc-types.h" />
-    <ClInclude Include="libnfc\buses\i2c.h" />
-    <ClInclude Include="libnfc\buses\spi.h" />
-    <ClInclude Include="libnfc\buses\uart.h" />
-    <ClInclude Include="libnfc\buses\usbbus.h" />
-    <ClInclude Include="libnfc\chips\pn53x.h" />
-    <ClInclude Include="libnfc\chips\pn53x-internal.h" />
-    <ClInclude Include="libnfc\drivers\acr122_pcsc.h" />
-    <ClInclude Include="libnfc\drivers\acr122_usb.h" />
-    <ClInclude Include="libnfc\drivers\acr122s.h" />
-    <ClInclude Include="libnfc\drivers\arygon.h" />
-    <ClInclude Include="libnfc\drivers\pcsc.h" />
-    <ClInclude Include="libnfc\drivers\pn53x_usb.h" />
-    <ClInclude Include="libnfc\drivers\pn71xx.h" />
-    <ClInclude Include="libnfc\drivers\pn532_i2c.h" />
-    <ClInclude Include="libnfc\drivers\pn532_spi.h" />
-    <ClInclude Include="libnfc\drivers\pn532_uart.h" />
-    <ClInclude Include="libnfc\conf.h" />
-    <ClInclude Include="libnfc\drivers.h" />
-    <ClInclude Include="libnfc\iso7816.h" />
-    <ClInclude Include="libnfc\log.h" />
-    <ClInclude Include="libnfc\log-internal.h" />
-    <ClInclude Include="libnfc\mirror-subr.h" />
-    <ClInclude Include="libnfc\nfc-internal.h" />
-    <ClInclude Include="libnfc\target-subr.h" />
+    <ClInclude Include="include\rpi-hw\driver\bcm2835.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\driver\bcm2835-inl.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\config.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\consts.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\iface\decoder-in.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\iface\decoder-in-inl.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\iface\decoder-out.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\iface\decoder-out-inl.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\designer.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\designer-inl.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\iface\encoder-in.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\iface\encoder-in-inl.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\iface\encoder-out.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\iface\encoder-out-inl.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\exception.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\gpio.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\gpio-inl.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\driver\i2c.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\driver\i2c-inl.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\iface\iface_base.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\iface\iface_base-inl.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\iface\input.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\iface\input-inl.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\driver\io-expander.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\driver\io-expander-inl.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\keypad\keypad_base.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\keypad\keypad_base-inl.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\math.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\keypad\matrix.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\keypad\matrix-inl.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\driver\mcp23s08.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\driver\mcp23s08-inl.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\driver\mcp23s17.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\driver\mcp23s17-inl.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\driver\mcp23x08.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\driver\mcp23x08-inl.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\driver\mcp23x17.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\driver\mcp23x17-inl.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\driver\mcp23008.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\driver\mcp23008-inl.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\driver\mcp23017.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\driver\mcp23017-inl.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\iface\output.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\iface\output-inl.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\rpi.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\iface\shift-base.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\iface\shift-base-inl.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\iface\shift-in.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\iface\shift-in-inl.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\iface\shift-out.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\iface\shift-out-inl.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\driver\spi.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\driver\spi-inl.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\time.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\time-inl.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\types.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\utils.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\utils-inl.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rpi-hw\version.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
