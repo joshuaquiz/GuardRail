@@ -2,6 +2,9 @@
 #include <memory>
 #include "include/rpi-hw/keypad/matrix.hpp"
 
+#include "include/nfc/nfc.h"
+#include "libnfc/chips/pn53x.h"
+
 using namespace rpihw;
 
 class my_app {
@@ -85,6 +88,38 @@ private:
 int main(int argc, char* args[]) {
 
 	my_app app;
+	nfc_device* pnd;
+	nfc_target nt;
+	nfc_context* context;
+	nfc_init(&context);
+	if (context == NULL)
+	{
+		exit(0);
+		return 0;
+	}
+
+	pnd = nfc_open(context, NULL);
+	if (pnd == NULL)
+	{
+		nfc_exit(context);
+		return 0;
+	}
+
+	int i, res;
+	for (i = 0; i < 10; i++) {
+		if ((res = pn53x_write_register(pnd, PN53X_SFR_P3, _BV(P32), 0)) < 0)
+		{
+			nfc_close(pnd);
+			return 0;
+		}
+		sleep(1);
+		if ((res = pn53x_write_register(pnd, PN53X_SFR_P3, _BV(P32), _BV(P32))) < 0)
+		{
+			nfc_close(pnd);
+			return 0;
+		}
+		sleep(1);
+	}
 
     my_app::run();
 
