@@ -25,47 +25,19 @@
  */
 
 /**
- * @file nfc-emulation.h
- * @brief Provide a small API to ease emulation in libnfc
- */
+* @file iso7816.h
+* @brief Defines some macros extracted for ISO/IEC 7816-4
+*/
 
-#ifndef NFC_EMULATION_H
-#define NFC_EMULATION_H
+#ifndef __LIBNFC_ISO7816_H
+#define __LIBNFC_ISO7816_H
 
-#include <sys/types.h>
-#include "nfc.h"
+#define ISO7816_C_APDU_COMMAND_HEADER_LEN 4
+#define ISO7816_SHORT_APDU_MAX_DATA_LEN 256
+#define ISO7816_SHORT_C_APDU_MAX_OVERHEAD 2
+#define ISO7816_SHORT_R_APDU_RESPONSE_TRAILER_LEN 2
 
-#ifdef __cplusplus
-extern  "C" {
-#endif /* __cplusplus */
+#define ISO7816_SHORT_C_APDU_MAX_LEN (ISO7816_C_APDU_COMMAND_HEADER_LEN + ISO7816_SHORT_APDU_MAX_DATA_LEN + ISO7816_SHORT_C_APDU_MAX_OVERHEAD)
+#define ISO7816_SHORT_R_APDU_MAX_LEN (ISO7816_SHORT_APDU_MAX_DATA_LEN + ISO7816_SHORT_R_APDU_RESPONSE_TRAILER_LEN)
 
-struct nfc_emulator;
-struct nfc_emulation_state_machine;
-
-/**
- * @struct nfc_emulator
- * @brief NFC emulator structure
- */
-struct nfc_emulator {
-  nfc_target *target;
-  struct nfc_emulation_state_machine *state_machine;
-  void *user_data;
-};
-
-/**
- * @struct nfc_emulation_state_machine
- * @brief  NFC emulation state machine structure
- */
-struct nfc_emulation_state_machine {
-  int (*io)(struct nfc_emulator *emulator, const uint8_t *data_in, const size_t data_in_len, uint8_t *data_out, const size_t data_out_len);
-  void *data;
-};
-
-NFC_EXPORT int    nfc_emulate_target(nfc_device *pnd, struct nfc_emulator *emulator, const int timeout);
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
-
-#endif /* NFC_EMULATION_H */
+#endif /* !__LIBNFC_ISO7816_H */

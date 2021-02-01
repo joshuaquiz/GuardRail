@@ -36,6 +36,8 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 
 #ifndef NFC_BUFSIZE_CONNSTRING
@@ -143,7 +145,7 @@ typedef enum {
 } nfc_property;
 
 // Compiler directive, set struct alignment to 1 uint8_t for compatibility
-#  pragma pack(1)
+#pragma pack(1)
 
 /**
  * @enum nfc_dep_mode
@@ -354,6 +356,6 @@ typedef struct {
 } nfc_target;
 
 // Reset struct alignment to default
-#  pragma pack()
+#pragma pack()
 
 #endif // LIBNFC_TYPES_H

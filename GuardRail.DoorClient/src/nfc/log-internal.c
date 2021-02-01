@@ -9,6 +9,7 @@
  * Copyright (C) 2012-2013 Ludovic Rousseau
  * See AUTHORS file for a more comprehensive list of contributors.
  * Additional contributors of this file:
+ * Copyright (C) 2013      Alex Lian
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by the
@@ -24,48 +25,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-/**
- * @file nfc-emulation.h
- * @brief Provide a small API to ease emulation in libnfc
- */
+#include "../../include/nfc/log-internal.h"
 
-#ifndef NFC_EMULATION_H
-#define NFC_EMULATION_H
+#include <stdio.h>
+#include <stdarg.h>
 
-#include <sys/types.h>
-#include "nfc.h"
-
-#ifdef __cplusplus
-extern  "C" {
-#endif /* __cplusplus */
-
-struct nfc_emulator;
-struct nfc_emulation_state_machine;
-
-/**
- * @struct nfc_emulator
- * @brief NFC emulator structure
- */
-struct nfc_emulator {
-  nfc_target *target;
-  struct nfc_emulation_state_machine *state_machine;
-  void *user_data;
-};
-
-/**
- * @struct nfc_emulation_state_machine
- * @brief  NFC emulation state machine structure
- */
-struct nfc_emulation_state_machine {
-  int (*io)(struct nfc_emulator *emulator, const uint8_t *data_in, const size_t data_in_len, uint8_t *data_out, const size_t data_out_len);
-  void *data;
-};
-
-NFC_EXPORT int    nfc_emulate_target(nfc_device *pnd, struct nfc_emulator *emulator, const int timeout);
-
-#ifdef __cplusplus
+void log_vput_internal(const char *format, const va_list args)
+{
+    vfprintf(stderr, format, args);
 }
-#endif /* __cplusplus */
 
-
-#endif /* NFC_EMULATION_H */
+void log_put_internal(const char* format, ...)
+{
+    va_list va;
+    va_start(va, format);
+    vfprintf(stderr, format, va);
+    va_end(va);
+}

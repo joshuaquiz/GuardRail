@@ -24,48 +24,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-/**
- * @file nfc-emulation.h
- * @brief Provide a small API to ease emulation in libnfc
- */
+#ifndef LOG_INTERNAL_H
+#define LOG_INTERNAL_H
 
-#ifndef NFC_EMULATION_H
-#define NFC_EMULATION_H
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif // HAVE_CONFIG_H
 
-#include <sys/types.h>
-#include "nfc.h"
+#include <stdarg.h>
 
-#ifdef __cplusplus
-extern  "C" {
-#endif /* __cplusplus */
+// Internal methods so different platforms can route the logging
+// Offering both forms of the variadic function
+// These are implemented in the log_<platform> specific file
+void log_put_internal(const char *format, ...);
+void log_vput_internal(const char *format, va_list args);
 
-struct nfc_emulator;
-struct nfc_emulation_state_machine;
-
-/**
- * @struct nfc_emulator
- * @brief NFC emulator structure
- */
-struct nfc_emulator {
-  nfc_target *target;
-  struct nfc_emulation_state_machine *state_machine;
-  void *user_data;
-};
-
-/**
- * @struct nfc_emulation_state_machine
- * @brief  NFC emulation state machine structure
- */
-struct nfc_emulation_state_machine {
-  int (*io)(struct nfc_emulator *emulator, const uint8_t *data_in, const size_t data_in_len, uint8_t *data_out, const size_t data_out_len);
-  void *data;
-};
-
-NFC_EXPORT int    nfc_emulate_target(nfc_device *pnd, struct nfc_emulator *emulator, const int timeout);
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
-
-#endif /* NFC_EMULATION_H */
+#endif // LOG_INTERNAL_H

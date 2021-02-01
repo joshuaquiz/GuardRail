@@ -65,34 +65,52 @@
     </RemotePostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\nfc\buses\i2c.c" />
+    <ClCompile Include="src\nfc\buses\spi.c" />
+    <ClCompile Include="src\nfc\chips\pn53x.c" />
+    <ClCompile Include="src\nfc\conf.c" />
+    <ClCompile Include="src\nfc\drivers\pn532_i2c.c" />
+    <ClCompile Include="src\nfc\drivers\pn532_spi.c" />
+    <ClCompile Include="src\nfc\iso14443-subr.c" />
+    <ClCompile Include="src\nfc\log-internal.c" />
+    <ClCompile Include="src\nfc\log.c" />
+    <ClCompile Include="src\nfc\mirror-subr.c" />
+    <ClCompile Include="src\nfc\nfc-device.c" />
+    <ClCompile Include="src\nfc\nfc-emulation.c" />
+    <ClCompile Include="src\nfc\nfc-internal.c" />
+    <ClCompile Include="src\nfc\nfc.c" />
+    <ClCompile Include="src\nfc\target-subr.c" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="src\driver\bcm2835.cpp" />
-    <ClCompile Include="src\driver\i2c.cpp" />
-    <ClCompile Include="src\driver\io-expander.cpp" />
-    <ClCompile Include="src\driver\mcp23008.cpp" />
-    <ClCompile Include="src\driver\mcp23017.cpp" />
-    <ClCompile Include="src\driver\mcp23s08.cpp" />
-    <ClCompile Include="src\driver\mcp23s17.cpp" />
-    <ClCompile Include="src\driver\mcp23x08.cpp" />
-    <ClCompile Include="src\driver\mcp23x17.cpp" />
-    <ClCompile Include="src\driver\spi.cpp" />
-    <ClCompile Include="src\gpio.cpp" />
-    <ClCompile Include="src\iface\iface_base.cpp" />
-    <ClCompile Include="src\iface\decoder-in.cpp" />
-    <ClCompile Include="src\iface\decoder-out.cpp" />
-    <ClCompile Include="src\iface\encoder-in.cpp" />
-    <ClCompile Include="src\iface\encoder-out.cpp" />
-    <ClCompile Include="src\iface\input.cpp" />
-    <ClCompile Include="src\iface\output.cpp" />
-    <ClCompile Include="src\iface\shift-base.cpp" />
-    <ClCompile Include="src\iface\shift-in.cpp" />
-    <ClCompile Include="src\iface\shift-out.cpp" />
-    <ClCompile Include="src\keypad\keypad_base.cpp" />
-    <ClCompile Include="src\keypad\matrix.cpp" />
-    <ClCompile Include="src\time.cpp" />
-    <ClCompile Include="src\utils.cpp" />
+    <ClCompile Include="src\rpi-hw\driver\bcm2835.cpp" />
+    <ClCompile Include="src\rpi-hw\driver\i2c.cpp" />
+    <ClCompile Include="src\rpi-hw\driver\io-expander.cpp" />
+    <ClCompile Include="src\rpi-hw\driver\mcp23008.cpp" />
+    <ClCompile Include="src\rpi-hw\driver\mcp23017.cpp" />
+    <ClCompile Include="src\rpi-hw\driver\mcp23s08.cpp" />
+    <ClCompile Include="src\rpi-hw\driver\mcp23s17.cpp" />
+    <ClCompile Include="src\rpi-hw\driver\mcp23x08.cpp" />
+    <ClCompile Include="src\rpi-hw\driver\mcp23x17.cpp" />
+    <ClCompile Include="src\rpi-hw\driver\spi.cpp" />
+    <ClCompile Include="src\rpi-hw\gpio.cpp" />
+    <ClCompile Include="src\rpi-hw\iface\iface_base.cpp" />
+    <ClCompile Include="src\rpi-hw\iface\decoder-in.cpp" />
+    <ClCompile Include="src\rpi-hw\iface\decoder-out.cpp" />
+    <ClCompile Include="src\rpi-hw\iface\encoder-in.cpp" />
+    <ClCompile Include="src\rpi-hw\iface\encoder-out.cpp" />
+    <ClCompile Include="src\rpi-hw\iface\input.cpp" />
+    <ClCompile Include="src\rpi-hw\iface\output.cpp" />
+    <ClCompile Include="src\rpi-hw\iface\shift-base.cpp" />
+    <ClCompile Include="src\rpi-hw\iface\shift-in.cpp" />
+    <ClCompile Include="src\rpi-hw\iface\shift-out.cpp" />
+    <ClCompile Include="src\rpi-hw\keypad\keypad_base.cpp" />
+    <ClCompile Include="src\rpi-hw\keypad\matrix.cpp" />
+    <ClCompile Include="src\rpi-hw\time.cpp" />
+    <ClCompile Include="src\rpi-hw\utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\nfc\nfc-emulation.h" />
+    <ClInclude Include="include\nfc\nfc-types.h" />
+    <ClInclude Include="include\nfc\nfc.h" />
     <ClInclude Include="include\rpi-hw.hpp" />
     <ClInclude Include="include\rpi-hw\config.hpp" />
     <ClInclude Include="include\rpi-hw\consts.hpp" />
@@ -153,8 +171,26 @@
     <ClInclude Include="include\rpi-hw\utils-inl.hpp" />
     <ClInclude Include="include\rpi-hw\utils.hpp" />
     <ClInclude Include="include\rpi-hw\version.hpp" />
+    <ClInclude Include="include\nfc\buses\i2c.h" />
+    <ClInclude Include="include\nfc\buses\spi.h" />
+    <ClInclude Include="include\nfc\chips\pn53x-internal.h" />
+    <ClInclude Include="include\nfc\chips\pn53x.h" />
+    <ClInclude Include="include\nfc\conf.h" />
+    <ClInclude Include="include\nfc\drivers.h" />
+    <ClInclude Include="include\nfc\drivers\pn532_i2c.h" />
+    <ClInclude Include="include\nfc\drivers\pn532_spi.h" />
+    <ClInclude Include="include\nfc\iso7816.h" />
+    <ClInclude Include="include\nfc\log-internal.h" />
+    <ClInclude Include="include\nfc\log.h" />
+    <ClInclude Include="include\nfc\mirror-subr.h" />
+    <ClInclude Include="include\nfc\nfc-internal.h" />
+    <ClInclude Include="include\nfc\target-subr.h" />
   </ItemGroup>
-  <ItemDefinitionGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <ClCompile>
+      <AdditionalOptions>-D_POSIX_C_SOURCE=199309L %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
 </Project>

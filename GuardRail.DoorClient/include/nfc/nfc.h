@@ -35,43 +35,44 @@
 #define LIBNFC_H
 
 #include <stdint.h>
+#include <stddef.h>
 #include <stdbool.h>
 
 #ifdef _WIN32
 /* Windows platform */
-#  ifndef _WINDLL
+#ifndef _WINDLL
 /* CMake compilation */
-#    ifdef nfc_EXPORTS
-#      define  NFC_EXPORT __declspec(dllexport)
-#    else
-/* nfc_EXPORTS */
-#      define  NFC_EXPORT __declspec(dllimport)
-#    endif
-/* nfc_EXPORTS */
+#  ifdef nfc_EXPORTS
+#    define  NFC_EXPORT __declspec(dllexport)
 #  else
+/* nfc_EXPORTS */
+#    define  NFC_EXPORT __declspec(dllimport)
+#  endif
+/* nfc_EXPORTS */
+#else
 /* _WINDLL */
 /* Manual makefile */
-#    define NFC_EXPORT
-#  endif
+#  define NFC_EXPORT
+#endif
 /* _WINDLL */
 #else
 /* _WIN32 */
-#  define NFC_EXPORT
+#define NFC_EXPORT
 #endif
 /* _WIN32 */
 
 #include "nfc-types.h"
 
 #ifndef __has_attribute
-#  define __has_attribute(x) 0
+#define __has_attribute(x) 0
 #endif
 
 #if __has_attribute(nonnull) || defined(__GNUC__)
-#  define __has_attribute_nonnull 1
+#define __has_attribute_nonnull 1
 #endif
 
 #if __has_attribute_nonnull
-#  define ATTRIBUTE_NONNULL( param ) __attribute__((nonnull (param)))
+#define ATTRIBUTE_NONNULL( param ) __attribute__((nonnull (param)))
 #else
 #define ATTRIBUTE_NONNULL( param )
 #endif
@@ -132,11 +133,11 @@ NFC_EXPORT int nfc_device_set_property_int(nfc_device *pnd, const nfc_property p
 NFC_EXPORT int nfc_device_set_property_bool(nfc_device *pnd, const nfc_property property, const bool bEnable);
 
 /* Misc. functions */
-NFC_EXPORT void iso14443a_crc(uint8_t *pbtData, size_t szLen, uint8_t *pbtCrc);
+NFC_EXPORT void iso14443a_crc(uint8_t *pbt_data, size_t sz_len, uint8_t *pbt_crc);
 NFC_EXPORT void iso14443a_crc_append(uint8_t *pbtData, size_t szLen);
-NFC_EXPORT void iso14443b_crc(uint8_t *pbtData, size_t szLen, uint8_t *pbtCrc);
-NFC_EXPORT void iso14443b_crc_append(uint8_t *pbtData, size_t szLen);
-NFC_EXPORT uint8_t *iso14443a_locate_historical_bytes(uint8_t *pbtAts, size_t szAts, size_t *pszTk);
+NFC_EXPORT void iso14443b_crc(uint8_t *pbt_data, size_t sz_len, uint8_t *pbt_crc);
+NFC_EXPORT void iso14443b_crc_append(uint8_t *pbt_data, size_t szLen);
+NFC_EXPORT uint8_t *iso14443a_locate_historical_bytes(uint8_t *pbt_ats, size_t sz_ats, size_t *psz_tk);
 
 NFC_EXPORT void nfc_free(void *p);
 NFC_EXPORT const char *nfc_version(void);
