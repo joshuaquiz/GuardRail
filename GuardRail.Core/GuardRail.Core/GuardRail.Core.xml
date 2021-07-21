@@ -275,6 +275,36 @@
             Whether or not the door is fully configured.
             </summary>
         </member>
+        <member name="T:GuardRail.Core.DataModels.DoorCommand">
+            <summary>
+            A command to a door, and all the things you can do with it.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.DataModels.DoorCommand.DoorId">
+            <summary>
+            The ID of the door.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.DataModels.DoorCommand.LockedStatus">
+            <summary>
+            Whether or not the door is locked.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.DataModels.DoorCommand.BuzzerDuration">
+            <summary>
+            How long to buzz the door.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.DataModels.DoorCommand.RedLightDuration">
+            <summary>
+            How long to turn on a red light.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.DataModels.DoorCommand.GreenLightDuration">
+            <summary>
+            How long to turn on a green light.
+            </summary>
+        </member>
         <member name="T:GuardRail.Core.DataModels.IAddableItem">
             <summary>
             An item that can be added.
@@ -286,6 +316,29 @@
             Guid is to be used in all systems for the global ID.
             This value is set automatically and should not be passed in for adds.
             </summary>
+        </member>
+        <member name="T:GuardRail.Core.DataModels.UnLockRequest">
+            <summary>
+            A request to unlock a door.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.DataModels.UnLockRequest.DoorId">
+            <summary>
+            The ID of the door.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.DataModels.UnLockRequest.UnlockRequestType">
+            <summary>
+            The method used to attempt to access the door.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.DataModels.UnLockRequest.Data">
+            <summary>
+            The data used.
+            </summary>
+            <remarks>
+            The type of data and how to handle it will be determined by the value of <see cref="P:GuardRail.Core.DataModels.UnLockRequest.UnlockRequestType"/>.
+            </remarks>
         </member>
         <member name="T:GuardRail.Core.DataModels.User">
             <summary>
@@ -356,6 +409,11 @@
         <member name="F:GuardRail.Core.Enums.LockedStatus.Locked">
             <summary>
             The door is locked.
+            </summary>
+        </member>
+        <member name="T:GuardRail.Core.Enums.UnlockRequestType">
+            <summary>
+            Ways an unlock can be triggered.
             </summary>
         </member>
         <member name="T:GuardRail.Core.Helpers.Extensions">

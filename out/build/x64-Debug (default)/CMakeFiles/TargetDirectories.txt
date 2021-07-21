@@ -1,5 +1,0 @@
-C:/Users/joshua.galloway/source/repos/GuardRail/out/build/x64-Debug (default)/CMakeFiles/edit_cache.dir
-C:/Users/joshua.galloway/source/repos/GuardRail/out/build/x64-Debug (default)/CMakeFiles/rebuild_cache.dir
-C:/Users/joshua.galloway/source/repos/GuardRail/out/build/x64-Debug (default)/GuardRail.DoorClient/CMakeFiles/GuardRail.DoorClient.dir
-C:/Users/joshua.galloway/source/repos/GuardRail/out/build/x64-Debug (default)/GuardRail.DoorClient/CMakeFiles/edit_cache.dir
-C:/Users/joshua.galloway/source/repos/GuardRail/out/build/x64-Debug (default)/GuardRail.DoorClient/CMakeFiles/rebuild_cache.dir
