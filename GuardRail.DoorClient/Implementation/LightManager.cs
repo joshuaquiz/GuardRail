@@ -1,5 +1,6 @@
 using System;
 using System.Device.Gpio;
+using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.DoorClient.Configuration;
 using GuardRail.DoorClient.Interfaces;
@@ -23,22 +24,26 @@ namespace GuardRail.DoorClient.Implementation
             _gpio.OpenPin(_lightConfiguration.GreenPin, PinMode.Output);
         }
 
-        public async Task TurnOnRedLight(TimeSpan duration)
+        public async Task TurnOnRedLightAsync(TimeSpan duration, CancellationToken cancellationToken)
         {
+            _logger.LogDebug("Turning red light on");
             _gpio.Write(_lightConfiguration.RedPin, PinValue.High);
             if (duration > TimeSpan.Zero)
             {
-                await Task.Delay(duration);
+                await Task.Delay(duration, cancellationToken);
+                _logger.LogDebug("Turning red light off");
                 _gpio.Write(_lightConfiguration.RedPin, PinValue.Low);
             }
         }
 
-        public async Task TurnOnGreenLight(TimeSpan duration)
+        public async Task TurnOnGreenLightAsync(TimeSpan duration, CancellationToken cancellationToken)
         {
+            _logger.LogDebug("Turning green light on");
             _gpio.Write(_lightConfiguration.GreenPin, PinValue.High);
             if (duration > TimeSpan.Zero)
             {
-                await Task.Delay(duration);
+                await Task.Delay(duration, cancellationToken);
+                _logger.LogDebug("Turning green light off");
                 _gpio.Write(_lightConfiguration.GreenPin, PinValue.Low);
             }
         }

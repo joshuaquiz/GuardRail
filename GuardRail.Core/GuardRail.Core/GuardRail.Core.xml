@@ -317,6 +317,19 @@
             This value is set automatically and should not be passed in for adds.
             </summary>
         </member>
+        <member name="T:GuardRail.Core.DataModels.NdsPing">
+            <summary>
+            A ping request/response.
+            </summary>
+            <remarks>
+            A client will send this data and the server will send it back to show it received it.
+            </remarks>
+        </member>
+        <member name="P:GuardRail.Core.DataModels.NdsPing.RequestId">
+            <summary>
+            The ID of the request.
+            </summary>
+        </member>
         <member name="T:GuardRail.Core.DataModels.UnLockRequest">
             <summary>
             A request to unlock a door.

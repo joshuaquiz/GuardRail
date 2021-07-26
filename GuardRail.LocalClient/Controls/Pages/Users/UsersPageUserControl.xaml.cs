@@ -68,7 +68,7 @@ namespace GuardRail.LocalClient.Controls.Pages.Users
                 || EmailTextBox.HasValidationError)
             {
                 MessageBox.Show(
-                    App.ServiceProvider.GetRequiredService<MainWindow>(),
+                    App.Host.Services.GetRequiredService<MainWindow>(),
                     "The user must have a first and last name as well as an email and phone number.",
                     "Validation error",
                     MessageBoxButton.OK,
@@ -77,7 +77,7 @@ namespace GuardRail.LocalClient.Controls.Pages.Users
                 return;
             }
             
-            var dataStore = App.ServiceProvider.GetRequiredService<IDataStore>();
+            var dataStore = App.Host.Services.GetRequiredService<IDataStore>();
             if (ViewModel.EditingUser.Id > 0)
             {
                 dataStore.UpdateExisting(ViewModel.EditingUser, App.CancellationTokenSource.Token);
@@ -108,7 +108,7 @@ namespace GuardRail.LocalClient.Controls.Pages.Users
 
         private void YesDeleteButton_OnClick(object sender, RoutedEventArgs e)
         {
-            var dataStore = App.ServiceProvider.GetRequiredService<IDataStore>();
+            var dataStore = App.Host.Services.GetRequiredService<IDataStore>();
             dataStore.DeleteExisting(ViewModel.EditingUser, App.CancellationTokenSource.Token);
         }
 

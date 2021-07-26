@@ -1,12 +1,13 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GuardRail.DoorClient.Interfaces
 {
     public interface ILightManager
     {
-        Task TurnOnRedLight(TimeSpan duration);
+        Task TurnOnRedLightAsync(TimeSpan duration, CancellationToken cancellationToken);
 
-        Task TurnOnGreenLight(TimeSpan duration);
+        Task TurnOnGreenLightAsync(TimeSpan duration, CancellationToken cancellationToken);
     }
 }

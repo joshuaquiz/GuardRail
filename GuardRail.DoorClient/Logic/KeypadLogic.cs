@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,52 +17,75 @@ namespace GuardRail.DoorClient.Logic
     {
         private readonly ILightManager _lightManager;
         private readonly KeypadConfiguration _keypadConfiguration;
-        private readonly IUdpSender _udpSender;
+        private readonly IUdpSenderReceiver _udpSenderReceiver;
         private readonly ILogger<KeypadLogic> _logger;
-        private readonly Timer _timer;
 
-        private List<char> _pressedKeys;
+        private CancellationTokenSource _cancellationTokenSource;
+
+        private List<char> _pressedKeys = new(0);
 
         public KeypadLogic(
             ILightManager lightManager,
             KeypadConfiguration keypadConfiguration,
-            IUdpSender udpSender,
+            IUdpSenderReceiver udpSenderReceiver,
             ILogger<KeypadLogic> logger)
         {
             _lightManager = lightManager;
             _keypadConfiguration = keypadConfiguration;
-            _udpSender = udpSender;
+            _udpSenderReceiver = udpSenderReceiver;
             _logger = logger;
-            _timer = new Timer(async _ => await Reset());
+            _cancellationTokenSource = new CancellationTokenSource();
         }
 
-        private async Task Reset()
+        private async Task DelayThenReset()
         {
-            _pressedKeys = new List<char>(0);
-            await _lightManager.TurnOnRedLight(TimeSpan.FromMilliseconds(300));
-            await Task.Delay(TimeSpan.FromMilliseconds(200));
-            await _lightManager.TurnOnRedLight(TimeSpan.FromMilliseconds(300));
-            _timer.Change(Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
-            _logger.LogInformation("Keypad entry timed out.");
+            try
+            {
+                await Task.Delay(_keypadConfiguration.KeypadTimeout, _cancellationTokenSource.Token);
+                if (_cancellationTokenSource.Token.IsCancellationRequested)
+                {
+                    return;
+                }
+
+                _logger.LogInformation("Keypad entry timed out.");
+                _pressedKeys = new List<char>(0);
+                await _lightManager.TurnOnRedLightAsync(TimeSpan.FromMilliseconds(300), _cancellationTokenSource.Token);
+                await Task.Delay(TimeSpan.FromMilliseconds(200), _cancellationTokenSource.Token);
+                await _lightManager.TurnOnRedLightAsync(TimeSpan.FromMilliseconds(300), _cancellationTokenSource.Token);
+            }
+            catch (TaskCanceledException)
+            {
+                _logger.LogInformation("Keypad entry time out canceled.");
+                // Ignored.
+            }
         }
 
-        public Task OnKeyPressedAsync(char key, CancellationToken cancellationToken)
+        public Task OnKeyPressedAsync(char key)
         {
-            _timer.Change(TimeSpan.Zero, _keypadConfiguration.KeypadTimeout);
+            _cancellationTokenSource.Cancel();
+            _logger.LogInformation($"Key pressed: {key}");
             if (key == _keypadConfiguration.SubmitKey)
             {
-                _logger.LogInformation($"Key pressed: {key}");
-                return _udpSender.SendUdpMessageAsync(
+                var keyData = _pressedKeys.ToList();
+                _pressedKeys = new List<char>(0);
+                _logger.LogInformation($"Sending keys: {string.Join(", ", keyData)}");
+                var cancellationTokenSource = new CancellationTokenSource(_keypadConfiguration.KeypadTimeout * 2);
+                return _udpSenderReceiver.SendUdpMessageAsync(
                     new UnLockRequest
                     {
                         UnlockRequestType = UnlockRequestType.Keypad,
-                        Data = Encoding.UTF8.GetBytes(_pressedKeys.ToJson())
+                        Data = Encoding.UTF8.GetBytes(keyData.ToJson())
                     },
-                    cancellationToken);
+                    cancellationTokenSource.Token);
             }
 
             _pressedKeys.Add(key);
-            _logger.LogInformation($"Key pressed: {key}");
+            _logger.LogInformation($"Keys pressed so far: {string.Join(", ", _pressedKeys)}");
+            _cancellationTokenSource = new CancellationTokenSource();
+#pragma warning disable 4014
+            // We want this to be fire-and-forget
+            DelayThenReset();
+#pragma warning restore 4014
             return Task.CompletedTask;
         }
     }

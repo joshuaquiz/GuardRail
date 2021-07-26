@@ -12,7 +12,7 @@ namespace GuardRail.LocalClient
     /// <summary>
     /// Helps with any startup actions or setup that needs to happen.
     /// </summary>
-    public class StartupHelper
+    public static class StartupHelper
     {
         /// <summary>
         /// Helps with any startup actions or setup that needs to happen.
@@ -40,7 +40,7 @@ namespace GuardRail.LocalClient
 
         private static async Task SetupDatabaseAsync(CancellationToken cancellationToken)
         {
-            using var serviceScope = App.ServiceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
+            using var serviceScope = App.Host.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
             var context = serviceScope.ServiceProvider.GetRequiredService<GuardRailContext>();
             var pendingMigrations = await context.Database.GetPendingMigrationsAsync(cancellationToken);
             if (pendingMigrations.Any())

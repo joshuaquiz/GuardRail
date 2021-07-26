@@ -12,9 +12,9 @@
             App
             </summary>
         </member>
-        <member name="P:GuardRail.LocalClient.App.ServiceProvider">
+        <member name="F:GuardRail.LocalClient.App.Host">
             <summary>
-            Service provider for the application.
+            Hosting environment for the application.
             </summary>
         </member>
         <member name="P:GuardRail.LocalClient.App.Configuration">
@@ -863,6 +863,22 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:GuardRail.LocalClient.NdsService">
+            <summary>
+            Listens for devices on the network.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.NdsService.#ctor">
+            <summary>
+            Creates a new <see cref="T:GuardRail.LocalClient.NdsService"/>
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.NdsService.StartAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.NdsService.StopAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
         <member name="T:GuardRail.LocalClient.Properties.Resources">
             <summary>
               A strongly-typed resource class, for looking up localized strings, etc.
@@ -906,6 +922,36 @@
             <param name="commandLineArguments">Command line arguments passed to the main app.</param>
             <param name="mainWindow">The application's main window.</param>
             <param name="cancellationToken">The cancellation token.</param>
+        </member>
+        <member name="T:XamlGeneratedNamespace.GeneratedInternalTypeHelper">
+            <summary>
+            GeneratedInternalTypeHelper
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateInstance(System.Type,System.Globalization.CultureInfo)">
+            <summary>
+            CreateInstance
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.GetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            GetPropertyValue
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.SetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            SetPropertyValue
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateDelegate(System.Type,System.Object,System.String)">
+            <summary>
+            CreateDelegate
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.AddEventHandler(System.Reflection.EventInfo,System.Object,System.Delegate)">
+            <summary>
+            AddEventHandler
+            </summary>
         </member>
     </members>
 </doc>

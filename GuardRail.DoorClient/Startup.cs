@@ -1,5 +1,4 @@
 using System.Device.Gpio;
-using System.Net.Sockets;
 using GuardRail.DoorClient.Configuration;
 using GuardRail.DoorClient.Implementation;
 using GuardRail.DoorClient.Interfaces;
@@ -49,14 +48,14 @@ namespace GuardRail.DoorClient
                 .AddSingleton(_ => Configuration.GetSection(nameof(LightConfiguration)).Get<LightConfiguration>())
                 .AddSingleton(_ => Configuration.GetSection(nameof(UdpConfiguration)).Get<UdpConfiguration>())
                 .AddSingleton(_ => new GpioController())
-                .AddSingleton(serviceProvider => new UdpClient(serviceProvider.GetRequiredService<UdpConfiguration>().Port))
                 .AddSingleton<IGpio, Gpio>()
                 .AddSingleton<ILightManager, LightManager>()
                 .AddSingleton<IBuzzerManager, BuzzerManager>()
-                .AddSingleton<IUdpSender, UdpSenderReceiver>()
-                .AddSingleton<IUdpReceiver, UdpSenderReceiver>()
+                .AddSingleton<IUdpSenderReceiver, UdpSenderReceiverReceiver>()
                 .AddSingleton<IKeypadLogic, KeypadLogic>()
+                .AddSingleton<IUdpWrapper, UdpWrapper>()
                 .AddHostedService<ButtonListenerService>()
+                .AddHostedService<NdsService>()
                 .AddHostedService<LockService>();
         }
 

@@ -5,7 +5,9 @@ namespace GuardRail.DoorClient.Configuration
 {
     public sealed class KeypadConfiguration
     {
-        public List<int> Pins { get; set; }
+        public List<int> ColumnPins { get; set; }
+
+        public List<int> RowPins { get; set; }
 
         public TimeSpan KeypadTimeout { get; set; }
 

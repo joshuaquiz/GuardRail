@@ -1,5 +1,6 @@
 using System;
 using System.Device.Gpio;
+using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.DoorClient.Configuration;
 using GuardRail.DoorClient.Interfaces;
@@ -18,12 +19,12 @@ namespace GuardRail.DoorClient.Implementation
             _gpio.OpenPin(_buzzerConfiguration.Pin, PinMode.Output);
         }
 
-        public async Task Buzz(TimeSpan duration)
+        public async Task BuzzAsync(TimeSpan duration, CancellationToken cancellationToken)
         {
             _gpio.Write(_buzzerConfiguration.Pin, PinValue.High);
             if (duration > TimeSpan.Zero)
             {
-                await Task.Delay(duration);
+                await Task.Delay(duration, cancellationToken);
                 _gpio.Write(_buzzerConfiguration.Pin, PinValue.Low);
             }
         }

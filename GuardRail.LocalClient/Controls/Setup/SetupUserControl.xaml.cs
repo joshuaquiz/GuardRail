@@ -17,7 +17,7 @@ namespace GuardRail.LocalClient.Controls.Setup
         /// </summary>
         public SetupUserControl()
         {
-            _guardRailApiClient = App.ServiceProvider.GetRequiredService<IGuardRailApiClient>();
+            _guardRailApiClient = App.Host.Services.GetRequiredService<IGuardRailApiClient>();
             InitializeComponent();
         }
 

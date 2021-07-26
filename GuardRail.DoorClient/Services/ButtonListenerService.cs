@@ -47,19 +47,20 @@ namespace GuardRail.DoorClient.Services
             _keypadLogic = keypadLogic;
             _logger = logger;
             // validate inputs
-            if (keypadConfiguration.Pins.Count == 8)
+            if (keypadConfiguration.ColumnPins.Count == 4
+                && keypadConfiguration.RowPins.Count == 4)
             {
                 return;
             }
 
-            SetupMessage = "Please supply a list of 8 GPIO pin numbers.";
+            SetupMessage = "Please supply a list of 4 GPIO column and 4 GPIO row pin numbers.";
             _logger.LogCritical(SetupMessage);
             throw new InvalidPinSetupException(SetupMessage);
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            if (InitializeGpio(_keypadConfiguration.Pins, cancellationToken))
+            if (InitializeGpio())
             {
                 _logger.LogInformation("GPIO setup for button listener");
                 _dispatcherTimer = new Timer(
@@ -78,49 +79,52 @@ namespace GuardRail.DoorClient.Services
         public async Task StopAsync(CancellationToken cancellationToken)
         {
             await _dispatcherTimer.DisposeAsync();
-            foreach (var pin in _keypadConfiguration.Pins)
+            foreach (var pin in _keypadConfiguration.ColumnPins)
+            {
+                _gpio.ClosePin(pin);
+            }
+
+            foreach (var pin in _keypadConfiguration.RowPins)
             {
                 _gpio.ClosePin(pin);
             }
         }
 
-        private bool InitializeGpio(
-            IReadOnlyList<int> pins,
-            CancellationToken cancellationToken)
+        private bool InitializeGpio()
         {
             if (_gpio != null)
             {
                 // Initialize Column GPIO Pins
-                _gpio.OpenPin(pins[0], PinMode.Output);
-                _gpio.Write(pins[0], PinValue.Low);
-                _gpio.OpenPin(pins[1], PinMode.Output);
-                _gpio.Write(pins[1], PinValue.Low);
-                _gpio.OpenPin(pins[2], PinMode.Output);
-                _gpio.Write(pins[2], PinValue.Low);
-                _gpio.OpenPin(pins[3], PinMode.Output);
-                _gpio.Write(pins[3], PinValue.Low);
+                _gpio.OpenPin(_keypadConfiguration.ColumnPins[0], PinMode.Output);
+                _gpio.Write(_keypadConfiguration.ColumnPins[0], PinValue.Low);
+                _gpio.OpenPin(_keypadConfiguration.ColumnPins[1], PinMode.Output);
+                _gpio.Write(_keypadConfiguration.ColumnPins[1], PinValue.Low);
+                _gpio.OpenPin(_keypadConfiguration.ColumnPins[2], PinMode.Output);
+                _gpio.Write(_keypadConfiguration.ColumnPins[2], PinValue.Low);
+                _gpio.OpenPin(_keypadConfiguration.ColumnPins[3], PinMode.Output);
+                _gpio.Write(_keypadConfiguration.ColumnPins[3], PinValue.Low);
 
                 // Add to Cols Array
-                _cols.Add(pins[0]);
-                _cols.Add(pins[1]);
-                _cols.Add(pins[2]);
-                _cols.Add(pins[3]);
+                _cols.Add(_keypadConfiguration.ColumnPins[0]);
+                _cols.Add(_keypadConfiguration.ColumnPins[1]);
+                _cols.Add(_keypadConfiguration.ColumnPins[2]);
+                _cols.Add(_keypadConfiguration.ColumnPins[3]);
 
                 // Initialize Row GPIO Pins
-                _gpio.OpenPin(pins[4]);
-                _gpio.RegisterCallbackForPinValueChangedEvent(pins[4], PinEventTypes.Falling | PinEventTypes.Rising, (_, args) => Pin_Changed(args.PinNumber, cancellationToken));
-                _gpio.OpenPin(pins[5]);
-                _gpio.RegisterCallbackForPinValueChangedEvent(pins[5], PinEventTypes.Falling | PinEventTypes.Rising, (_, args) => Pin_Changed(args.PinNumber, cancellationToken));
-                _gpio.OpenPin(pins[6]);
-                _gpio.RegisterCallbackForPinValueChangedEvent(pins[6], PinEventTypes.Falling | PinEventTypes.Rising, (_, args) => Pin_Changed(args.PinNumber, cancellationToken));
-                _gpio.OpenPin(pins[7]);
-                _gpio.RegisterCallbackForPinValueChangedEvent(pins[7], PinEventTypes.Falling | PinEventTypes.Rising, (_, args) => Pin_Changed(args.PinNumber, cancellationToken));
+                _gpio.OpenPin(_keypadConfiguration.RowPins[0]);
+                _gpio.RegisterCallbackForPinValueChangedEvent(_keypadConfiguration.RowPins[0], PinEventTypes.Falling | PinEventTypes.Rising, (_, args) => Pin_Changed(args.PinNumber));
+                _gpio.OpenPin(_keypadConfiguration.RowPins[1]);
+                _gpio.RegisterCallbackForPinValueChangedEvent(_keypadConfiguration.RowPins[1], PinEventTypes.Falling | PinEventTypes.Rising, (_, args) => Pin_Changed(args.PinNumber));
+                _gpio.OpenPin(_keypadConfiguration.RowPins[2]);
+                _gpio.RegisterCallbackForPinValueChangedEvent(_keypadConfiguration.RowPins[2], PinEventTypes.Falling | PinEventTypes.Rising, (_, args) => Pin_Changed(args.PinNumber));
+                _gpio.OpenPin(_keypadConfiguration.RowPins[3]);
+                _gpio.RegisterCallbackForPinValueChangedEvent(_keypadConfiguration.RowPins[3], PinEventTypes.Falling | PinEventTypes.Rising, (_, args) => Pin_Changed(args.PinNumber));
 
                 // Add to Row Array
-                _rows.Add(pins[4]);
-                _rows.Add(pins[5]);
-                _rows.Add(pins[6]);
-                _rows.Add(pins[7]);
+                _rows.Add(_keypadConfiguration.RowPins[0]);
+                _rows.Add(_keypadConfiguration.RowPins[1]);
+                _rows.Add(_keypadConfiguration.RowPins[2]);
+                _rows.Add(_keypadConfiguration.RowPins[3]);
 
                 // Set the rows up for input
                 foreach (var r in _rows)
@@ -148,7 +152,7 @@ namespace GuardRail.DoorClient.Services
             _clearLastPinValueTime = DateTime.UtcNow.AddSeconds(15);
         }
 
-        private void Pin_Changed(int pinNumber, CancellationToken cancellationToken)
+        private void Pin_Changed(int pinNumber)
         {
             var colNumber = -1;
             var rowNumber = -1;
@@ -157,7 +161,7 @@ namespace GuardRail.DoorClient.Services
                 var senderValue = _gpio.Read(pinNumber);
                 if (senderValue.ToString() == _lastPinValue)
                 {
-                    _logger.LogInformation($"{DateTime.Now:hh:mm:ss.ffff} - Skipping duplicate value for pin {pinNumber}!");
+                    // Skipping duplicate value for pin.
                     return;
                 }
 
@@ -172,19 +176,19 @@ namespace GuardRail.DoorClient.Services
                 _clearLastPinValueTime = DateTime.UtcNow.AddMilliseconds(ButtonDebounceMilliseconds);
 
                 // Get the corresponding row index for conversion later
-                if (pinNumber == _keypadConfiguration.Pins[4])
+                if (pinNumber == _keypadConfiguration.RowPins[0])
                 {
                     rowNumber = 0;
                 }
-                else if(pinNumber == _keypadConfiguration.Pins[5])
+                else if(pinNumber == _keypadConfiguration.RowPins[1])
                 {
                     rowNumber = 1;
                 }
-                else if (pinNumber == _keypadConfiguration.Pins[6])
+                else if (pinNumber == _keypadConfiguration.RowPins[2])
                 {
                     rowNumber = 2;
                 }
-                else if (pinNumber == _keypadConfiguration.Pins[7])
+                else if (pinNumber == _keypadConfiguration.RowPins[3])
                 {
                     rowNumber = 3;
                 }
@@ -206,19 +210,19 @@ namespace GuardRail.DoorClient.Services
                 foreach (var c in _cols.Where(c => _gpio.Read(c) == PinValue.High))
                 {
                     // Get the corresponding column index for conversion later
-                    if (c == _keypadConfiguration.Pins[0])
+                    if (c == _keypadConfiguration.ColumnPins[0])
                     {
                         colNumber = 0;
                     }
-                    else if(c == _keypadConfiguration.Pins[1])
+                    else if(c == _keypadConfiguration.ColumnPins[1])
                     {
                         colNumber = 1;
                     }
-                    else if (c == _keypadConfiguration.Pins[2])
+                    else if (c == _keypadConfiguration.ColumnPins[2])
                     {
                         colNumber = 2;
                     }
-                    else if (c == _keypadConfiguration.Pins[3])
+                    else if (c == _keypadConfiguration.ColumnPins[3])
                     {
                         colNumber = 3;
                     }
@@ -230,7 +234,7 @@ namespace GuardRail.DoorClient.Services
                     return;
                 }
                     
-                FoundADigit(_keypad[colNumber, rowNumber], cancellationToken);
+                FoundADigit(_keypad[colNumber, rowNumber]);
             }
             catch (Exception ex)
             {
@@ -243,10 +247,10 @@ namespace GuardRail.DoorClient.Services
         /// </summary>
         /// <param name="key">The key that was pressed.</param>
         /// <param name="cancellationToken"></param>
-        private void FoundADigit(char key, CancellationToken cancellationToken)
+        private void FoundADigit(char key)
         {
             _logger.LogInformation($"Found character {key}");
-            _keypadLogic.OnKeyPressedAsync(key, cancellationToken);
+            _keypadLogic.OnKeyPressedAsync(key);
         }
     }
 }

@@ -6,13 +6,14 @@ using GuardRail.Core.CommandLine;
 using GuardRail.LocalClient.Data;
 using GuardRail.LocalClient.Data.Interfaces;
 using GuardRail.LocalClient.Data.Local;
-using GuardRail.LocalClient.Data.Models;
 using GuardRail.LocalClient.Data.Remote;
 using GuardRail.LocalClient.Implementations;
 using GuardRail.LocalClient.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Account = GuardRail.LocalClient.Data.Models.Account;
 
 namespace GuardRail.LocalClient
 {
@@ -22,9 +23,9 @@ namespace GuardRail.LocalClient
     public partial class App
     {
         /// <summary>
-        /// Service provider for the application.
+        /// Hosting environment for the application.
         /// </summary>
-        public static IServiceProvider ServiceProvider { get; private set; }
+        public static IHost Host;
 
         /// <summary>
         /// Configuration for the application.
@@ -46,12 +47,6 @@ namespace GuardRail.LocalClient
         /// </summary>
         public App()
         {
-            Startup += Application_Startup;
-            Exit += Application_Exit;
-        }
-
-        private async void Application_Startup(object sender, StartupEventArgs e)
-        {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", false, true)
@@ -64,13 +59,18 @@ namespace GuardRail.LocalClient
                 Location = "Here",
                 Name = "Test"
             };
+            Host = new HostBuilder()
+                .ConfigureServices(ConfigureServices)
+                .Build();
+            Startup += Application_Startup;
+            Exit += Application_Exit;
+        }
+
+        private static async void Application_Startup(object sender, StartupEventArgs e)
+        {
+            await Host.StartAsync();
             CancellationTokenSource = new CancellationTokenSource();
-            var serviceCollection = new ServiceCollection();
-            ConfigureServices(serviceCollection);
-            ServiceProvider = serviceCollection.BuildServiceProvider();
-            var dataStore = ServiceProvider.GetRequiredService<IDataStore>();
-            await dataStore.StartAsync(CancellationTokenSource.Token);
-            var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+            var mainWindow = Host.Services.GetRequiredService<MainWindow>();
             await StartupHelper.StartupAsync(
                 CommandLineArguments.Create(e.Args),
                 mainWindow,
@@ -88,12 +88,13 @@ namespace GuardRail.LocalClient
             services.AddSingleton<IDataSink, RemoteDataSink>();
             services.AddSingleton<IDataStore, DataStore>();
             services.AddHostedService<DataStore>();
+            services.AddHostedService<NdsService>();
         }
 
         private static void Application_Exit(object sender, ExitEventArgs e)
         {
             CancellationTokenSource.Cancel();
-            var disposables = ServiceProvider.GetServices<IDisposable>();
+            var disposables = Host.Services.GetServices<IDisposable>();
             foreach (var disposable in disposables)
             {
                 disposable.Dispose();

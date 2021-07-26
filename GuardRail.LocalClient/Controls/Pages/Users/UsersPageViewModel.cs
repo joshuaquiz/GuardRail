@@ -77,7 +77,7 @@ namespace GuardRail.LocalClient.Controls.Pages.Users
                     TimeSpan.FromSeconds(1),
                     async ct =>
                     {
-                        var dataStore = App.ServiceProvider.GetRequiredService<IDataStore>();
+                        var dataStore = App.Host.Services.GetRequiredService<IDataStore>();
                         foreach (var user in await dataStore.GetData<User>(x => x.Account == App.Account, ct))
                         {
                             if (!Users.Contains(user))

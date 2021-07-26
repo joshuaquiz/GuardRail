@@ -11,7 +11,7 @@ namespace GuardRail.DoorClient.Services
 {
     public sealed class LockService : IHostedService
     {
-        private readonly IUdpReceiver _udpReceiver;
+        private readonly IUdpSenderReceiver _udpSenderReceiver;
         private readonly IBuzzerManager _buzzerManager;
         private readonly ILightManager _lightManager;
         private readonly ILogger<LockService> _logger;
@@ -20,12 +20,12 @@ namespace GuardRail.DoorClient.Services
         private Task _listener;
 
         public LockService(
-            IUdpReceiver udpReceiver,
+            IUdpSenderReceiver udpSenderReceiver,
             IBuzzerManager buzzerManager,
             ILightManager lightManager,
             ILogger<LockService> logger)
         {
-            _udpReceiver = udpReceiver;
+            _udpSenderReceiver = udpSenderReceiver;
             _buzzerManager = buzzerManager;
             _lightManager = lightManager;
             _logger = logger;
@@ -40,7 +40,7 @@ namespace GuardRail.DoorClient.Services
                     {
                         while (!cancellationToken.IsCancellationRequested)
                         {
-                            var doorCommand = await _udpReceiver.ReceiveUdpMessage<DoorCommand>(cancellationToken);
+                            var doorCommand = await _udpSenderReceiver.ReceiveUdpMessage<DoorCommand>(cancellationToken);
                             var tasks = new List<Task>();
                             switch (doorCommand.LockedStatus)
                             {
@@ -57,17 +57,17 @@ namespace GuardRail.DoorClient.Services
 
                             if (doorCommand.BuzzerDuration.HasValue)
                             {
-                                tasks.Add(_buzzerManager.Buzz(doorCommand.BuzzerDuration.Value));
+                                tasks.Add(_buzzerManager.BuzzAsync(doorCommand.BuzzerDuration.Value, cancellationToken));
                             }
 
                             if (doorCommand.RedLightDuration.HasValue)
                             {
-                                tasks.Add(_lightManager.TurnOnRedLight(doorCommand.RedLightDuration.Value));
+                                tasks.Add(_lightManager.TurnOnRedLightAsync(doorCommand.RedLightDuration.Value, cancellationToken));
                             }
 
                             if (doorCommand.GreenLightDuration.HasValue)
                             {
-                                tasks.Add(_lightManager.TurnOnGreenLight(doorCommand.GreenLightDuration.Value));
+                                tasks.Add(_lightManager.TurnOnGreenLightAsync(doorCommand.GreenLightDuration.Value, cancellationToken));
                             }
 
                             await Task.WhenAll(tasks);
