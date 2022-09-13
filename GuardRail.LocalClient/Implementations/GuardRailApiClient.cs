@@ -8,28 +8,27 @@ using GuardRail.LocalClient.Data.Models;
 using GuardRail.LocalClient.Data.Remote;
 using GuardRail.LocalClient.Interfaces;
 
-namespace GuardRail.LocalClient.Implementations
+namespace GuardRail.LocalClient.Implementations;
+
+/// <inheritdoc />
+internal sealed class GuardRailApiClient : IGuardRailApiClient
 {
     /// <inheritdoc />
-    internal sealed class GuardRailApiClient : IGuardRailApiClient
+    public Task UploadChangesAsync(IEnumerable<RemoteSinkAction> changes, CancellationToken cancellationToken)
     {
-        /// <inheritdoc />
-        public Task UploadChangesAsync(IEnumerable<RemoteSinkAction> changes, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+        throw new NotImplementedException();
+    }
 
-        /// <inheritdoc />
-        public Task<IQueryable<T>> GetDataFromQuery<T>(Expression<Func<IQueryable<T>>> getExpression, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+    /// <inheritdoc />
+    public Task<IQueryable<T>> GetDataFromQuery<T>(Expression<Func<IQueryable<T>>> getExpression, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 
-        /// <inheritdoc />
-        public Task<Account> CreateNewAccount(string accountName, string location, string firstName, string lastName, string phone,
-            string email)
-        {
-            throw new NotImplementedException();
-        }
+    /// <inheritdoc />
+    public Task<Account> CreateNewAccount(string accountName, string location, string firstName, string lastName, string phone,
+        string email)
+    {
+        throw new NotImplementedException();
     }
 }

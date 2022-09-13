@@ -7,46 +7,45 @@ using GuardRail.Core.DataModels;
 using GuardRail.Core.Helpers;
 using Microsoft.Extensions.Hosting;
 
-namespace GuardRail.LocalClient
+namespace GuardRail.LocalClient;
+
+/// <summary>
+/// Listens for devices on the network.
+/// </summary>
+public sealed class NdsService : IHostedService
 {
+    private readonly CancellationTokenSource _cancellationTokenSource;
+
     /// <summary>
-    /// Listens for devices on the network.
+    /// Creates a new <see cref="NdsService"/>
     /// </summary>
-    public sealed class NdsService : IHostedService
+    public NdsService()
     {
-        private readonly CancellationTokenSource _cancellationTokenSource;
+        _cancellationTokenSource = new CancellationTokenSource();
+    }
 
-        /// <summary>
-        /// Creates a new <see cref="NdsService"/>
-        /// </summary>
-        public NdsService()
-        {
-            _cancellationTokenSource = new CancellationTokenSource();
-        }
-
-        /// <inheritdoc />
-        public Task StartAsync(CancellationToken cancellationToken) =>
-            new TaskFactory()
-                .StartNew(async () =>
+    /// <inheritdoc />
+    public Task StartAsync(CancellationToken cancellationToken) =>
+        new TaskFactory()
+            .StartNew(async () =>
+                {
+                    var server = new UdpClient(18989);
+                    while (!_cancellationTokenSource.Token.IsCancellationRequested)
                     {
-                        var server = new UdpClient(18989);
-                        while (!_cancellationTokenSource.Token.IsCancellationRequested)
+                        var clientRequestData = await server.ReceiveAsync();
+                        var ping = Encoding.UTF8.GetString(clientRequestData.Buffer).FromJson<NdsPing>();
+                        if (ping?.RequestId != Guid.Empty)
                         {
-                            var clientRequestData = await server.ReceiveAsync();
-                            var ping = Encoding.UTF8.GetString(clientRequestData.Buffer).FromJson<NdsPing>();
-                            if (ping?.RequestId != Guid.Empty)
-                            {
-                                await server.SendAsync(clientRequestData.Buffer, clientRequestData.Buffer.Length, clientRequestData.RemoteEndPoint);
-                            }
+                            await server.SendAsync(clientRequestData.Buffer, clientRequestData.Buffer.Length, clientRequestData.RemoteEndPoint);
                         }
-                    },
-                    _cancellationTokenSource.Token);
+                    }
+                },
+                _cancellationTokenSource.Token);
 
-        /// <inheritdoc />
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            _cancellationTokenSource.Cancel();
-            return Task.CompletedTask;
-        }
+    /// <inheritdoc />
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        _cancellationTokenSource.Cancel();
+        return Task.CompletedTask;
     }
 }

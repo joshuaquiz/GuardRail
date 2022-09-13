@@ -1,9 +1,8 @@
-﻿namespace GuardRail.DoorClient.Configuration
-{
-    public sealed class LightConfiguration
-    {
-        public int RedPin { get; set; }
+﻿namespace GuardRail.DoorClient.Configuration;
 
-        public int GreenPin { get; set; }
-    }
+public sealed class LightConfiguration
+{
+    public int RedPin { get; set; }
+
+    public int GreenPin { get; set; }
 }

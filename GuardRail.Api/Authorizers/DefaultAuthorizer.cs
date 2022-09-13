@@ -3,45 +3,44 @@ using System.Threading.Tasks;
 using GuardRail.Core;
 using GuardRail.Core.DataModels;
 
-namespace GuardRail.Api.Authorizers
+namespace GuardRail.Api.Authorizers;
+
+/// <summary>
+/// Everyone gets in all the time!
+/// </summary>
+public sealed class DefaultAuthorizer : IAuthorizer
 {
-    /// <summary>
-    /// Everyone gets in all the time!
-    /// </summary>
-    public sealed class DefaultAuthorizer : IAuthorizer
+    private readonly GuardRailLogger _guardRailLogger;
+
+    public DefaultAuthorizer(
+        GuardRailLogger guardRailLogger)
     {
-        private readonly GuardRailLogger _guardRailLogger;
+        _guardRailLogger = guardRailLogger;
+    }
 
-        public DefaultAuthorizer(
-            GuardRailLogger guardRailLogger)
+    /// <summary>
+    /// Is device allowed? Yes!
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="accessControlDevice"></param>
+    /// <returns></returns>
+    public async Task<bool> IsDeviceAuthorizedAtLocation(
+        User user,
+        IAccessControlDevice accessControlDevice)
+    {
+        if (user == null)
         {
-            _guardRailLogger = guardRailLogger;
+            throw new ArgumentNullException(
+                nameof(user));
         }
 
-        /// <summary>
-        /// Is device allowed? Yes!
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="accessControlDevice"></param>
-        /// <returns></returns>
-        public async Task<bool> IsDeviceAuthorizedAtLocation(
-            User user,
-            IAccessControlDevice accessControlDevice)
+        if (accessControlDevice == null)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException(
-                    nameof(user));
-            }
-
-            if (accessControlDevice == null)
-            {
-                throw new ArgumentNullException(
-                    nameof(accessControlDevice));
-            }
-
-            await _guardRailLogger.LogAsync($"User {user.FirstName} {user.LastName} is granted access using {accessControlDevice.GetDeviceId()}");
-            return true;
+            throw new ArgumentNullException(
+                nameof(accessControlDevice));
         }
+
+        await _guardRailLogger.LogAsync($"User {user.FirstName} {user.LastName} is granted access using {accessControlDevice.GetDeviceId()}");
+        return true;
     }
 }

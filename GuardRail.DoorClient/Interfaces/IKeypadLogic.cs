@@ -1,9 +1,8 @@
 using System.Threading.Tasks;
 
-namespace GuardRail.DoorClient.Interfaces
+namespace GuardRail.DoorClient.Interfaces;
+
+public interface IKeypadLogic
 {
-    public interface IKeypadLogic
-    {
-        Task OnKeyPressedAsync(char key);
-    }
+    Task OnKeyPressedAsync(char key);
 }

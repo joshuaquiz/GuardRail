@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using GuardRail.Core.CommandLine;
 
 namespace GuardRail.Core
 {

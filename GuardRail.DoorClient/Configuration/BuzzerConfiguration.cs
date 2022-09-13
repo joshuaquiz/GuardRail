@@ -1,7 +1,6 @@
-﻿namespace GuardRail.DoorClient.Configuration
+﻿namespace GuardRail.DoorClient.Configuration;
+
+public sealed class BuzzerConfiguration
 {
-    public sealed class BuzzerConfiguration
-    {
-        public int Pin { get; set; }
-    }
+    public int Pin { get; set; }
 }

@@ -2,10 +2,9 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace GuardRail.DoorClient.Interfaces
+namespace GuardRail.DoorClient.Interfaces;
+
+public interface IBuzzerManager
 {
-    public interface IBuzzerManager
-    {
-        Task BuzzAsync(TimeSpan duration, CancellationToken cancellationToken);
-    }
+    Task BuzzAsync(TimeSpan duration, CancellationToken cancellationToken);
 }

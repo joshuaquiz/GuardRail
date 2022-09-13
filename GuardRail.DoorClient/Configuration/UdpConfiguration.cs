@@ -1,7 +1,6 @@
-﻿namespace GuardRail.DoorClient.Configuration
+﻿namespace GuardRail.DoorClient.Configuration;
+
+public sealed class UdpConfiguration
 {
-    public sealed class UdpConfiguration
-    {
-        public int Port { get; set; }
-    }
+    public int Port { get; set; }
 }

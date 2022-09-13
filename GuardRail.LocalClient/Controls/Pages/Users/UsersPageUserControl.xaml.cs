@@ -8,120 +8,119 @@ using GuardRail.LocalClient.Data.Interfaces;
 using GuardRail.LocalClient.Data.Models;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace GuardRail.LocalClient.Controls.Pages.Users
+namespace GuardRail.LocalClient.Controls.Pages.Users;
+
+/// <summary>
+/// Interaction logic for UsersUserControl.xaml
+/// </summary>
+public partial class UsersPageUserControl
 {
+    /// <summary>
+    /// The viewModel.
+    /// </summary>
+    public UsersPageViewModel ViewModel;
+
     /// <summary>
     /// Interaction logic for UsersUserControl.xaml
     /// </summary>
-    public partial class UsersPageUserControl
+    public UsersPageUserControl()
     {
-        /// <summary>
-        /// The viewModel.
-        /// </summary>
-        public UsersPageViewModel ViewModel;
+        InitializeComponent();
+        ViewModel = (UsersPageViewModel)DataContext;
+        var view = (CollectionView)CollectionViewSource.GetDefaultView(UsersDisplay.ItemsSource);
+        view.Filter = UserSearchFilter;
+    }
 
-        /// <summary>
-        /// Interaction logic for UsersUserControl.xaml
-        /// </summary>
-        public UsersPageUserControl()
+    private bool UserSearchFilter(object obj)
+    {
+        if (string.IsNullOrEmpty(SearchBox.Text))
         {
-            InitializeComponent();
-            ViewModel = (UsersPageViewModel)DataContext;
-            var view = (CollectionView)CollectionViewSource.GetDefaultView(UsersDisplay.ItemsSource);
-            view.Filter = UserSearchFilter;
+            return true;
         }
 
-        private bool UserSearchFilter(object obj)
+        if (obj is User user)
         {
-            if (string.IsNullOrEmpty(SearchBox.Text))
-            {
-                return true;
-            }
-
-            if (obj is User user)
-            {
-                return user.GetSearchString().Contains(SearchBox.Text, StringComparison.OrdinalIgnoreCase);
-            }
-
-            throw new InvalidCastException("An item in the list was not the correct data type.");
+            return user.GetSearchString().Contains(SearchBox.Text, StringComparison.OrdinalIgnoreCase);
         }
 
-        private void SearchBox_OnTextChanged_TextChanged(object sender, TextChangedEventArgs e) =>
-            CollectionViewSource.GetDefaultView(UsersDisplay.ItemsSource).Refresh();
+        throw new InvalidCastException("An item in the list was not the correct data type.");
+    }
 
-        private void AddNewButton_OnClick(object sender, RoutedEventArgs e)
+    private void SearchBox_OnTextChanged_TextChanged(object sender, TextChangedEventArgs e) =>
+        CollectionViewSource.GetDefaultView(UsersDisplay.ItemsSource).Refresh();
+
+    private void AddNewButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        ViewModel.EditingUser = new User
         {
-            ViewModel.EditingUser = new User
-            {
-                Account = App.Account
-            };
-            EditViewLabel.Content = "Add new user";
-            EditGrid.Visibility = Visibility.Visible;
-            UpdateLayout();
+            Account = App.Account
+        };
+        EditViewLabel.Content = "Add new user";
+        EditGrid.Visibility = Visibility.Visible;
+        UpdateLayout();
+    }
+
+    private void SaveButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        if (FirstNameTextBox.Text.IsNullOrWhiteSpace()
+            || LastNameTextBox.Text.IsNullOrWhiteSpace()
+            || PhoneTextBox.HasValidationError
+            || EmailTextBox.HasValidationError)
+        {
+            MessageBox.Show(
+                App.Host.Services.GetRequiredService<MainWindow>(),
+                "The user must have a first and last name as well as an email and phone number.",
+                "Validation error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error,
+                MessageBoxResult.OK);
+            return;
         }
-
-        private void SaveButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            if (FirstNameTextBox.Text.IsNullOrWhiteSpace()
-                || LastNameTextBox.Text.IsNullOrWhiteSpace()
-                || PhoneTextBox.HasValidationError
-                || EmailTextBox.HasValidationError)
-            {
-                MessageBox.Show(
-                    App.Host.Services.GetRequiredService<MainWindow>(),
-                    "The user must have a first and last name as well as an email and phone number.",
-                    "Validation error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error,
-                    MessageBoxResult.OK);
-                return;
-            }
             
-            var dataStore = App.Host.Services.GetRequiredService<IDataStore>();
-            if (ViewModel.EditingUser.Id > 0)
-            {
-                dataStore.UpdateExisting(ViewModel.EditingUser, App.CancellationTokenSource.Token);
-            }
-            else
-            {
-                dataStore.SaveNew(ViewModel.EditingUser, App.CancellationTokenSource.Token);
-            }
-
-            EditGrid.Visibility = Visibility.Collapsed;
-            UpdateLayout();
-        }
-
-        private void EditButton_OnClick(object sender, RoutedEventArgs e)
+        var dataStore = App.Host.Services.GetRequiredService<IDataStore>();
+        if (ViewModel.EditingUser.Id > 0)
         {
-            ViewModel.EditingUser = (sender as Button)?.Tag as User;
-            EditViewLabel.Content = "Edit user";
-
-            EditGrid.Visibility = Visibility.Visible;
-            UpdateLayout();
+            dataStore.UpdateExisting(ViewModel.EditingUser, App.CancellationTokenSource.Token);
         }
-
-        private void DeleteViewButton_OnClick(object sender, RoutedEventArgs e)
+        else
         {
-            DeleteView.Visibility = Visibility.Collapsed;
-            UpdateLayout();
+            dataStore.SaveNew(ViewModel.EditingUser, App.CancellationTokenSource.Token);
         }
 
-        private void YesDeleteButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            var dataStore = App.Host.Services.GetRequiredService<IDataStore>();
-            dataStore.DeleteExisting(ViewModel.EditingUser, App.CancellationTokenSource.Token);
-        }
+        EditGrid.Visibility = Visibility.Collapsed;
+        UpdateLayout();
+    }
 
-        private void DeleteButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            ViewModel.EditingUser = (sender as Button)?.Tag as User;
-            DeleteNameLabel.Content = ViewModel.EditingUser?.FirstName + " " + ViewModel.EditingUser?.LastName;
-            DeleteView.Visibility = Visibility.Visible;
-            UpdateLayout();
-        }
+    private void EditButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        ViewModel.EditingUser = (sender as Button)?.Tag as User;
+        EditViewLabel.Content = "Edit user";
 
-        private void DoNothingPanel_OnClick(object sender, MouseButtonEventArgs e)
-        {
-        }
+        EditGrid.Visibility = Visibility.Visible;
+        UpdateLayout();
+    }
+
+    private void DeleteViewButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        DeleteView.Visibility = Visibility.Collapsed;
+        UpdateLayout();
+    }
+
+    private void YesDeleteButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        var dataStore = App.Host.Services.GetRequiredService<IDataStore>();
+        dataStore.DeleteExisting(ViewModel.EditingUser, App.CancellationTokenSource.Token);
+    }
+
+    private void DeleteButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        ViewModel.EditingUser = (sender as Button)?.Tag as User;
+        DeleteNameLabel.Content = ViewModel.EditingUser?.FirstName + " " + ViewModel.EditingUser?.LastName;
+        DeleteView.Visibility = Visibility.Visible;
+        UpdateLayout();
+    }
+
+    private void DoNothingPanel_OnClick(object sender, MouseButtonEventArgs e)
+    {
     }
 }
