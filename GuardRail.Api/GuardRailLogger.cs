@@ -37,7 +37,7 @@ public sealed class GuardRailLogger
 
     public async Task LogErrorAsync(Exception exception)
     {
-        _logger.Error(exception, exception?.Message);
+        _logger.Error(exception, exception?.Message ?? string.Empty);
         await _guardRailContext.Logs.AddAsync(
             new Log
             {

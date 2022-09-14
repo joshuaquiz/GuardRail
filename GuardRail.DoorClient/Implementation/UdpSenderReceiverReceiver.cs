@@ -31,7 +31,7 @@ public sealed class UdpSenderReceiverReceiver : IUdpSenderReceiver
             async () =>
             {
                 var client = await _udpClient.GetUdpClient(cancellationToken);
-                var data = Encoding.UTF8.GetBytes(message.ToJson());
+                var data = Encoding.UTF8.GetBytes(typeof(T).Name + ":~:" + message.ToJson());
                 await client.SendAsync(data, data.Length);
             });
 
@@ -40,7 +40,7 @@ public sealed class UdpSenderReceiverReceiver : IUdpSenderReceiver
             async () =>
             {
                 var client = await _udpClient.GetUdpClient(cancellationToken);
-                var data = await client.ReceiveAsync();
+                var data = await client.ReceiveAsync(cancellationToken);
                 return Encoding.UTF8.GetString(data.Buffer).FromJson<T>();
             });
 }

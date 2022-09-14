@@ -49,8 +49,8 @@ public sealed class Startup
         services.AddSingleton<IDoorResolver, DoorResolver>();
         services.AddAuthentication("BasicAuthentication")
             .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
-        services.AddSingleton<GuardRailHub, GuardRailHub>();
-        services.AddSingleton<GuardRailLogger, GuardRailLogger>();
+        services.AddSingleton<GuardRailHub>();
+        services.AddSingleton<GuardRailLogger>();
         RegisterAllImplementations(services, typeof(IDoorFactory));
         RegisterAllImplementations(services, typeof(IAccessControlFactory));
         services.AddHostedService<CoordinatorService>();

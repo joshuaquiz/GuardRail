@@ -55,7 +55,7 @@ public class Startup
             .AddSingleton<IKeypadLogic, KeypadLogic>()
             .AddSingleton<IUdpWrapper, UdpWrapper>()
             .AddHostedService<ButtonListenerService>()
-            .AddHostedService<NdsService>()
+            .AddHostedService<NetworkConnectionCheckingService>()
             .AddHostedService<LockService>();
     }
 

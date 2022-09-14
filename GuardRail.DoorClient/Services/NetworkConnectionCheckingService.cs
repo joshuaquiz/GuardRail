@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace GuardRail.DoorClient.Services;
 
-public sealed class NdsService : IHostedService
+public sealed class NetworkConnectionCheckingService : IHostedService
 {
     private readonly ILightManager _lightManager;
     private readonly IUdpWrapper _udpWrapper;
@@ -24,7 +24,7 @@ public sealed class NdsService : IHostedService
     private bool _connected;
     private Task _listener;
 
-    public NdsService(
+    public NetworkConnectionCheckingService(
         ILightManager lightManager,
         IUdpWrapper udpWrapper,
         UdpConfiguration udpConfiguration,
@@ -55,7 +55,7 @@ public sealed class NdsService : IHostedService
                             Task.Run(
                                 async () =>
                                 {
-                                    _logger.LogDebug("Trying to send ping.");
+                                    LogDebug("Trying to send ping.");
                                     using var udpClient = new UdpClient
                                     {
                                         EnableBroadcast = true
@@ -68,10 +68,10 @@ public sealed class NdsService : IHostedService
                                     serverResponseData = await udpClient.ReceiveAsync(cancellationToken);
                                 },
                                 _cancellationTokenSource.Token));
-                        _logger.LogDebug("Ping or timer finished.");
+                        LogDebug("Ping or timer finished.");
                         if (serverResponseData == default)
                         {
-                            _logger.LogDebug("Disconnected!");
+                            LogDebug("Disconnected!");
                             _udpWrapper.SetUdpClient(null);
                             _connected = false;
                             await NotifyDisconnected();
@@ -82,12 +82,12 @@ public sealed class NdsService : IHostedService
                             var serverResponse = serverResponseString.FromJson<NdsPing>();
                             if (ping.RequestId == serverResponse?.RequestId && _connected)
                             {
-                                _logger.LogDebug("Still Connected");
+                                LogDebug("Still Connected");
                             }
                             else if (ping.RequestId == serverResponse?.RequestId && !_connected)
                             {
-                                _logger.LogDebug("Successfully pinged!");
-                                _logger.LogDebug($"Remote host: {serverResponseData.RemoteEndPoint.Address}:{serverResponseData.RemoteEndPoint.Port}");
+                                LogDebug("Successfully pinged!");
+                                LogDebug($"Remote host: {serverResponseData.RemoteEndPoint.Address}:{serverResponseData.RemoteEndPoint.Port}");
                                 try
                                 {
                                     var client = new UdpClient();
@@ -100,13 +100,13 @@ public sealed class NdsService : IHostedService
                                     throw;
                                 }
 
-                                _logger.LogDebug("Setup UdpClient!");
+                                LogDebug("Setup UdpClient!");
                                 _connected = true;
                                 await NotifySuccessfullyConnected();
                             }
                             else
                             {
-                                _logger.LogDebug($"Unknown value... {serverResponseString}");
+                                LogDebug($"Unknown value... {serverResponseString}");
                             }
                         }
 
@@ -139,4 +139,7 @@ public sealed class NdsService : IHostedService
         await Task.Delay(TimeSpan.FromMilliseconds(200), _cancellationTokenSource.Token);
         await _lightManager.TurnOnRedLightAsync(TimeSpan.FromMilliseconds(500), _cancellationTokenSource.Token);
     }
+
+    private void LogDebug(string message) =>
+        _logger.LogDebug("[nds service] " + message);
 }
