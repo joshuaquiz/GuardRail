@@ -2,59 +2,50 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using GuardRail.Core;
+using GuardRail.Core.Enums;
 using Microsoft.EntityFrameworkCore;
 
-namespace GuardRail.Api.Data
+namespace GuardRail.Api.Data;
+
+public class Door : Core.DataModels.Door
 {
-    public sealed class Door : IDoor
+    public Guid Id { get; set; }
+
+    public AccessControlDevice AccessControlDevice { get; set; }
+
+    public List<DoorUserAccess> DoorUserAccesses { get; set; }
+
+    public static void OnModelCreating(ModelBuilder builder)
     {
-        public Guid Id { get; set; }
+        builder
+            ?.Entity<Door>()
+            ?.HasKey(b => b.Id);
+        builder
+            ?.Entity<Door>()
+            ?.HasIndex(b => b.DeviceId);
+        builder
+            ?.Entity<Door>()
+            ?.HasOne<AccessControlDevice>();
+        builder
+            ?.Entity<Door>()
+            ?.HasMany<DoorUserAccess>();
+    }
 
-        public string DeviceId { get; set; }
+    public Task<string> GetDeviceId() =>
+        Task.FromResult(DeviceId);
 
-        public string FriendlyName { get; set; }
+    public Task<LockedStatus> GetLockedStatus(CancellationToken cancellationToken) =>
+        Task.FromResult(LockedStatus);
 
-        public LockedStatus LockedStatus { get; set; }
+    public Task LockAsync(CancellationToken cancellationToken)
+    {
+        LockedStatus = LockedStatus.Locked;
+        return Task.CompletedTask;
+    }
 
-        public bool IsConfigured { get; set; }
-
-        public AccessControlDevice AccessControlDevice { get; set; }
-
-        public List<DoorUserAccess> DoorUserAccesses { get; set; }
-
-        public static void OnModelCreating(ModelBuilder builder)
-        {
-            builder
-                ?.Entity<Door>()
-                ?.HasKey(b => b.Id);
-            builder
-                ?.Entity<Door>()
-                ?.HasIndex(b => b.DeviceId);
-            builder
-                ?.Entity<Door>()
-                ?.HasOne<AccessControlDevice>();
-            builder
-                ?.Entity<Door>()
-                ?.HasMany<DoorUserAccess>();
-        }
-
-        public Task<string> GetDeviceId() =>
-            Task.FromResult(DeviceId);
-
-        public Task<LockedStatus> GetLockedStatus(CancellationToken cancellationToken) =>
-            Task.FromResult(LockedStatus);
-
-        public Task LockAsync(CancellationToken cancellationToken)
-        {
-            LockedStatus = LockedStatus.Locked;
-            return Task.CompletedTask;
-        }
-
-        public Task UnLockAsync(CancellationToken cancellationToken)
-        {
-            LockedStatus = LockedStatus.UnLocked;
-            return Task.CompletedTask;
-        }
+    public Task UnLockAsync(CancellationToken cancellationToken)
+    {
+        LockedStatus = LockedStatus.UnLocked;
+        return Task.CompletedTask;
     }
 }

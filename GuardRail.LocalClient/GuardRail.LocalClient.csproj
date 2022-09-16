@@ -1,0 +1,157 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+	<StartWorkingDirectory>$(MSBuildProjectDirectory)</StartWorkingDirectory>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>GuardRail</AssemblyName>
+    <StartupObject>GuardRail.LocalClient.App</StartupObject>
+    <ApplicationIcon>logo_icon.ico</ApplicationIcon>
+    <Authors>Joshua Galloway</Authors>
+    <Company>G3 Software</Company>
+    <Description>GuardRail access control system.</Description>
+    <PackageProjectUrl>https://github.com/joshuaquiz/GuardRail</PackageProjectUrl>
+    <PackageIcon>logo_icon.png</PackageIcon>
+    <RepositoryType>GitHub</RepositoryType>
+    <RepositoryUrl>https://github.com/joshuaquiz/GuardRail</RepositoryUrl>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <AssemblyVersion>0.0.0.1</AssemblyVersion>
+    <FileVersion>0.0.0.1</FileVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DocumentationFile>GuardRail.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="Assets\logo.png" />
+    <None Include="Assets\logo_icon.ico" />
+    <None Include="Assets\logo_icon.png" />
+    <None Remove="Assets\teko-bold.ttf" />
+    <None Remove="Assets\teko-light.ttf" />
+    <None Remove="Assets\teko-medium.ttf" />
+    <None Remove="Assets\teko-regular.ttf" />
+    <None Remove="Assets\teko-semibold.ttf" />
+    <None Remove="LocalDataStore.db-shm" />
+    <None Remove="logo_icon.ico" />
+    <None Remove="logo_icon.png" />
+    <None Remove="Resources\paper-and-pencil.png" />
+    <None Remove="Resources\plus.png" />
+    <None Remove="Resources\x.png" />
+    <None Include="Assets\logo_icon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.9">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.9">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GuardRail.EventBus\GuardRail.EventBus.csproj" />
+    <ProjectReference Include="..\GuardRail.LocalUpdater\GuardRail.LocalUpdater.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\logo.png" />
+    <Resource Include="Assets\logo_icon.ico" />
+    <Resource Include="Assets\logo_icon.png">
+      <PackagePath></PackagePath>
+      <Pack>True</Pack>
+    </Resource>
+    <Resource Include="Assets\teko-bold.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Resource>
+    <Resource Include="Assets\teko-light.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Resource>
+    <Resource Include="Assets\teko-medium.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Resource>
+    <Resource Include="Assets\teko-regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Resource>
+    <Resource Include="Assets\teko-semibold.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Resource>
+    <Resource Include="logo_icon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="logo_icon.png" />
+    <Resource Include="Resources\paper-and-pencil.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\plus.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Controls\ValidatedEmailInput - Copy.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>ValidatedEmailInput.xaml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Controls\ValidatedEmailInput.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Controls\ValidatedPhoneInput - Copy - Copy.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>ValidatedPhoneInput - Copy.xaml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Controls\ValidatedPhoneInput - Copy.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>ValidatedPhoneInput.xaml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Controls\ValidatedEmailInput - Copy.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\ValidatedEmailInput.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+</Project>

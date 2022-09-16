@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "GuardRail.LocalClient": {
+      "commandName": "Project"
+    }
+  }
+}

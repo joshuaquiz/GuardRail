@@ -1,37 +1,25 @@
 ﻿using System;
-using GuardRail.Core;
+using GuardRail.Core.DataModels;
 
-namespace GuardRail.Api.Devices
+namespace GuardRail.Api.Devices;
+
+/// <inheritdoc />
+public sealed class LoggerDevice : Device
 {
-    /// <summary>
-    /// Logs stuff, that's it.
-    /// </summary>
-    public sealed class LoggerDevice : IDevice
-    {
-        private Guid _id = Guid.NewGuid();
-
-        /// <summary>
-        /// THe ID of the device.
-        /// </summary>
-        public string DeviceId =>
-            _id.ToString();
-
-        /// <summary>
-        /// A friendly name for the device.
-        /// </summary>
-        public string FriendlyName =>
-            "default testing device";
-
-        /// <summary>
-        /// The bytes used to identify a device.
-        /// </summary>
-        public byte[] ByteId =>
-            new byte[]
-            {
-                0,
-                1,
-                2,
-                3
-            };
-    }
+    private Guid _id = Guid.NewGuid();
+        
+    public new string DeviceId =>
+        _id.ToString();
+        
+    public new string FriendlyName =>
+        "default testing device";
+        
+    public new byte[] ByteId =>
+        new byte[]
+        {
+            0,
+            1,
+            2,
+            3
+        };
 }

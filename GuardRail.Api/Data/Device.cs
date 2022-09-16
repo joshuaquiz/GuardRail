@@ -1,37 +1,26 @@
-﻿using System;
-using GuardRail.Core;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace GuardRail.Api.Data
+namespace GuardRail.Api.Data;
+
+public sealed class Device : Core.DataModels.Device
 {
-    public sealed class Device : IDevice
+    public int Id { get; set; }
+
+    public User User { get; set; }
+
+    public static void OnModelCreating(ModelBuilder builder)
     {
-        public Guid Id { get; set; }
-
-        public string DeviceId { get; set; }
-
-        public string FriendlyName { get; set; }
-
-        public byte[] ByteId { get; set; }
-
-        public bool IsConfigured { get; set; }
-
-        public User User { get; set; }
-
-        public static void OnModelCreating(ModelBuilder builder)
-        {
-            builder
-                ?.Entity<Device>()
-                ?.HasKey(b => b.Id);
-            builder
-                ?.Entity<Device>()
-                ?.HasIndex(b => b.DeviceId);
-            builder
-                ?.Entity<Device>()
-                ?.HasIndex(b => b.ByteId);
-            builder
-                ?.Entity<Device>()
-                ?.HasOne<User>();
-        }
+        builder
+            ?.Entity<Device>()
+            ?.HasKey(b => b.Id);
+        builder
+            ?.Entity<Device>()
+            ?.HasIndex(b => b.DeviceId);
+        builder
+            ?.Entity<Device>()
+            ?.HasIndex(b => b.ByteId);
+        builder
+            ?.Entity<Device>()
+            ?.HasOne<User>();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using GuardRail.Core.DataModels;
 
 namespace GuardRail.Core
 {
@@ -14,7 +15,7 @@ namespace GuardRail.Core
         /// <param name="accessControlDevice"></param>
         /// <returns></returns>
         Task<bool> IsDeviceAuthorizedAtLocation(
-            IUser user,
+            User user,
             IAccessControlDevice accessControlDevice);
     }
 }

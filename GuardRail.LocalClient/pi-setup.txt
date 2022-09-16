@@ -1,0 +1,58 @@
+sudo apt-get update
+sudo apt-get upgrade
+
+wget https://download.visualstudio.microsoft.com/download/pr/f456f253-db24-45ea-9c73-f507f93a8cd2/6efe7bed8639344d9c9afb8a46686c99/dotnet-sdk-5.0.302-linux-arm.tar.gz
+wget https://download.visualstudio.microsoft.com/download/pr/7e928c60-5f60-4c62-8439-422be547605c/0d1dc316cf38efdb2557f639ca9da4ad/aspnetcore-runtime-5.0.8-linux-arm.tar.gz
+
+mkdir dotnet
+
+tar zxf dotnet-sdk-3.1.102-linux-arm.tar.gz -C $HOME/dotnet
+tar zxf aspnetcore-runtime-3.1.2-linux-arm.tar.gz -C $HOME/dotnet
+
+echo "# set .NET Core SDK and Runtime path" >> .profile
+echo "export DOTNET_ROOT=$HOME/dotnet" >> .profile
+echo "export PATH=$PATH:$HOME/dotnet" >> .profile
+command >> .profile
+date >> .profile
+
+sudo apt-get install nginx
+rm -f /etc/nginx/sites-available/default
+echo "server {
+    listen        80 default_server;
+    server_name   _;
+    location / {
+        proxy_pass         http://localhost:5000;
+        proxy_http_version 1.1;
+        proxy_set_header   Upgrade $http_upgrade;
+        proxy_set_header   Connection keep-alive;
+        proxy_set_header   Host $host;
+        proxy_cache_bypass $http_upgrade;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+    }
+}" >> /etc/nginx/sites-available/default
+sudo /etc/init.d/nginx start
+sudo nginx -t
+sudo nginx -s reload
+
+sudo echo "[Unit]
+Description=ASP.NET Core 3.0 App - Empower
+
+[Service]
+WorkingDirectory=/home/pi/dotnet-playground/empower/portable-fdd
+ExecStart=/home/pi/dotnet/dotnet /home/pi/dotnet-playground/empower/portable-fdd/Empower.dll
+Restart=always
+# Restart service after 10 seconds if the dotnet service crashes:
+RestartSec=10
+KillSignal=SIGINT
+SyslogIdentifier=dotnet-empower
+User=pi
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
+
+[Install]
+WantedBy=multi-user.target" >> /etc/systemd/system/kestrel-empowerapp.service
+
+sudo systemctl enable kestrel-empowerapp.service
+sudo systemctl start kestrel-empowerapp.service
+sudo systemctl status kestrel-empowerapp.service

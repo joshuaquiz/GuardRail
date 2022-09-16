@@ -1,0 +1,927 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GuardRail</name>
+    </assembly>
+    <members>
+        <member name="T:GuardRail.LocalClient.App">
+            <summary>
+            Interaction logic for App.xaml
+            </summary>
+            <summary>
+            App
+            </summary>
+        </member>
+        <member name="F:GuardRail.LocalClient.App.Host">
+            <summary>
+            Hosting environment for the application.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.App.Configuration">
+            <summary>
+            Configuration for the application.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.App.CancellationTokenSource">
+            <summary>
+            The CancellationTokenSource for the application.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.App.Account">
+            <summary>
+            The account for this installation. 
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.App.#ctor">
+            <summary>
+            Initial app startup configuration.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.App.Main">
+            <summary>
+            Application Entry Point.
+            </summary>
+        </member>
+        <member name="T:GuardRail.LocalClient.Controls.MenuItemControl">
+            <summary>
+            A menu item for the UI.
+            </summary>
+        </member>
+        <member name="E:GuardRail.LocalClient.Controls.MenuItemControl.PropertyChanged">
+            <summary>
+            PropertyChanged event.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Controls.MenuItemControl.Icon">
+            <summary>
+            The icon of the menu item.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Controls.MenuItemControl.Title">
+            <summary>
+            The title of the menu item.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Controls.MenuItemControl.#ctor">
+            <summary>
+            A menu item for the UI.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Controls.MenuItemControl.SetActive">
+            <summary>
+            Enable the active indicator.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Controls.MenuItemControl.SetNotActive">
+            <summary>
+            Disable the active indicator.
+            </summary>
+        </member>
+        <member name="T:GuardRail.LocalClient.Controls.Pages.Home.HomePageLogItem">
+            <summary>
+            A log item in the home page UI.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Controls.Pages.Home.HomePageLogItem.TimeStamp">
+            <summary>
+            The timestamp of the log.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Controls.Pages.Home.HomePageLogItem.Log">
+            <summary>
+            The log itself.
+            </summary>
+        </member>
+        <member name="T:GuardRail.LocalClient.Controls.Pages.Home.HomePageUserControl">
+            <summary>
+            Interaction logic for HomePageUserControl.xaml
+            </summary>
+            <summary>
+            HomePageUserControl
+            </summary>
+        </member>
+        <member name="F:GuardRail.LocalClient.Controls.Pages.Home.HomePageUserControl.ViewModel">
+            <summary>
+            The viewModel.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Controls.Pages.Home.HomePageUserControl.#ctor">
+            <summary>
+            Interaction logic for HomePageUserControl.xaml
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Controls.Pages.Home.HomePageUserControl.AddLogAsync(System.DateTime,System.String)">
+            <summary>
+            Add a log to the display.
+            </summary>
+            <param name="timeStamp">When the log happened.</param>
+            <param name="log">The log itself.</param>
+        </member>
+        <member name="M:GuardRail.LocalClient.Controls.Pages.Home.HomePageUserControl.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GuardRail.LocalClient.Controls.Pages.Home.HomePageViewModel">
+            <summary>
+            View model for the home page user control.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Controls.Pages.Home.HomePageViewModel.Logs">
+            <summary>
+            For viewing logs in the application.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Controls.Pages.Home.HomePageViewModel.AddLog(System.DateTime,System.String)">
+            <summary>
+            Add a log to the display.
+            </summary>
+            <param name="timeStamp">When the log happened.</param>
+            <param name="log">The log itself.</param>
+        </member>
+        <member name="T:GuardRail.LocalClient.Controls.Pages.Users.UsersPageUserControl">
+            <summary>
+            Interaction logic for UsersUserControl.xaml
+            </summary>
+            <summary>
+            UsersPageUserControl
+            </summary>
+        </member>
+        <member name="F:GuardRail.LocalClient.Controls.Pages.Users.UsersPageUserControl.ViewModel">
+            <summary>
+            The viewModel.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Controls.Pages.Users.UsersPageUserControl.#ctor">
+            <summary>
+            Interaction logic for UsersUserControl.xaml
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Controls.Pages.Users.UsersPageUserControl.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GuardRail.LocalClient.Controls.Pages.Users.UsersPageViewModel">
+            <summary>
+            View model for the users page user control.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Controls.Pages.Users.UsersPageViewModel.Users">
+            <summary>
+            For viewing users in the application.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Controls.Pages.Users.UsersPageViewModel.EditingUser">
+            <summary>
+            The user being edited.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Controls.Pages.Users.UsersPageViewModel.#ctor">
+            <summary>
+            View model for the users page user control.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Controls.Pages.Users.UsersPageViewModel.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="T:GuardRail.LocalClient.Controls.Setup.SetupUserControl">
+            <summary>
+            Interaction logic for SetupUserControl.xaml
+            </summary>
+            <summary>
+            SetupUserControl
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Controls.Setup.SetupUserControl.#ctor">
+            <summary>
+            Interaction logic for SetupUserControl.xaml
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Controls.Setup.SetupUserControl.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GuardRail.LocalClient.Controls.ValidatedEmailTextBox">
+            <summary>
+            A custom TextBox that validates for emails.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Controls.ValidatedEmailTextBox.#ctor">
+            <summary>
+            A custom TextBox that validates for emails.
+            </summary>
+        </member>
+        <member name="T:GuardRail.LocalClient.Controls.ValidatedPhoneTextBox">
+            <summary>
+            A custom TextBox that validates for phones.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Controls.ValidatedPhoneTextBox.#ctor">
+            <summary>
+            A custom TextBox that validates for phones.
+            </summary>
+        </member>
+        <member name="T:GuardRail.LocalClient.Controls.ValidatedTextBox">
+            <summary>
+            A custom TextBox that validates its contents.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Controls.ValidatedTextBox.HasValidationError">
+            <summary>
+            Whether or not the TextBox has a valid value.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Controls.ValidatedTextBox.#ctor(System.Func{System.String,System.Threading.CancellationToken,System.Threading.Tasks.Task{System.Boolean}})">
+            <summary>
+            A custom TextBox that validates its contents.
+            </summary>
+            <param name="validate">The function to validate the contents of the TextBox.</param>
+        </member>
+        <member name="T:GuardRail.LocalClient.Data.DataStore">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.DataStore.#ctor(System.IServiceProvider)">
+            <summary>
+            A data store.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.DataStore.StartAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.DataStore.SaveNew``1(``0,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.DataStore.UpdateExisting``1(``0,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.DataStore.DeleteExisting``1(``0,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.DataStore.GetSingleOrDefault``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.DataStore.GetFirstOrDefault``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.DataStore.GetData``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.DataStore.StopAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="T:GuardRail.LocalClient.Data.Interfaces.IDataSink">
+            <summary>
+            A definition for a data sink.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Interfaces.IDataSink.StartSync">
+            <summary>
+            Starts the syncing for this sink.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Interfaces.IDataSink.SaveNew``1(``0,System.Threading.CancellationToken)">
+            <summary>
+            Save a new item of type T.
+            </summary>
+            <typeparam name="T">The type to save a new of.</typeparam>
+            <param name="item">The item to save a new of.</param>
+            <param name="cancellationToken">The CancellationToken that can cancel the request.</param>
+            <returns>Task of T</returns>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Interfaces.IDataSink.UpdateExisting``1(``0,System.Threading.CancellationToken)">
+            <summary>
+            Update an existing item.
+            </summary>
+            <typeparam name="T">The type of item to update.</typeparam>
+            <param name="item">The item to update.</param>
+            <param name="cancellationToken">The CancellationToken that can cancel the request.</param>
+            <returns>Task</returns>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Interfaces.IDataSink.DeleteExisting``1(``0,System.Threading.CancellationToken)">
+            <summary>
+            Delete and existing item.
+            </summary>
+            <typeparam name="T">The type of item to delete.</typeparam>
+            <param name="item">The item to update.</param>
+            <param name="cancellationToken">The CancellationToken that can cancel the request.</param>
+            <returns></returns>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Interfaces.IDataSink.GetSingleOrDefault``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Threading.CancellationToken)">
+            <summary>
+            Retrieves a single matching record from the data sink.
+            </summary>
+            <typeparam name="T">The type to get.</typeparam>
+            <param name="getExpression">The expression for how to get data.</param>
+            <param name="cancellationToken">The CancellationToken that can cancel the request.</param>
+            <returns>Task of IQueryable of T</returns>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Interfaces.IDataSink.GetFirstOrDefault``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Threading.CancellationToken)">
+            <summary>
+            Retrieves the first matching record from the data sink.
+            </summary>
+            <typeparam name="T">The type to get.</typeparam>
+            <param name="getExpression">The expression for how to get data.</param>
+            <param name="cancellationToken">The CancellationToken that can cancel the request.</param>
+            <returns>Task of IQueryable of T</returns>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Interfaces.IDataSink.GetData``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Threading.CancellationToken)">
+            <summary>
+            Retrieve data from the data sink.
+            </summary>
+            <typeparam name="T">The type to get.</typeparam>
+            <param name="getExpression">The expression for how to get data.</param>
+            <param name="cancellationToken">The CancellationToken that can cancel the request.</param>
+            <returns>Task of IQueryable of T</returns>
+        </member>
+        <member name="T:GuardRail.LocalClient.Data.Interfaces.IDataStore">
+            <summary>
+            A definition for a data store.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Interfaces.IDataStore.SaveNew``1(``0,System.Threading.CancellationToken)">
+            <summary>
+            Save a new item of type T.
+            </summary>
+            <typeparam name="T">The type to save a new of.</typeparam>
+            <param name="item">The item to save a new of.</param>
+            <param name="cancellationToken">The CancellationToken that can cancel the request.</param>
+            <returns>Task of T</returns>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Interfaces.IDataStore.UpdateExisting``1(``0,System.Threading.CancellationToken)">
+            <summary>
+            Update an existing item.
+            </summary>
+            <typeparam name="T">The type of item to update.</typeparam>
+            <param name="item">The item to update.</param>
+            <param name="cancellationToken">The CancellationToken that can cancel the request.</param>
+            <returns>Task</returns>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Interfaces.IDataStore.DeleteExisting``1(``0,System.Threading.CancellationToken)">
+            <summary>
+            Delete and existing item.
+            </summary>
+            <typeparam name="T">The type of item to delete.</typeparam>
+            <param name="item">The item to update.</param>
+            <param name="cancellationToken">The CancellationToken that can cancel the request.</param>
+            <returns></returns>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Interfaces.IDataStore.GetSingleOrDefault``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Threading.CancellationToken)">
+            <summary>
+            Retrieves a single matching record from the data sink.
+            </summary>
+            <typeparam name="T">The type to get.</typeparam>
+            <param name="getExpression">The expression for how to get data.</param>
+            <param name="cancellationToken">The CancellationToken that can cancel the request.</param>
+            <returns>Task of IQueryable of T</returns>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Interfaces.IDataStore.GetFirstOrDefault``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Threading.CancellationToken)">
+            <summary>
+            Retrieves the first matching record from the data sink.
+            </summary>
+            <typeparam name="T">The type to get.</typeparam>
+            <param name="getExpression">The expression for how to get data.</param>
+            <param name="cancellationToken">The CancellationToken that can cancel the request.</param>
+            <returns>Task of IQueryable of T</returns>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Interfaces.IDataStore.GetData``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Threading.CancellationToken)">
+            <summary>
+            Retrieve data from the data sink.
+            </summary>
+            <typeparam name="T">The type to get.</typeparam>
+            <param name="getExpression">The expression for how to get data.</param>
+            <param name="cancellationToken">The CancellationToken that can cancel the request.</param>
+            <returns>Task of IQueryable of T</returns>
+        </member>
+        <member name="T:GuardRail.LocalClient.Data.Local.EntityFrameWorkDataSink">
+            <summary>
+            An EntityFrameWork IDataSink implementation.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Local.EntityFrameWorkDataSink.#ctor(GuardRail.LocalClient.Data.Local.GuardRailContext)">
+            <summary>
+            Creates an EntityFrameWorkDataSink.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Local.EntityFrameWorkDataSink.StartSync">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Local.EntityFrameWorkDataSink.SaveNew``1(``0,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Local.EntityFrameWorkDataSink.UpdateExisting``1(``0,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Local.EntityFrameWorkDataSink.DeleteExisting``1(``0,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Local.EntityFrameWorkDataSink.GetSingleOrDefault``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Local.EntityFrameWorkDataSink.GetFirstOrDefault``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Local.EntityFrameWorkDataSink.GetData``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Local.EntityFrameWorkDataSink.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="T:GuardRail.LocalClient.Data.Local.GuardRailContext">
+            <summary>
+            The EF core context.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Local.GuardRailContext.Accounts">
+            <summary>
+            The accounts.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Local.GuardRailContext.Users">
+            <summary>
+            The users.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Local.GuardRailContext.AccessPoints">
+            <summary>
+            The access points.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Local.GuardRailContext.AccessPointGroups">
+            <summary>
+            The access point groups.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Local.GuardRailContext.Devices">
+            <summary>
+            The devices.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Local.GuardRailContext.Doors">
+            <summary>
+            The doors.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Local.GuardRailContext.UserGroups">
+            <summary>
+            The user groups.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Local.GuardRailContext.#ctor">
+            <summary>
+            The EF core context.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Local.GuardRailContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{GuardRail.LocalClient.Data.Local.GuardRailContext})">
+            <summary>
+            The EF core context.
+            </summary>
+            <param name="dbContextOptions">The context options.</param>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Local.GuardRailContext.OnConfiguring(Microsoft.EntityFrameworkCore.DbContextOptionsBuilder)">
+            <summary>
+            OnConfiguring event.
+            </summary>
+            <param name="options">The context options builder.</param>
+        </member>
+        <member name="T:GuardRail.LocalClient.Data.Models.AccessPoint">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Models.AccessPoint.Id">
+            <summary>
+            The ID used for EF.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Models.AccessPoint.Door">
+            <summary>
+            The door attached to this access point.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Models.AccessPoint.Users">
+            <summary>
+            The users with direct access.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Models.AccessPoint.UserGroups">
+            <summary>
+            The UserGroups this access point is linked to.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Models.AccessPoint.AccessPointGroups">
+            <summary>
+            The AccessPointGroups this access point is linked to.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Models.AccessPoint.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            EF creation helper.
+            </summary>
+            <param name="builder">EF model builder.</param>
+        </member>
+        <member name="T:GuardRail.LocalClient.Data.Models.AccessPointGroup">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Models.AccessPointGroup.Id">
+            <summary>
+            The ID used for EF.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Models.AccessPointGroup.Users">
+            <summary>
+            The users in the group.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Models.AccessPointGroup.AccessPoints">
+            <summary>
+            The AccessPoints the group has direct access to.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Models.AccessPointGroup.UserGroups">
+            <summary>
+            The UserGroups the user group has access to.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Models.AccessPointGroup.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            EF creation helper.
+            </summary>
+            <param name="builder">EF model builder.</param>
+        </member>
+        <member name="T:GuardRail.LocalClient.Data.Models.Account">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Models.Account.Id">
+            <summary>
+            The ID used for EF.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Models.Account.Users">
+            <summary>
+            Users on the account.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Models.Account.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            EF creation helper.
+            </summary>
+            <param name="builder">EF model builder.</param>
+        </member>
+        <member name="T:GuardRail.LocalClient.Data.Models.Device">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Models.Device.Id">
+            <summary>
+            The ID used for EF.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Models.Device.User">
+            <summary>
+            The user that owns the device.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Models.Device.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            EF creation helper.
+            </summary>
+            <param name="builder">EF model builder.</param>
+        </member>
+        <member name="T:GuardRail.LocalClient.Data.Models.Door">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Models.Door.Id">
+            <summary>
+            The ID used for EF.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Models.Door.AccessPointId">
+            <summary>
+            The ID for the related access point.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Models.Door.AccessPoint">
+            <summary>
+            The AccessPoint linked to the door.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Models.Door.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            EF creation helper.
+            </summary>
+            <param name="builder">EF model builder.</param>
+        </member>
+        <member name="T:GuardRail.LocalClient.Data.Models.User">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Models.User.Id">
+            <summary>
+            The ID used for EF.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Models.User.Account">
+            <summary>
+            The account the user is in.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Models.User.Devices">
+            <summary>
+            The devices a user has.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Models.User.AccessPoints">
+            <summary>
+            The AccessPoints a user has direct access to.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Models.User.UserGroups">
+            <summary>
+            The UserGroups a user is in.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Models.User.AccessPointGroups">
+            <summary>
+            The AccessPointGroups a user has access to.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Models.User.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            EF creation helper.
+            </summary>
+            <param name="builder">EF model builder.</param>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Models.User.GetSearchString">
+            <summary>
+            Returns a string that contains text that can be searched against.
+            </summary>
+            <returns>string</returns>
+        </member>
+        <member name="T:GuardRail.LocalClient.Data.Models.UserGroup">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Models.UserGroup.Id">
+            <summary>
+            The ID used for EF.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Models.UserGroup.Users">
+            <summary>
+            The users in the group.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Models.UserGroup.AccessPoints">
+            <summary>
+            The AccessPoints the group has direct access to.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Models.UserGroup.AccessPointGroups">
+            <summary>
+            The AccessPointGroups the user group has access to.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Models.UserGroup.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            EF creation helper.
+            </summary>
+            <param name="builder">EF model builder.</param>
+        </member>
+        <member name="T:GuardRail.LocalClient.Data.Remote.RemoteDataSink">
+            <summary>
+            A remote stored IDataSink implementation.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Remote.RemoteDataSink.#ctor(GuardRail.LocalClient.Interfaces.IGuardRailFileProvider,GuardRail.LocalClient.Interfaces.IGuardRailApiClient)">
+            <summary>
+            A remote stored IDataSink implementation.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Remote.RemoteDataSink.StartSync">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Remote.RemoteDataSink.SaveNew``1(``0,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Remote.RemoteDataSink.UpdateExisting``1(``0,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Remote.RemoteDataSink.DeleteExisting``1(``0,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Remote.RemoteDataSink.GetSingleOrDefault``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Remote.RemoteDataSink.GetFirstOrDefault``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Remote.RemoteDataSink.GetData``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Data.Remote.RemoteDataSink.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="T:GuardRail.LocalClient.Data.Remote.RemoteSinkAction">
+            <summary>
+            Defines a sink action.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Remote.RemoteSinkAction.RemoteSinkActionType">
+            <summary>
+            The type of action.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Remote.RemoteSinkAction.Type">
+            <summary>
+            The type of the item.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Data.Remote.RemoteSinkAction.Item">
+            <summary>
+            The item.
+            </summary>
+        </member>
+        <member name="T:GuardRail.LocalClient.Data.Remote.RemoteSinkActionType">
+            <summary>
+            The type of sink action.
+            </summary>
+        </member>
+        <member name="F:GuardRail.LocalClient.Data.Remote.RemoteSinkActionType.Add">
+            <summary>
+            Add an item.
+            </summary>
+        </member>
+        <member name="F:GuardRail.LocalClient.Data.Remote.RemoteSinkActionType.Update">
+            <summary>
+            Update an item.
+            </summary>
+        </member>
+        <member name="F:GuardRail.LocalClient.Data.Remote.RemoteSinkActionType.Delete">
+            <summary>
+            Delete an item.
+            </summary>
+        </member>
+        <member name="T:GuardRail.LocalClient.Implementations.GuardRailApiClient">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Implementations.GuardRailApiClient.UploadChangesAsync(System.Collections.Generic.IEnumerable{GuardRail.LocalClient.Data.Remote.RemoteSinkAction},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Implementations.GuardRailApiClient.GetDataFromQuery``1(System.Linq.Expressions.Expression{System.Func{System.Linq.IQueryable{``0}}},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.Implementations.GuardRailApiClient.CreateNewAccount(System.String,System.String,System.String,System.String,System.String,System.String)">
+            <inheritdoc />
+        </member>
+        <member name="T:GuardRail.LocalClient.Interfaces.IGuardRailApiClient">
+            <summary>
+            A wrapper for the API.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Interfaces.IGuardRailApiClient.UploadChangesAsync(System.Collections.Generic.IEnumerable{GuardRail.LocalClient.Data.Remote.RemoteSinkAction},System.Threading.CancellationToken)">
+            <summary>
+            Upload data changes for syncing.
+            </summary>
+            <param name="changes">The changes to sync.</param>
+            <param name="cancellationToken">A CancellationToken.</param>
+            <returns>Task</returns>
+        </member>
+        <member name="M:GuardRail.LocalClient.Interfaces.IGuardRailApiClient.GetDataFromQuery``1(System.Linq.Expressions.Expression{System.Func{System.Linq.IQueryable{``0}}},System.Threading.CancellationToken)">
+            <summary>
+            Get data from the remote data store.
+            </summary>
+            <typeparam name="T">The type of data to get.</typeparam>
+            <param name="getExpression">The expression to use to pull data.</param>
+            <param name="cancellationToken">A CancellationToken.</param>
+            <returns>Task of IQueryable of T</returns>
+        </member>
+        <member name="M:GuardRail.LocalClient.Interfaces.IGuardRailApiClient.CreateNewAccount(System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Create a new account.
+            </summary>
+            <param name="accountName">The name of the account.</param>
+            <param name="location">The location of the account.</param>
+            <param name="firstName">The first name of the main user.</param>
+            <param name="lastName">The last name of the main user.</param>
+            <param name="phone">The phone number of the main user.</param>
+            <param name="email">The email of the main user.</param>
+            <returns>Task of Account</returns>
+        </member>
+        <member name="T:GuardRail.LocalClient.Interfaces.IGuardRailFileProvider">
+            <summary>
+            An interface for abstracting getting files.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.Interfaces.IGuardRailFileProvider.AppendOrCreateAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Append to or create a new file.
+            </summary>
+            <param name="path">The path to the file.</param>
+            <param name="text">The text to put into the file.</param>
+            <param name="cancellationToken">A CancellationToken.</param>
+            <returns>Task</returns>
+        </member>
+        <member name="M:GuardRail.LocalClient.Interfaces.IGuardRailFileProvider.CreateOrOverride(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Creates a new or overrides an existing file.
+            </summary>
+            <param name="path">The path to the file.</param>
+            <param name="text">The text to put into the file.</param>
+            <param name="cancellationToken">A CancellationToken.</param>
+            <returns>Task</returns>
+        </member>
+        <member name="M:GuardRail.LocalClient.Interfaces.IGuardRailFileProvider.Delete(System.String)">
+            <summary>
+            Deletes a file.
+            </summary>
+            <param name="path">The path to the file.</param>
+        </member>
+        <member name="T:GuardRail.LocalClient.MainWindow">
+            <summary>
+            Interaction logic for MainWindow.xaml
+            </summary>
+            <summary>
+            MainWindow
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.MainWindow.#ctor">
+            <summary>
+            Interaction logic for MainWindow.xaml
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.MainWindow.OnStateChanged(System.EventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:GuardRail.LocalClient.MainWindow.OnClosing(System.ComponentModel.CancelEventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:GuardRail.LocalClient.MainWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GuardRail.LocalClient.NdsService">
+            <summary>
+            Listens for devices on the network.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.NdsService.#ctor">
+            <summary>
+            Creates a new <see cref="T:GuardRail.LocalClient.NdsService"/>
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.NdsService.StartAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:GuardRail.LocalClient.NdsService.StopAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="T:GuardRail.LocalClient.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Properties.Resources.paper_and_pencil">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Properties.Resources.plus">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:GuardRail.LocalClient.Properties.Resources.x">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="T:GuardRail.LocalClient.StartupHelper">
+            <summary>
+            Helps with any startup actions or setup that needs to happen.
+            </summary>
+        </member>
+        <member name="M:GuardRail.LocalClient.StartupHelper.StartupAsync(GuardRail.Core.CommandLine.CommandLineArguments,GuardRail.LocalClient.MainWindow,System.Threading.CancellationToken)">
+            <summary>
+            Helps with any startup actions or setup that needs to happen.
+            </summary>
+            <param name="commandLineArguments">Command line arguments passed to the main app.</param>
+            <param name="mainWindow">The application's main window.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+        </member>
+    </members>
+</doc>
