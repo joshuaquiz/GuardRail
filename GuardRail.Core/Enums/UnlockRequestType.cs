@@ -7,6 +7,12 @@
     {
         UnKnown = 0,
 
-        Keypad = 1
+        Keypad = 1,
+
+        Nfc = 2,
+
+        Rfid = 3,
+
+        Swipe = 4
     }
 }

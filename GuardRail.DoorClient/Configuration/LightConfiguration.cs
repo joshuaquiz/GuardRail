@@ -1,8 +1,15 @@
-﻿namespace GuardRail.DoorClient.Configuration;
+﻿using GuardRail.DeviceLogic.Interfaces.Feedback.Lights;
+using GuardRail.DoorClient.Helpers;
+using System.ComponentModel;
 
-public sealed class LightConfiguration
+namespace GuardRail.DoorClient.Configuration;
+
+[TypeConverter(typeof(IntToByteArrayConverter))]
+public sealed class LightConfiguration : ILightConfiguration
 {
-    public int RedPin { get; set; }
+    /// <inheritdoc />
+    public byte[] RedLightAddress { get; set; }
 
-    public int GreenPin { get; set; }
+    /// <inheritdoc />
+    public byte[] GreenLightAddress { get; set; }
 }

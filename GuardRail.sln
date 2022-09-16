@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29721.120
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuardRail.Core", "GuardRail.Core\GuardRail.Core.csproj", "{B5FB3D7D-C398-43F7-B8FE-B0F3876789BE}"
 EndProject
@@ -22,7 +22,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuardRail.EventBus", "Guard
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuardRail.Hq.Api", "GuardRail.Hq.Api\GuardRail.Hq.Api.csproj", "{FC32C4F6-0A68-4AC2-B4F2-F976AECB120C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuardRail.DoorClient", "GuardRail.DoorClient\GuardRail.DoorClient.csproj", "{8E5FA7EF-A9BB-4E03-88DA-C9717F6C5540}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuardRail.DoorClient", "GuardRail.DoorClient\GuardRail.DoorClient.csproj", "{8E5FA7EF-A9BB-4E03-88DA-C9717F6C5540}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuardRail.DeviceLogic", "GuardRail.DeviceLogic\GuardRail.DeviceLogic.csproj", "{3C9E2E12-D5A8-4903-A19E-FC8D39A1FE21}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -198,6 +200,26 @@ Global
 		{8E5FA7EF-A9BB-4E03-88DA-C9717F6C5540}.Release|x64.Build.0 = Release|Any CPU
 		{8E5FA7EF-A9BB-4E03-88DA-C9717F6C5540}.Release|x86.ActiveCfg = Release|Any CPU
 		{8E5FA7EF-A9BB-4E03-88DA-C9717F6C5540}.Release|x86.Build.0 = Release|Any CPU
+		{3C9E2E12-D5A8-4903-A19E-FC8D39A1FE21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C9E2E12-D5A8-4903-A19E-FC8D39A1FE21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C9E2E12-D5A8-4903-A19E-FC8D39A1FE21}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{3C9E2E12-D5A8-4903-A19E-FC8D39A1FE21}.Debug|ARM.Build.0 = Debug|Any CPU
+		{3C9E2E12-D5A8-4903-A19E-FC8D39A1FE21}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{3C9E2E12-D5A8-4903-A19E-FC8D39A1FE21}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{3C9E2E12-D5A8-4903-A19E-FC8D39A1FE21}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3C9E2E12-D5A8-4903-A19E-FC8D39A1FE21}.Debug|x64.Build.0 = Debug|Any CPU
+		{3C9E2E12-D5A8-4903-A19E-FC8D39A1FE21}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3C9E2E12-D5A8-4903-A19E-FC8D39A1FE21}.Debug|x86.Build.0 = Debug|Any CPU
+		{3C9E2E12-D5A8-4903-A19E-FC8D39A1FE21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C9E2E12-D5A8-4903-A19E-FC8D39A1FE21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C9E2E12-D5A8-4903-A19E-FC8D39A1FE21}.Release|ARM.ActiveCfg = Release|Any CPU
+		{3C9E2E12-D5A8-4903-A19E-FC8D39A1FE21}.Release|ARM.Build.0 = Release|Any CPU
+		{3C9E2E12-D5A8-4903-A19E-FC8D39A1FE21}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{3C9E2E12-D5A8-4903-A19E-FC8D39A1FE21}.Release|ARM64.Build.0 = Release|Any CPU
+		{3C9E2E12-D5A8-4903-A19E-FC8D39A1FE21}.Release|x64.ActiveCfg = Release|Any CPU
+		{3C9E2E12-D5A8-4903-A19E-FC8D39A1FE21}.Release|x64.Build.0 = Release|Any CPU
+		{3C9E2E12-D5A8-4903-A19E-FC8D39A1FE21}.Release|x86.ActiveCfg = Release|Any CPU
+		{3C9E2E12-D5A8-4903-A19E-FC8D39A1FE21}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

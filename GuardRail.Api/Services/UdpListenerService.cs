@@ -28,7 +28,7 @@ public sealed class UdpListenerService : IHostedService
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        _listener = new TaskFactory()
+        /*_listener = new TaskFactory()
             .StartNew(
                 async () =>
                 {
@@ -52,7 +52,7 @@ public sealed class UdpListenerService : IHostedService
                 },
                 _cancellationTokenSource.Token,
                 TaskCreationOptions.LongRunning,
-                TaskScheduler.Default);
+                TaskScheduler.Default);*/
         return Task.CompletedTask;
     }
 

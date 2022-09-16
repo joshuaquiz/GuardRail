@@ -1,6 +1,12 @@
-﻿namespace GuardRail.DoorClient.Configuration;
+﻿using GuardRail.DeviceLogic.Interfaces.Feedback.Buzzer;
+using GuardRail.DoorClient.Helpers;
+using System.ComponentModel;
 
-public sealed class BuzzerConfiguration
+namespace GuardRail.DoorClient.Configuration;
+
+[TypeConverter(typeof(IntToByteArrayConverter))]
+public sealed class BuzzerConfiguration : IBuzzerConfiguration
 {
-    public int Pin { get; set; }
+    /// <inheritdoc />
+    public byte[] BuzzerAddress { get; set; }
 }

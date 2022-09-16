@@ -1,8 +1,17 @@
+using System;
 using System.Device.Gpio;
+using System.Linq;
+using System.Reflection;
+using GuardRail.DeviceLogic.Interfaces;
+using GuardRail.DeviceLogic.Interfaces.Feedback.Buzzer;
+using GuardRail.DeviceLogic.Interfaces.Feedback.Lights;
+using GuardRail.DeviceLogic.Interfaces.Input.Keypad;
 using GuardRail.DoorClient.Configuration;
 using GuardRail.DoorClient.Implementation;
+using GuardRail.DoorClient.Implementation.Feedback.Buzzer;
+using GuardRail.DoorClient.Implementation.Feedback.Lights;
+using GuardRail.DoorClient.Implementation.Input;
 using GuardRail.DoorClient.Interfaces;
-using GuardRail.DoorClient.Logic;
 using GuardRail.DoorClient.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -44,19 +53,37 @@ public class Startup
             .AddOptions()
             .AddLogging()
             .AddSingleton(_ => Configuration.GetSection(nameof(BuzzerConfiguration)).Get<BuzzerConfiguration>())
-            .AddSingleton(_ => Configuration.GetSection(nameof(KeypadConfiguration)).Get<KeypadConfiguration>())
             .AddSingleton(_ => Configuration.GetSection(nameof(LightConfiguration)).Get<LightConfiguration>())
-            .AddSingleton(_ => Configuration.GetSection(nameof(UdpConfiguration)).Get<UdpConfiguration>())
+            .AddSingleton(_ => Configuration.GetSection(nameof(KeypadConfiguration)).Get<KeypadConfiguration>())
+            /*.AddSingleton(_ => Configuration.GetSection(nameof(UdpConfiguration)).Get<UdpConfiguration>())*/
             .AddSingleton(_ => new GpioController())
             .AddSingleton<IGpio, Gpio>()
+            .AddSingleton<ILightHardwareManager, LightHardwareManager>()
+            .AddSingleton<IBuzzerHardwareManager, BuzzerHardwareManager>()
             .AddSingleton<ILightManager, LightManager>()
             .AddSingleton<IBuzzerManager, BuzzerManager>()
-            .AddSingleton<IUdpSenderReceiver, UdpSenderReceiverReceiver>()
-            .AddSingleton<IKeypadLogic, KeypadLogic>()
-            .AddSingleton<IUdpWrapper, UdpWrapper>()
+            .AddSingleton<IKeypadHardwareManager, KeypadHardwareManager>()
             .AddHostedService<ButtonListenerService>()
+            .AddSingleton<IKeypadInput, KeypadInput>()
+            /*.AddSingleton<IUdpSenderReceiver, UdpSenderReceiverReceiver>()
+            .AddSingleton<IUdpWrapper, UdpWrapper>()*/
             .AddHostedService<NetworkConnectionCheckingService>()
-            .AddHostedService<LockService>();
+            .AddHostedService<LockService>()
+            .AddHostedService<HardwareInitService>();
+        RegisterAllImplementations(services, typeof(IHardwareAsyncInit));
+    }
+
+    private static void RegisterAllImplementations(
+        IServiceCollection serviceCollection,
+        Type type)
+    {
+        foreach (var t in Assembly
+                     .GetExecutingAssembly()
+                     .DefinedTypes
+                     .Where(x => type.IsAssignableFrom(x) && type != x.AsType()))
+        {
+            serviceCollection.AddSingleton(type, t.AsType());
+        }
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
