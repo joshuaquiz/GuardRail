@@ -1,4 +1,3 @@
-using System;
 using GuardRail.DeviceLogic.Implementations.Feedback;
 using GuardRail.DeviceLogic.Interfaces.Feedback.Lights;
 using Microsoft.Extensions.Logging;

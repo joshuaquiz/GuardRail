@@ -39,7 +39,7 @@ public sealed class DoorsController : ControllerBase
                     Id = x.Id,
                     FriendlyName = x.FriendlyName,
                     DeviceId = x.DeviceId,
-                    LockedStatus = x.LockedStatus
+                    DoorStatus = x.DoorStatus
                 })
             .ToListAsync();
 
@@ -57,7 +57,7 @@ public sealed class DoorsController : ControllerBase
             HttpContext.RequestAborted);
         /*await door.LockAsync(
             HttpContext.RequestAborted);*/
-        doorFromDatabase.LockedStatus = LockedStatus.Locked;
+        doorFromDatabase.DoorStatus = DoorStatus.Locked;
         await _guardRailContext.SaveChangesAsync();
         return Ok();
     }
@@ -76,7 +76,7 @@ public sealed class DoorsController : ControllerBase
             HttpContext.RequestAborted);
         /*await door.UnLockAsync(
             HttpContext.RequestAborted);*/
-        doorFromDatabase.LockedStatus = LockedStatus.UnLocked;
+        doorFromDatabase.DoorStatus = DoorStatus.UnLocked;
         await _guardRailContext.SaveChangesAsync();
         return Ok();
     }

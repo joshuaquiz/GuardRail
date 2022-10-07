@@ -41,6 +41,7 @@ public abstract class CoreKeypadInput<TKeypadInput, TKeypadConfiguration> : IKey
         string inputData,
         CancellationToken cancellationToken) =>
         await CentralServerCommunication.SendDataAsync(
+            nameof(UnLockRequest),
             new UnLockRequest
             {
                 DoorId = DeviceConstants.DeviceId,

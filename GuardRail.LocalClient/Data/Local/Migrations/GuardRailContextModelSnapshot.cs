@@ -196,7 +196,7 @@ namespace GuardRail.LocalClient.Data.Local.Migrations
                     b.Property<bool>("IsConfigured")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("LockedStatus")
+                    b.Property<int>("DoorStatus")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");

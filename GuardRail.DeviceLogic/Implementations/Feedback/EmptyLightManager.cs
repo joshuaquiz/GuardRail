@@ -3,7 +3,7 @@ namespace GuardRail.DeviceLogic.Implementations.Feedback;
 /// <summary>
 /// Provides an empty implementation.
 /// </summary>
-public sealed class EmptyLightManager : CoreLightManager
+public sealed class EmptyLightManager : CoreLightManager<EmptyLightManager>
 {
     public EmptyLightManager()
         : base(null!, null!, null!)

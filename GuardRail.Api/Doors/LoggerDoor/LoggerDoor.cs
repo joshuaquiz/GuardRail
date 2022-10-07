@@ -27,10 +27,10 @@ public sealed class LoggerDoor : Door
     public Task<string> GetDeviceId() =>
         Task.FromResult(Id.ToString());
 
-    public Task<LockedStatus> GetLockedStatus(CancellationToken cancellationToken) =>
+    public Task<DoorStatus> GetLockedStatus(CancellationToken cancellationToken) =>
         Task.FromResult(_isLocked
-            ? LockedStatus.Locked
-            : LockedStatus.UnLocked);
+            ? DoorStatus.Locked
+            : DoorStatus.UnLocked);
 
     public Task LockAsync(CancellationToken cancellationToken)
     {

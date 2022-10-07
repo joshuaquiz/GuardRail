@@ -1,6 +1,9 @@
-﻿namespace GuardRail.DoorClient.Configuration;
+﻿using GuardRail.DeviceLogic.Interfaces.Communication;
 
-public sealed class UdpConfiguration
+namespace GuardRail.DoorClient.Configuration;
+
+public sealed class UdpConfiguration : IUdpConfiguration
 {
+    /// <inheritdoc />
     public int Port { get; set; }
 }

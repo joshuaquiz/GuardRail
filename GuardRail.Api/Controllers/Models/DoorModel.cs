@@ -11,5 +11,5 @@ public sealed class DoorModel
 
     public string DeviceId { get; set; }
 
-    public LockedStatus LockedStatus{ get; set; }
+    public DoorStatus DoorStatus{ get; set; }
 }

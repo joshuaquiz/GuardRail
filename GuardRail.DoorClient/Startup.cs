@@ -1,13 +1,18 @@
 using System;
 using System.Device.Gpio;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Reflection;
 using GuardRail.DeviceLogic.Interfaces;
+using GuardRail.DeviceLogic.Interfaces.Communication;
 using GuardRail.DeviceLogic.Interfaces.Feedback.Buzzer;
 using GuardRail.DeviceLogic.Interfaces.Feedback.Lights;
 using GuardRail.DeviceLogic.Interfaces.Input.Keypad;
+using GuardRail.DeviceLogic.Models;
+using GuardRail.DeviceLogic.Services;
 using GuardRail.DoorClient.Configuration;
 using GuardRail.DoorClient.Implementation;
+using GuardRail.DoorClient.Implementation.Communication;
 using GuardRail.DoorClient.Implementation.Feedback.Buzzer;
 using GuardRail.DoorClient.Implementation.Feedback.Lights;
 using GuardRail.DoorClient.Implementation.Input;
@@ -49,13 +54,14 @@ public class Startup
                     Title = "GuardRail.DoorClient",
                     Version = "v1"
                 }));
+        RegisterAllImplementations(services, typeof(IHardwareAsyncInit));
         services
             .AddOptions()
             .AddLogging()
             .AddSingleton(_ => Configuration.GetSection(nameof(BuzzerConfiguration)).Get<BuzzerConfiguration>())
             .AddSingleton(_ => Configuration.GetSection(nameof(LightConfiguration)).Get<LightConfiguration>())
             .AddSingleton(_ => Configuration.GetSection(nameof(KeypadConfiguration)).Get<KeypadConfiguration>())
-            /*.AddSingleton(_ => Configuration.GetSection(nameof(UdpConfiguration)).Get<UdpConfiguration>())*/
+            .AddSingleton(_ => Configuration.GetSection(nameof(UdpConfiguration)).Get<UdpConfiguration>())
             .AddSingleton(_ => new GpioController())
             .AddSingleton<IGpio, Gpio>()
             .AddSingleton<ILightHardwareManager, LightHardwareManager>()
@@ -65,12 +71,21 @@ public class Startup
             .AddSingleton<IKeypadHardwareManager, KeypadHardwareManager>()
             .AddHostedService<ButtonListenerService>()
             .AddSingleton<IKeypadInput, KeypadInput>()
-            /*.AddSingleton<IUdpSenderReceiver, UdpSenderReceiverReceiver>()
-            .AddSingleton<IUdpWrapper, UdpWrapper>()*/
-            .AddHostedService<NetworkConnectionCheckingService>()
+            .AddSingleton<ICentralServerCommunication, CentralServerCommunication>()
+            .AddSingleton<ICentralServerPushCommunication, CentralServerPushCommunication>()
+            .AddHostedService<HardwareInitService>()
+            .AddHostedService<UdpConnectionManagerService>()
+            .AddHostedService<CentralServerPushCommunication>()
             .AddHostedService<LockService>()
-            .AddHostedService<HardwareInitService>();
-        RegisterAllImplementations(services, typeof(IHardwareAsyncInit));
+            .AddHttpClient(
+                "GuardRail",
+                (_, client) =>
+                {
+                    client.BaseAddress = DeviceConstants.RemoteHostIpAddress != null
+                        ? new Uri($"https://{DeviceConstants.RemoteHostIpAddress}/", UriKind.Absolute)
+                        : new Uri("https://localhost/", UriKind.Absolute);
+                    client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("GuardRailDoor", "1.0.0"));
+                });
     }
 
     private static void RegisterAllImplementations(

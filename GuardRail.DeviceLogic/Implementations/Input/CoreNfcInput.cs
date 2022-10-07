@@ -31,6 +31,7 @@ public abstract class CoreNfcInput : INfcInput
         byte[] inputData,
         CancellationToken cancellationToken) =>
         await CentralServerCommunication.SendDataAsync(
+            nameof(UnLockRequest),
             new UnLockRequest
             {
                 DoorId = DeviceConstants.DeviceId,

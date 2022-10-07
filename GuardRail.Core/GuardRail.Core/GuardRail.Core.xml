@@ -265,7 +265,7 @@
             A friendlyName for the door.
             </summary>
         </member>
-        <member name="P:GuardRail.Core.DataModels.Door.LockedStatus">
+        <member name="P:GuardRail.Core.DataModels.Door.DoorStatus">
             <summary>
             The locked status of the door.
             </summary>
@@ -285,7 +285,7 @@
             The ID of the door.
             </summary>
         </member>
-        <member name="P:GuardRail.Core.DataModels.DoorCommand.LockedStatus">
+        <member name="P:GuardRail.Core.DataModels.DoorCommand.DoorStatus">
             <summary>
             Whether or not the door is locked.
             </summary>
@@ -404,22 +404,22 @@
             The name of the group.
             </summary>
         </member>
-        <member name="T:GuardRail.Core.Enums.LockedStatus">
+        <member name="T:GuardRail.Core.Enums.DoorStatus">
             <summary>
             The locked states for a door.
             </summary>
         </member>
-        <member name="F:GuardRail.Core.Enums.LockedStatus.UnKnown">
+        <member name="F:GuardRail.Core.Enums.DoorStatus.UnKnown">
             <summary>
             The locked status of the door cannot be determined.
             </summary>
         </member>
-        <member name="F:GuardRail.Core.Enums.LockedStatus.UnLocked">
+        <member name="F:GuardRail.Core.Enums.DoorStatus.UnLocked">
             <summary>
             The door is unlocked.
             </summary>
         </member>
-        <member name="F:GuardRail.Core.Enums.LockedStatus.Locked">
+        <member name="F:GuardRail.Core.Enums.DoorStatus.Locked">
             <summary>
             The door is locked.
             </summary>

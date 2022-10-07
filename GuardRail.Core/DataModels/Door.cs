@@ -24,7 +24,7 @@ namespace GuardRail.Core.DataModels
         /// <summary>
         /// The locked status of the door.
         /// </summary>
-        public LockedStatus LockedStatus { get; set; }
+        public DoorStatus DoorStatus { get; set; }
 
         /// <summary>
         /// Whether or not the door is fully configured.
