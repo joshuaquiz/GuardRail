@@ -1,17 +1,16 @@
 ﻿using System;
 
-namespace GuardRail.Core.DataModels
+namespace GuardRail.Core.DataModels;
+
+/// <summary>
+/// An item that can be added.
+/// </summary>
+public interface IAddableItem
 {
     /// <summary>
-    /// An item that can be added.
+    /// The global ID for the item.
+    /// Guid is to be used in all systems for the global ID.
+    /// This value is set automatically and should not be passed in for adds.
     /// </summary>
-    public interface IAddableItem
-    {
-        /// <summary>
-        /// The global ID for the item.
-        /// Guid is to be used in all systems for the global ID.
-        /// This value is set automatically and should not be passed in for adds.
-        /// </summary>
-        Guid Guid { get; set; }
-    }
+    Guid Guid { get; set; }
 }

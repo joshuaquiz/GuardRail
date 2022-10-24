@@ -19,11 +19,11 @@ public sealed class KeypadInput : CoreKeypadInput<KeypadInput, KeypadConfigurati
         ILightManager lightManager,
         KeypadConfiguration keypadConfiguration,
         ICentralServerCommunication centralServerCommunication,
-        IKeypadHardwareManager keypadHardwareManager,
+        IKeypadManager keypadManager,
         ILogger<KeypadInput> logger)
         : base(
             keypadConfiguration,
-            keypadHardwareManager,
+            keypadManager,
             centralServerCommunication,
             logger)
     {
@@ -42,7 +42,7 @@ public sealed class KeypadInput : CoreKeypadInput<KeypadInput, KeypadConfigurati
     {
         foreach (var pin in KeypadConfiguration.ColumnPins.Concat(KeypadConfiguration.RowPins))
         {
-            await KeypadHardwareManager.DisposeAddressAsync(new[] { Convert.ToByte(pin) });
+            await KeypadManager.DisposeAddressAsync(new[] { Convert.ToByte(pin) });
         }
     }
 }

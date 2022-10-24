@@ -1,9 +1,13 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace GuardRail.DeviceLogic.Interfaces.Input.Keypad;
 
 /// <summary>
 /// The low level API for interacting with a keypad.
 /// </summary>
-public interface IKeypadHardwareManager : IHardwareAsyncInit
+public interface IKeypadManager : IAsyncInit
 {
     /// <summary>
     /// The submit event.

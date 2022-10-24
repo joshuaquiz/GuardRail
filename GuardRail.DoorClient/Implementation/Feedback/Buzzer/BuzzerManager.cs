@@ -8,11 +8,11 @@ public sealed class BuzzerManager : CoreBuzzerManager<BuzzerManager>
 {
     public BuzzerManager(
         IBuzzerConfiguration buzzerConfiguration,
-        IBuzzerHardwareManager buzzerHardwareManager,
+        IBuzzerHardwareManager buzzerManager,
         ILogger<BuzzerManager> logger)
         : base(
             buzzerConfiguration,
-            buzzerHardwareManager,
+            buzzerManager,
             logger)
     {
     }

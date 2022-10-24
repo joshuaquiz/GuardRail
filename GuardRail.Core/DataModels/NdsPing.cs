@@ -1,18 +1,17 @@
 ﻿using System;
 
-namespace GuardRail.Core.DataModels
+namespace GuardRail.Core.DataModels;
+
+/// <summary>
+/// A ping request/response.
+/// </summary>
+/// <remarks>
+/// A client will send this data and the server will send it back to show it received it.
+/// </remarks>
+public sealed class NdsPing
 {
     /// <summary>
-    /// A ping request/response.
+    /// The ID of the request.
     /// </summary>
-    /// <remarks>
-    /// A client will send this data and the server will send it back to show it received it.
-    /// </remarks>
-    public sealed class NdsPing
-    {
-        /// <summary>
-        /// The ID of the request.
-        /// </summary>
-        public Guid RequestId { get; set; }
-    }
+    public Guid RequestId { get; set; }
 }

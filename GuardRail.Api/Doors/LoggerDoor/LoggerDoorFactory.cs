@@ -39,7 +39,7 @@ public sealed class LoggerDoorFactory : IDoorFactory
                     new Door
                     {
                         DeviceId = doorId,
-                        DoorStatus = await door.GetLockedStatus(CancellationToken.None),
+                        DoorStateRequestType = await door.GetLockedStatus(CancellationToken.None),
                         FriendlyName = door.FriendlyName,
                         IsConfigured = false
                     });

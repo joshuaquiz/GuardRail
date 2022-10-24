@@ -2,6 +2,8 @@ using GuardRail.DeviceLogic.Interfaces.Communication;
 using GuardRail.DeviceLogic.Interfaces.Input.Keypad;
 using Microsoft.Extensions.Logging;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using GuardRail.Core.DataModels;
 using GuardRail.Core.Enums;
 using GuardRail.DeviceLogic.Models;
@@ -13,22 +15,32 @@ public abstract class CoreKeypadInput<TKeypadInput, TKeypadConfiguration> : IKey
     where TKeypadConfiguration : IKeypadConfiguration
 {
     protected readonly TKeypadConfiguration KeypadConfiguration;
-    protected readonly IKeypadHardwareManager KeypadHardwareManager;
+    protected readonly IKeypadManager? KeypadManager;
     protected readonly ICentralServerCommunication CentralServerCommunication;
     protected readonly ILogger<TKeypadInput> Logger;
 
     protected CoreKeypadInput(
         TKeypadConfiguration keypadConfiguration,
-        IKeypadHardwareManager keypadHardwareManager,
+        IKeypadManager? keypadManager,
         ICentralServerCommunication centralServerCommunication,
         ILogger<TKeypadInput> logger)
     {
         KeypadConfiguration = keypadConfiguration;
-        KeypadHardwareManager = keypadHardwareManager;
+        KeypadManager = keypadManager;
         CentralServerCommunication = centralServerCommunication;
         Logger = logger;
-        KeypadHardwareManager.Reset += OnKeypadReset;
-        KeypadHardwareManager.Submit += OnKeypadSubmit;
+    }
+
+    /// <inheritdoc />
+    public ValueTask InitAsync()
+    {
+        if (KeypadManager != null)
+        {
+            KeypadManager.Reset += OnKeypadReset;
+            KeypadManager.Submit += OnKeypadSubmit;
+        }
+
+        return ValueTask.CompletedTask;
     }
 
     /// <inheritdoc />

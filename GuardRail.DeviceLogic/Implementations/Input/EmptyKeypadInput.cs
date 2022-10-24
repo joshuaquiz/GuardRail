@@ -1,28 +1,27 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
+using GuardRail.DeviceLogic.Interfaces.Input.Keypad;
 
-namespace GuardRail.DeviceLogic.Implementations.Feedback;
+namespace GuardRail.DeviceLogic.Implementations.Input;
 
 /// <summary>
 /// Provides an empty implementation.
 /// </summary>
-public sealed class EmptyLightManager : CoreLightManager<EmptyLightManager>
+public sealed class EmptyKeypadInput : CoreKeypadInput<EmptyKeypadInput, IKeypadConfiguration>
 {
-    public EmptyLightManager()
-        : base(null!, null!, null!)
+    public EmptyKeypadInput()
+        : base(null!, null!, null!, null!)
     {
     }
 
     /// <inheritdoc />
-    public override ValueTask TurnOnRedLightAsync(
-        TimeSpan duration,
+    public override ValueTask OnKeypadReset(
         CancellationToken cancellationToken) =>
         ValueTask.CompletedTask;
 
     /// <inheritdoc />
-    public override ValueTask TurnOnGreenLightAsync(
-        TimeSpan duration,
+    public override ValueTask OnKeypadSubmit(
+        string inputData,
         CancellationToken cancellationToken) =>
         ValueTask.CompletedTask;
 

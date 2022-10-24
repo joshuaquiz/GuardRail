@@ -265,7 +265,7 @@
             A friendlyName for the door.
             </summary>
         </member>
-        <member name="P:GuardRail.Core.DataModels.Door.DoorStatus">
+        <member name="P:GuardRail.Core.DataModels.Door.DoorStateRequestType">
             <summary>
             The locked status of the door.
             </summary>
@@ -273,36 +273,6 @@
         <member name="P:GuardRail.Core.DataModels.Door.IsConfigured">
             <summary>
             Whether or not the door is fully configured.
-            </summary>
-        </member>
-        <member name="T:GuardRail.Core.DataModels.DoorCommand">
-            <summary>
-            A command to a door, and all the things you can do with it.
-            </summary>
-        </member>
-        <member name="P:GuardRail.Core.DataModels.DoorCommand.DoorId">
-            <summary>
-            The ID of the door.
-            </summary>
-        </member>
-        <member name="P:GuardRail.Core.DataModels.DoorCommand.DoorStatus">
-            <summary>
-            Whether or not the door is locked.
-            </summary>
-        </member>
-        <member name="P:GuardRail.Core.DataModels.DoorCommand.BuzzerDuration">
-            <summary>
-            How long to buzz the door.
-            </summary>
-        </member>
-        <member name="P:GuardRail.Core.DataModels.DoorCommand.RedLightDuration">
-            <summary>
-            How long to turn on a red light.
-            </summary>
-        </member>
-        <member name="P:GuardRail.Core.DataModels.DoorCommand.GreenLightDuration">
-            <summary>
-            How long to turn on a green light.
             </summary>
         </member>
         <member name="T:GuardRail.Core.DataModels.IAddableItem">
@@ -404,30 +374,100 @@
             The name of the group.
             </summary>
         </member>
-        <member name="T:GuardRail.Core.Enums.DoorStatus">
+        <member name="T:GuardRail.Core.Enums.DoorStateRequestType">
             <summary>
-            The locked states for a door.
+            The states for a door.
             </summary>
         </member>
-        <member name="F:GuardRail.Core.Enums.DoorStatus.UnKnown">
+        <member name="F:GuardRail.Core.Enums.DoorStateRequestType.UnKnown">
             <summary>
             The locked status of the door cannot be determined.
             </summary>
         </member>
-        <member name="F:GuardRail.Core.Enums.DoorStatus.UnLocked">
+        <member name="F:GuardRail.Core.Enums.DoorStateRequestType.UnLocked">
             <summary>
             The door is unlocked.
             </summary>
         </member>
-        <member name="F:GuardRail.Core.Enums.DoorStatus.Locked">
+        <member name="F:GuardRail.Core.Enums.DoorStateRequestType.Locked">
             <summary>
             The door is locked.
+            </summary>
+        </member>
+        <member name="F:GuardRail.Core.Enums.DoorStateRequestType.Open">
+            <summary>
+            The door is open.
+            </summary>
+        </member>
+        <member name="F:GuardRail.Core.Enums.DoorStateRequestType.Closed">
+            <summary>
+            The door is closed.
+            </summary>
+        </member>
+        <member name="F:GuardRail.Core.Enums.DoorStateRequestType.GreenLightOn">
+            <summary>
+            The green light is on.
+            </summary>
+        </member>
+        <member name="F:GuardRail.Core.Enums.DoorStateRequestType.RedLightOn">
+            <summary>
+            The red light is on.
+            </summary>
+        </member>
+        <member name="F:GuardRail.Core.Enums.DoorStateRequestType.BuzzerOn">
+            <summary>
+            The buzzer is on.
             </summary>
         </member>
         <member name="T:GuardRail.Core.Enums.UnlockRequestType">
             <summary>
             Ways an unlock can be triggered.
             </summary>
+        </member>
+        <member name="T:GuardRail.Core.EventModels.DoorCommand">
+            <summary>
+            A command to a door.
+            </summary>
+            <param name="DoorId">The ID of the door.</param>
+            <param name="DoorStateRequests">All requested state changes.</param>
+            <param name="Message">A message related to the command.</param>
+        </member>
+        <member name="M:GuardRail.Core.EventModels.DoorCommand.#ctor(System.Guid,System.Collections.Generic.IReadOnlyCollection{GuardRail.Core.EventModels.DoorStateRequest},System.String)">
+            <summary>
+            A command to a door.
+            </summary>
+            <param name="DoorId">The ID of the door.</param>
+            <param name="DoorStateRequests">All requested state changes.</param>
+            <param name="Message">A message related to the command.</param>
+        </member>
+        <member name="P:GuardRail.Core.EventModels.DoorCommand.DoorId">
+            <summary>The ID of the door.</summary>
+        </member>
+        <member name="P:GuardRail.Core.EventModels.DoorCommand.DoorStateRequests">
+            <summary>All requested state changes.</summary>
+        </member>
+        <member name="P:GuardRail.Core.EventModels.DoorCommand.Message">
+            <summary>A message related to the command.</summary>
+        </member>
+        <member name="T:GuardRail.Core.EventModels.DoorStateRequest">
+            <summary>
+            A request item for state change on a door.
+            </summary>
+            <param name="DoorStateRequestType">The type of state change.</param>
+            <param name="Duration">How long to hold the door status.</param>
+        </member>
+        <member name="M:GuardRail.Core.EventModels.DoorStateRequest.#ctor(GuardRail.Core.Enums.DoorStateRequestType,System.TimeSpan)">
+            <summary>
+            A request item for state change on a door.
+            </summary>
+            <param name="DoorStateRequestType">The type of state change.</param>
+            <param name="Duration">How long to hold the door status.</param>
+        </member>
+        <member name="P:GuardRail.Core.EventModels.DoorStateRequest.DoorStateRequestType">
+            <summary>The type of state change.</summary>
+        </member>
+        <member name="P:GuardRail.Core.EventModels.DoorStateRequest.Duration">
+            <summary>How long to hold the door status.</summary>
         </member>
         <member name="T:GuardRail.Core.Helpers.Extensions">
             <summary>

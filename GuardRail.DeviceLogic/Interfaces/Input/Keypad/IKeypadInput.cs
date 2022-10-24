@@ -1,9 +1,13 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace GuardRail.DeviceLogic.Interfaces.Input.Keypad;
 
 /// <summary>
 /// High level API for keypad input.
 /// </summary>
-public interface IKeypadInput : IAsyncDisposable, IDisposable
+public interface IKeypadInput : IAsyncInit, IAsyncDisposable, IDisposable
 {
     /// <summary>
     /// Handler for the reset event triggered from keypad hardware.

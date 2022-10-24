@@ -1,17 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace GuardRail.Core
+namespace GuardRail.Core;
+
+/// <summary>
+/// Used to generate a list of <see cref="IAccessControlDevice"/>.
+/// </summary>
+public interface IAccessControlFactory
 {
     /// <summary>
-    /// Used to generate a list of <see cref="IAccessControlDevice"/>.
+    /// Gets a list of <see cref="IAccessControlDevice"/>.
     /// </summary>
-    public interface IAccessControlFactory
-    {
-        /// <summary>
-        /// Gets a list of <see cref="IAccessControlDevice"/>.
-        /// </summary>
-        /// <returns></returns>
-        Task<IReadOnlyCollection<IAccessControlDevice>> GetAccessControlDevices();
-    }
+    /// <returns></returns>
+    Task<IReadOnlyCollection<IAccessControlDevice>> GetAccessControlDevices();
 }

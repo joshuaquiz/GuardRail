@@ -11,16 +11,16 @@ public sealed class ButtonListenerService : IHostedService
 {
     private const int TimerIntervalMilliseconds = 20;
 
-    private readonly KeypadHardwareManager _keypadHardwareManager;
+    private readonly KeypadManager _keypadManager;
     private readonly ILogger<ButtonListenerService> _logger;
 
     private Timer _dispatcherTimer;
 
     public ButtonListenerService(
-        KeypadHardwareManager keypadHardwareManager,
+        KeypadManager keypadManager,
         ILogger<ButtonListenerService> logger)
     {
-        _keypadHardwareManager = keypadHardwareManager;
+        _keypadManager = keypadManager;
         _logger = logger;
     }
 
@@ -28,7 +28,7 @@ public sealed class ButtonListenerService : IHostedService
     {
         _logger.LogInformation("GPIO setup for button listener");
         _dispatcherTimer = new Timer(
-            _ => _keypadHardwareManager.TimerTick(),
+            _ => _keypadManager.TimerTick(),
             null,
             TimeSpan.Zero,
             TimeSpan.FromMilliseconds(TimerIntervalMilliseconds));

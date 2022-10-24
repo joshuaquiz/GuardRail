@@ -1,9 +1,12 @@
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace GuardRail.DeviceLogic.Interfaces.Door;
 
 /// <summary>
 /// The low level API for interacting with a door that is openable.
 /// </summary>
-public interface IOpenableDoorHardwareManager : IHardwareAsyncInit
+public interface IOpenableDoorManager : IAsyncInit
 {
     /// <summary>
     /// Opens the door.

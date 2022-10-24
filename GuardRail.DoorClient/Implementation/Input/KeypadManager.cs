@@ -11,13 +11,13 @@ using Microsoft.Extensions.Logging;
 
 namespace GuardRail.DoorClient.Implementation.Input;
 
-public sealed class KeypadHardwareManager : IKeypadHardwareManager
+public sealed class KeypadManager : IKeypadManager
 {
     private const int ButtonDebounceMilliseconds = 25;
 
     private readonly IGpio _gpio;
     private readonly KeypadConfiguration _keypadConfiguration;
-    private readonly ILogger<KeypadHardwareManager> _logger;
+    private readonly ILogger<KeypadManager> _logger;
 
     private CancellationTokenSource _cancellationTokenSource;
     private List<char> _pressedKeys = new(0);
@@ -33,10 +33,10 @@ public sealed class KeypadHardwareManager : IKeypadHardwareManager
     public readonly List<int> Rows = new();
     public readonly List<int> Columns = new();
 
-    public KeypadHardwareManager(
+    public KeypadManager(
         IGpio gpio,
         KeypadConfiguration keypadConfiguration,
-        ILogger<KeypadHardwareManager> logger)
+        ILogger<KeypadManager> logger)
     {
         _gpio = gpio;
         _keypadConfiguration = keypadConfiguration;

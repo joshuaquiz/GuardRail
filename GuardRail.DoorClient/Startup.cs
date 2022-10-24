@@ -3,11 +3,9 @@ using System.Device.Gpio;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Reflection;
+using GuardRail.DeviceLogic.DependencyHelpers;
 using GuardRail.DeviceLogic.Interfaces;
 using GuardRail.DeviceLogic.Interfaces.Communication;
-using GuardRail.DeviceLogic.Interfaces.Feedback.Buzzer;
-using GuardRail.DeviceLogic.Interfaces.Feedback.Lights;
-using GuardRail.DeviceLogic.Interfaces.Input.Keypad;
 using GuardRail.DeviceLogic.Models;
 using GuardRail.DeviceLogic.Services;
 using GuardRail.DoorClient.Configuration;
@@ -15,7 +13,6 @@ using GuardRail.DoorClient.Implementation;
 using GuardRail.DoorClient.Implementation.Communication;
 using GuardRail.DoorClient.Implementation.Feedback.Buzzer;
 using GuardRail.DoorClient.Implementation.Feedback.Lights;
-using GuardRail.DoorClient.Implementation.Input;
 using GuardRail.DoorClient.Interfaces;
 using GuardRail.DoorClient.Services;
 using Microsoft.AspNetCore.Builder;
@@ -54,29 +51,22 @@ public class Startup
                     Title = "GuardRail.DoorClient",
                     Version = "v1"
                 }));
-        RegisterAllImplementations(services, typeof(IHardwareAsyncInit));
+        RegisterAllImplementations(services, typeof(IAsyncInit));
         services
             .AddOptions()
             .AddLogging()
-            .AddSingleton(_ => Configuration.GetSection(nameof(BuzzerConfiguration)).Get<BuzzerConfiguration>())
-            .AddSingleton(_ => Configuration.GetSection(nameof(LightConfiguration)).Get<LightConfiguration>())
-            .AddSingleton(_ => Configuration.GetSection(nameof(KeypadConfiguration)).Get<KeypadConfiguration>())
             .AddSingleton(_ => Configuration.GetSection(nameof(UdpConfiguration)).Get<UdpConfiguration>())
             .AddSingleton(_ => new GpioController())
             .AddSingleton<IGpio, Gpio>()
-            .AddSingleton<ILightHardwareManager, LightHardwareManager>()
-            .AddSingleton<IBuzzerHardwareManager, BuzzerHardwareManager>()
-            .AddSingleton<ILightManager, LightManager>()
-            .AddSingleton<IBuzzerManager, BuzzerManager>()
-            .AddSingleton<IKeypadHardwareManager, KeypadHardwareManager>()
-            .AddHostedService<ButtonListenerService>()
-            .AddSingleton<IKeypadInput, KeypadInput>()
+            .AddBuzzer<BuzzerConfiguration, BuzzerHardwareManager, BuzzerManager>(Configuration)
+            .AddLight<LightConfiguration, LightHardwareManager, LightManager>(Configuration)
+            .AddEmptyScreen()
             .AddSingleton<ICentralServerCommunication, CentralServerCommunication>()
             .AddSingleton<ICentralServerPushCommunication, CentralServerPushCommunication>()
-            .AddHostedService<HardwareInitService>()
+            .AddHostedService<ButtonListenerService>()
+            .AddHostedService<AsyncInitService>()
             .AddHostedService<UdpConnectionManagerService>()
             .AddHostedService<CentralServerPushCommunication>()
-            .AddHostedService<LockService>()
             .AddHttpClient(
                 "GuardRail",
                 (_, client) =>
@@ -124,5 +114,7 @@ public class Startup
                     AllowCachingResponses = false
                 });
         });
+
+        app.UseCoreEventHandlers();
     }
 }

@@ -1,7 +1,13 @@
+using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using GuardRail.DeviceLogic.Interfaces.Communication;
+using GuardRail.DeviceLogic.Logic;
 using Microsoft.Extensions.Logging;
 
 namespace GuardRail.DeviceLogic.Implementations.Communication;
@@ -97,10 +103,11 @@ public abstract class CoreCentralServerPushCommunication<T> : ICentralServerPush
                                 if (EventHandlers.TryGetValue(parts[0], out var handlers))
                                 {
                                     var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(30));
-                                    await Task.WhenAll(
-                                        handlers
-                                        .Select(func =>
-                                            func(parts[1], cancellationTokenSource.Token)));
+                                    var tasks = handlers.Select(func => func(parts[1], cancellationTokenSource.Token)).ToList();
+                                    while (!cancellationTokenSource.IsCancellationRequested && tasks.Any(x => !x.IsCanceled))
+                                    {
+                                        await Task.Delay(TimeSpan.FromMilliseconds(100), cancellationTokenSource.Token);
+                                    }
                                 }
                             },
                             CancellationTokenSource.Token,

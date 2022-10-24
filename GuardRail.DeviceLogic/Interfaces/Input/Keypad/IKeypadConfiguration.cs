@@ -1,3 +1,5 @@
+using System;
+
 namespace GuardRail.DeviceLogic.Interfaces.Input.Keypad;
 
 /// <summary>

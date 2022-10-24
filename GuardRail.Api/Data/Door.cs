@@ -34,18 +34,18 @@ public class Door : Core.DataModels.Door
     public Task<string> GetDeviceId() =>
         Task.FromResult(DeviceId);
 
-    public Task<DoorStatus> GetLockedStatus(CancellationToken cancellationToken) =>
-        Task.FromResult(DoorStatus);
+    public Task<DoorStateRequestType> GetLockedStatus(CancellationToken cancellationToken) =>
+        Task.FromResult(DoorStateRequestType);
 
     public Task LockAsync(CancellationToken cancellationToken)
     {
-        DoorStatus = DoorStatus.Locked;
+        DoorStateRequestType = DoorStateRequestType.Locked;
         return Task.CompletedTask;
     }
 
     public Task UnLockAsync(CancellationToken cancellationToken)
     {
-        DoorStatus = DoorStatus.UnLocked;
+        DoorStateRequestType = DoorStateRequestType.UnLocked;
         return Task.CompletedTask;
     }
 }

@@ -1,7 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
     <ApplicationIcon>logo_icon.ico</ApplicationIcon>
     <Authors>Joshua Galloway</Authors>
     <Company>G3 Software</Company>
@@ -14,7 +16,7 @@
     <FileVersion>0.0.0.1</FileVersion>
     <Product>GuardRail</Product>
     <Nullable>enable</Nullable>
-    <LangVersion>latest</LangVersion>
+    <OutputType>Library</OutputType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

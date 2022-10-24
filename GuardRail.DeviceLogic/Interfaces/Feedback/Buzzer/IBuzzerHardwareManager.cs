@@ -1,9 +1,12 @@
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace GuardRail.DeviceLogic.Interfaces.Feedback.Buzzer;
 
 /// <summary>
 /// The low level API for interacting with a feedback buzzer.
 /// </summary>
-public interface IBuzzerHardwareManager : IHardwareAsyncInit
+public interface IBuzzerHardwareManager : IAsyncInit
 {
     /// <summary>
     /// Turns on a buzzer.

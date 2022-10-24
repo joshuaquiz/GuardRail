@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using GuardRail.DeviceLogic.Interfaces;
 
 namespace GuardRail.DeviceLogic.Interfaces.Door;
@@ -5,7 +7,7 @@ namespace GuardRail.DeviceLogic.Interfaces.Door;
 /// <summary>
 /// The low level API for interacting with a door that unlocks.
 /// </summary>
-public interface IUnLockableDoorHardwareManager : IHardwareAsyncInit
+public interface IUnLockableDoorManager : IAsyncInit
 {
     /// <summary>
     /// Unlocks the door.

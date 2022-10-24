@@ -9,10 +9,10 @@ public sealed class LightManager : CoreLightManager<LightManager>
     public LightManager(
         ILightConfiguration lightConfiguration,
         ILogger<LightManager> logger,
-        ILightHardwareManager lightHardwareManager)
+        ILightHardwareManager lightManager)
         : base(
             lightConfiguration,
-            lightHardwareManager,
+            lightManager,
             logger)
     {
     }

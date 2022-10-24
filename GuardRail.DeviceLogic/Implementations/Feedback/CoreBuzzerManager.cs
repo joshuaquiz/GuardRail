@@ -1,3 +1,6 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using GuardRail.DeviceLogic.Interfaces.Feedback.Buzzer;
 using Microsoft.Extensions.Logging;
 
@@ -6,16 +9,16 @@ namespace GuardRail.DeviceLogic.Implementations.Feedback;
 public class CoreBuzzerManager<T> : IBuzzerManager where T : CoreBuzzerManager<T>
 {
     protected readonly IBuzzerConfiguration BuzzerConfiguration;
-    protected readonly IBuzzerHardwareManager BuzzerHardwareManager;
+    protected readonly IBuzzerHardwareManager BuzzerManager;
     protected readonly ILogger<T> Logger;
 
     protected CoreBuzzerManager(
         IBuzzerConfiguration buzzerConfiguration,
-        IBuzzerHardwareManager buzzerHardwareManager,
+        IBuzzerHardwareManager buzzerManager,
         ILogger<T> logger)
     {
         BuzzerConfiguration = buzzerConfiguration;
-        BuzzerHardwareManager = buzzerHardwareManager;
+        BuzzerManager = buzzerManager;
         Logger = logger;
     }
 
@@ -25,12 +28,12 @@ public class CoreBuzzerManager<T> : IBuzzerManager where T : CoreBuzzerManager<T
         CancellationToken cancellationToken)
     {
         LogDebug("Turning buzzer on");
-        await BuzzerHardwareManager.TurnBuzzerOnAsync(BuzzerConfiguration.BuzzerAddress, cancellationToken);
+        await BuzzerManager.TurnBuzzerOnAsync(BuzzerConfiguration.BuzzerAddress, cancellationToken);
         if (duration > TimeSpan.Zero)
         {
             await Task.Delay(duration, cancellationToken);
             LogDebug("Turning buzzer off");
-            await BuzzerHardwareManager.TurnBuzzerOffAsync(BuzzerConfiguration.BuzzerAddress, cancellationToken);
+            await BuzzerManager.TurnBuzzerOffAsync(BuzzerConfiguration.BuzzerAddress, cancellationToken);
         }
     }
 
@@ -44,7 +47,7 @@ public class CoreBuzzerManager<T> : IBuzzerManager where T : CoreBuzzerManager<T
     /// <inheritdoc />
     public virtual async ValueTask DisposeAsync()
     {
-        await BuzzerHardwareManager.DisposeAddressAsync(
+        await BuzzerManager.DisposeAddressAsync(
             BuzzerConfiguration.BuzzerAddress);
     }
 }

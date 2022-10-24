@@ -1,9 +1,12 @@
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace GuardRail.DeviceLogic.Interfaces.Feedback.Lights;
 
 /// <summary>
 /// The low level API for interacting with feedback lights.
 /// </summary>
-public interface ILightHardwareManager : IHardwareAsyncInit
+public interface ILightHardwareManager : IAsyncInit
 {
     /// <summary>
     /// Turns on a light.

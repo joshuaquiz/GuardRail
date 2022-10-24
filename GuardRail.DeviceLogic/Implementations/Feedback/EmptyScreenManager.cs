@@ -7,15 +7,16 @@ namespace GuardRail.DeviceLogic.Implementations.Feedback;
 /// <summary>
 /// Provides an empty implementation.
 /// </summary>
-public sealed class EmptyBuzzerManager : CoreBuzzerManager<EmptyBuzzerManager>
+public sealed class EmptyScreenManager : CoreScreenManager<EmptyScreenManager>
 {
-    public EmptyBuzzerManager()
-        : base(null!, null!, null!)
+    public EmptyScreenManager()
+        : base(null!)
     {
     }
 
     /// <inheritdoc />
-    public override ValueTask BuzzAsync(
+    public override ValueTask DisplayMessageAsync(
+        string message,
         TimeSpan duration,
         CancellationToken cancellationToken) =>
         ValueTask.CompletedTask;
