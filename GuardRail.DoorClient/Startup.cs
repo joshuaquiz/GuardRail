@@ -1,10 +1,7 @@
 using System;
 using System.Device.Gpio;
-using System.Linq;
 using System.Net.Http.Headers;
-using System.Reflection;
 using GuardRail.DeviceLogic.DependencyHelpers;
-using GuardRail.DeviceLogic.Interfaces;
 using GuardRail.DeviceLogic.Interfaces.Communication;
 using GuardRail.DeviceLogic.Models;
 using GuardRail.DeviceLogic.Services;
@@ -13,6 +10,8 @@ using GuardRail.DoorClient.Implementation;
 using GuardRail.DoorClient.Implementation.Communication;
 using GuardRail.DoorClient.Implementation.Feedback.Buzzer;
 using GuardRail.DoorClient.Implementation.Feedback.Lights;
+using GuardRail.DoorClient.Implementation.Input;
+using GuardRail.DoorClient.Implementation.Input.Nfc;
 using GuardRail.DoorClient.Interfaces;
 using GuardRail.DoorClient.Services;
 using Microsoft.AspNetCore.Builder;
@@ -21,6 +20,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
@@ -51,20 +51,27 @@ public class Startup
                     Title = "GuardRail.DoorClient",
                     Version = "v1"
                 }));
-        RegisterAllImplementations(services, typeof(IAsyncInit));
         services
             .AddOptions()
-            .AddLogging()
-            .AddSingleton(_ => Configuration.GetSection(nameof(UdpConfiguration)).Get<UdpConfiguration>())
+            .AddLogging(logging =>
+            {
+                logging.ClearProviders();
+                logging.AddSerilog();
+            })
+            .AddSingleton(_ => Configuration.GetSection(nameof(UdpConfiguration)).Get<UdpConfiguration>() ?? new UdpConfiguration())
+            .AddSingleton<IUdpConfiguration, UdpConfiguration>()
             .AddSingleton(_ => new GpioController())
             .AddSingleton<IGpio, Gpio>()
-            .AddBuzzer<BuzzerConfiguration, BuzzerHardwareManager, BuzzerManager>(Configuration)
-            .AddLight<LightConfiguration, LightHardwareManager, LightManager>(Configuration)
+            .AddBuzzer<BuzzerConfiguration, int, BuzzerHardwareManager, BuzzerManager>(Configuration)
+            .AddLight<LightConfiguration, int, LightHardwareManager, LightManager>(Configuration)
+            .AddKeypad<KeypadConfiguration, int, KeypadHardwareManager, KeypadInput>(Configuration)
+            .AddNfc<NfcConfiguration, NfcHardwareManager, NfcInput>(Configuration)
             .AddEmptyScreen()
+            .AddEmptyDoor()
             .AddSingleton<ICentralServerCommunication, CentralServerCommunication>()
             .AddSingleton<ICentralServerPushCommunication, CentralServerPushCommunication>()
             .AddHostedService<ButtonListenerService>()
-            .AddHostedService<AsyncInitService>()
+            //.AddHostedService<AsyncInitService>()
             .AddHostedService<UdpConnectionManagerService>()
             .AddHostedService<CentralServerPushCommunication>()
             .AddHttpClient(
@@ -76,19 +83,6 @@ public class Startup
                         : new Uri("https://localhost/", UriKind.Absolute);
                     client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("GuardRailDoor", "1.0.0"));
                 });
-    }
-
-    private static void RegisterAllImplementations(
-        IServiceCollection serviceCollection,
-        Type type)
-    {
-        foreach (var t in Assembly
-                     .GetExecutingAssembly()
-                     .DefinedTypes
-                     .Where(x => type.IsAssignableFrom(x) && type != x.AsType()))
-        {
-            serviceCollection.AddSingleton(type, t.AsType());
-        }
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -116,5 +110,6 @@ public class Startup
         });
 
         app.UseCoreEventHandlers();
+        app.UseAsyncInitTypes();
     }
 }

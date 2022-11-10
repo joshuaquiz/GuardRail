@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace GuardRail.DoorClient.Implementation.Input;
 
-public sealed class KeypadInput : CoreKeypadInput<KeypadInput, KeypadConfiguration>
+public sealed class KeypadInput : CoreKeypadInput<KeypadInput, KeypadConfiguration, int>
 {
     private readonly ILightManager _lightManager;
 
@@ -19,11 +19,11 @@ public sealed class KeypadInput : CoreKeypadInput<KeypadInput, KeypadConfigurati
         ILightManager lightManager,
         KeypadConfiguration keypadConfiguration,
         ICentralServerCommunication centralServerCommunication,
-        IKeypadManager keypadManager,
+        IKeypadHardwareManager<int> keypadHardwareManager,
         ILogger<KeypadInput> logger)
         : base(
             keypadConfiguration,
-            keypadManager,
+            keypadHardwareManager,
             centralServerCommunication,
             logger)
     {
@@ -42,7 +42,10 @@ public sealed class KeypadInput : CoreKeypadInput<KeypadInput, KeypadConfigurati
     {
         foreach (var pin in KeypadConfiguration.ColumnPins.Concat(KeypadConfiguration.RowPins))
         {
-            await KeypadManager.DisposeAddressAsync(new[] { Convert.ToByte(pin) });
+            if (KeypadHardwareManager is not null)
+            {
+                await KeypadHardwareManager.DisposeAddressAsync(pin);
+            }
         }
     }
 }

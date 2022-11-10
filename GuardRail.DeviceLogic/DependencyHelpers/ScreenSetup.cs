@@ -30,6 +30,7 @@ public static class ScreenSetup
         where TScreenManager : class, IScreenManager =>
         services
             //.AddSingleton(_ => configuration.GetSection("Screen").Get<TScreenConfiguration>())
+            //.AddSingleton<IScreenConfiguration, TScreenConfiguration>()
             //.AddSingleton<IScreenHardwareManager, TScreenHardwareManager>()
             .AddSingleton<IScreenManager, TScreenManager>();
 

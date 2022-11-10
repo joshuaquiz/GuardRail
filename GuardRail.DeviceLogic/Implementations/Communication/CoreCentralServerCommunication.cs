@@ -34,7 +34,7 @@ public class CoreCentralServerCommunication<T> : ICentralServerCommunication whe
             using var scope = ServiceProvider.CreateScope();
             using var httpClient = scope.ServiceProvider.GetRequiredService<HttpClient>();
             await httpClient.PostAsJsonAsync(
-                path,
+                "api/device_actions/" + path,
                 data,
                 cancellationToken);
             return true;
@@ -55,7 +55,7 @@ public class CoreCentralServerCommunication<T> : ICentralServerCommunication whe
             using var scope = ServiceProvider.CreateScope();
             using var httpClient = scope.ServiceProvider.GetRequiredService<HttpClient>();
             return await httpClient.GetStreamAsync(
-                path,
+                "api/device_actions/" + path,
                 cancellationToken);
         }
         catch (Exception)

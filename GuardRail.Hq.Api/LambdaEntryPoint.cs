@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 namespace GuardRail.Hq.Api;
 
 /// <summary>
-/// This class extends from APIGatewayProxyFunction which contains the method FunctionHandlerAsync which is the 
+/// This class extends from APIGatewayProxyFunction which contains the method FunctionHandlerAsync which is the
 /// actual Lambda function entry point. The Lambda handler field should be set to
 /// 
 /// GuardRail.Hq.Api::GuardRail.Hq.Api.LambdaEntryPoint::FunctionHandlerAsync
@@ -36,7 +36,7 @@ public class LambdaEntryPoint :
     }
 
     /// <summary>
-    /// Use this override to customize the services registered with the IHostBuilder. 
+    /// Use this override to customize the services registered with the IHostBuilder.
     /// 
     /// It is recommended not to call ConfigureWebHostDefaults to configure the IWebHostBuilder inside this method.
     /// Instead customize the IWebHostBuilder in the Init(IWebHostBuilder) overload.

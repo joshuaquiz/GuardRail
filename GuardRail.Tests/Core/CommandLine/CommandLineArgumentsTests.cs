@@ -18,7 +18,7 @@ public static class CommandLineArgumentsTests
         var stringValue = commandLineArguments.ToString();
         Assert.Equal(argument1, stringValue);
     }
-        
+
     [Fact]
     public static void CommandLineArgumentsToStringMultiValue()
     {
@@ -33,7 +33,7 @@ public static class CommandLineArgumentsTests
         var stringValue = commandLineArguments.ToString();
         Assert.Equal($"{argument1} {argument2}", stringValue);
     }
-        
+
     [Fact]
     public static void CommandLineArgumentsContainsKeyTrue()
     {
@@ -47,7 +47,7 @@ public static class CommandLineArgumentsTests
             });
         Assert.True(commandLineArguments.ContainsKey(CommandLineArgumentType.FreshInstall));
     }
-        
+
     [Fact]
     public static void CommandLineArgumentsContainsKeyFalse()
     {

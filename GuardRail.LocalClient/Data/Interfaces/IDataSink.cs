@@ -15,7 +15,7 @@ public interface IDataSink : IDisposable
     /// Starts the syncing for this sink.
     /// </summary>
     void StartSync();
-        
+
     /// <summary>
     /// Save a new item of type T.
     /// </summary>

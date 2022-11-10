@@ -4,27 +4,27 @@ using System.Threading.Tasks;
 namespace GuardRail.DeviceLogic.Interfaces.Door;
 
 /// <summary>
-/// The low level API for interacting with a door that is openable.
+/// The low level API for interacting with a door that unlocks.
 /// </summary>
-public interface IOpenableDoorManager : IAsyncInit
+public interface ILockableDoorHardwareManager : IAsyncInit
 {
     /// <summary>
-    /// Opens the door.
+    /// Unlocks the door.
     /// </summary>
     /// <param name="address">The hardware address.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
-    /// <returns>A <see cref="ValueTask"/> representing the work to open the door.</returns>
-    public ValueTask OpenAsync(
+    /// <returns>A <see cref="ValueTask"/> representing the work to unlock the door.</returns>
+    public ValueTask UnLockAsync(
         byte[] address,
         CancellationToken cancellationToken);
 
     /// <summary>
-    /// Closes the door.
+    /// Locks the door.
     /// </summary>
     /// <param name="address">The hardware address.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
-    /// <returns>A <see cref="ValueTask"/> representing the work to close the door.</returns>
-    public ValueTask CloseAsync(
+    /// <returns>A <see cref="ValueTask"/> representing the work to lock the door.</returns>
+    public ValueTask LockAsync(
         byte[] address,
         CancellationToken cancellationToken);
 

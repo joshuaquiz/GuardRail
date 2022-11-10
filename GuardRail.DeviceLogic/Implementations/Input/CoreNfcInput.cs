@@ -6,21 +6,24 @@ using GuardRail.Core.DataModels;
 using GuardRail.Core.Enums;
 using GuardRail.DeviceLogic.Models;
 using GuardRail.DeviceLogic.Interfaces.Input.Nfc;
+using System.Text;
 
 namespace GuardRail.DeviceLogic.Implementations.Input;
 
-public abstract class CoreNfcInput : INfcInput
+public abstract class CoreNfcInput<TNfcInput, TNfcConfiguration> : INfcInput
+    where TNfcInput : CoreNfcInput<TNfcInput, TNfcConfiguration>
+    where TNfcConfiguration : INfcConfiguration
 {
-    protected readonly INfcConfiguration NfcConfiguration;
-    protected readonly INfcHardwareManager NfcHardwareManager;
+    protected readonly TNfcConfiguration NfcConfiguration;
+    protected readonly INfcHardwareManager? NfcHardwareManager;
     protected readonly ICentralServerCommunication CentralServerCommunication;
-    protected readonly ILogger<CoreNfcInput> Logger;
+    protected readonly ILogger<TNfcInput> Logger;
 
     protected CoreNfcInput(
-        INfcConfiguration nfcConfiguration,
-        INfcHardwareManager nfcHardwareManager,
+        TNfcConfiguration nfcConfiguration,
+        INfcHardwareManager? nfcHardwareManager,
         ICentralServerCommunication centralServerCommunication,
-        ILogger<CoreNfcInput> logger)
+        ILogger<TNfcInput> logger)
     {
         NfcConfiguration = nfcConfiguration;
         NfcHardwareManager = nfcHardwareManager;
@@ -29,8 +32,19 @@ public abstract class CoreNfcInput : INfcInput
     }
 
     /// <inheritdoc />
-    public async ValueTask OnSubmit(
-        byte[] inputData,
+    public ValueTask InitAsync()
+    {
+        if (NfcHardwareManager != null)
+        {
+            NfcHardwareManager.Submit += OnNfcSubmit;
+        }
+
+        return ValueTask.CompletedTask;
+    }
+
+    /// <inheritdoc />
+    public virtual async ValueTask OnNfcSubmit(
+        string inputData,
         CancellationToken cancellationToken) =>
         await CentralServerCommunication.SendDataAsync(
             nameof(UnLockRequest),
@@ -38,7 +52,7 @@ public abstract class CoreNfcInput : INfcInput
             {
                 DoorId = DeviceConstants.DeviceId,
                 UnlockRequestType = UnlockRequestType.Nfc,
-                Data = inputData
+                Data = Encoding.UTF8.GetBytes(inputData)
             },
             cancellationToken);
 

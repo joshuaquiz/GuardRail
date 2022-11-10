@@ -1,53 +1,58 @@
 using System.Device.Gpio;
 using System.Threading;
 using System.Threading.Tasks;
+using GuardRail.Core.Helpers;
 using GuardRail.DeviceLogic.Interfaces.Feedback.Buzzer;
 using GuardRail.DoorClient.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace GuardRail.DoorClient.Implementation.Feedback.Buzzer;
 
-public sealed class BuzzerHardwareManager : IBuzzerHardwareManager
+public sealed class BuzzerHardwareManager : IBuzzerHardwareManager<int>
 {
     private readonly IGpio _gpio;
-    private readonly IBuzzerConfiguration _buzzerConfiguration;
+    private readonly IBuzzerConfiguration<int> _buzzerConfiguration;
+    private readonly ILogger<BuzzerHardwareManager> _logger;
 
     public BuzzerHardwareManager(
         IGpio gpio,
-        IBuzzerConfiguration buzzerConfiguration)
+        IBuzzerConfiguration<int> buzzerConfiguration,
+        ILogger<BuzzerHardwareManager> logger)
     {
         _gpio = gpio;
         _buzzerConfiguration = buzzerConfiguration;
+        _logger = logger;
     }
 
     public ValueTask InitAsync()
     {
-        _gpio.OpenPin(_buzzerConfiguration.BuzzerAddress[0], PinMode.Output);
+        _gpio.OpenPin(_buzzerConfiguration.BuzzerAddress, PinMode.Output);
         return ValueTask.CompletedTask;
     }
 
     public ValueTask TurnBuzzerOnAsync(
-        byte[] address,
+        int address,
         CancellationToken cancellationToken)
     {
         _gpio.Write(
-            address[0],
+            address,
             PinValue.High);
         return ValueTask.CompletedTask;
     }
 
     public ValueTask TurnBuzzerOffAsync(
-        byte[] address,
+        int address,
         CancellationToken cancellationToken)
     {
         _gpio.Write(
-            address[0],
+            address,
             PinValue.Low);
         return ValueTask.CompletedTask;
     }
 
-    public ValueTask DisposeAddressAsync(byte[] address)
+    public ValueTask DisposeAddressAsync(int address)
     {
-        _gpio.ClosePin(address[0]);
+        _gpio.ClosePin(address);
         return ValueTask.CompletedTask;
     }
 }

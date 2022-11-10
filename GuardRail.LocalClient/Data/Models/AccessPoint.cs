@@ -10,7 +10,7 @@ public sealed class AccessPoint : Core.DataModels.AccessPoint
     /// The ID used for EF.
     /// </summary>
     public int Id { get; set; }
-        
+
     /// <summary>
     /// The door attached to this access point.
     /// </summary>
@@ -19,17 +19,17 @@ public sealed class AccessPoint : Core.DataModels.AccessPoint
     /// <summary>
     /// The users with direct access.
     /// </summary>
-    public List<User> Users { get; } = new List<User>();
+    public List<User> Users { get; } = new();
 
     /// <summary>
     /// The UserGroups this access point is linked to.
     /// </summary>
-    public List<UserGroup> UserGroups { get; } = new List<UserGroup>();
+    public List<UserGroup> UserGroups { get; } = new();
 
     /// <summary>
     /// The AccessPointGroups this access point is linked to.
     /// </summary>
-    public List<AccessPointGroup> AccessPointGroups { get; } = new List<AccessPointGroup>();
+    public List<AccessPointGroup> AccessPointGroups { get; } = new();
 
     /// <summary>
     /// EF creation helper.

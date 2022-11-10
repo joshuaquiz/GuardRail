@@ -7,7 +7,7 @@ namespace GuardRail.DeviceLogic.Implementations.Input;
 /// <summary>
 /// Provides an empty implementation.
 /// </summary>
-public sealed class EmptyKeypadInput : CoreKeypadInput<EmptyKeypadInput, IKeypadConfiguration>
+public sealed class EmptyKeypadInput : CoreKeypadInput<EmptyKeypadInput, IKeypadConfiguration<int>, int>
 {
     public EmptyKeypadInput()
         : base(null!, null!, null!, null!)

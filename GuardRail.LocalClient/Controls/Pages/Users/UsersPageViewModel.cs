@@ -22,7 +22,7 @@ public sealed class UsersPageViewModel : IDisposable
     /// <summary>
     /// For viewing users in the application.
     /// </summary>
-    public ObservableCollection<User> Users { get; set; } = new ObservableCollection<User>();
+    public ObservableCollection<User> Users { get; set; } = new();
 
     /// <summary>
     /// The user being edited.
@@ -39,7 +39,7 @@ public sealed class UsersPageViewModel : IDisposable
             Users = new ObservableCollection<User>(
                 new List<User>
                 {
-                    new User
+                    new()
                     {
                         FirstName = "Joshua1",
                         LastName = "Galloway1",
@@ -48,7 +48,7 @@ public sealed class UsersPageViewModel : IDisposable
                         Email = "asdf@asdf1.com",
                         Phone = "3213213214"
                     },
-                    new User
+                    new()
                     {
                         FirstName = "Joshua2",
                         LastName = "Galloway2",
@@ -57,7 +57,7 @@ public sealed class UsersPageViewModel : IDisposable
                         Email = "asdf@asdf2.com",
                         Phone = "3213213214"
                     },
-                    new User
+                    new()
                     {
                         FirstName = "Joshua3",
                         LastName = "Galloway3",

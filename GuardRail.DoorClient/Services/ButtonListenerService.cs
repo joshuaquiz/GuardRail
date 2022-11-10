@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using GuardRail.DoorClient.Implementation.Input;
+using GuardRail.DeviceLogic.Interfaces.Input.Keypad;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -11,16 +11,16 @@ public sealed class ButtonListenerService : IHostedService
 {
     private const int TimerIntervalMilliseconds = 20;
 
-    private readonly KeypadManager _keypadManager;
+    private readonly IKeypadHardwareManager<int> _keypadHardwareManager;
     private readonly ILogger<ButtonListenerService> _logger;
 
-    private Timer _dispatcherTimer;
+    private Timer? _dispatcherTimer;
 
     public ButtonListenerService(
-        KeypadManager keypadManager,
+        IKeypadHardwareManager<int> keypadHardwareManager,
         ILogger<ButtonListenerService> logger)
     {
-        _keypadManager = keypadManager;
+        _keypadHardwareManager = keypadHardwareManager;
         _logger = logger;
     }
 
@@ -28,13 +28,18 @@ public sealed class ButtonListenerService : IHostedService
     {
         _logger.LogInformation("GPIO setup for button listener");
         _dispatcherTimer = new Timer(
-            _ => _keypadManager.TimerTick(),
+            _ => _keypadHardwareManager.TimerTick(),
             null,
             TimeSpan.Zero,
             TimeSpan.FromMilliseconds(TimerIntervalMilliseconds));
         return Task.CompletedTask;
     }
 
-    public async Task StopAsync(CancellationToken cancellationToken) =>
-        await _dispatcherTimer.DisposeAsync();
+    public async Task StopAsync(CancellationToken cancellationToken)
+    {
+        if (_dispatcherTimer is not null)
+        {
+            await _dispatcherTimer.DisposeAsync();
+        }
+    }
 }

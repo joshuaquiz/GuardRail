@@ -4,11 +4,11 @@ using Microsoft.Extensions.Logging;
 
 namespace GuardRail.DoorClient.Implementation.Feedback.Buzzer;
 
-public sealed class BuzzerManager : CoreBuzzerManager<BuzzerManager>
+public sealed class BuzzerManager : CoreBuzzerManager<BuzzerManager, int>
 {
     public BuzzerManager(
-        IBuzzerConfiguration buzzerConfiguration,
-        IBuzzerHardwareManager buzzerManager,
+        IBuzzerConfiguration<int> buzzerConfiguration,
+        IBuzzerHardwareManager<int> buzzerManager,
         ILogger<BuzzerManager> logger)
         : base(
             buzzerConfiguration,

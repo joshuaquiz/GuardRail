@@ -29,7 +29,7 @@
         </member>
         <member name="P:GuardRail.LocalClient.App.Account">
             <summary>
-            The account for this installation. 
+            The account for this installation.
             </summary>
         </member>
         <member name="M:GuardRail.LocalClient.App.#ctor">

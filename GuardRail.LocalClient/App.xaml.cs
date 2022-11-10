@@ -38,7 +38,7 @@ public partial class App
     public static CancellationTokenSource CancellationTokenSource { get; private set; }
 
     /// <summary>
-    /// The account for this installation. 
+    /// The account for this installation.
     /// </summary>
     public static Account Account { get; private set; }
 
@@ -77,7 +77,7 @@ public partial class App
             CancellationTokenSource.Token);
         mainWindow.Show();
     }
-        
+
     private void ConfigureServices(IServiceCollection services)
     {
         services.AddSingleton<MainWindow>();

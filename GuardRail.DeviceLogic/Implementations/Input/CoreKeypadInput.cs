@@ -10,23 +10,23 @@ using GuardRail.DeviceLogic.Models;
 
 namespace GuardRail.DeviceLogic.Implementations.Input;
 
-public abstract class CoreKeypadInput<TKeypadInput, TKeypadConfiguration> : IKeypadInput
-    where TKeypadInput : CoreKeypadInput<TKeypadInput, TKeypadConfiguration>
-    where TKeypadConfiguration : IKeypadConfiguration
+public abstract class CoreKeypadInput<TKeypadInput, TKeypadConfiguration, TKeypadConfigurationType> : IKeypadInput
+    where TKeypadInput : CoreKeypadInput<TKeypadInput, TKeypadConfiguration, TKeypadConfigurationType>
+    where TKeypadConfiguration : IKeypadConfiguration<TKeypadConfigurationType>
 {
     protected readonly TKeypadConfiguration KeypadConfiguration;
-    protected readonly IKeypadManager? KeypadManager;
+    protected readonly IKeypadHardwareManager<TKeypadConfigurationType>? KeypadHardwareManager;
     protected readonly ICentralServerCommunication CentralServerCommunication;
     protected readonly ILogger<TKeypadInput> Logger;
 
     protected CoreKeypadInput(
         TKeypadConfiguration keypadConfiguration,
-        IKeypadManager? keypadManager,
+        IKeypadHardwareManager<TKeypadConfigurationType>? keypadHardwareManager,
         ICentralServerCommunication centralServerCommunication,
         ILogger<TKeypadInput> logger)
     {
         KeypadConfiguration = keypadConfiguration;
-        KeypadManager = keypadManager;
+        KeypadHardwareManager = keypadHardwareManager;
         CentralServerCommunication = centralServerCommunication;
         Logger = logger;
     }
@@ -34,10 +34,10 @@ public abstract class CoreKeypadInput<TKeypadInput, TKeypadConfiguration> : IKey
     /// <inheritdoc />
     public ValueTask InitAsync()
     {
-        if (KeypadManager != null)
+        if (KeypadHardwareManager != null)
         {
-            KeypadManager.Reset += OnKeypadReset;
-            KeypadManager.Submit += OnKeypadSubmit;
+            KeypadHardwareManager.Reset += OnKeypadReset;
+            KeypadHardwareManager.Submit += OnKeypadSubmit;
         }
 
         return ValueTask.CompletedTask;

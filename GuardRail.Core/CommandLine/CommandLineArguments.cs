@@ -10,7 +10,7 @@ namespace GuardRail.Core.CommandLine;
 public sealed class CommandLineArguments : IList<CommandLineArgument>
 {
     private readonly IList<CommandLineArgument> _backingDataStore;
-        
+
     private CommandLineArguments(IEnumerable<string> args) =>
         _backingDataStore = args.Select(CommandLineArgument.Parse).ToList();
 
@@ -19,7 +19,7 @@ public sealed class CommandLineArguments : IList<CommandLineArgument>
     /// </summary>
     /// <param name="args">The arguments to parse.</param>
     public static CommandLineArguments Create(IEnumerable<string> args) =>
-        new CommandLineArguments(args);
+        new(args);
 
     /// <summary>
     /// Checks to see if the CommandLineArgumentType was defined.

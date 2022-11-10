@@ -196,7 +196,7 @@ public sealed class TestEvent : IGuardRailEvent
 public sealed class EventHub : IEventHub
 {
     private readonly IDictionary<Type, ObservableCollection<IGuardRailEvent>> _observables = new Dictionary<Type, ObservableCollection<IGuardRailEvent>>();
-    private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+    private readonly CancellationTokenSource _cancellationTokenSource = new();
 
     public void Startup(ICollection<Type> events)
     {

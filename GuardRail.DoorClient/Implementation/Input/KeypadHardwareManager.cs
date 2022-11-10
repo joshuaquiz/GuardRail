@@ -11,13 +11,13 @@ using Microsoft.Extensions.Logging;
 
 namespace GuardRail.DoorClient.Implementation.Input;
 
-public sealed class KeypadManager : IKeypadManager
+public sealed class KeypadHardwareManager : IKeypadHardwareManager<int>
 {
     private const int ButtonDebounceMilliseconds = 25;
 
     private readonly IGpio _gpio;
     private readonly KeypadConfiguration _keypadConfiguration;
-    private readonly ILogger<KeypadManager> _logger;
+    private readonly ILogger<KeypadHardwareManager> _logger;
 
     private CancellationTokenSource _cancellationTokenSource;
     private List<char> _pressedKeys = new(0);
@@ -33,14 +33,16 @@ public sealed class KeypadManager : IKeypadManager
     public readonly List<int> Rows = new();
     public readonly List<int> Columns = new();
 
-    public KeypadManager(
+    public KeypadHardwareManager(
         IGpio gpio,
         KeypadConfiguration keypadConfiguration,
-        ILogger<KeypadManager> logger)
+        ILogger<KeypadHardwareManager> logger)
     {
         _gpio = gpio;
         _keypadConfiguration = keypadConfiguration;
         _logger = logger;
+
+        _cancellationTokenSource = new CancellationTokenSource();
     }
 
     public ValueTask InitAsync()
@@ -87,15 +89,15 @@ public sealed class KeypadManager : IKeypadManager
     }
 
     /// <inheritdoc />
-    public event Func<string, CancellationToken, ValueTask> Submit;
+    public event Func<string, CancellationToken, ValueTask>? Submit;
 
     /// <inheritdoc />
-    public event Func<CancellationToken, ValueTask> Reset;
+    public event Func<CancellationToken, ValueTask>? Reset;
 
     public ValueTask DisposeAddressAsync(
-        byte[] address)
+        int address)
     {
-        _gpio.ClosePin(address[0]);
+        _gpio.ClosePin(address);
         return ValueTask.CompletedTask;
     }
 
@@ -220,16 +222,17 @@ public sealed class KeypadManager : IKeypadManager
 #pragma warning restore 4014
     }
 
+    /// <inheritdoc />
     public void TimerTick()
     {
-        // if it's been a while, then clear the last value so you enter another one
+        // If it's been a while, then clear the last value so you enter another one.
         if (_clearLastPinValueTime > DateTime.UtcNow)
         {
             return;
         }
 
         _lastPinValue = string.Empty;
-        // reset the next check a ways out in the future
+        // Reset the next check a ways out in the future.
         _clearLastPinValueTime = DateTime.UtcNow.AddSeconds(15);
     }
 

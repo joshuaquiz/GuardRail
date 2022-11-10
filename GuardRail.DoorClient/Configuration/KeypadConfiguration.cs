@@ -4,7 +4,7 @@ using GuardRail.DeviceLogic.Interfaces.Input.Keypad;
 
 namespace GuardRail.DoorClient.Configuration;
 
-public sealed class KeypadConfiguration : IKeypadConfiguration
+public sealed class KeypadConfiguration : IKeypadConfiguration<int>
 {
     /// <inheritdoc />
     public TimeSpan KeypadTimeout { get; set; }
@@ -12,7 +12,9 @@ public sealed class KeypadConfiguration : IKeypadConfiguration
     /// <inheritdoc />
     public char SubmitKey { get; set; }
 
-    public List<int> ColumnPins { get; set; }
+    /// <inheritdoc />
+    public List<int> ColumnPins { get; set; } = new();
 
-    public List<int> RowPins { get; set; }
+    /// <inheritdoc />
+    public List<int> RowPins { get; set; } = new();
 }

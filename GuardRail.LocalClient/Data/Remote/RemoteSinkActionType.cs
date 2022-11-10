@@ -9,12 +9,12 @@ public enum RemoteSinkActionType
     /// Add an item.
     /// </summary>
     Add = 0,
-        
+
     /// <summary>
     /// Update an item.
     /// </summary>
     Update = 1,
-        
+
     /// <summary>
     /// Delete an item.
     /// </summary>

@@ -76,7 +76,7 @@ public partial class UsersPageUserControl
                 MessageBoxResult.OK);
             return;
         }
-            
+
         var dataStore = App.Host.Services.GetRequiredService<IDataStore>();
         if (ViewModel.EditingUser.Id > 0)
         {

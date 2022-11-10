@@ -6,14 +6,14 @@ using GuardRail.DoorClient.Interfaces;
 
 namespace GuardRail.DoorClient.Implementation.Feedback.Lights;
 
-public sealed class LightHardwareManager : ILightHardwareManager
+public sealed class LightHardwareManager : ILightHardwareManager<int>
 {
     private readonly IGpio _gpio;
-    private readonly ILightConfiguration _lightConfiguration;
+    private readonly ILightConfiguration<int> _lightConfiguration;
 
     public LightHardwareManager(
         IGpio gpio,
-        ILightConfiguration lightConfiguration)
+        ILightConfiguration<int> lightConfiguration)
     {
         _gpio = gpio;
         _lightConfiguration = lightConfiguration;
@@ -21,30 +21,30 @@ public sealed class LightHardwareManager : ILightHardwareManager
 
     public ValueTask InitAsync()
     {
-        _gpio.OpenPin(_lightConfiguration.RedLightAddress[0], PinMode.Output);
-        _gpio.OpenPin(_lightConfiguration.GreenLightAddress[0], PinMode.Output);
+        _gpio.OpenPin(_lightConfiguration.RedLightAddress, PinMode.Output);
+        _gpio.OpenPin(_lightConfiguration.GreenLightAddress, PinMode.Output);
         return ValueTask.CompletedTask;
     }
 
     public ValueTask TurnLightOnAsync(
-        byte[] address,
+        int address,
         CancellationToken cancellationToken)
     {
-        _gpio.Write(address[0], PinValue.High);
+        _gpio.Write(address, PinValue.High);
         return ValueTask.CompletedTask;
     }
 
     public ValueTask TurnLightOffAsync(
-        byte[] address,
+        int address,
         CancellationToken cancellationToken)
     {
-        _gpio.Write(address[0], PinValue.Low);
+        _gpio.Write(address, PinValue.Low);
         return ValueTask.CompletedTask;
     }
 
-    public ValueTask DisposeAddressAsync(byte[] address)
+    public ValueTask DisposeAddressAsync(int address)
     {
-        _gpio.ClosePin(address[0]);
+        _gpio.ClosePin(address);
         return ValueTask.CompletedTask;
     }
 }

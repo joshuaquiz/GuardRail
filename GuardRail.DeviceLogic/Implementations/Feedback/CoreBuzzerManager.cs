@@ -6,16 +6,17 @@ using Microsoft.Extensions.Logging;
 
 namespace GuardRail.DeviceLogic.Implementations.Feedback;
 
-public class CoreBuzzerManager<T> : IBuzzerManager where T : CoreBuzzerManager<T>
+public class CoreBuzzerManager<TCoreBuzzerManager, TBuzzerConfigurationType> : IBuzzerManager
+    where TCoreBuzzerManager : CoreBuzzerManager<TCoreBuzzerManager, TBuzzerConfigurationType>
 {
-    protected readonly IBuzzerConfiguration BuzzerConfiguration;
-    protected readonly IBuzzerHardwareManager BuzzerManager;
-    protected readonly ILogger<T> Logger;
+    protected readonly IBuzzerConfiguration<TBuzzerConfigurationType> BuzzerConfiguration;
+    protected readonly IBuzzerHardwareManager<TBuzzerConfigurationType> BuzzerManager;
+    protected readonly ILogger<TCoreBuzzerManager> Logger;
 
     protected CoreBuzzerManager(
-        IBuzzerConfiguration buzzerConfiguration,
-        IBuzzerHardwareManager buzzerManager,
-        ILogger<T> logger)
+        IBuzzerConfiguration<TBuzzerConfigurationType> buzzerConfiguration,
+        IBuzzerHardwareManager<TBuzzerConfigurationType> buzzerManager,
+        ILogger<TCoreBuzzerManager> logger)
     {
         BuzzerConfiguration = buzzerConfiguration;
         BuzzerManager = buzzerManager;

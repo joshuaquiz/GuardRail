@@ -6,16 +6,17 @@ using Microsoft.Extensions.Logging;
 
 namespace GuardRail.DeviceLogic.Implementations.Feedback;
 
-public class CoreLightManager<T> : ILightManager where T : CoreLightManager<T>
+public class CoreLightManager<TCoreLightManager, TLightConfigurationType> : ILightManager
+    where TCoreLightManager : CoreLightManager<TCoreLightManager, TLightConfigurationType>
 {
-    protected readonly ILightConfiguration LightConfiguration;
-    protected readonly ILightHardwareManager LightManager;
-    protected readonly ILogger<T> Logger;
+    protected readonly ILightConfiguration<TLightConfigurationType> LightConfiguration;
+    protected readonly ILightHardwareManager<TLightConfigurationType> LightManager;
+    protected readonly ILogger<TCoreLightManager> Logger;
 
     protected CoreLightManager(
-        ILightConfiguration lightConfiguration,
-        ILightHardwareManager lightManager,
-        ILogger<T> logger)
+        ILightConfiguration<TLightConfigurationType> lightConfiguration,
+        ILightHardwareManager<TLightConfigurationType> lightManager,
+        ILogger<TCoreLightManager> logger)
     {
         LightConfiguration = lightConfiguration;
         LightManager = lightManager;

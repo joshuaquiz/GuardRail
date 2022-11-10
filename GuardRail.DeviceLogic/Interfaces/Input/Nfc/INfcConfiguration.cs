@@ -5,4 +5,5 @@ namespace GuardRail.DeviceLogic.Interfaces.Input.Nfc;
 /// </summary>
 public interface INfcConfiguration
 {
+    public string SerialPort { get; set; }
 }

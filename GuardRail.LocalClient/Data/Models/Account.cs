@@ -14,7 +14,7 @@ public class Account : Core.DataModels.Account
     /// <summary>
     /// Users on the account.
     /// </summary>
-    public List<User> Users { get; } = new List<User>();
+    public List<User> Users { get; } = new();
 
     /// <summary>
     /// EF creation helper.

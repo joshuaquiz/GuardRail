@@ -11,6 +11,8 @@ public class Door : Core.DataModels.Door
 {
     public Guid Id { get; set; }
 
+    public string FriendlyName { get; set; }
+
     public AccessControlDevice AccessControlDevice { get; set; }
 
     public List<DoorUserAccess> DoorUserAccesses { get; set; }

@@ -19,22 +19,22 @@ public sealed class User : Core.DataModels.User
     /// <summary>
     /// The devices a user has.
     /// </summary>
-    public List<Device> Devices { get; } = new List<Device>();
+    public List<Device> Devices { get; } = new();
 
     /// <summary>
     /// The AccessPoints a user has direct access to.
     /// </summary>
-    public List<AccessPoint> AccessPoints { get; } = new List<AccessPoint>();
+    public List<AccessPoint> AccessPoints { get; } = new();
 
     /// <summary>
     /// The UserGroups a user is in.
     /// </summary>
-    public List<UserGroup> UserGroups { get; } = new List<UserGroup>();
+    public List<UserGroup> UserGroups { get; } = new();
 
     /// <summary>
     /// The AccessPointGroups a user has access to.
     /// </summary>
-    public List<AccessPointGroup> AccessPointGroups { get; } = new List<AccessPointGroup>();
+    public List<AccessPointGroup> AccessPointGroups { get; } = new();
 
     /// <summary>
     /// EF creation helper.

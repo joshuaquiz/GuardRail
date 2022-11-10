@@ -18,16 +18,47 @@ public sealed class Gpio : IGpio, IDisposable
     }
 
     /// <inheritdoc />
-    public void OpenPin(int pinNumber, PinMode mode) =>
-        _gpio.OpenPin(pinNumber, mode);
+    public void OpenPin(int pinNumber, PinMode mode)
+    {
+        try
+        {
+            _gpio.OpenPin(pinNumber, mode);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, e.Message);
+        }
+    }
 
     /// <inheritdoc />
-    public void OpenPin(int pinNumber) =>
-        _gpio.OpenPin(pinNumber);
+    public void OpenPin(int pinNumber)
+    {
+        try
+        {
+            _gpio.OpenPin(pinNumber);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, e.Message);
+        }
+    }
 
     /// <inheritdoc />
-    public void ClosePin(int pinNumber) =>
-        _gpio.ClosePin(pinNumber);
+    public void ClosePin(int pinNumber)
+    {
+        try
+        {
+            _gpio.ClosePin(pinNumber);
+        }
+        catch (Exception e) when (e.Message == $"Can not close pin {pinNumber} because it is not open.")
+        {
+            _logger.LogInformation($"Pin {pinNumber} is already closed");
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, e.Message);
+        }
+    }
 
     /// <inheritdoc />
     public PinValue Read(int pinNumber) =>

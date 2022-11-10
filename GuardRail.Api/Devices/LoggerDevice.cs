@@ -7,13 +7,13 @@ namespace GuardRail.Api.Devices;
 public sealed class LoggerDevice : Device
 {
     private Guid _id = Guid.NewGuid();
-        
+
     public new string DeviceId =>
         _id.ToString();
-        
+
     public new string FriendlyName =>
         "default testing device";
-        
+
     public new byte[] ByteId =>
         new byte[]
         {

@@ -14,17 +14,17 @@ public sealed class UserGroup : Core.DataModels.UserGroup
     /// <summary>
     /// The users in the group.
     /// </summary>
-    public List<User> Users { get; } = new List<User>();
+    public List<User> Users { get; } = new();
 
     /// <summary>
     /// The AccessPoints the group has direct access to.
     /// </summary>
-    public List<AccessPoint> AccessPoints { get; } = new List<AccessPoint>();
+    public List<AccessPoint> AccessPoints { get; } = new();
 
     /// <summary>
     /// The AccessPointGroups the user group has access to.
     /// </summary>
-    public List<AccessPointGroup> AccessPointGroups { get; } = new List<AccessPointGroup>();
+    public List<AccessPointGroup> AccessPointGroups { get; } = new();
 
     /// <summary>
     /// EF creation helper.

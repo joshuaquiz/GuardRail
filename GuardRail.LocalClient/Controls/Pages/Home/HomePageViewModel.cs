@@ -11,7 +11,7 @@ public sealed class HomePageViewModel
     /// <summary>
     /// For viewing logs in the application.
     /// </summary>
-    public ObservableCollection<HomePageLogItem> Logs { get; set; } = new ObservableCollection<HomePageLogItem>();
+    public ObservableCollection<HomePageLogItem> Logs { get; set; } = new();
 
     /// <summary>
     /// Add a log to the display.

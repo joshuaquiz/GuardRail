@@ -24,7 +24,7 @@ internal interface IDataStore : IHostedService
         T item,
         CancellationToken cancellationToken)
         where T : class, IAddableItem;
-        
+
     /// <summary>
     /// Update an existing item.
     /// </summary>

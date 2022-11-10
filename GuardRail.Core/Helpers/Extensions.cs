@@ -22,7 +22,7 @@ public static class Extensions
     /// <returns>string</returns>
     public static string ToJson<T>(
         this T item,
-        JsonSerializerSettings jsonSerializerSettings = null) =>
+        JsonSerializerSettings? jsonSerializerSettings = null) =>
         JsonConvert.SerializeObject(
             item,
             jsonSerializerSettings
@@ -37,7 +37,7 @@ public static class Extensions
     /// <typeparam name="T">The type of the item to deserialize.</typeparam>
     /// <param name="s">The JSON string.</param>
     /// <returns>T</returns>
-    public static T FromJson<T>(this string s)
+    public static T? FromJson<T>(this string s)
     {
         using var stringReader = new StringReader(s);
         using JsonReader reader = new JsonTextReader(stringReader);
@@ -52,7 +52,7 @@ public static class Extensions
     /// <typeparam name="T">The type of the item to deserialize.</typeparam>
     /// <param name="s">The JSON string.</param>
     /// <returns>T</returns>
-    public static T FromJson<T>(this Stream s)
+    public static T? FromJson<T>(this Stream s)
     {
         using var streamReader = new StreamReader(s);
         using JsonReader reader = new JsonTextReader(streamReader);
@@ -69,7 +69,7 @@ public static class Extensions
     /// <typeparam name="TOut">The type to return.</typeparam>
     /// <param name="from">The value to convert.</param>
     /// <returns>TOut</returns>
-    public static TOut Convert<TOut>(this string from)
+    public static TOut? Convert<TOut>(this string? from)
     {
         if (from == null)
         {

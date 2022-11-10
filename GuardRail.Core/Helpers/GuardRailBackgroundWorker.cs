@@ -50,7 +50,7 @@ public sealed class GuardRailBackgroundWorker : IDisposable
         TimeSpan delay,
         Func<CancellationToken, Task> work,
         CancellationToken cancellationToken) =>
-        new GuardRailBackgroundWorker(
+        new(
             name,
             delay,
             work,

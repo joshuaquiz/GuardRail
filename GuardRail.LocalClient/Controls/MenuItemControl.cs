@@ -34,7 +34,7 @@ public sealed class MenuItemControl : Grid, INotifyPropertyChanged
             OnPropertyChanged(nameof(Icon));
         }
     }
-        
+
     /// <summary>
     /// The title of the menu item.
     /// </summary>
@@ -123,7 +123,7 @@ public sealed class MenuItemControl : Grid, INotifyPropertyChanged
     {
         Background = Brushes.Transparent;
     }
-        
+
     private void OnPropertyChanged(string propertyName) =>
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 

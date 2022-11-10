@@ -14,6 +14,8 @@ public class GuardRailContext : DbContext
 
     public DbSet<User> Users { get; set; }
 
+    public DbSet<UserAccessMethods> UserAccessMethods { get; set; }
+
     public DbSet<Device> Devices { get; set; }
 
     public DbSet<DoorUserAccess> DoorUserAccesses { get; set; }

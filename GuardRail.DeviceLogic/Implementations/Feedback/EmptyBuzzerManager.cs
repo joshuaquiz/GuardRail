@@ -7,7 +7,7 @@ namespace GuardRail.DeviceLogic.Implementations.Feedback;
 /// <summary>
 /// Provides an empty implementation.
 /// </summary>
-public sealed class EmptyBuzzerManager : CoreBuzzerManager<EmptyBuzzerManager>
+public sealed class EmptyBuzzerManager : CoreBuzzerManager<EmptyBuzzerManager, int>
 {
     public EmptyBuzzerManager()
         : base(null!, null!, null!)

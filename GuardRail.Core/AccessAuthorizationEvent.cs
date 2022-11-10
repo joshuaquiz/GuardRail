@@ -24,7 +24,7 @@ public sealed class AccessAuthorizationEvent
     public static AccessAuthorizationEvent Create(
         Device device,
         IAccessControlDevice accessControlDevice) =>
-        new AccessAuthorizationEvent(
+        new(
             device,
             accessControlDevice);
 

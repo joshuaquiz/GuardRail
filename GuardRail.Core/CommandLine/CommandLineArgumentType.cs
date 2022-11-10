@@ -9,7 +9,7 @@ public enum CommandLineArgumentType
     /// Default
     /// </summary>
     Default = -1,
-        
+
     /// <summary>
     /// Denotes that a fresh install should be done.
     /// </summary>

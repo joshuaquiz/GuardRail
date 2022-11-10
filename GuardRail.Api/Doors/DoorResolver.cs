@@ -13,7 +13,7 @@ namespace GuardRail.Api.Doors;
 /// </summary>
 public sealed class DoorResolver : IDoorResolver
 {
-    private static readonly Dictionary<string, Door> Doors = new Dictionary<string, Door>();
+    private static readonly Dictionary<string, Door> Doors = new();
 
     private readonly GuardRailContext _guardRailContext;
 

@@ -6,7 +6,8 @@ namespace GuardRail.DeviceLogic.Interfaces.Feedback.Lights;
 /// <summary>
 /// The low level API for interacting with feedback lights.
 /// </summary>
-public interface ILightHardwareManager : IAsyncInit
+/// <typeparam name="T">The type used for the buzzer's address.</typeparam>
+public interface ILightHardwareManager<in T> : IAsyncInit
 {
     /// <summary>
     /// Turns on a light.
@@ -15,7 +16,7 @@ public interface ILightHardwareManager : IAsyncInit
     /// <param name="cancellationToken">A cancellation token.</param>
     /// <returns>A <see cref="ValueTask"/> representing the work to turn the light on.</returns>
     public ValueTask TurnLightOnAsync(
-        byte[] address,
+        T address,
         CancellationToken cancellationToken);
 
     /// <summary>
@@ -25,7 +26,7 @@ public interface ILightHardwareManager : IAsyncInit
     /// <param name="cancellationToken">A cancellation token.</param>
     /// <returns>A <see cref="ValueTask"/> representing the work to turn the light off.</returns>
     public ValueTask TurnLightOffAsync(
-        byte[] address,
+        T address,
         CancellationToken cancellationToken);
 
     /// <summary>
@@ -34,5 +35,5 @@ public interface ILightHardwareManager : IAsyncInit
     /// <param name="address">The hardware address.</param>
     /// <returns>A <see cref="ValueTask"/> representing the work to dispose/close the hardware.</returns>
     public ValueTask DisposeAddressAsync(
-        byte[] address);
+        T address);
 }

@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.DeviceLogic.Interfaces.Communication;
-using GuardRail.DeviceLogic.Logic;
 using Microsoft.Extensions.Logging;
 
 namespace GuardRail.DeviceLogic.Implementations.Communication;

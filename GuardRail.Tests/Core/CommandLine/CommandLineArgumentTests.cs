@@ -13,7 +13,7 @@ public static class CommandLineArgumentTests
         var strValue = commandLineArgument.ToString();
         Assert.Equal(argumentString, strValue);
     }
-        
+
     [Fact]
     public static void CommandLineArgumentToStringWithNoSpaceValue()
     {
@@ -22,7 +22,7 @@ public static class CommandLineArgumentTests
         var strValue = commandLineArgument.ToString();
         Assert.Equal(argumentString, strValue);
     }
-        
+
     [Fact]
     public static void CommandLineArgumentToStringWithSpaceValue()
     {

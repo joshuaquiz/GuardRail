@@ -4,12 +4,12 @@ using Microsoft.Extensions.Logging;
 
 namespace GuardRail.DoorClient.Implementation.Feedback.Lights;
 
-public sealed class LightManager : CoreLightManager<LightManager>
+public sealed class LightManager : CoreLightManager<LightManager, int>
 {
     public LightManager(
-        ILightConfiguration lightConfiguration,
-        ILogger<LightManager> logger,
-        ILightHardwareManager lightManager)
+        ILightConfiguration<int> lightConfiguration,
+        ILightHardwareManager<int> lightManager,
+        ILogger<LightManager> logger)
         : base(
             lightConfiguration,
             lightManager,
