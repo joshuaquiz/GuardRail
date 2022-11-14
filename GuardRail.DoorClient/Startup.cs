@@ -23,6 +23,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using Serilog.Exceptions;
 
 namespace GuardRail.DoorClient;
 
@@ -35,11 +36,12 @@ public class Startup
 
     public IConfiguration Configuration { get; }
 
-    // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
         Log.Logger = new LoggerConfiguration()
             .ReadFrom.Configuration(Configuration)
+            .Enrich.FromLogContext()
+            .Enrich.WithExceptionDetails()
             .CreateLogger();
         services.AddControllers();
         services.AddHealthChecks();
@@ -65,13 +67,13 @@ public class Startup
             .AddBuzzer<BuzzerConfiguration, int, BuzzerHardwareManager, BuzzerManager>(Configuration)
             .AddLight<LightConfiguration, int, LightHardwareManager, LightManager>(Configuration)
             .AddKeypad<KeypadConfiguration, int, KeypadHardwareManager, KeypadInput>(Configuration)
-            .AddNfc<NfcConfiguration, NfcHardwareManager, NfcInput>(Configuration)
+            //.AddNfc<NfcConfiguration, NfcHardwareManager, NfcInput>(Configuration)
+            .AddEmptyNfc()
             .AddEmptyScreen()
             .AddEmptyDoor()
             .AddSingleton<ICentralServerCommunication, CentralServerCommunication>()
             .AddSingleton<ICentralServerPushCommunication, CentralServerPushCommunication>()
             .AddHostedService<ButtonListenerService>()
-            //.AddHostedService<AsyncInitService>()
             .AddHostedService<UdpConnectionManagerService>()
             .AddHostedService<CentralServerPushCommunication>()
             .AddHttpClient(
@@ -85,7 +87,6 @@ public class Startup
                 });
     }
 
-    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         if (env.IsDevelopment())

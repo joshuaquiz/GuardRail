@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using GuardRail.Core.Helpers;
 using GuardRail.DeviceLogic.Interfaces.Input.Keypad;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -26,7 +27,7 @@ public sealed class ButtonListenerService : IHostedService
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        _logger.LogInformation("GPIO setup for button listener");
+        _logger.LogGuardRailInformation("GPIO setup for button listener");
         _dispatcherTimer = new Timer(
             _ => _keypadHardwareManager.TimerTick(),
             null,

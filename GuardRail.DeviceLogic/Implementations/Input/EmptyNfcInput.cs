@@ -1,6 +1,8 @@
 using System.Threading;
 using System.Threading.Tasks;
+using GuardRail.Core.Helpers;
 using GuardRail.DeviceLogic.Interfaces.Input.Nfc;
+using Microsoft.Extensions.Logging;
 
 namespace GuardRail.DeviceLogic.Implementations.Input;
 
@@ -9,18 +11,28 @@ namespace GuardRail.DeviceLogic.Implementations.Input;
 /// </summary>
 public sealed class EmptyNfcInput : CoreNfcInput<EmptyNfcInput, INfcConfiguration>
 {
-    public EmptyNfcInput()
+    private readonly ILogger<EmptyNfcInput> _logger;
+
+    public EmptyNfcInput(ILogger<EmptyNfcInput> logger)
         : base(null!, null!, null!, null!)
     {
+        _logger = logger;
+        _logger.LogGuardRailInformation("Setting up");
     }
 
     /// <inheritdoc />
     public override ValueTask OnNfcSubmit(
         string inputData,
-        CancellationToken cancellationToken) =>
-        ValueTask.CompletedTask;
+        CancellationToken cancellationToken)
+    {
+        _logger.LogGuardRailInformation(nameof(inputData) + ": " + inputData);
+        return ValueTask.CompletedTask;
+    }
 
     /// <inheritdoc />
-    public override ValueTask DisposeAsync() =>
-        ValueTask.CompletedTask;
+    public override ValueTask DisposeAsync()
+    {
+        _logger.LogGuardRailInformation("Disposing");
+        return ValueTask.CompletedTask;
+    }
 }

@@ -67,7 +67,7 @@ public partial class MainWindow
     {
         Status.Content = "Checking version...";
         var uriString = Application.Current.TryFindResource("UpdateUri") as string;
-        if (string.IsNullOrWhiteSpace(uriString))
+        if (uriString.IsNullOrWhiteSpace())
         {
             throw new ConfigurationErrorsException("Error: No download URL");
         }

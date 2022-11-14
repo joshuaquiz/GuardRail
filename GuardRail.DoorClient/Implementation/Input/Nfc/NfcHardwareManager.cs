@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using GuardRail.Core.Helpers;
 using GuardRail.DeviceLogic.Interfaces.Input.Nfc;
 using GuardRail.DoorClient.Configuration;
 using Iot.Device.Card.CreditCardProcessing;
@@ -56,7 +57,7 @@ public sealed class NfcHardwareManager : INfcHardwareManager
                     while (!_cancellationTokenSource.IsCancellationRequested)
                     {
                         var nfcAutoPollData = new NfcAutoPollData(_pn532.AutoPoll(5, 300, new[] { PollingType.Passive106kbpsISO144443_4A, PollingType.Passive106kbpsISO144443_4B }));
-                        _logger.LogInformation($"Has Targets: {nfcAutoPollData.HasTargets}, Num tags: {nfcAutoPollData.NumberOfTargets}, Type: {nfcAutoPollData.TargetType}");
+                        _logger.LogGuardRailInformation($"Has Targets: {nfcAutoPollData.HasTargets}, Num tags: {nfcAutoPollData.NumberOfTargets}, Type: {nfcAutoPollData.TargetType}");
                         if (nfcAutoPollData.HasTargets)
                         {
                             switch (nfcAutoPollData.TargetType)
@@ -176,7 +177,7 @@ public sealed class NfcHardwareManager : INfcHardwareManager
                                         return;
                                     }
 
-                                    _logger.LogInformation(
+                                    _logger.LogGuardRailInformation(
                                         $"{decrypted.TargetNumber}, Serial: {BitConverter.ToString(decrypted.NfcId)}, App Data: {BitConverter.ToString(decrypted.ApplicationData)}, " +
                                         $"{decrypted.ApplicationType}, Bit Rates: {decrypted.BitRates}, CID {decrypted.CidSupported}, Command: {decrypted.Command}, FWT: {decrypted.FrameWaitingTime}, " +
                                         $"ISO144443 compliance: {decrypted.ISO14443_4Compliance}, Max Frame size: {decrypted.MaxFrameSize}, NAD: {decrypted.NadSupported}");
@@ -184,7 +185,7 @@ public sealed class NfcHardwareManager : INfcHardwareManager
                                     var creditCard = new CreditCard(_pn532, decrypted.TargetNumber);
                                     creditCard.ReadCreditCardInformation();
 
-                                    _logger.LogInformation("All Tags for the Credit Card:");
+                                    _logger.LogGuardRailInformation("All Tags for the Credit Card:");
                                     DisplayTags(creditCard.Tags, 0);
                                     break;
                                 }
@@ -231,23 +232,23 @@ public sealed class NfcHardwareManager : INfcHardwareManager
             var isTemplate = TagList.Tags.FirstOrDefault(m => m.TagNumber == tagParent.TagNumber);
             if (isTemplate?.IsTemplate == true || isTemplate?.IsConstructed == true)
             {
-                _logger.LogInformation(string.Empty);
+                _logger.LogGuardRailInformation(string.Empty);
                 DisplayTags(tagParent.Tags, levels + 1);
             }
             else if (isTemplate?.IsDol == true)
             {
                 // In this case, all the data inside are 1 byte only
-                _logger.LogInformation(", Data Object Length elements:");
+                _logger.LogGuardRailInformation(", Data Object Length elements:");
                 foreach (var dt in tagParent.Tags)
                 {
                     Console.Write(AddSpace(levels + 1) + $"{dt.TagNumber:X4}-{TagList.Tags.FirstOrDefault(m => m.TagNumber == dt.TagNumber)?.Description}");
-                    _logger.LogInformation($", data length: {dt.Data[0]}");
+                    _logger.LogGuardRailInformation($", data length: {dt.Data[0]}");
                 }
             }
             else
             {
                 var tg = new TagDetails(tagParent);
-                _logger.LogInformation($": {tg}");
+                _logger.LogGuardRailInformation($": {tg}");
             }
         }
     }

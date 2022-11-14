@@ -1,5 +1,6 @@
 using System;
 using System.Device.Gpio;
+using GuardRail.Core.Helpers;
 using GuardRail.DoorClient.Interfaces;
 using Microsoft.Extensions.Logging;
 
@@ -14,7 +15,7 @@ public sealed class Gpio : IGpio, IDisposable
     {
         _gpio = gpio;
         _logger = logger;
-        _logger.LogInformation("GPIO wrapper setup");
+        _logger.LogGuardRailInformation("GPIO wrapper setup");
     }
 
     /// <inheritdoc />
@@ -26,7 +27,7 @@ public sealed class Gpio : IGpio, IDisposable
         }
         catch (Exception e)
         {
-            _logger.LogError(e, e.Message);
+            _logger.LogGuardRailError(e);
         }
     }
 
@@ -39,7 +40,7 @@ public sealed class Gpio : IGpio, IDisposable
         }
         catch (Exception e)
         {
-            _logger.LogError(e, e.Message);
+            _logger.LogGuardRailError(e);
         }
     }
 
@@ -52,11 +53,11 @@ public sealed class Gpio : IGpio, IDisposable
         }
         catch (Exception e) when (e.Message == $"Can not close pin {pinNumber} because it is not open.")
         {
-            _logger.LogInformation($"Pin {pinNumber} is already closed");
+            _logger.LogGuardRailInformation($"Pin {pinNumber} is already closed");
         }
         catch (Exception e)
         {
-            _logger.LogError(e, e.Message);
+            _logger.LogGuardRailError(e);
         }
     }
 

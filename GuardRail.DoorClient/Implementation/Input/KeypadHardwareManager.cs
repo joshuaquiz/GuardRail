@@ -4,6 +4,7 @@ using System.Device.Gpio;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using GuardRail.Core.Helpers;
 using GuardRail.DeviceLogic.Interfaces.Input.Keypad;
 using GuardRail.DoorClient.Configuration;
 using GuardRail.DoorClient.Interfaces;
@@ -187,7 +188,7 @@ public sealed class KeypadHardwareManager : IKeypadHardwareManager<int>
         }
         catch (Exception ex)
         {
-            LogError(ex, $"Pin_Changed Error: {pinNumber} {rowNumber} {colNumber} {ex.Message}");
+            _logger.LogGuardRailError(ex, $"Pin_Changed Error: {pinNumber} {rowNumber} {colNumber} {ex.Message}");
         }
     }
 
@@ -198,12 +199,12 @@ public sealed class KeypadHardwareManager : IKeypadHardwareManager<int>
     private async Task FoundADigit(char key)
     {
         _cancellationTokenSource.Cancel();
-        LogInformation($"Key pressed: {key}");
+        _logger.LogGuardRailInformation($"Key pressed: {key}");
         if (key == _keypadConfiguration.SubmitKey)
         {
             var keyData = _pressedKeys.ToList();
             _pressedKeys = new List<char>(0);
-            LogInformation($"Sending keys: {string.Join(", ", keyData)}");
+            _logger.LogGuardRailInformation($"Sending keys: {string.Join(", ", keyData)}");
             var cancellationTokenSource = new CancellationTokenSource(_keypadConfiguration.KeypadTimeout * 2);
             if (Submit != null)
             {
@@ -214,7 +215,7 @@ public sealed class KeypadHardwareManager : IKeypadHardwareManager<int>
         }
 
         _pressedKeys.Add(key);
-        LogInformation($"Keys pressed so far: {string.Join(", ", _pressedKeys)}");
+        _logger.LogGuardRailInformation($"Keys pressed so far: {string.Join(", ", _pressedKeys)}");
         _cancellationTokenSource = new CancellationTokenSource();
 #pragma warning disable 4014
         // We want this to be fire-and-forget
@@ -246,7 +247,7 @@ public sealed class KeypadHardwareManager : IKeypadHardwareManager<int>
                 return;
             }
 
-            LogInformation("Keypad entry timed out.");
+            _logger.LogGuardRailInformation("Keypad entry timed out.");
             _pressedKeys = new List<char>(0);
             if (Reset != null)
             {
@@ -255,13 +256,7 @@ public sealed class KeypadHardwareManager : IKeypadHardwareManager<int>
         }
         catch (TaskCanceledException)
         {
-            LogInformation("Keypad entry time out canceled.");
+            _logger.LogGuardRailInformation("Keypad entry time out canceled.");
         }
     }
-
-    private void LogError(Exception e, string message) =>
-        _logger.LogError(e, "[keypad hardware manager] " + message);
-
-    private void LogInformation(string message) =>
-        _logger.LogInformation("[keypad hardware manager] " + message);
 }

@@ -59,7 +59,4 @@ public sealed class UdpListenerService : IHostedService
         _listener.Dispose();
         return Task.CompletedTask;
     }
-
-    private void LogError(Exception e, string message) =>
-        _logger.LogError(e, "[keypad] " + message);
 }

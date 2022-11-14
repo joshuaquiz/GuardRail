@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Threading;
 using GuardRail.Api.Data;
 using GuardRail.Core;
+using GuardRail.Core.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace GuardRail.Api;
@@ -30,9 +31,9 @@ public sealed class InMemoryEventBus : IEventBus
                 var accessControlDevice =
                     await guardRailContext.AccessControlDevices.SingleOrDefaultAsync(
                         x => x.DeviceId == acdId);
-                if (!accessControlDevice.IsConfigured)
+                if (accessControlDevice != null && !accessControlDevice.IsConfigured)
                 {
-                    var log = $"Access control device {(string.IsNullOrWhiteSpace(accessControlDevice.FriendlyName) ? accessControlDevice.DeviceId : accessControlDevice.FriendlyName)} is not configured";
+                    var log = $"Access control device {(accessControlDevice.FriendlyName.IsNullOrWhiteSpace() ? accessControlDevice.DeviceId : accessControlDevice.FriendlyName)} is not configured";
                     await guardRailLogger.LogAsync(log);
                     await newItem.AccessControlDevice.PresentNoAccessGranted(log);
                     AccessAuthorizationEvents.Remove(newItem);
@@ -44,7 +45,7 @@ public sealed class InMemoryEventBus : IEventBus
                         x => x.DeviceId == newItem.Device.DeviceId);
                 if (device == null)
                 {
-                    var log = $"Device {(string.IsNullOrWhiteSpace(newItem.Device.FriendlyName) ? newItem.Device.DeviceId : newItem.Device.FriendlyName)} is not configured";
+                    var log = $"Device {(newItem.Device.FriendlyName.IsNullOrWhiteSpace() ? newItem.Device.DeviceId : newItem.Device.FriendlyName)} is not configured";
                     await guardRailLogger.LogAsync(log);
                     await newItem.AccessControlDevice.PresentNoAccessGranted(log);
                     AccessAuthorizationEvents.Remove(newItem);
@@ -53,7 +54,7 @@ public sealed class InMemoryEventBus : IEventBus
 
                 if (!device.IsConfigured)
                 {
-                    var log = $"Device {(string.IsNullOrWhiteSpace(device.FriendlyName) ? device.DeviceId : device.FriendlyName)} is not configured";
+                    var log = $"Device {(device.FriendlyName.IsNullOrWhiteSpace() ? device.DeviceId : device.FriendlyName)} is not configured";
                     await guardRailLogger.LogAsync(log);
                     await newItem.AccessControlDevice.PresentNoAccessGranted(log);
                     AccessAuthorizationEvents.Remove(newItem);

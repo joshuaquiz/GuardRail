@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Runtime.CompilerServices;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Serilog.Context;
 
 namespace GuardRail.Core.Helpers;
 
@@ -87,6 +90,47 @@ public static class Extensions
     /// </summary>
     /// <param name="str">The value to use</param>
     /// <returns>bool</returns>
-    public static bool IsNullOrWhiteSpace(this string str) =>
+    public static bool IsNullOrWhiteSpace(this string? str) =>
         string.IsNullOrWhiteSpace(str);
+
+    /// <summary>
+    /// Logs an exception with meta-data.
+    /// </summary>
+    /// <param name="logger">The logger to write the exception to.</param>
+    /// <param name="exception">The exception to log.</param>
+    /// <param name="additionalMessage">Any additional information to log, the exception's message is automatically logged.</param>
+    /// <param name="memberName">DO NOT USE: Auto-populated by <see cref="CallerMemberNameAttribute"/>.</param>
+    /// <param name="sourceFilePath">DO NOT USE: Auto-populated by <see cref="CallerFilePathAttribute"/>.</param>
+    /// <param name="sourceLineNumber">DO NOT USE: Auto-populated by <see cref="CallerLineNumberAttribute"/>.</param>
+    /// <typeparam name="TLoggerType">The logger type.</typeparam>
+    /// <typeparam name="TException">The exception type.</typeparam>
+    public static void LogGuardRailError<TLoggerType, TException>(
+        this ILogger<TLoggerType> logger,
+        TException exception,
+        string? additionalMessage = null,
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
+        where TException : Exception =>
+        logger.LogError(
+            exception,
+            $"{Path.GetFileName(sourceFilePath)}:{sourceLineNumber}({memberName}) {(additionalMessage.IsNullOrWhiteSpace() ? string.Empty : additionalMessage + " ")}{exception.Message}");
+
+    /// <summary>
+    /// Logs an informational message with meta-data.
+    /// </summary>
+    /// <param name="logger">The logger to write the informational log to.</param>
+    /// <param name="message">The message to log.</param>
+    /// <param name="memberName">DO NOT USE: Auto-populated by <see cref="CallerMemberNameAttribute"/>.</param>
+    /// <param name="sourceFilePath">DO NOT USE: Auto-populated by <see cref="CallerFilePathAttribute"/>.</param>
+    /// <param name="sourceLineNumber">DO NOT USE: Auto-populated by <see cref="CallerLineNumberAttribute"/>.</param>
+    /// <typeparam name="TLoggerType">The logger type.</typeparam>
+    public static void LogGuardRailInformation<TLoggerType>(
+        this ILogger<TLoggerType> logger,
+        string? message,
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0) =>
+        logger.LogInformation(
+            $"{Path.GetFileName(sourceFilePath)}:{sourceLineNumber}({memberName}): {message}");
 }
