@@ -514,6 +514,30 @@
             <param name="str">The value to use</param>
             <returns>bool</returns>
         </member>
+        <member name="M:GuardRail.Core.Helpers.Extensions.LogGuardRailError``2(Microsoft.Extensions.Logging.ILogger{``0},``1,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            Logs an exception with meta-data.
+            </summary>
+            <param name="logger">The logger to write the exception to.</param>
+            <param name="exception">The exception to log.</param>
+            <param name="additionalMessage">Any additional information to log, the exception's message is automatically logged.</param>
+            <param name="memberName">DO NOT USE: Auto-populated by <see cref="T:System.Runtime.CompilerServices.CallerMemberNameAttribute"/>.</param>
+            <param name="sourceFilePath">DO NOT USE: Auto-populated by <see cref="T:System.Runtime.CompilerServices.CallerFilePathAttribute"/>.</param>
+            <param name="sourceLineNumber">DO NOT USE: Auto-populated by <see cref="T:System.Runtime.CompilerServices.CallerLineNumberAttribute"/>.</param>
+            <typeparam name="TLoggerType">The logger type.</typeparam>
+            <typeparam name="TException">The exception type.</typeparam>
+        </member>
+        <member name="M:GuardRail.Core.Helpers.Extensions.LogGuardRailInformation``1(Microsoft.Extensions.Logging.ILogger{``0},System.String,System.String,System.String,System.Int32)">
+            <summary>
+            Logs an informational message with meta-data.
+            </summary>
+            <param name="logger">The logger to write the informational log to.</param>
+            <param name="message">The message to log.</param>
+            <param name="memberName">DO NOT USE: Auto-populated by <see cref="T:System.Runtime.CompilerServices.CallerMemberNameAttribute"/>.</param>
+            <param name="sourceFilePath">DO NOT USE: Auto-populated by <see cref="T:System.Runtime.CompilerServices.CallerFilePathAttribute"/>.</param>
+            <param name="sourceLineNumber">DO NOT USE: Auto-populated by <see cref="T:System.Runtime.CompilerServices.CallerLineNumberAttribute"/>.</param>
+            <typeparam name="TLoggerType">The logger type.</typeparam>
+        </member>
         <member name="T:GuardRail.Core.Helpers.GuardRailBackgroundWorker">
             <summary>
             A background worker for GuardRail.
@@ -672,41 +696,51 @@
             <summary>
             The configuration for an update/install.
             </summary>
+            <param name="LatestVersion">The latest version of the software.</param>
+            <param name="InstallFiles">The files for the upload.</param>
+            <param name="RestartCommand">The command to run that will do any last cleanups and start the updated application.</param>
+            <param name="UpdateDirectory">The directory that the updates are to be stored in.</param>
+        </member>
+        <member name="M:GuardRail.Core.InstallConfiguration.#ctor(System.String,System.Collections.Generic.IReadOnlyCollection{GuardRail.Core.InstallFile},System.String,System.String)">
+            <summary>
+            The configuration for an update/install.
+            </summary>
+            <param name="LatestVersion">The latest version of the software.</param>
+            <param name="InstallFiles">The files for the upload.</param>
+            <param name="RestartCommand">The command to run that will do any last cleanups and start the updated application.</param>
+            <param name="UpdateDirectory">The directory that the updates are to be stored in.</param>
         </member>
         <member name="P:GuardRail.Core.InstallConfiguration.LatestVersion">
-            <summary>
-            The latest version of the software.
-            </summary>
+            <summary>The latest version of the software.</summary>
         </member>
         <member name="P:GuardRail.Core.InstallConfiguration.InstallFiles">
-            <summary>
-            The files for the upload.
-            </summary>
+            <summary>The files for the upload.</summary>
         </member>
         <member name="P:GuardRail.Core.InstallConfiguration.RestartCommand">
-            <summary>
-            The command to run that will do any last cleanups and start the updated application.
-            </summary>
+            <summary>The command to run that will do any last cleanups and start the updated application.</summary>
         </member>
         <member name="P:GuardRail.Core.InstallConfiguration.UpdateDirectory">
-            <summary>
-            The directory that the updates are to be stored in.
-            </summary>
+            <summary>The directory that the updates are to be stored in.</summary>
         </member>
         <member name="T:GuardRail.Core.InstallFile">
             <summary>
             Represents a file to be downloaded for the install.
             </summary>
+            <param name="DownloadUri">The Location of the file on the web.</param>
+            <param name="LocalPath">Where the file goes locally.</param>
+        </member>
+        <member name="M:GuardRail.Core.InstallFile.#ctor(System.Uri,System.String)">
+            <summary>
+            Represents a file to be downloaded for the install.
+            </summary>
+            <param name="DownloadUri">The Location of the file on the web.</param>
+            <param name="LocalPath">Where the file goes locally.</param>
         </member>
         <member name="P:GuardRail.Core.InstallFile.DownloadUri">
-            <summary>
-            The Location of the file on the web.
-            </summary>
+            <summary>The Location of the file on the web.</summary>
         </member>
         <member name="P:GuardRail.Core.InstallFile.LocalPath">
-            <summary>
-            Where the file goes locally.
-            </summary>
+            <summary>Where the file goes locally.</summary>
         </member>
         <member name="T:GuardRail.Core.Validator">
             <summary>

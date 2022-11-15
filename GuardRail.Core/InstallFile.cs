@@ -5,15 +5,8 @@ namespace GuardRail.Core;
 /// <summary>
 /// Represents a file to be downloaded for the install.
 /// </summary>
-public sealed class InstallFile
-{
-    /// <summary>
-    /// The Location of the file on the web.
-    /// </summary>
-    public Uri DownloadUri { get; set; }
-
-    /// <summary>
-    /// Where the file goes locally.
-    /// </summary>
-    public string LocalPath { get; set; }
-}
+/// <param name="DownloadUri">The Location of the file on the web.</param>
+/// <param name="LocalPath">Where the file goes locally.</param>
+public sealed record InstallFile(
+    Uri DownloadUri,
+    string LocalPath);

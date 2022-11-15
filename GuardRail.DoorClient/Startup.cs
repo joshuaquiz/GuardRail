@@ -1,26 +1,21 @@
 using System;
-using System.Device.Gpio;
+using System.Linq;
 using System.Net.Http.Headers;
-using GuardRail.DeviceLogic.DependencyHelpers;
+using System.Threading.Tasks;
+using GuardRail.DeviceLogic.Hardware.GuardRailIntegrated.DependencyHelpers;
+using GuardRail.DeviceLogic.Interfaces;
 using GuardRail.DeviceLogic.Interfaces.Communication;
+using GuardRail.DeviceLogic.Logic;
 using GuardRail.DeviceLogic.Models;
 using GuardRail.DeviceLogic.Services;
 using GuardRail.DoorClient.Configuration;
-using GuardRail.DoorClient.Implementation;
 using GuardRail.DoorClient.Implementation.Communication;
-using GuardRail.DoorClient.Implementation.Feedback.Buzzer;
-using GuardRail.DoorClient.Implementation.Feedback.Lights;
-using GuardRail.DoorClient.Implementation.Input;
-using GuardRail.DoorClient.Implementation.Input.Nfc;
-using GuardRail.DoorClient.Interfaces;
-using GuardRail.DoorClient.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Exceptions;
@@ -55,25 +50,12 @@ public class Startup
                 }));
         services
             .AddOptions()
-            .AddLogging(logging =>
-            {
-                logging.ClearProviders();
-                logging.AddSerilog();
-            })
+            .AddLogging()
             .AddSingleton(_ => Configuration.GetSection(nameof(UdpConfiguration)).Get<UdpConfiguration>() ?? new UdpConfiguration())
             .AddSingleton<IUdpConfiguration, UdpConfiguration>()
-            .AddSingleton(_ => new GpioController())
-            .AddSingleton<IGpio, Gpio>()
-            .AddBuzzer<BuzzerConfiguration, int, BuzzerHardwareManager, BuzzerManager>(Configuration)
-            .AddLight<LightConfiguration, int, LightHardwareManager, LightManager>(Configuration)
-            .AddKeypad<KeypadConfiguration, int, KeypadHardwareManager, KeypadInput>(Configuration)
-            //.AddNfc<NfcConfiguration, NfcHardwareManager, NfcInput>(Configuration)
-            .AddEmptyNfc()
-            .AddEmptyScreen()
-            .AddEmptyDoor()
+            .AddGuardRailIntegratedHardware(Configuration)
             .AddSingleton<ICentralServerCommunication, CentralServerCommunication>()
             .AddSingleton<ICentralServerPushCommunication, CentralServerPushCommunication>()
-            .AddHostedService<ButtonListenerService>()
             .AddHostedService<UdpConnectionManagerService>()
             .AddHostedService<CentralServerPushCommunication>()
             .AddHttpClient(
@@ -111,6 +93,7 @@ public class Startup
         });
 
         app.UseCoreEventHandlers();
-        app.UseAsyncInitTypes();
+        var inits = app.ApplicationServices.GetServices<IAsyncInit>();
+        Task.WhenAll(inits.Select(async x => await x.InitAsync())).GetAwaiter().GetResult();
     }
 }

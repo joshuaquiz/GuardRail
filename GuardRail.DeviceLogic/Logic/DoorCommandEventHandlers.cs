@@ -17,10 +17,10 @@ public static class DoorCommandEventHandlers
 {
     public static ValueTask ConfigureCoreDoorCommandEventHandler(
         ICentralServerPushCommunication centralServerPushCommunication,
-        IBuzzerManager buzzerManager,
-        ILightManager lightManager,
-        IDoorManager doorManager,
-        IScreenManager screenManager,
+        IBuzzerManager? buzzerManager,
+        ILightManager? lightManager,
+        IDoorManager? doorManager,
+        IScreenManager? screenManager,
         ILogger<DoorCommand> logger) =>
         centralServerPushCommunication.ConfigureDataReceiverAsync<DoorCommand>(async (doorCommand, cancellationToken) =>
             {
@@ -30,7 +30,7 @@ public static class DoorCommandEventHandlers
                 }
 
                 var valueTasks = new List<ValueTask>();
-                if (!string.IsNullOrEmpty(doorCommand.Message))
+                if (screenManager is not null && !string.IsNullOrEmpty(doorCommand.Message))
                 {
                     valueTasks.Add(
                         screenManager.DisplayMessageAsync(
@@ -44,44 +44,65 @@ public static class DoorCommandEventHandlers
                     switch (doorCommandDoorStateRequest.DoorStateRequestType)
                     {
                         case DoorStateRequestType.UnLocked:
-                            valueTasks.Add(
-                                doorManager.UnLockAsync(
-                                    doorCommandDoorStateRequest.Duration,
-                                    cancellationToken));
+                            if (doorManager is not null)
+                            {
+                                valueTasks.Add(
+                                    doorManager.UnLockAsync(
+                                        doorCommandDoorStateRequest.Duration,
+                                        cancellationToken));
+                            }
                             break;
                         case DoorStateRequestType.Locked:
-                            valueTasks.Add(
+                            if (doorManager is not null)
+                            {
+                                valueTasks.Add(
                                 doorManager.LockAsync(
                                     cancellationToken));
+                            }
                             break;
                         case DoorStateRequestType.Open:
-                            valueTasks.Add(
+                            if (doorManager is not null)
+                            {
+                                valueTasks.Add(
                                 doorManager.OpenAsync(
                                     doorCommandDoorStateRequest.Duration,
                                     cancellationToken));
+                            }
                             break;
                         case DoorStateRequestType.Closed:
-                            valueTasks.Add(
+                            if (doorManager is not null)
+                            {
+                                valueTasks.Add(
                                 doorManager.CloseAsync(
                                     cancellationToken));
+                            }
                             break;
                         case DoorStateRequestType.GreenLightOn:
-                            valueTasks.Add(
+                            if (lightManager is not null)
+                            {
+                                valueTasks.Add(
                                 lightManager.TurnOnGreenLightAsync(
                                     doorCommandDoorStateRequest.Duration,
                                     cancellationToken));
+                            }
                             break;
                         case DoorStateRequestType.RedLightOn:
-                            valueTasks.Add(
+                            if (lightManager is not null)
+                            {
+                                valueTasks.Add(
                                 lightManager.TurnOnRedLightAsync(
                                     doorCommandDoorStateRequest.Duration,
                                     cancellationToken));
+                            }
                             break;
                         case DoorStateRequestType.BuzzerOn:
-                            valueTasks.Add(
+                            if (buzzerManager is not null)
+                            {
+                                valueTasks.Add(
                                 buzzerManager.BuzzAsync(
                                     doorCommandDoorStateRequest.Duration,
                                     cancellationToken));
+                            }
                             break;
                         case DoorStateRequestType.UnKnown:
                         default:

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace GuardRail.Api;
 
@@ -10,8 +11,6 @@ public sealed class Program
 
     public static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseStartup<Startup>();
-            });
+            .UseSerilog()
+            .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());
 }

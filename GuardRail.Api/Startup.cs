@@ -13,9 +13,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PCSC;
 using Serilog;
-using ILogger = Serilog.ILogger;
+using Serilog.Exceptions;
 
 namespace GuardRail.Api;
 
@@ -30,6 +29,11 @@ public sealed class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        Serilog.Log.Logger = new LoggerConfiguration()
+            .ReadFrom.Configuration(Configuration)
+            .Enrich.FromLogContext()
+            .Enrich.WithExceptionDetails()
+            .CreateLogger();
         services.AddControllers();
         ConfigureHealthChecks(services);
         var logger = new LoggerConfiguration()
@@ -42,8 +46,6 @@ public sealed class Startup
             ServiceLifetime.Singleton,
             ServiceLifetime.Singleton);
         services.AddSingleton<ILogger>(logger);
-        services.AddSingleton<ISCardContext, SCardContext>();
-        services.AddSingleton<IEventBus, InMemoryEventBus>();
         services.AddSingleton<IAuthorizer, DefaultAuthorizer>();
         services.AddSingleton<IDeviceProvider, DeviceProvider>();
         services.AddSingleton<IDoorResolver, DoorResolver>();

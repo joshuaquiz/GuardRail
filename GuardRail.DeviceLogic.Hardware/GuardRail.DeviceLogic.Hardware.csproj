@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Iot.Device.Bindings" Version="2.2.0" />
+    <PackageReference Include="PCSC" Version="6.0.0" />
+    <PackageReference Include="System.Device.Gpio" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GuardRail.DeviceLogic\GuardRail.DeviceLogic.csproj" />
+  </ItemGroup>
+
+</Project>

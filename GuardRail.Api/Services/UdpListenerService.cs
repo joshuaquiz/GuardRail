@@ -1,7 +1,5 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
-using GuardRail.Core;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -10,16 +8,13 @@ namespace GuardRail.Api.Services;
 public sealed class UdpListenerService : IHostedService
 {
     private readonly ILogger<UdpListenerService> _logger;
-    private readonly IEventBus _eventBus;
     private readonly CancellationTokenSource _cancellationTokenSource;
     private Task _listener;
 
     public UdpListenerService(
-        ILogger<UdpListenerService> logger,
-        IEventBus eventBus)
+        ILogger<UdpListenerService> logger)
     {
         _logger = logger;
-        _eventBus = eventBus;
         _cancellationTokenSource = new CancellationTokenSource();
     }
 
