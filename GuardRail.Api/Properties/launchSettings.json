@@ -1,15 +1,29 @@
-{
-  "$schema": "http://json.schemastore.org/launchsettings.json",
+﻿{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:43900",
+      "sslPort": 44341
+    }
+  },
   "profiles": {
     "GuardRail.Api": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "",
+      "applicationUrl": "https://localhost:7026;http://localhost:5145",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "nativeDebugging": true,
-      "applicationUrl": "https://localhost:5001"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy"
+      }
+    },
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy"
+      }
     }
   }
 }

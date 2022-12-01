@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Http;
-using GuardRail.Api.Controllers.Models;
 using GuardRail.Api.Data;
+using GuardRail.Api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace GuardRail.Api.Controllers;
 
 [Authorize]
-[Microsoft.AspNetCore.Mvc.Route("api/users")]
+[Route("api/users")]
 [ApiController]
 public sealed class UsersController : ControllerBase
 {
@@ -22,8 +22,8 @@ public sealed class UsersController : ControllerBase
         _guardRailContext = guardRailContext;
     }
 
-    [Microsoft.AspNetCore.Mvc.Route("")]
-    [Microsoft.AspNetCore.Mvc.HttpGet]
+    [Route("")]
+    [HttpGet]
     public async Task<List<UserModel>> GetAllUsers() =>
         await _guardRailContext
             .Users

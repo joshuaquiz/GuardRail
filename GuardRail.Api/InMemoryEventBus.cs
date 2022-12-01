@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+﻿/*using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Threading;
 using GuardRail.Api.Data;
@@ -13,9 +13,7 @@ public sealed class InMemoryEventBus : IEventBus
     public ObservableCollection<AccessAuthorizationEvent> AccessAuthorizationEvents { get; }
 
     public InMemoryEventBus(
-        IAuthorizer authorizer,
-        GuardRailContext guardRailContext,
-        GuardRailLogger guardRailLogger)
+        GuardRailContext guardRailContext)
     {
         AccessAuthorizationEvents = new ObservableCollection<AccessAuthorizationEvent>();
         AccessAuthorizationEvents.CollectionChanged += async (sender, args) =>
@@ -31,7 +29,7 @@ public sealed class InMemoryEventBus : IEventBus
                 var accessControlDevice =
                     await guardRailContext.AccessControlDevices.SingleOrDefaultAsync(
                         x => x.DeviceId == acdId);
-                if (accessControlDevice != null && !accessControlDevice.IsConfigured)
+                if (accessControlDevice?.IsConfigured == true)
                 {
                     var log = $"Access control device {(accessControlDevice.FriendlyName.IsNullOrWhiteSpace() ? accessControlDevice.DeviceId : accessControlDevice.FriendlyName)} is not configured";
                     await guardRailLogger.LogAsync(log);
@@ -80,4 +78,4 @@ public sealed class InMemoryEventBus : IEventBus
             }
         };
     }
-}
+}*/

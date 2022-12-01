@@ -1,11 +1,5 @@
 using System;
-using System.Linq;
-using System.Reflection;
-using GuardRail.Api.Authorizers;
 using GuardRail.Api.Data;
-using GuardRail.Api.DeviceProviders;
-using GuardRail.Api.Doors;
-using GuardRail.Core;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,42 +28,23 @@ public sealed class Startup
             .Enrich.FromLogContext()
             .Enrich.WithExceptionDetails()
             .CreateLogger();
-        services.AddControllers();
-        ConfigureHealthChecks(services);
-        var logger = new LoggerConfiguration()
-            .WriteTo.Console()
-            .MinimumLevel.Verbose()
-            .CreateLogger();
+        services.AddLogging();
+        services.AddSingleton(Serilog.Log.Logger);
+        services.AddDatabaseDeveloperPageExceptionFilter();
+        services.AddControllersWithViews();
+        services.AddRazorPages();
+        services.AddHealthChecks();
         services.AddSignalR();
+        services.AddCors();
         services.AddDbContext<GuardRailContext>(
-            options => options.UseInMemoryDatabase(Guid.NewGuid().ToString()),
-            ServiceLifetime.Singleton,
-            ServiceLifetime.Singleton);
-        services.AddSingleton<ILogger>(logger);
-        services.AddSingleton<IAuthorizer, DefaultAuthorizer>();
-        services.AddSingleton<IDeviceProvider, DeviceProvider>();
-        services.AddSingleton<IDoorResolver, DoorResolver>();
+            options => options.UseInMemoryDatabase(
+                Guid.NewGuid().ToString()),
+                ServiceLifetime.Singleton,
+                ServiceLifetime.Singleton);
         services.AddAuthentication("BasicAuthentication")
             .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
         services.AddSingleton<GuardRailHub>();
-        services.AddSingleton<GuardRailLogger>();
-        RegisterAllImplementations(services, typeof(IDoorFactory));
-        RegisterAllImplementations(services, typeof(IAccessControlFactory));
-        services.AddHostedService<CoordinatorService>();
-        logger.Debug("Starting application");
-    }
-
-    private static void RegisterAllImplementations(
-        IServiceCollection serviceCollection,
-        Type type)
-    {
-        foreach (var t in Assembly
-                     .GetExecutingAssembly()
-                     .DefinedTypes
-                     .Where(x => type.IsAssignableFrom(x) && type != x.AsType()))
-        {
-            serviceCollection.AddSingleton(type, t.AsType());
-        }
+        Serilog.Log.Logger.Debug("Starting application");
     }
 
     public void Configure(
@@ -79,6 +54,7 @@ public sealed class Startup
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
+            app.UseMigrationsEndPoint();
         }
         else
         {
@@ -86,20 +62,19 @@ public sealed class Startup
         }
 
         app.UseHttpsRedirection();
-        app.UseRouting();
-        app.UseAuthorization();
-        app.UseDefaultFiles();
         app.UseStaticFiles();
+        app.UseRouting();
+        app.UseCors();
+        app.UseAuthentication();
+        app.UseAuthorization();
+
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
+            endpoints.MapRazorPages();
+            endpoints.MapFallbackToFile("index.html");
             endpoints.MapHealthChecks("/healthz");
             endpoints.MapHub<GuardRailHub>("/guardRailHub");
         });
-    }
-
-    public void ConfigureHealthChecks(IServiceCollection services)
-    {
-        services.AddHealthChecks();
     }
 }

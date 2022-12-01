@@ -42,14 +42,14 @@ public partial class MainWindow
         _cancellationTokenSource = new CancellationTokenSource();
         Status.Content = "Checking for updates...";
         Loaded += OnLoaded;
-        Unloaded += (sender, args) => _cancellationTokenSource.Cancel();
+        Unloaded += (_, _) => _cancellationTokenSource.Cancel();
     }
 
     private async void OnLoaded(object sender, RoutedEventArgs e)
     {
         if (await HasUpdate())
         {
-            if (!(await UpdateDownloaded()))
+            if (!await UpdateDownloaded())
             {
                 await DownloadUpdate();
             }
@@ -73,7 +73,7 @@ public partial class MainWindow
         }
 
         var configuration = Encoding.Unicode.GetString(await GetData(new Uri(uriString, UriKind.Absolute)));
-        _installConfiguration = configuration.FromJson<InstallConfiguration>();
+        _installConfiguration = configuration.FromJson<InstallConfiguration?>() ?? new InstallConfiguration(string.Empty, Array.Empty<InstallFile>(), string.Empty, string.Empty);
         return Assembly.GetExecutingAssembly().GetName().Version < new Version(_installConfiguration.LatestVersion);
     }
 

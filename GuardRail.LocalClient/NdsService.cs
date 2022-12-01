@@ -32,7 +32,7 @@ public sealed class NdsService : IHostedService
                     var server = new UdpClient(18989);
                     while (!_cancellationTokenSource.Token.IsCancellationRequested)
                     {
-                        var clientRequestData = await server.ReceiveAsync();
+                        var clientRequestData = await server.ReceiveAsync(cancellationToken);
                         var ping = Encoding.UTF8.GetString(clientRequestData.Buffer).FromJson<NdsPing>();
                         if (ping?.RequestId != Guid.Empty)
                         {

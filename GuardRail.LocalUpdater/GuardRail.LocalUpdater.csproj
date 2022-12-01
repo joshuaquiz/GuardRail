@@ -18,6 +18,7 @@
     <FileVersion>0.0.0.1</FileVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
     <AssemblyName>GuardRailUpdater</AssemblyName>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

@@ -2,34 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Http;
-using GuardRail.Api.Controllers.Models;
 using GuardRail.Api.Data;
-using GuardRail.Core;
+using GuardRail.Api.Models;
 using GuardRail.Core.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace GuardRail.Api.Controllers;
 
 [Authorize]
-[Microsoft.AspNetCore.Mvc.Route("api/doors")]
+[Route("api/doors")]
 [ApiController]
 public sealed class DoorsController : ControllerBase
 {
     private readonly GuardRailContext _guardRailContext;
-    private readonly IDoorResolver _doorResolver;
 
     public DoorsController(
-        GuardRailContext guardRailContext,
-        IDoorResolver doorResolver)
+        GuardRailContext guardRailContext)
     {
         _guardRailContext = guardRailContext;
-        _doorResolver = doorResolver;
     }
 
-    [Microsoft.AspNetCore.Mvc.Route("")]
-    [Microsoft.AspNetCore.Mvc.HttpGet]
+    [Route("")]
+    [HttpGet]
     public async Task<List<DoorModel>> GetAllDoorsAsync() =>
         await _guardRailContext
             .Doors
@@ -43,8 +39,8 @@ public sealed class DoorsController : ControllerBase
                 })
             .ToListAsync();
 
-    [Microsoft.AspNetCore.Mvc.Route("{doorId}/lock")]
-    [Microsoft.AspNetCore.Mvc.HttpPost]
+    [Route("{doorId:guid}/lock")]
+    [HttpPost]
     public async Task<OkResult> LockDoorAsync(Guid doorId)
     {
         var doorFromDatabase = await _guardRailContext
@@ -52,18 +48,18 @@ public sealed class DoorsController : ControllerBase
             .SingleAsync(
                 x => x.Id == doorId,
                 HttpContext.RequestAborted);
-        var door = await _doorResolver.GetDoorByDeviceId(
+        /*var door = await _doorResolver.GetDoorByDeviceId(
             doorFromDatabase.DeviceId,
             HttpContext.RequestAborted);
-        /*await door.LockAsync(
+        await door.LockAsync(
             HttpContext.RequestAborted);*/
         doorFromDatabase.DoorStateRequestType = DoorStateRequestType.Locked;
         await _guardRailContext.SaveChangesAsync();
         return Ok();
     }
 
-    [Microsoft.AspNetCore.Mvc.Route("{doorId}/unlock")]
-    [Microsoft.AspNetCore.Mvc.HttpPost]
+    [Route("{doorId:guid}/unlock")]
+    [HttpPost]
     public async Task<OkResult> UnlockDoorAsync(Guid doorId)
     {
         var doorFromDatabase = await _guardRailContext
@@ -71,10 +67,10 @@ public sealed class DoorsController : ControllerBase
             .SingleAsync(
                 x => x.Id == doorId,
                 HttpContext.RequestAborted);
-        var door = await _doorResolver.GetDoorByDeviceId(
+        /*var door = await _doorResolver.GetDoorByDeviceId(
             doorFromDatabase.DeviceId,
             HttpContext.RequestAborted);
-        /*await door.UnLockAsync(
+        await door.UnLockAsync(
             HttpContext.RequestAborted);*/
         doorFromDatabase.DoorStateRequestType = DoorStateRequestType.UnLocked;
         await _guardRailContext.SaveChangesAsync();

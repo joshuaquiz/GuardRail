@@ -351,3 +351,5 @@ MigrationBackup/
 
 # GruardRail syncing data file
 *.gr
+
+**/ClientApp/.angular

@@ -15,7 +15,7 @@ public sealed class MenuItemControl : Grid, INotifyPropertyChanged
 {
     private ImageSource _icon;
     private string _title;
-    private Rectangle _activeIndicator;
+    private readonly Rectangle _activeIndicator;
 
     /// <summary>
     /// PropertyChanged event.

@@ -13,7 +13,7 @@ public class Door : Core.DataModels.Door
 
     public string FriendlyName { get; set; }
 
-    public AccessControlDevice AccessControlDevice { get; set; }
+    /*public AccessControlDevice AccessControlDevice { get; set; }*/
 
     public List<DoorUserAccess> DoorUserAccesses { get; set; }
 
@@ -25,9 +25,9 @@ public class Door : Core.DataModels.Door
         builder
             ?.Entity<Door>()
             ?.HasIndex(b => b.DeviceId);
-        builder
+        /*builder
             ?.Entity<Door>()
-            ?.HasOne<AccessControlDevice>();
+            ?.HasOne<AccessControlDevice>();*/
         builder
             ?.Entity<Door>()
             ?.HasMany<DoorUserAccess>();

@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Http;
 using GuardRail.Api.Logic;
 using GuardRail.Core.DataModels;
 using GuardRail.Core.Enums;
 using GuardRail.Core.EventModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GuardRail.Api.Controllers;
 
 [Authorize]
-[Microsoft.AspNetCore.Mvc.Route("api/device_actions")]
+[Route("api/device_actions")]
 [ApiController]
 public sealed class DeviceActionsController : ControllerBase
 {
@@ -26,10 +26,10 @@ public sealed class DeviceActionsController : ControllerBase
         _pushNotifications = pushNotifications;
     }
 
-    [Microsoft.AspNetCore.Mvc.Route(nameof(UnLockRequest))]
-    [Microsoft.AspNetCore.Mvc.HttpGet]
+    [Route(nameof(UnLockRequest))]
+    [HttpGet]
     public async ValueTask<OkResult> UnLockRequestAsync(
-        [Microsoft.AspNetCore.Mvc.FromBody] UnLockRequest unLockRequest,
+        [FromBody] UnLockRequest unLockRequest,
         CancellationToken cancellationToken)
     {
         var shouldUnLockResult = await _userEntryRequestHandler.HandleUnLockRequest(unLockRequest, cancellationToken);

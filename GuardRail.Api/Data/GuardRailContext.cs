@@ -18,9 +18,9 @@ public class GuardRailContext : DbContext
 
     public DbSet<Device> Devices { get; set; }
 
-    public DbSet<DoorUserAccess> DoorUserAccesses { get; set; }
+    /*public DbSet<DoorUserAccess> DoorUserAccesses { get; set; }
 
-    public DbSet<AccessControlDevice> AccessControlDevices { get; set; }
+    public DbSet<AccessControlDevice> AccessControlDevices { get; set; }*/
 
     public DbSet<Door> Doors { get; set; }
 

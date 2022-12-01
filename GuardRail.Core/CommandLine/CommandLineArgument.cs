@@ -12,23 +12,23 @@ public sealed class CommandLineArgument
     /// <summary>
     /// The type of the argument.
     /// </summary>
-    public CommandLineArgumentType Type { get; private set; }
+    public CommandLineArgumentType Type { get; private init; }
 
     /// <summary>
     /// The value of the argument as a string.
     /// </summary>
-    public string Value { get; private set; }
+    public string? Value { get; private init; }
 
     /// <summary>
     /// Parses a CommandLineArgument from a string
     /// </summary>
     /// <param name="argument"></param>
     /// <returns></returns>
-    public static CommandLineArgument Parse(string argument)
+    public static CommandLineArgument Parse(string? argument)
     {
         if (argument == null || !Regex.IsMatch(argument, "/[a-z0-9]+(?: [a-z0-9\\-\\._\"])?", RegexOptions.IgnoreCase))
         {
-            throw new InvalidCommandLineArgumentFormatException(argument);
+            throw new InvalidCommandLineArgumentFormatException(argument ?? string.Empty);
         }
 
         var indexOfSpace = argument.IndexOf(" ", StringComparison.InvariantCultureIgnoreCase);
@@ -51,12 +51,12 @@ public sealed class CommandLineArgument
     public override string ToString()
     {
         var type = Type.ToString();
-        string value;
+        string? value;
         if (Value.IsNullOrWhiteSpace())
         {
             value = null;
         }
-        else if (Value.Contains(" ", StringComparison.InvariantCultureIgnoreCase))
+        else if (Value?.Contains(' ', StringComparison.InvariantCultureIgnoreCase) == true)
         {
             value = $" \"{Value}\"";
         }

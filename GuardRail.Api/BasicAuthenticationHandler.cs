@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using GuardRail.Core.Helpers;
 
 namespace GuardRail.Api;
 
@@ -34,10 +35,15 @@ public sealed class BasicAuthenticationHandler : AuthenticationHandler<Authentic
             return AuthenticateResult.Fail("Missing Authorization Header");
         }
 
-        User user;
+        User? user;
         try
         {
             var authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
+            if (authHeader.Parameter.IsNullOrWhiteSpace())
+            {
+                return AuthenticateResult.Fail("Invalid Authorization Header");
+            }
+
             var credentialBytes = Convert.FromBase64String(authHeader.Parameter);
             var credentials = Encoding.UTF8.GetString(credentialBytes).Split(new[] { ':' }, 2);
             var username = credentials[0];
@@ -54,7 +60,8 @@ public sealed class BasicAuthenticationHandler : AuthenticationHandler<Authentic
             return AuthenticateResult.Fail("Invalid Username or Password");
         }
 
-        var claims = new[] {
+        var claims = new[]
+        {
             new Claim(ClaimTypes.NameIdentifier, user.Guid.ToString()),
             new Claim(ClaimTypes.Name, user.Username),
         };

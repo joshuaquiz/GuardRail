@@ -8,11 +8,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2E349CD8-91AC-4393-8DF5-C5DFD8955BDF}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuardRail.Tests", "GuardRail.Tests\GuardRail.Tests.csproj", "{9EEAFE58-F375-4CBD-A9F5-1B06EEAD20D5}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuardRail.Api", "GuardRail.Api\GuardRail.Api.csproj", "{E996AE63-1DF1-4B02-A096-11F2083FE82A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuardRail.LocalUpdater", "GuardRail.LocalUpdater\GuardRail.LocalUpdater.csproj", "{EA8D0DEB-EDED-4630-B76E-7538E11007E7}"
 EndProject
@@ -26,7 +27,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuardRail.DoorClient", "Gua
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuardRail.DeviceLogic", "GuardRail.DeviceLogic\GuardRail.DeviceLogic.csproj", "{3C9E2E12-D5A8-4903-A19E-FC8D39A1FE21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuardRail.DeviceLogic.Hardware", "GuardRail.DeviceLogic.Hardware\GuardRail.DeviceLogic.Hardware.csproj", "{E4070D4D-2912-4867-9FF1-2048658FC165}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuardRail.DeviceLogic.Hardware", "GuardRail.DeviceLogic.Hardware\GuardRail.DeviceLogic.Hardware.csproj", "{E4070D4D-2912-4867-9FF1-2048658FC165}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuardRail.Api", "GuardRail.Api\GuardRail.Api.csproj", "{909EAB71-7A7F-42B9-9D93-E55B4896E055}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{31A383D9-9140-4E7F-B40A-C3678FF85A24}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{21FACDB2-4A66-4C08-9BE5-3BB16E1F56B3}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\dotnetcore.yml = .github\workflows\dotnetcore.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -82,26 +92,6 @@ Global
 		{9EEAFE58-F375-4CBD-A9F5-1B06EEAD20D5}.Release|x64.Build.0 = Release|Any CPU
 		{9EEAFE58-F375-4CBD-A9F5-1B06EEAD20D5}.Release|x86.ActiveCfg = Release|Any CPU
 		{9EEAFE58-F375-4CBD-A9F5-1B06EEAD20D5}.Release|x86.Build.0 = Release|Any CPU
-		{E996AE63-1DF1-4B02-A096-11F2083FE82A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E996AE63-1DF1-4B02-A096-11F2083FE82A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E996AE63-1DF1-4B02-A096-11F2083FE82A}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{E996AE63-1DF1-4B02-A096-11F2083FE82A}.Debug|ARM.Build.0 = Debug|Any CPU
-		{E996AE63-1DF1-4B02-A096-11F2083FE82A}.Debug|ARM64.ActiveCfg = Debug|Any CPU
-		{E996AE63-1DF1-4B02-A096-11F2083FE82A}.Debug|ARM64.Build.0 = Debug|Any CPU
-		{E996AE63-1DF1-4B02-A096-11F2083FE82A}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{E996AE63-1DF1-4B02-A096-11F2083FE82A}.Debug|x64.Build.0 = Debug|Any CPU
-		{E996AE63-1DF1-4B02-A096-11F2083FE82A}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E996AE63-1DF1-4B02-A096-11F2083FE82A}.Debug|x86.Build.0 = Debug|Any CPU
-		{E996AE63-1DF1-4B02-A096-11F2083FE82A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E996AE63-1DF1-4B02-A096-11F2083FE82A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E996AE63-1DF1-4B02-A096-11F2083FE82A}.Release|ARM.ActiveCfg = Release|Any CPU
-		{E996AE63-1DF1-4B02-A096-11F2083FE82A}.Release|ARM.Build.0 = Release|Any CPU
-		{E996AE63-1DF1-4B02-A096-11F2083FE82A}.Release|ARM64.ActiveCfg = Release|Any CPU
-		{E996AE63-1DF1-4B02-A096-11F2083FE82A}.Release|ARM64.Build.0 = Release|Any CPU
-		{E996AE63-1DF1-4B02-A096-11F2083FE82A}.Release|x64.ActiveCfg = Release|Any CPU
-		{E996AE63-1DF1-4B02-A096-11F2083FE82A}.Release|x64.Build.0 = Release|Any CPU
-		{E996AE63-1DF1-4B02-A096-11F2083FE82A}.Release|x86.ActiveCfg = Release|Any CPU
-		{E996AE63-1DF1-4B02-A096-11F2083FE82A}.Release|x86.Build.0 = Release|Any CPU
 		{EA8D0DEB-EDED-4630-B76E-7538E11007E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EA8D0DEB-EDED-4630-B76E-7538E11007E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA8D0DEB-EDED-4630-B76E-7538E11007E7}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -242,9 +232,33 @@ Global
 		{E4070D4D-2912-4867-9FF1-2048658FC165}.Release|x64.Build.0 = Release|Any CPU
 		{E4070D4D-2912-4867-9FF1-2048658FC165}.Release|x86.ActiveCfg = Release|Any CPU
 		{E4070D4D-2912-4867-9FF1-2048658FC165}.Release|x86.Build.0 = Release|Any CPU
+		{909EAB71-7A7F-42B9-9D93-E55B4896E055}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{909EAB71-7A7F-42B9-9D93-E55B4896E055}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{909EAB71-7A7F-42B9-9D93-E55B4896E055}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{909EAB71-7A7F-42B9-9D93-E55B4896E055}.Debug|ARM.Build.0 = Debug|Any CPU
+		{909EAB71-7A7F-42B9-9D93-E55B4896E055}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{909EAB71-7A7F-42B9-9D93-E55B4896E055}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{909EAB71-7A7F-42B9-9D93-E55B4896E055}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{909EAB71-7A7F-42B9-9D93-E55B4896E055}.Debug|x64.Build.0 = Debug|Any CPU
+		{909EAB71-7A7F-42B9-9D93-E55B4896E055}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{909EAB71-7A7F-42B9-9D93-E55B4896E055}.Debug|x86.Build.0 = Debug|Any CPU
+		{909EAB71-7A7F-42B9-9D93-E55B4896E055}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{909EAB71-7A7F-42B9-9D93-E55B4896E055}.Release|Any CPU.Build.0 = Release|Any CPU
+		{909EAB71-7A7F-42B9-9D93-E55B4896E055}.Release|ARM.ActiveCfg = Release|Any CPU
+		{909EAB71-7A7F-42B9-9D93-E55B4896E055}.Release|ARM.Build.0 = Release|Any CPU
+		{909EAB71-7A7F-42B9-9D93-E55B4896E055}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{909EAB71-7A7F-42B9-9D93-E55B4896E055}.Release|ARM64.Build.0 = Release|Any CPU
+		{909EAB71-7A7F-42B9-9D93-E55B4896E055}.Release|x64.ActiveCfg = Release|Any CPU
+		{909EAB71-7A7F-42B9-9D93-E55B4896E055}.Release|x64.Build.0 = Release|Any CPU
+		{909EAB71-7A7F-42B9-9D93-E55B4896E055}.Release|x86.ActiveCfg = Release|Any CPU
+		{909EAB71-7A7F-42B9-9D93-E55B4896E055}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{31A383D9-9140-4E7F-B40A-C3678FF85A24} = {2E349CD8-91AC-4393-8DF5-C5DFD8955BDF}
+		{21FACDB2-4A66-4C08-9BE5-3BB16E1F56B3} = {31A383D9-9140-4E7F-B40A-C3678FF85A24}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {53D85FEE-AA1A-4A9E-9448-93FF31EAD61A}

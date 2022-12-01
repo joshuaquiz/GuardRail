@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using GuardRail.Api.Data;
-using GuardRail.Core.DataModels;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Threading;
+using GuardRail.Core.DataModels;
 using Door = GuardRail.Api.Data.Door;
 using User = GuardRail.Api.Data.User;
 

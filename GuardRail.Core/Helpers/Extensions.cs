@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Runtime.CompilerServices;
@@ -89,7 +90,7 @@ public static class Extensions
     /// </summary>
     /// <param name="str">The value to use</param>
     /// <returns>bool</returns>
-    public static bool IsNullOrWhiteSpace(this string? str) =>
+    public static bool IsNullOrWhiteSpace([NotNullWhen(false)] this string? str) =>
         string.IsNullOrWhiteSpace(str);
 
     /// <summary>

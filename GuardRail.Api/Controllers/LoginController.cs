@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
-using GuardRail.Api.Controllers.Models;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using GuardRail.Api.Data;
+using GuardRail.Api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,13 +22,31 @@ public sealed class LoginController : ControllerBase
         _guardRailContext = guardRailContext;
     }
 
-    [Route("")]
     [HttpPost]
-    public async Task<bool> LoginAsync(
-        LoginModel loginModel)
+    public async Task<LoginResponseModel> LoginAsync(
+        LoginModel loginModel,
+        CancellationToken cancellationToken)
     {
-        var user = await _guardRailContext.Users.SingleOrDefaultAsync(x =>
-            x.Username == loginModel.Username && x.Password == loginModel.Password);
-        return user != null;
+        if (!await _guardRailContext.Users.AnyAsync(cancellationToken))
+        {
+            return new LoginResponseModel(
+                false,
+                loginModel.Username,
+                "Admin",
+                null,
+                true);
+        }
+
+        var user = await _guardRailContext.Users.SingleOrDefaultAsync(
+            x =>
+                x.Username == loginModel.Username
+                && x.Password == loginModel.Password,
+            cancellationToken);
+        return new LoginResponseModel(
+            user != null,
+            user?.Email,
+            user?.FirstName + " " + user?.LastName,
+            Guid.NewGuid(),
+            false);
     }
 }
