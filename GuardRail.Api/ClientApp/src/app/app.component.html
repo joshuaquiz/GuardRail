@@ -1,6 +1,10 @@
-<body>
+<header>
+  <img src="assets/images/logo_icon.svg" alt="Logo" class="icon" />
+  <span class="title">GuardRail</span>
+</header>
+<div class="menu-wrapper" *ngIf="IsLoggedIn">
   <app-nav-menu></app-nav-menu>
-  <main class="container">
-    <router-outlet></router-outlet>
-  </main>
-</body>
+</div>
+<main [ngClass]="{ 'full': !IsLoggedIn }">
+  <router-outlet></router-outlet>
+</main>

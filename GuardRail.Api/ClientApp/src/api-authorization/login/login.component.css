@@ -1,9 +1,8 @@
 .login_box {
   font-family: 'teko-regular';
   width: 400px;
-  position: relative;
-  top: calc(50% - 150px);
-  left: calc(50% - 200px);
+  margin: 50px auto 0;
+  padding: 0;
   box-shadow: 5px 10px 10px 0 #ccc;
   border-radius: 5px;
 }
@@ -42,11 +41,11 @@
       .login_box > form > .form-group > label {
         width: calc(100% - 20px);
         display: block;
-        padding: 10px 10px 0 10px;
+        padding: 10px 0 0 10px;
       }
 
       .login_box > form > .form-group > input {
-        width: calc(100% - 35px);
+        width: calc(100% - 22px);
         display: block;
         margin: 0 9px;
         padding: 5px;

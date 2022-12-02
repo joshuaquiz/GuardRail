@@ -76,5 +76,18 @@ public sealed class Startup
             endpoints.MapHealthChecks("/healthz");
             endpoints.MapHub<GuardRailHub>("/guardRailHub");
         });
+
+        var db = app.ApplicationServices.GetRequiredService<GuardRailContext>();
+        db.Users.Add(
+            new User
+            {
+                FirstName = "Joshua",
+                LastName = "Galloway",
+                Email = "joshuaquiz@gmail.com",
+                Phone = "3177603538",
+                Password = "asdf",
+                Username = "asdf"
+            });
+        db.SaveChanges();
     }
 }

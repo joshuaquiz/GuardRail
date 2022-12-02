@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthorizeService, IUser } from '../authorize.service';
+import { AuthorizeService } from '../authorize.service';
 
 @Component({
   selector: 'app-login-menu',
@@ -8,15 +8,15 @@ import { AuthorizeService, IUser } from '../authorize.service';
 })
 export class LoginMenuComponent implements OnInit {
   public IsAuthenticated: boolean;
-  public UserName: string | null | undefined;
+  public Name: string | null | undefined;
 
   constructor(private readonly authorizeService: AuthorizeService) {
     this.IsAuthenticated = false;
-    this.UserName = null;
+    this.Name = null;
   }
 
   public ngOnInit() {
     this.IsAuthenticated = this.authorizeService.isAuthenticated();
-    this.UserName = this.authorizeService.getUser()?.Name;
+    this.Name = this.authorizeService.getUser()?.Name;
   }
 }

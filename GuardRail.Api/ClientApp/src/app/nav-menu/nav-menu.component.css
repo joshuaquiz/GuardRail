@@ -1,18 +1,34 @@
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+nav > div > ul {
+  list-style: none;
+  height: 100%;
+  width: 100%;
 }
 
-html {
-  font-size: 14px;
-}
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
+  nav > div > ul > li {
+    height: 75px;
+    width: 100%;
   }
-}
 
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
-}
+    nav > div > ul > li > a {
+      font-family: 'teko-regular';
+      text-decoration: none;
+      font-size: 30px;
+      width: 100%;
+      height: 100%;
+      display: block;
+      text-align: center;
+      line-height: 75px;
+    }
+
+      nav > div > ul > li > a:active {
+        color: #000;
+      }
+
+      nav > div > ul > li > a:visited {
+        color: #000;
+      }
+
+      nav > div > ul > li > a:hover {
+        background-color: #f3f3f3;
+        cursor: pointer;
+      }
