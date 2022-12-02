@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthorizeService } from './authorize.service';
-import { mergeMap, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +20,6 @@ export class AuthorizeInterceptor implements HttpInterceptor {
   // and adds it to the request in case it's targeted at the same origin as the
   // single page application.
   private processRequestWithToken(token: string | null, req: HttpRequest<any>, next: HttpHandler) {
-    console.log('i1', token, req);
     if (!!token && this.isSameOriginUrl(req)) {
       req = req.clone({
         setHeaders: {
@@ -30,12 +28,10 @@ export class AuthorizeInterceptor implements HttpInterceptor {
       });
     }
 
-    console.log('i2');
     return next.handle(req);
   }
 
   private isSameOriginUrl(req: any) {
-    console.log('i3', req);
     // It's an absolute url with the same origin.
     if (req.url.startsWith(`${window.location.origin}/`)) {
       return true;

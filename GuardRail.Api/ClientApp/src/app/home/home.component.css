@@ -1,6 +1,6 @@
-﻿@font-face {
-    font-family: 'teko-regular';
-    src: url('../fonts/teko-regular.ttf') format('truetype');
+@font-face {
+  font-family: 'teko-regular';
+  src: url('../../assets/fonts/teko-regular.ttf') format('truetype');
 }
 
 .home_box {

@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "Project1": {
+    "GuardRail": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:application": {
@@ -31,6 +31,7 @@
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -72,10 +73,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "Project1:build:production"
+              "browserTarget": "GuardRail:build:production"
             },
             "development": {
-              "browserTarget": "Project1:build:development",
+              "browserTarget": "GuardRail:build:development",
               "proxyConfig": "proxy.conf.js"
             }
           },
@@ -84,7 +85,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "Project1:build"
+            "browserTarget": "GuardRail:build"
           }
         },
         "test": {
@@ -132,7 +133,7 @@
       }
     }
   },
-  "defaultProject": "Project1",
+  "defaultProject": "GuardRail",
   "cli": {
     "analytics": "286b9e49-c99b-4b6c-9455-405cd5ac459f"
   }

@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using GuardRail.Api.Data;
+using GuardRail.Core.Helpers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Exceptions;
+using Microsoft.AspNetCore.Routing;
 
 namespace GuardRail.Api;
 
@@ -32,6 +36,7 @@ public sealed class Startup
         services.AddSingleton(Serilog.Log.Logger);
         services.AddDatabaseDeveloperPageExceptionFilter();
         services.AddControllersWithViews();
+        services.AddRouting();
         services.AddRazorPages();
         services.AddHealthChecks();
         services.AddSignalR();
@@ -89,5 +94,15 @@ public sealed class Startup
                 Username = "asdf"
             });
         db.SaveChanges();
+
+        var endpoints = app.ApplicationServices.GetRequiredService<IEnumerable<EndpointDataSource>>()
+            .SelectMany(es => es.Endpoints)
+            .OfType<RouteEndpoint>()
+            .Where(x => !(x.RoutePattern.RawText?.Equals("/health") ?? false))
+            .Select(x => $"{x.Metadata.OfType<HttpMethodMetadata>().FirstOrDefault()?.HttpMethods[0] ?? "Unknown Verb"} /{x.RoutePattern.RawText?.TrimStart('/')}")
+            .Distinct()
+            .OrderBy(x => x)
+            .ToList();
+        Console.WriteLine(endpoints.ToJson());
     }
 }

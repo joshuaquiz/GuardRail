@@ -3,12 +3,15 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule, Route } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { MapEditorModule } from 'angular-map-editor';
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
+import { MapComponent } from './map/map.component';
 import { ApiAuthorizationModule } from '../api-authorization/api-authorization.module';
 import { AuthorizeGuard } from '../api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from '../api-authorization/authorize.interceptor';
@@ -19,17 +22,19 @@ import { AuthorizeInterceptor } from '../api-authorization/authorize.interceptor
     NavMenuComponent,
     HomeComponent,
     CounterComponent,
-    FetchDataComponent
+    MapComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
     ApiAuthorizationModule,
+    BrowserAnimationsModule,
+    MapEditorModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' } as Route,
-      { path: 'counter', component: CounterComponent } as Route,
-      { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] } as Route
+      { component: HomeComponent, canActivate: [AuthorizeGuard], path: '', pathMatch: 'full' } as Route,
+      { component: CounterComponent, canActivate: [AuthorizeGuard], path: 'counter' } as Route,
+      { component: MapComponent, canActivate: [AuthorizeGuard], path: 'fetch-data' } as Route
     ])
   ],
   providers: [

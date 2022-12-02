@@ -6,7 +6,7 @@ const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_H
 const proxyConfig = [
   {
     context: [
-      '/api/*'
+      '/api/**'
     ],
     target: target,
     secure: false,
@@ -17,3 +17,11 @@ const proxyConfig = [
 ];
 
 module.exports = proxyConfig;
+
+
+{
+  "/api": {
+    "target": "http://localhost:3000",
+      "secure": false
+  }
+}
