@@ -1,0 +1,94 @@
+.pan {
+  height: 59px;
+  width: 59px;
+  border-radius: 50%;
+  background-color: #ccc;
+  overflow: hidden;
+  box-shadow: 0 0 1px 1px #515151;
+  margin-right: 6px;
+}
+
+  .pan > .pan_handle {
+    height: 29px;
+    width: 29px;
+    cursor: pointer;
+    position: absolute;
+    border-top-right-radius: 30px;
+  }
+
+    .pan > .pan_handle:hover {
+      box-shadow: 0 0 1px 1px #515151;
+      z-index: 1;
+    }
+
+  .pan > .up {
+    transform: rotate(-45deg);
+    top: -6px;
+    right: 21px;
+  }
+
+    .pan > .up::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background-image: url( '/assets/images/majesticons/line/arrow-up-line.svg' );
+      transform: rotate(45deg);
+      top: 3px;
+      right: 3px;
+    }
+
+  .pan > .right {
+    transform: rotate(45deg);
+    top: 15px;
+    right: 0;
+  }
+
+    .pan > .right::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background-image: url( '/assets/images/majesticons/line/arrow-up-line.svg' );
+      transform: rotate(45deg);
+      top: 3px;
+      right: 3px;
+    }
+
+  .pan > .down {
+    transform: rotate(135deg);
+    top: 36px;
+    right: 21px;
+  }
+
+    .pan > .down::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background-image: url( '/assets/images/majesticons/line/arrow-up-line.svg' );
+      transform: rotate(45deg);
+      top: 3px;
+      right: 3px;
+    }
+
+  .pan > .left {
+    transform: rotate(225deg);
+    top: 15px;
+    right: 42px;
+  }
+
+    .pan > .left::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background-image: url( '/assets/images/majesticons/line/arrow-up-line.svg' );
+      transform: rotate(45deg);
+      top: 3px;
+      right: 3px;
+    }

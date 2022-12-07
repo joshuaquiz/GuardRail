@@ -17,11 +17,3 @@ const proxyConfig = [
 ];
 
 module.exports = proxyConfig;
-
-
-{
-  "/api": {
-    "target": "http://localhost:3000",
-      "secure": false
-  }
-}

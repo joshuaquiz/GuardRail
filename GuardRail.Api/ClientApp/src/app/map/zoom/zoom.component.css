@@ -1,0 +1,162 @@
+.zoom {
+  position: relative;
+  width: 30px;
+  float: right;
+  margin: 10px;
+}
+
+  .zoom > .in {
+    height: 15px;
+    width: 30px;
+    border-radius: 5px;
+    background-image: url( '/assets/images/majesticons/line/plus-line.svg' );
+    background-color: #ccc;
+    box-shadow: 0 0 1px 1px #515151;
+    background-position-x: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+  }
+
+    .zoom > .in:hover {
+      box-shadow: 0 0 2px 2px #515151
+    }
+
+  .zoom > .zoom_bar {
+    height: 72px;
+    width: 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+    .zoom > .zoom_bar > .bar {
+      height: 72px;
+      width: 2px;
+      border-radius: 5px;
+      background-color: #000;
+      position: relative;
+      right: -14px;
+    }
+
+    .zoom > .zoom_bar > .line {
+      height: 1px;
+      width: 10px;
+      border-radius: 5px;
+      background-color: #222;
+      position: relative;
+      right: -10px;
+    }
+
+      .zoom > .zoom_bar > .line.one {
+        top: -68px;
+      }
+
+      .zoom > .zoom_bar > .line.two {
+        top: -61px;
+      }
+
+      .zoom > .zoom_bar > .line.three {
+        top: -54px;
+      }
+
+      .zoom > .zoom_bar > .line.four {
+        top: -47px;
+      }
+
+      .zoom > .zoom_bar > .line.five {
+        top: -40px;
+      }
+
+      .zoom > .zoom_bar > .line.six {
+        top: -33px;
+      }
+
+      .zoom > .zoom_bar > .line.seven {
+        top: -26px;
+      }
+
+      .zoom > .zoom_bar > .line.eight {
+        top: -19px;
+      }
+
+      .zoom > .zoom_bar > .line.nine {
+        top: -12px;
+      }
+
+    .zoom > .zoom_bar > .slider {
+      height: 5px;
+      width: 20px;
+      border-radius: 5px;
+      background-color: #ccc;
+      box-shadow: 0 0 1px 1px #515151;
+      position: relative;
+      right: -5px;
+    }
+
+      .zoom > .zoom_bar > .slider.one {
+        top: -79px;
+      }
+
+      .zoom > .zoom_bar > .slider.two {
+        top: -71px;
+      }
+
+      .zoom > .zoom_bar > .slider.three {
+        top: -63px;
+      }
+
+      .zoom > .zoom_bar > .slider.four {
+        top: -55px;
+      }
+
+      .zoom > .zoom_bar > .slider.five {
+        top: -47px;
+      }
+
+      .zoom > .zoom_bar > .slider.six {
+        top: -39px;
+      }
+
+      .zoom > .zoom_bar > .slider.seven {
+        top: -31px;
+      }
+
+      .zoom > .zoom_bar > .slider.eight {
+        top: -23px;
+      }
+
+      .zoom > .zoom_bar > .slider.nine {
+        top: -15px;
+      }
+
+  .zoom > .out {
+    height: 15px;
+    width: 30px;
+    border-radius: 5px;
+    background-image: url( '/assets/images/majesticons/line/minus-line.svg' );
+    background-color: #ccc;
+    box-shadow: 0 0 1px 1px #515151;
+    background-position-x: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+  }
+
+    .zoom > .out:hover {
+      box-shadow: 0 0 2px 2px #515151
+    }
+
+  .zoom > .reset {
+    background-image: url( '/assets/images/majesticons/line/repeat-circle-line.svg' );
+    background-color: #ccc;
+    background-size: 41px;
+    background-position: center;
+    height: 30px;
+    width: 30px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 25px;
+    box-shadow: 0 0 1px 1px #515151;
+  }
+
+    .zoom > .reset:hover {
+      box-shadow: 0 0 2px 2px #515151
+    }

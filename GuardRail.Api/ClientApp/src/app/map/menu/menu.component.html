@@ -1,0 +1,18 @@
+<div class="options"
+     (mouseover)="MenuOpen=true"
+     (mouseout)="MenuOpen=false"
+     [@openClose]="MenuOpen ? 'open' : 'closed'">
+  <div class="menu">
+    <div class="menu_icon add sub">
+      <div class="line"></div>
+      <div class="room"></div>
+      <div class="camera"></div>
+      <div class="door"></div>
+    </div>
+    <div class="menu_icon rotate"></div>
+    <div class="menu_icon delete"></div>
+  </div>
+  <div class="edit_icon_wrapper">
+    <div class="edit_icon"></div>
+  </div>
+</div>

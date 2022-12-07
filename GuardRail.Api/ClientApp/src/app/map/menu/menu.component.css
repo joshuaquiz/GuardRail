@@ -1,0 +1,69 @@
+.options {
+  height: 62px;
+  width: 62px;
+  position: absolute;
+  right: 25px;
+  bottom: 25px;
+  border-radius: 35px;
+  cursor: pointer;
+  border: solid 1px #ccc;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+  .options > .edit_icon_wrapper {
+    height: 62px;
+    width: 62px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    border-radius: 35px;
+    background-color: #fff;
+    cursor: pointer;
+    border: solid 1px #ccc;
+    overflow: hidden;
+  }
+
+    .options > .edit_icon_wrapper > .edit_icon {
+      height: 40px;
+      width: 40px;
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      border-radius: 35px;
+      background-image: url( '/assets/images/majesticons/line/edit-pen-2-line.svg' );
+    }
+
+  .options > .menu {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    background-color: #fff;
+  }
+
+    .options > .menu > .menu_icon {
+      height: 40px;
+      width: 40px;
+      margin-left: 10px;
+      margin-top: 10px;
+      border-radius: 35px;
+    }
+
+      .options > .menu > .menu_icon:hover {
+        background-color: #ccc;
+      }
+
+      .options > .menu > .menu_icon.sub {
+      }
+
+      .options > .menu > .menu_icon.add {
+        background-image: url( '/assets/images/majesticons/line/plus-line.svg' );
+      }
+
+      .options > .menu > .menu_icon.rotate {
+        background-image: url( '/assets/images/majesticons/line/reload-line.svg' );
+      }
+
+      .options > .menu > .menu_icon.delete {
+        background-image: url( '/assets/images/majesticons/line/multiply-line.svg' );
+      }

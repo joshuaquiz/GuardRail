@@ -1,0 +1,34 @@
+.designer {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.designer > .layout {
+    height: 100%;
+    width: 100%;
+    background-color: #eee;
+  }
+
+    .designer > .layout > .grid {
+      height: 100%;
+      width: 100%;
+    }
+
+      .designer > .layout > .grid .horizontal_line {
+        height: 0;
+        width: 100%;
+        border-top: solid 1px #000;
+      }
+
+    .designer > .layout > .items {
+      height: calc(100vh - 50px);
+      width: calc(100vw - 200px);
+      display: block;
+    }
+
+  .designer > .layout > .zoom_pan {
+    position: absolute;
+    top: 60px;
+    right: 10px;
+  }

@@ -1,0 +1,25 @@
+<div class="zoom">
+  <div class="in"
+       (click)="zoomIn()"
+       title="Zoom in"></div>
+  <div class="zoom_bar">
+    <div class="bar"></div>
+    <div class="line one"></div>
+    <div class="line two"></div>
+    <div class="line three"></div>
+    <div class="line four"></div>
+    <div class="line five"></div>
+    <div class="line six"></div>
+    <div class="line seven"></div>
+    <div class="line eight"></div>
+    <div class="line nine"></div>
+    <div class="slider"
+         [ngClass]="ZoomName"></div>
+  </div>
+  <div class="out"
+       (click)="zoomOut()"
+       title="Zoom out"></div>
+  <div class="reset"
+       (click)="reset()"
+       title="Reset position"></div>
+</div>
