@@ -27,7 +27,7 @@
       display: block;
     }
 
-  .designer > .layout > .zoom_pan {
+  .designer > .layout > .zoom_nav {
     position: absolute;
     top: 60px;
     right: 10px;

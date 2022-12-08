@@ -29,24 +29,12 @@ export class MapInterfaceStateService {
     this.updateState(this.currentInterfaceState.updateOffsetX(deltaX));
   }
 
-  public getOffsetX(): number {
-    return this.currentInterfaceState.OffsetX;
-  }
-
   public updateOffsetY(deltaY: number): void {
     this.updateState(this.currentInterfaceState.updateOffsetY(deltaY));
   }
 
-  public getOffsetY(): number {
-    return this.currentInterfaceState.OffsetY;
-  }
-
   public updateScaleFactor(factor: number): void {
     this.updateState(this.currentInterfaceState.updateScaleFactor(factor));
-  }
-
-  public getScaleFactor(): number {
-    return this.currentInterfaceState.ScaleFactor;
   }
 
   private updateState(state: MapInterfaceState): void {

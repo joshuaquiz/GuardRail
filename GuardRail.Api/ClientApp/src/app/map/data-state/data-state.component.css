@@ -1,0 +1,57 @@
+.data_state {
+  position: absolute;
+  top: 10px;
+  right: 75px;
+}
+
+  .data_state > .saving {
+    height: 15px;
+    width: 65px;
+  }
+
+    .data_state > .saving > .message {
+
+    }
+
+      .data_state > .saving > .message.error {
+
+      }
+
+  .data_state > .history {
+    height: 15px;
+    width: 65px;
+  }
+
+  .data_state .history > .undo {
+    height: 15px;
+    width: 30px;
+    border-radius: 5px;
+    background-image: url( '/assets/images/majesticons/line/undo-line.svg' );
+    background-color: #ccc;
+    box-shadow: 0 0 1px 1px #515151;
+    background-position-x: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    float: left;
+  }
+
+    .data_state .history > .undo:hover {
+      box-shadow: 0 0 2px 2px #515151
+    }
+
+  .data_state .history > .redo {
+    height: 15px;
+    width: 30px;
+    border-radius: 5px;
+    background-image: url( '/assets/images/majesticons/line/redo-line.svg' );
+    background-color: #ccc;
+    box-shadow: 0 0 1px 1px #515151;
+    background-position-x: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    float: right;
+  }
+
+    .data_state .history > .redo:hover {
+      box-shadow: 0 0 2px 2px #515151
+    }

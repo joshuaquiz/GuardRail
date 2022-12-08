@@ -1,0 +1,15 @@
+<div class="data_state">
+  <div class="history">
+    <div class="undo"
+         (click)="undo()"
+         title="Undo"></div>
+    <div class="redo"
+         (click)="redo()"
+         title="Redo"></div>
+  </div>
+  <div class="saving">
+    <div class="message" *ngIf="!Saving && LastSavedDate">Saved at {{ LastSavedDate }}</div>
+    <div class="message" *ngIf="Saving">Saving...</div>
+    <div class="message error" *ngIf="!Saving && SavingError">{{ SavingError }}</div>
+  </div>
+</div>

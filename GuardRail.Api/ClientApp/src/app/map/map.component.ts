@@ -6,10 +6,11 @@ import { ZoomSteps } from './zoom/zoom-steps.model';
 import { PanService } from './pan/pan.service';
 import { PanDirection } from './pan/pan-direction.model';
 import { MapInterfaceStateService } from './map-interface-state.service';
+import { MapDataStateService } from './data-state/map-data-state.service';
 import { LogService } from '../log.service';
 import { IMapInterfaceState } from './map-interface-state.interface';
-import { Point } from './point.model';
-import { Room } from './room.model';
+import { Point } from './data-state/point.model';
+import { Room } from './data-state/room.model';
 
 @Component({
   selector: 'app-map',
@@ -17,11 +18,9 @@ import { Room } from './room.model';
   styleUrls: ['./map.component.css']
 })
 export class MapComponent implements AfterViewInit {
-  public MenuOpen = false;
-  public PanStepAmount = 125;
-  public GridSpacing = 50;
-  public Rooms = new Array<Room>();
-  private mapInterfaceState = { OffsetX: 0, OffsetY: 0, ScaleFactor: 1 } as IMapInterfaceState;
+  public MenuOpen: boolean;
+  public PanStepAmount: number;
+  public GridSpacing: number;
 
   private boundingRect: DOMRect | undefined;
 
@@ -34,10 +33,15 @@ export class MapComponent implements AfterViewInit {
     private readonly zoomService: ZoomService,
     private readonly panService: PanService,
     private readonly mapInterfaceStateService: MapInterfaceStateService,
+    private readonly mapDataStateService: MapDataStateService,
     private readonly logService: LogService) {
+    this.MenuOpen = false;
+    this.PanStepAmount = 125;
+    this.GridSpacing = 50;
     this.setupInterfaceState();
     this.setupZoomService();
     this.setupPanService();
+    this.setupDataStateService();
   }
 
   public setupInterfaceState(): void {
@@ -45,10 +49,10 @@ export class MapComponent implements AfterViewInit {
       .subscribe((x: IMapInterfaceState): void => {
         this.logService.debug('Map interface state updated', x);
         if (this.canvasRenderingContext) {
-          this.mapInterfaceState = x;
           this.renderGridAndCurrentRooms(
+            this.mapDataStateService.CurrentState.value,
             this.canvasRenderingContext,
-            this.mapInterfaceState);
+            this.mapInterfaceStateService.CurrentInterfaceState.value);
         }
       });
   }
@@ -59,8 +63,9 @@ export class MapComponent implements AfterViewInit {
         this.mapInterfaceStateService.updateScaleFactor(x);
         this.logService.debug(`Set zoom offset to ${ZoomSteps[x]} with value ${x}`);
         this.renderGridAndCurrentRooms(
+          this.mapDataStateService.CurrentState.value,
           this.canvasRenderingContext,
-          this.mapInterfaceState);
+          this.mapInterfaceStateService.CurrentInterfaceState.value);
       });
   }
 
@@ -70,25 +75,37 @@ export class MapComponent implements AfterViewInit {
         switch (x) {
         case PanDirection.Up:
           this.mapInterfaceStateService.updateOffsetY(this.PanStepAmount);
-          this.logService.debug(`Panned up ${this.PanStepAmount} to ${this.mapInterfaceStateService.getOffsetY()}`);
+          this.logService.debug(`Panned up ${this.PanStepAmount} to ${this.mapInterfaceStateService.CurrentInterfaceState.value.OffsetY}`);
           break;
         case PanDirection.Down:
           this.mapInterfaceStateService.updateOffsetY(-this.PanStepAmount);
-          this.logService.debug(`Panned down ${this.PanStepAmount} to ${this.mapInterfaceStateService.getOffsetY()}`);
+          this.logService.debug(`Panned down ${this.PanStepAmount} to ${this.mapInterfaceStateService.CurrentInterfaceState.value.OffsetY}`);
           break;
         case PanDirection.Left:
           this.mapInterfaceStateService.updateOffsetX(this.PanStepAmount);
-          this.logService.debug(`Panned left ${this.PanStepAmount} to ${this.mapInterfaceStateService.getOffsetX()}`);
+          this.logService.debug(`Panned left ${this.PanStepAmount} to ${this.mapInterfaceStateService.CurrentInterfaceState.value.OffsetX}`);
           break;
         case PanDirection.Right:
           this.mapInterfaceStateService.updateOffsetX(-this.PanStepAmount);
-          this.logService.debug(`Panned right ${this.PanStepAmount} to ${this.mapInterfaceStateService.getOffsetX()}`);
+          this.logService.debug(`Panned right ${this.PanStepAmount} to ${this.mapInterfaceStateService.CurrentInterfaceState.value.OffsetX}`);
           break;
         }
 
         this.renderGridAndCurrentRooms(
+          this.mapDataStateService.CurrentState.value,
           this.canvasRenderingContext,
-          this.mapInterfaceState);
+          this.mapInterfaceStateService.CurrentInterfaceState.value);
+      });
+  }
+
+  private setupDataStateService(): void {
+    this.mapDataStateService.CurrentState
+      .subscribe((x: Map<string, Room>): void => {
+        this.logService.debug('new state', Array.from(x));
+        this.renderGridAndCurrentRooms(
+          x,
+          this.canvasRenderingContext,
+          this.mapInterfaceStateService.CurrentInterfaceState.value);
       });
   }
 
@@ -109,8 +126,9 @@ export class MapComponent implements AfterViewInit {
 
     this.captureEvents(canvasEl);
     this.renderGridAndCurrentRooms(
+      this.mapDataStateService.CurrentState.value,
       this.canvasRenderingContext,
-      this.mapInterfaceState);
+      this.mapInterfaceStateService.CurrentInterfaceState.value);
   }
 
   private roundToNearest(numToRound: number, numToRoundTo: number): number {
@@ -149,10 +167,11 @@ export class MapComponent implements AfterViewInit {
       this.roundToNearest(m1.clientY - this.boundingRect!.top, 10));
 
     if (m1.type === 'mouseup') {
-      if (Math.abs(startPos.X - currentPos.X) < 10 || Math.abs(startPos.Y - currentPos.Y) < 10) {
+      if (Math.abs(startPos.X - currentPos.X) < 5
+        || Math.abs(startPos.Y - currentPos.Y) < 5) {
         this.logService.debug('The box was to small');
       } else {
-        this.Rooms.push(
+        this.mapDataStateService.addRoom(
           new Room(
             startPos,
             currentPos));
@@ -160,9 +179,9 @@ export class MapComponent implements AfterViewInit {
     }
 
     this.renderGridAndCurrentRooms(
+      this.mapDataStateService.CurrentState.value,
       this.canvasRenderingContext!,
-      this.mapInterfaceState);
-
+      this.mapInterfaceStateService.CurrentInterfaceState.value);
     if (m1.type !== 'mouseup') {
       const tempRoom = new Room(
         startPos,
@@ -170,11 +189,12 @@ export class MapComponent implements AfterViewInit {
       this.renderRoom(
         tempRoom,
         this.canvasRenderingContext!,
-        this.mapInterfaceState);
+        this.mapInterfaceStateService.CurrentInterfaceState.value);
     }
   }
 
   private renderGridAndCurrentRooms(
+    rooms: Map<string, Room>,
     canvasContext: CanvasRenderingContext2D | null | undefined,
     mapInterfaceState: IMapInterfaceState): void {
     if (!canvasContext) {
@@ -185,12 +205,7 @@ export class MapComponent implements AfterViewInit {
     this.renderGrid(
       canvasContext,
       mapInterfaceState);
-    for (let i = 0; i < this.Rooms.length; i++) {
-      this.renderRoom(
-        this.Rooms[i],
-        canvasContext,
-        mapInterfaceState);
-    }
+    rooms.forEach(x => this.renderRoom(x, canvasContext, mapInterfaceState));
   }
 
   private renderGrid(
@@ -201,7 +216,7 @@ export class MapComponent implements AfterViewInit {
     const xStart = mapInterfaceState.OffsetX > 0
       ? -mapInterfaceState.OffsetX
       : mapInterfaceState.OffsetX;
-    for (let i = xStart; i < 50; i++) {
+    for (let i = xStart; i < 80; i++) {
       lines.push({
         Start: new Point(
           (i * this.GridSpacing) + mapInterfaceState.OffsetX,
@@ -215,13 +230,13 @@ export class MapComponent implements AfterViewInit {
     const yStart = mapInterfaceState.OffsetY > 0
       ? -mapInterfaceState.OffsetY
       : mapInterfaceState.OffsetY;
-    for (let i = yStart; i < 50; i++) {
+    for (let i = yStart; i < 80; i++) {
       lines.push({
         Start: new Point(
           0,
           (i * this.GridSpacing) + mapInterfaceState.OffsetY),
         End: new Point(
-          5000,
+          10000,
           (i * this.GridSpacing) + mapInterfaceState.OffsetY)
       });
     }
@@ -250,8 +265,9 @@ export class MapComponent implements AfterViewInit {
       Math.floor(p1Y),
       Math.floor(width),
       Math.floor(height));
+    const numberFormat = new Intl.NumberFormat('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
     canvasContext.fillText(
-      `${Math.abs(room.P2.X - room.P1.X)}ft`,
+      `${numberFormat.format(Math.abs(room.P2.X - room.P1.X) / 2)}ft`,
       Math.floor(p1X + (width / 2)),
       Math.floor((room.P1.Y + 12 - mapInterfaceState.OffsetY) * mapInterfaceState.ScaleFactor));
     canvasContext.stroke();
@@ -261,7 +277,7 @@ export class MapComponent implements AfterViewInit {
       Math.floor(p1Y + (height / 2)));
     canvasContext.rotate(Math.PI / 2);
     canvasContext.fillText(
-      `${Math.abs(room.P2.Y - room.P1.Y)}ft`,
+      `${numberFormat.format(Math.abs(room.P2.Y - room.P1.Y) / 2)}ft`,
       0,
       0);
     canvasContext.stroke();
