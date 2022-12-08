@@ -7,5 +7,5 @@ export enum ZoomSteps {
   Six = 0.9,
   Seven = 0.75,
   Eight = 0.5,
-  Nine = 0.01
+  Nine = 0.25
 }

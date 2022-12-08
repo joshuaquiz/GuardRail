@@ -83,13 +83,13 @@
       }
 
     .zoom > .zoom_bar > .slider {
-      height: 5px;
-      width: 20px;
-      border-radius: 5px;
+      height: 11px;
+      width: 25px;
+      border-radius: 3px;
       background-color: #ccc;
       box-shadow: 0 0 1px 1px #515151;
       position: relative;
-      right: -5px;
+      right: -3px;
     }
 
       .zoom > .zoom_bar > .slider.one {
@@ -126,6 +126,14 @@
 
       .zoom > .zoom_bar > .slider.nine {
         top: -15px;
+      }
+
+      .zoom > .zoom_bar > .slider > .label {
+        font-size: 10px;
+        font-weight: bold;
+        line-height: 10px;
+        position: relative;
+        text-align: center;
       }
 
   .zoom > .out {

@@ -12,12 +12,14 @@ import { LogService } from '../../log.service';
 })
 export class ZoomComponent implements OnInit {
   public ZoomName: string;
+  public ZoomNumber: ZoomSteps;
   private readonly wheelEvent: BehaviorSubject<WheelEvent>;
 
   constructor(
     private readonly zoomService: ZoomService,
     private readonly logService: LogService) {
-    this.ZoomName = ZoomSteps[ZoomSteps.Five];
+    this.ZoomNumber = ZoomSteps.Five;
+    this.ZoomName = ZoomSteps[this.ZoomNumber];
     this.wheelEvent = new BehaviorSubject({} as WheelEvent);
   }
 
@@ -36,7 +38,8 @@ export class ZoomComponent implements OnInit {
 
     this.zoomService.ZoomAmount
       .subscribe((x: ZoomSteps): void => {
-        this.ZoomName = ZoomSteps[x].toLowerCase();
+        this.ZoomNumber = x;
+        this.ZoomName = ZoomSteps[this.ZoomNumber].toLowerCase();
       });
   }
 

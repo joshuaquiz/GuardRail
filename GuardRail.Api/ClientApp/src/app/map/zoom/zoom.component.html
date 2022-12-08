@@ -14,7 +14,9 @@
     <div class="line eight"></div>
     <div class="line nine"></div>
     <div class="slider"
-         [ngClass]="ZoomName"></div>
+         [ngClass]="ZoomName">
+      <div class="label">{{ ZoomNumber }}x</div>
+    </div>
   </div>
   <div class="out"
        (click)="zoomOut()"

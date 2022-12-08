@@ -8,6 +8,8 @@ import { PanDirection } from './pan/pan-direction.model';
 import { MapInterfaceStateService } from './map-interface-state.service';
 import { LogService } from '../log.service';
 import { IMapInterfaceState } from './map-interface-state.interface';
+import { Point } from './point.model';
+import { Room } from './room.model';
 
 @Component({
   selector: 'app-map',
@@ -16,8 +18,10 @@ import { IMapInterfaceState } from './map-interface-state.interface';
 })
 export class MapComponent implements AfterViewInit {
   public MenuOpen = false;
-  public PanStepAmount = 100;
+  public PanStepAmount = 125;
+  public GridSpacing = 50;
   public Rooms = new Array<Room>();
+  private mapInterfaceState = { OffsetX: 0, OffsetY: 0, ScaleFactor: 1 } as IMapInterfaceState;
 
   private boundingRect: DOMRect | undefined;
 
@@ -37,14 +41,14 @@ export class MapComponent implements AfterViewInit {
   }
 
   public setupInterfaceState(): void {
-    this.mapInterfaceStateService.updateOffsetX(0);
-    this.mapInterfaceStateService.updateOffsetY(0);
     this.mapInterfaceStateService.CurrentInterfaceState
       .subscribe((x: IMapInterfaceState): void => {
+        this.logService.debug('Map interface state updated', x);
         if (this.canvasRenderingContext) {
-          this.render(
-            this.canvasRenderingContext!,
-            x);
+          this.mapInterfaceState = x;
+          this.renderGridAndCurrentRooms(
+            this.canvasRenderingContext,
+            this.mapInterfaceState);
         }
       });
   }
@@ -54,6 +58,9 @@ export class MapComponent implements AfterViewInit {
       .subscribe((x: ZoomSteps): void => {
         this.mapInterfaceStateService.updateScaleFactor(x);
         this.logService.debug(`Set zoom offset to ${ZoomSteps[x]} with value ${x}`);
+        this.renderGridAndCurrentRooms(
+          this.canvasRenderingContext,
+          this.mapInterfaceState);
       });
   }
 
@@ -78,6 +85,10 @@ export class MapComponent implements AfterViewInit {
           this.logService.debug(`Panned right ${this.PanStepAmount} to ${this.mapInterfaceStateService.getOffsetX()}`);
           break;
         }
+
+        this.renderGridAndCurrentRooms(
+          this.canvasRenderingContext,
+          this.mapInterfaceState);
       });
   }
 
@@ -89,13 +100,17 @@ export class MapComponent implements AfterViewInit {
     canvasEl.width = this.boundingRect.width;
     canvasEl.height = this.boundingRect.height;
 
-
     if (this.canvasRenderingContext) {
-      this.canvasRenderingContext.lineWidth = 3;
+      this.canvasRenderingContext.lineWidth = 2;
       this.canvasRenderingContext.strokeStyle = '#000';
+      this.canvasRenderingContext.font = '15px';
+      this.canvasRenderingContext.textAlign = 'center';
     }
 
     this.captureEvents(canvasEl);
+    this.renderGridAndCurrentRooms(
+      this.canvasRenderingContext,
+      this.mapInterfaceState);
   }
 
   private roundToNearest(numToRound: number, numToRoundTo: number): number {
@@ -103,123 +118,78 @@ export class MapComponent implements AfterViewInit {
   }
 
   private captureEvents(canvasEl: HTMLCanvasElement) {
-    // this will capture all mousedown events from the canvas element
-    var start: MouseEvent;
+    var startPos: Point;
     fromEvent(canvasEl, 'mousedown')
       .pipe(
-        tap(x => start = x as MouseEvent),
+        tap(x => {
+          const start = x as MouseEvent;
+          startPos = new Point(
+            this.roundToNearest(start.clientX - this.boundingRect!.left, 10),
+            this.roundToNearest(start.clientY - this.boundingRect!.top, 10));
+        }),
         filter(x => (x as MouseEvent).button === 0),
-        tap(x => console.log((x as MouseEvent).button)),
         switchMap(() =>
-          // after a mouse down, we'll record all mouse moves
           fromEvent(canvasEl, 'mousemove')
             .pipe(
-              // we'll stop (and unsubscribe) once the user releases the mouse
-              // this will trigger a 'mouseup' event
               takeUntil(fromEvent(canvasEl, 'mouseup')),
-              // we'll also stop (and unsubscribe) once the mouse leaves the canvas (mouseleave event)
               takeUntil(fromEvent(canvasEl, 'mouseleave'))
             ))
       )
-      .subscribe(res => {
-        console.log(res, this.boundingRect);
-        if (!this.boundingRect || !this.canvasRenderingContext) {
-          return;
-        }
-
-        const m1 = res as MouseEvent;
-        if (start && m1) {
-          const startPos = {
-            X: this.roundToNearest(start.clientX - this.boundingRect.left, 10),
-            Y: this.roundToNearest(start.clientY - this.boundingRect.top, 10)
-          };
-
-          const currentPos = {
-            X: this.roundToNearest(m1.clientX - this.boundingRect.left, 10),
-            Y: this.roundToNearest(m1.clientY - this.boundingRect.top, 10)
-          };
-
-          // this method we'll implement soon to do the actual drawing
-          this.drawOnCanvas(startPos, currentPos);
-          this.canvasRenderingContext.beginPath();
-          this.canvasRenderingContext.font = '20px serif';
-          this.canvasRenderingContext.fillText(`Start:(${start.clientX},${start.clientY}),m1:(${m1.clientX},${m1.clientY})`, m1.clientX - this.boundingRect.left, m1.clientY - this.boundingRect.top);
-          this.canvasRenderingContext.stroke();
-        }
-      });
+      .subscribe(x => this.handleMouseUpAndMove(x, startPos));
     fromEvent(canvasEl, 'mouseup')
-      .subscribe(res => {
-        console.log(res);
-        if (!start || !this.boundingRect) {
-          return;
-        }
-
-        const m1 = res as MouseEvent;
-        if (start && m1) {
-          const startPos = {
-            X: this.roundToNearest(start.clientX - this.boundingRect.left, 10),
-            Y: this.roundToNearest(start.clientY - this.boundingRect.top, 10)
-          };
-
-          const currentPos = {
-            X: this.roundToNearest(m1.clientX - this.boundingRect.left, 10),
-            Y: this.roundToNearest(m1.clientY - this.boundingRect.top, 10)
-          };
-
-          if (Math.abs(startPos.X - currentPos.X) < 10
-            || Math.abs(startPos.Y - currentPos.Y) < 10) {
-            console.log('too small');
-            this.drawOnCanvas(null, null);
-            return;
-          }
-
-          console.log(startPos, currentPos);
-
-          this.Rooms.push(
-            new Room(
-              startPos.X,
-              startPos.Y,
-              currentPos.X,
-              currentPos.Y));
-
-          // this method we'll implement soon to do the actual drawing
-          this.drawOnCanvas(null, null);
-        }
-      });
+      .subscribe(x => this.handleMouseUpAndMove(x, startPos));
   }
 
-  private drawOnCanvas(prevPos: { X: number, Y: number } | null, currentPos: { X: number, Y: number } | null): void {
-    if (!this.canvasRenderingContext) {
-      return;
+  private handleMouseUpAndMove(
+    res: Event,
+    startPos: Point): void {
+    const m1 = res as MouseEvent;
+    const currentPos = new Point(
+      this.roundToNearest(m1.clientX - this.boundingRect!.left, 10),
+      this.roundToNearest(m1.clientY - this.boundingRect!.top, 10));
+
+    if (m1.type === 'mouseup') {
+      if (Math.abs(startPos.X - currentPos.X) < 10 || Math.abs(startPos.Y - currentPos.Y) < 10) {
+        this.logService.debug('The box was to small');
+      } else {
+        this.Rooms.push(
+          new Room(
+            startPos,
+            currentPos));
+      }
     }
 
-    this.canvasRenderingContext.clearRect(0, 0, Number.MAX_VALUE, Number.MAX_VALUE); //clear canvas
+    this.renderGridAndCurrentRooms(
+      this.canvasRenderingContext!,
+      this.mapInterfaceState);
 
-    for (let i = 0; i < this.Rooms.length; i++) {
-      this.Rooms[i].render(this.canvasRenderingContext, null);
+    if (m1.type !== 'mouseup') {
+      const tempRoom = new Room(
+        startPos,
+        currentPos);
+      this.renderRoom(
+        tempRoom,
+        this.canvasRenderingContext!,
+        this.mapInterfaceState);
     }
-
-    if (!prevPos || !currentPos) {
-      return;
-    }
-
-    const tempRoom = new Room(
-      prevPos.X,
-      prevPos.Y,
-      currentPos.X,
-      currentPos.Y);
-    tempRoom.render(this.canvasRenderingContext, null);
   }
 
-  private render(
-    canvasContext: CanvasRenderingContext2D,
+  private renderGridAndCurrentRooms(
+    canvasContext: CanvasRenderingContext2D | null | undefined,
     mapInterfaceState: IMapInterfaceState): void {
+    if (!canvasContext) {
+      return;
+    }
+
     canvasContext.clearRect(0, 0, Number.MAX_VALUE, Number.MAX_VALUE);
     this.renderGrid(
       canvasContext,
       mapInterfaceState);
     for (let i = 0; i < this.Rooms.length; i++) {
-      this.Rooms[i].render(canvasContext, mapInterfaceState);
+      this.renderRoom(
+        this.Rooms[i],
+        canvasContext,
+        mapInterfaceState);
     }
   }
 
@@ -227,47 +197,74 @@ export class MapComponent implements AfterViewInit {
     ctx: CanvasRenderingContext2D,
     mapInterfaceState: IMapInterfaceState): void {
     ctx.strokeStyle = '#ddd';
-    for (let i = 0; i < 50; i++) {
-      ctx.beginPath();
-      ctx.moveTo((i * 100) + mapInterfaceState.OffsetX, 0);
-      ctx.lineTo((i * 100) + mapInterfaceState.OffsetX, 1000);
-      ctx.stroke();
+    const lines = new Array<{ Start: Point, End: Point }>();
+    const xStart = mapInterfaceState.OffsetX > 0
+      ? -mapInterfaceState.OffsetX
+      : mapInterfaceState.OffsetX;
+    for (let i = xStart; i < 50; i++) {
+      lines.push({
+        Start: new Point(
+          (i * this.GridSpacing) + mapInterfaceState.OffsetX,
+          0),
+        End: new Point(
+          (i * this.GridSpacing) + mapInterfaceState.OffsetX,
+          1000)
+      });
     }
 
-    for (let i = 0; i < 50; i++) {
+    const yStart = mapInterfaceState.OffsetY > 0
+      ? -mapInterfaceState.OffsetY
+      : mapInterfaceState.OffsetY;
+    for (let i = yStart; i < 50; i++) {
+      lines.push({
+        Start: new Point(
+          0,
+          (i * this.GridSpacing) + mapInterfaceState.OffsetY),
+        End: new Point(
+          5000,
+          (i * this.GridSpacing) + mapInterfaceState.OffsetY)
+      });
+    }
+
+    for (let i = 0; i < lines.length; i++) {
       ctx.beginPath();
-      ctx.moveTo(0, (i * 100) + mapInterfaceState.OffsetY);
-      ctx.lineTo(2000, (i * 100) + mapInterfaceState.OffsetY);
+      ctx.moveTo(lines[i].Start.X, lines[i].Start.Y);
+      ctx.lineTo(lines[i].End.X, lines[i].End.Y);
       ctx.stroke();
     }
 
     ctx.strokeStyle = '#000';
   }
-}
 
-class Room {
-  constructor(
-    public X1: number,
-    public Y1: number,
-    public X2: number,
-    public Y2: number) {
-  }
-
-  public render(
+  private renderRoom(
+    room: Room,
     canvasContext: CanvasRenderingContext2D,
-    mapInterfaceState: IMapInterfaceState | null): void {
+    mapInterfaceState: IMapInterfaceState): void {
     canvasContext.beginPath();
+    const p1X = (room.P1.X - mapInterfaceState.OffsetX) * mapInterfaceState.ScaleFactor;
+    const width = (room.P2.X - room.P1.X) * mapInterfaceState.ScaleFactor;
+    const p1Y = (room.P1.Y - mapInterfaceState.OffsetY) * mapInterfaceState.ScaleFactor;
+    const height = (room.P2.Y - room.P1.Y) * mapInterfaceState.ScaleFactor;
     canvasContext.rect(
-      this.X1,
-      this.Y1,
-      this.X2 - this.X1,
-      this.Y2 - this.Y1);
-    canvasContext.font = '20px serif';
-    canvasContext.fillText(this.toString(), this.X1 + 3, this.Y1 + 20);
+      Math.floor(p1X),
+      Math.floor(p1Y),
+      Math.floor(width),
+      Math.floor(height));
+    canvasContext.fillText(
+      `${Math.abs(room.P2.X - room.P1.X)}ft`,
+      Math.floor(p1X + (width / 2)),
+      Math.floor((room.P1.Y + 12 - mapInterfaceState.OffsetY) * mapInterfaceState.ScaleFactor));
     canvasContext.stroke();
-  }
-
-  public toString(): string {
-    return `{P1:{${this.X1},${this.Y1}},P2:{${this.X2},${this.Y2}},W:${this.X2 - this.X1},H:${this.Y2 - this.Y1}}`;
+    canvasContext.save();
+    canvasContext.translate(
+      Math.floor(p1X) + 3,
+      Math.floor(p1Y + (height / 2)));
+    canvasContext.rotate(Math.PI / 2);
+    canvasContext.fillText(
+      `${Math.abs(room.P2.Y - room.P1.Y)}ft`,
+      0,
+      0);
+    canvasContext.stroke();
+    canvasContext.restore();
   }
 }
