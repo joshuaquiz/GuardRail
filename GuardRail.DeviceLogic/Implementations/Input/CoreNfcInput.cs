@@ -2,11 +2,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.DeviceLogic.Interfaces.Communication;
 using Microsoft.Extensions.Logging;
-using GuardRail.Core.DataModels;
-using GuardRail.Core.Enums;
 using GuardRail.DeviceLogic.Models;
 using GuardRail.DeviceLogic.Interfaces.Input.Nfc;
 using System.Text;
+using GuardRail.Core.Data.Enums;
+using GuardRail.Core.Data.Models;
 
 namespace GuardRail.DeviceLogic.Implementations.Input;
 
@@ -50,7 +50,7 @@ public abstract class CoreNfcInput<TNfcInput, TNfcConfiguration> : INfcInput
             nameof(UnLockRequest),
             new UnLockRequest
             {
-                DoorId = DeviceConstants.DeviceId,
+                AccessPointGuid = DeviceConstants.DeviceId,
                 UnlockRequestType = UnlockRequestType.Nfc,
                 Data = Encoding.UTF8.GetBytes(inputData)
             },

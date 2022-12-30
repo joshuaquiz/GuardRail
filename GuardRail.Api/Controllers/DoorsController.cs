@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GuardRail.Api.Data;
 using GuardRail.Api.Models;
-using GuardRail.Core.Enums;
+using GuardRail.Core.Data;
+using GuardRail.Core.Data.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +32,7 @@ public sealed class DoorsController : ControllerBase
             .Select(x =>
                 new DoorModel
                 {
-                    Id = x.Id,
+                    Id = x.Guid,
                     FriendlyName = x.FriendlyName,
                     DeviceId = x.DeviceId,
                     DoorStateRequestType = x.DoorStateRequestType
@@ -46,7 +46,7 @@ public sealed class DoorsController : ControllerBase
         var doorFromDatabase = await _guardRailContext
             .Doors
             .SingleAsync(
-                x => x.Id == doorId,
+                x => x.Guid == doorId,
                 HttpContext.RequestAborted);
         /*var door = await _doorResolver.GetDoorByDeviceId(
             doorFromDatabase.DeviceId,
@@ -65,7 +65,7 @@ public sealed class DoorsController : ControllerBase
         var doorFromDatabase = await _guardRailContext
             .Doors
             .SingleAsync(
-                x => x.Id == doorId,
+                x => x.Guid == doorId,
                 HttpContext.RequestAborted);
         /*var door = await _doorResolver.GetDoorByDeviceId(
             doorFromDatabase.DeviceId,

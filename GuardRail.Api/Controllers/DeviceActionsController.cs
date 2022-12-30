@@ -2,8 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.Api.Logic;
-using GuardRail.Core.DataModels;
-using GuardRail.Core.Enums;
+using GuardRail.Core.Data.Enums;
+using GuardRail.Core.Data.Models;
 using GuardRail.Core.EventModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -37,7 +37,7 @@ public sealed class DeviceActionsController : ControllerBase
         {
             await _pushNotifications.Send(
                 new DoorCommand(
-                    unLockRequest.DoorId,
+                    unLockRequest.AccessPointGuid,
                     new[]
                     {
                         new DoorStateRequest(
@@ -53,17 +53,10 @@ public sealed class DeviceActionsController : ControllerBase
                             DoorStateRequestType.Open,
                             TimeSpan.FromSeconds(3))
                     },
-                    $"{shouldUnLockResult.Door?.FriendlyName} has been unlocked and opened for 3 seconds by {shouldUnLockResult.User?.FirstName} {shouldUnLockResult.User?.LastName} as of {DateTime.UtcNow:O}"),
+                    $"{shouldUnLockResult.AccessPoint?.Name} has been unlocked and opened for 3 seconds by {shouldUnLockResult.User?.FirstName} {shouldUnLockResult.User?.LastName} as of {DateTime.UtcNow:O}"),
                 cancellationToken);
         }
 
         return Ok();
     }
-}
-
-public interface IPushNotifications
-{
-    public ValueTask Send(
-        DoorCommand doorCommand,
-        CancellationToken cancellationToken);
 }

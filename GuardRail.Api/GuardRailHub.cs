@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using GuardRail.Api.Data;
+using GuardRail.Core.Data.Models;
 using Microsoft.AspNetCore.SignalR;
 
 namespace GuardRail.Api;

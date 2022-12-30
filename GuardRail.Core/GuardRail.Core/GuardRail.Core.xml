@@ -4,29 +4,6 @@
         <name>GuardRail.Core</name>
     </assembly>
     <members>
-        <member name="T:GuardRail.Core.AccessAuthorizationEvent">
-            <summary>
-            The data defining the access authorization event
-            </summary>
-        </member>
-        <member name="M:GuardRail.Core.AccessAuthorizationEvent.Create(GuardRail.Core.DataModels.Device,GuardRail.Core.IAccessControlDevice)">
-            <summary>
-            Creates a new AccessAuthorizationEvent.
-            </summary>
-            <param name="device">The device that triggered the request.</param>
-            <param name="accessControlDevice">The access point the request was triggered at.</param>
-            <returns></returns>
-        </member>
-        <member name="P:GuardRail.Core.AccessAuthorizationEvent.Device">
-            <summary>
-            The device that triggered the request.
-            </summary>
-        </member>
-        <member name="P:GuardRail.Core.AccessAuthorizationEvent.AccessControlDevice">
-            <summary>
-            The access point the request was triggered at.
-            </summary>
-        </member>
         <member name="T:GuardRail.Core.CommandLine.CommandLineArgument">
             <summary>
             A single command line argument.
@@ -174,261 +151,11 @@
             </summary>
             <param name="invalidArgument"></param>
         </member>
-        <member name="T:GuardRail.Core.DataModels.AccessPoint">
-            <summary>
-            Represents an access control device.
-            This could be a keypad, NFC reader, etc.
-            </summary>
-        </member>
-        <member name="P:GuardRail.Core.DataModels.AccessPoint.Guid">
-            <inheritdoc />
-        </member>
-        <member name="P:GuardRail.Core.DataModels.AccessPoint.DeviceId">
-            <summary>
-            The device's ID.
-            </summary>
-        </member>
-        <member name="T:GuardRail.Core.DataModels.AccessPointGroup">
-            <summary>
-            A group of doors in the system.
-            </summary>
-        </member>
-        <member name="P:GuardRail.Core.DataModels.AccessPointGroup.Guid">
-            <inheritdoc />
-        </member>
-        <member name="P:GuardRail.Core.DataModels.AccessPointGroup.Name">
-            <summary>
-            The name of the group.
-            </summary>
-        </member>
-        <member name="T:GuardRail.Core.DataModels.Account">
-            <summary>
-            An account in the system.
-            </summary>
-        </member>
-        <member name="P:GuardRail.Core.DataModels.Account.Guid">
-            <inheritdoc />
-        </member>
-        <member name="P:GuardRail.Core.DataModels.Account.Name">
-            <summary>
-            The name of the account.
-            </summary>
-        </member>
-        <member name="P:GuardRail.Core.DataModels.Account.Location">
-            <summary>
-            The location of the installation.
-            </summary>
-        </member>
-        <member name="T:GuardRail.Core.DataModels.Device">
-            <summary>
-            A device like a phone, NFC tag, etc.
-            </summary>
-        </member>
-        <member name="P:GuardRail.Core.DataModels.Device.Guid">
-            <inheritdoc />
-        </member>
-        <member name="P:GuardRail.Core.DataModels.Device.DeviceId">
-            <summary>
-            The ID of the device.
-            </summary>
-        </member>
-        <member name="P:GuardRail.Core.DataModels.Device.FriendlyName">
-            <summary>
-            A friendly name for the device.
-            </summary>
-        </member>
-        <member name="P:GuardRail.Core.DataModels.Device.ByteId">
-            <summary>
-            The bytes used to identify a device.
-            </summary>
-        </member>
-        <member name="P:GuardRail.Core.DataModels.Device.IsConfigured">
-            <summary>
-            Whether or not the device has been configured.
-            </summary>
-        </member>
-        <member name="T:GuardRail.Core.DataModels.Door">
-            <summary>
-            Represents a door locking device.
-            </summary>
-        </member>
-        <member name="P:GuardRail.Core.DataModels.Door.Guid">
-            <inheritdoc />
-        </member>
-        <member name="P:GuardRail.Core.DataModels.Door.DeviceId">
-            <summary>
-            The ID of the door.
-            </summary>
-        </member>
-        <member name="P:GuardRail.Core.DataModels.Door.FriendlyName">
-            <summary>
-            A friendlyName for the door.
-            </summary>
-        </member>
-        <member name="P:GuardRail.Core.DataModels.Door.DoorStateRequestType">
-            <summary>
-            The locked status of the door.
-            </summary>
-        </member>
-        <member name="P:GuardRail.Core.DataModels.Door.IsConfigured">
-            <summary>
-            Whether or not the door is fully configured.
-            </summary>
-        </member>
-        <member name="T:GuardRail.Core.DataModels.IAddableItem">
-            <summary>
-            An item that can be added.
-            </summary>
-        </member>
-        <member name="P:GuardRail.Core.DataModels.IAddableItem.Guid">
-            <summary>
-            The global ID for the item.
-            Guid is to be used in all systems for the global ID.
-            This value is set automatically and should not be passed in for adds.
-            </summary>
-        </member>
-        <member name="T:GuardRail.Core.DataModels.NdsPing">
-            <summary>
-            A ping request/response.
-            </summary>
-            <remarks>
-            A client will send this data and the server will send it back to show it received it.
-            </remarks>
-        </member>
-        <member name="P:GuardRail.Core.DataModels.NdsPing.RequestId">
-            <summary>
-            The ID of the request.
-            </summary>
-        </member>
-        <member name="T:GuardRail.Core.DataModels.UnLockRequest">
-            <summary>
-            A request to unlock a door.
-            </summary>
-        </member>
-        <member name="P:GuardRail.Core.DataModels.UnLockRequest.DoorId">
-            <summary>
-            The ID of the door.
-            </summary>
-        </member>
-        <member name="P:GuardRail.Core.DataModels.UnLockRequest.UnlockRequestType">
-            <summary>
-            The method used to attempt to access the door.
-            </summary>
-        </member>
-        <member name="P:GuardRail.Core.DataModels.UnLockRequest.Data">
-            <summary>
-            The data used.
-            </summary>
-            <remarks>
-            The type of data and how to handle it will be determined by the value of <see cref="P:GuardRail.Core.DataModels.UnLockRequest.UnlockRequestType"/>.
-            </remarks>
-        </member>
-        <member name="T:GuardRail.Core.DataModels.User">
-            <summary>
-            A user in the system.
-            </summary>
-        </member>
-        <member name="P:GuardRail.Core.DataModels.User.Guid">
-            <inheritdoc />
-        </member>
-        <member name="P:GuardRail.Core.DataModels.User.Username">
-            <summary>
-            The user's first name.
-            </summary>
-        </member>
-        <member name="P:GuardRail.Core.DataModels.User.Password">
-            <summary>
-            The user's last name.
-            </summary>
-        </member>
-        <member name="P:GuardRail.Core.DataModels.User.FirstName">
-            <summary>
-            The user's first name.
-            </summary>
-        </member>
-        <member name="P:GuardRail.Core.DataModels.User.LastName">
-            <summary>
-            The user's last name.
-            </summary>
-        </member>
-        <member name="P:GuardRail.Core.DataModels.User.Phone">
-            <summary>
-            The user's phone.
-            </summary>
-        </member>
-        <member name="P:GuardRail.Core.DataModels.User.Email">
-            <summary>
-            The user's email.
-            </summary>
-        </member>
-        <member name="T:GuardRail.Core.DataModels.UserGroup">
-            <summary>
-            A group of users in the system.
-            </summary>
-        </member>
-        <member name="P:GuardRail.Core.DataModels.UserGroup.Guid">
-            <inheritdoc />
-        </member>
-        <member name="P:GuardRail.Core.DataModels.UserGroup.Name">
-            <summary>
-            The name of the group.
-            </summary>
-        </member>
-        <member name="T:GuardRail.Core.Enums.DoorStateRequestType">
-            <summary>
-            The states for a door.
-            </summary>
-        </member>
-        <member name="F:GuardRail.Core.Enums.DoorStateRequestType.UnKnown">
-            <summary>
-            The locked status of the door cannot be determined.
-            </summary>
-        </member>
-        <member name="F:GuardRail.Core.Enums.DoorStateRequestType.UnLocked">
-            <summary>
-            The door is unlocked.
-            </summary>
-        </member>
-        <member name="F:GuardRail.Core.Enums.DoorStateRequestType.Locked">
-            <summary>
-            The door is locked.
-            </summary>
-        </member>
-        <member name="F:GuardRail.Core.Enums.DoorStateRequestType.Open">
-            <summary>
-            The door is open.
-            </summary>
-        </member>
-        <member name="F:GuardRail.Core.Enums.DoorStateRequestType.Closed">
-            <summary>
-            The door is closed.
-            </summary>
-        </member>
-        <member name="F:GuardRail.Core.Enums.DoorStateRequestType.GreenLightOn">
-            <summary>
-            The green light is on.
-            </summary>
-        </member>
-        <member name="F:GuardRail.Core.Enums.DoorStateRequestType.RedLightOn">
-            <summary>
-            The red light is on.
-            </summary>
-        </member>
-        <member name="F:GuardRail.Core.Enums.DoorStateRequestType.BuzzerOn">
-            <summary>
-            The buzzer is on.
-            </summary>
-        </member>
-        <member name="T:GuardRail.Core.Enums.UnlockRequestType">
-            <summary>
-            Ways an unlock can be triggered.
-            </summary>
-        </member>
         <member name="T:GuardRail.Core.EventModels.DoorCommand">
             <summary>
             A command to a door.
             </summary>
-            <param name="DoorId">The ID of the door.</param>
+            <param name="AccessPointId">The ID of the access point.</param>
             <param name="DoorStateRequests">All requested state changes.</param>
             <param name="Message">A message related to the command.</param>
         </member>
@@ -436,12 +163,12 @@
             <summary>
             A command to a door.
             </summary>
-            <param name="DoorId">The ID of the door.</param>
+            <param name="AccessPointId">The ID of the access point.</param>
             <param name="DoorStateRequests">All requested state changes.</param>
             <param name="Message">A message related to the command.</param>
         </member>
-        <member name="P:GuardRail.Core.EventModels.DoorCommand.DoorId">
-            <summary>The ID of the door.</summary>
+        <member name="P:GuardRail.Core.EventModels.DoorCommand.AccessPointId">
+            <summary>The ID of the access point.</summary>
         </member>
         <member name="P:GuardRail.Core.EventModels.DoorCommand.DoorStateRequests">
             <summary>All requested state changes.</summary>
@@ -456,7 +183,7 @@
             <param name="DoorStateRequestType">The type of state change.</param>
             <param name="Duration">How long to hold the door status.</param>
         </member>
-        <member name="M:GuardRail.Core.EventModels.DoorStateRequest.#ctor(GuardRail.Core.Enums.DoorStateRequestType,System.TimeSpan)">
+        <member name="M:GuardRail.Core.EventModels.DoorStateRequest.#ctor(GuardRail.Core.Data.Enums.DoorStateRequestType,System.TimeSpan)">
             <summary>
             A request item for state change on a door.
             </summary>
@@ -511,8 +238,15 @@
             <summary>
             Extension for IsNullOrWhiteSpace.
             </summary>
-            <param name="str">The value to use</param>
+            <param name="str">The value to use.</param>
             <returns>bool</returns>
+        </member>
+        <member name="M:GuardRail.Core.Helpers.Extensions.GetBytes(System.String)">
+            <summary>
+            Gets the UTF8 encoded bytes from the provided text.
+            </summary>
+            <param name="str">The value to use.</param>
+            <returns><see cref="T:System.Byte"/>s</returns>
         </member>
         <member name="M:GuardRail.Core.Helpers.Extensions.LogGuardRailError``2(Microsoft.Extensions.Logging.ILogger{``0},``1,System.String,System.String,System.String,System.Int32)">
             <summary>
@@ -589,31 +323,6 @@
         <member name="M:GuardRail.Core.Helpers.VersionConverter.CanConvert(System.Type)">
             <inheritdoc/>
         </member>
-        <member name="T:GuardRail.Core.IAccessControlDevice">
-            <summary>
-            Represents an access control device.
-            This could be a keypad, NFC reader, etc.
-            </summary>
-        </member>
-        <member name="M:GuardRail.Core.IAccessControlDevice.Init">
-            <summary>
-            Starts up any processes needed to monitor the device.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:GuardRail.Core.IAccessControlDevice.GetDeviceId">
-            <summary>
-            Gets an ID for the device.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:GuardRail.Core.IAccessControlDevice.PresentNoAccessGranted(System.String)">
-            <summary>
-            Present to the user access was not granted.
-            </summary>
-            <param name="reason"></param>
-            <returns></returns>
-        </member>
         <member name="T:GuardRail.Core.InstallConfiguration">
             <summary>
             The configuration for an update/install.
@@ -663,6 +372,19 @@
         </member>
         <member name="P:GuardRail.Core.InstallFile.LocalPath">
             <summary>Where the file goes locally.</summary>
+        </member>
+        <member name="T:GuardRail.Core.Models.NdsPing">
+            <summary>
+            A ping request/response.
+            </summary>
+            <remarks>
+            A client will send this data and the server will send it back to show it received it.
+            </remarks>
+        </member>
+        <member name="P:GuardRail.Core.Models.NdsPing.RequestId">
+            <summary>
+            The ID of the request.
+            </summary>
         </member>
         <member name="T:GuardRail.Core.Validator">
             <summary>

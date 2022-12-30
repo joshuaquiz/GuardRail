@@ -1,0 +1,555 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GuardRail.Core.Data</name>
+    </assembly>
+    <members>
+        <member name="T:GuardRail.Core.Data.Enums.DoorStateRequestType">
+            <summary>
+            The states for a door.
+            </summary>
+        </member>
+        <member name="F:GuardRail.Core.Data.Enums.DoorStateRequestType.UnKnown">
+            <summary>
+            The locked status of the door cannot be determined.
+            </summary>
+        </member>
+        <member name="F:GuardRail.Core.Data.Enums.DoorStateRequestType.UnLocked">
+            <summary>
+            The door is unlocked.
+            </summary>
+        </member>
+        <member name="F:GuardRail.Core.Data.Enums.DoorStateRequestType.Locked">
+            <summary>
+            The door is locked.
+            </summary>
+        </member>
+        <member name="F:GuardRail.Core.Data.Enums.DoorStateRequestType.Open">
+            <summary>
+            The door is open.
+            </summary>
+        </member>
+        <member name="F:GuardRail.Core.Data.Enums.DoorStateRequestType.Closed">
+            <summary>
+            The door is closed.
+            </summary>
+        </member>
+        <member name="F:GuardRail.Core.Data.Enums.DoorStateRequestType.GreenLightOn">
+            <summary>
+            The green light is on.
+            </summary>
+        </member>
+        <member name="F:GuardRail.Core.Data.Enums.DoorStateRequestType.RedLightOn">
+            <summary>
+            The red light is on.
+            </summary>
+        </member>
+        <member name="F:GuardRail.Core.Data.Enums.DoorStateRequestType.BuzzerOn">
+            <summary>
+            The buzzer is on.
+            </summary>
+        </member>
+        <member name="T:GuardRail.Core.Data.Enums.UnlockRequestType">
+            <summary>
+            Ways an unlock can be triggered.
+            </summary>
+        </member>
+        <member name="T:GuardRail.Core.Data.GuardRailContext">
+            <summary>
+            Database context for the project.
+            </summary>
+        </member>
+        <member name="M:GuardRail.Core.Data.GuardRailContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions)">
+            <summary>
+            Creates a new <see cref="T:GuardRail.Core.Data.GuardRailContext"/>.
+            </summary>
+            <param name="options"></param>
+        </member>
+        <member name="P:GuardRail.Core.Data.GuardRailContext.Accounts">
+            <summary>
+            The <see cref="T:GuardRail.Core.Data.Models.Account"/>s in the database.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.GuardRailContext.Logs">
+            <summary>
+            The <see cref="T:GuardRail.Core.Data.Models.Log"/>s in the database.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.GuardRailContext.Users">
+            <summary>
+            The <see cref="T:GuardRail.Core.Data.Models.User"/>s in the database.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.GuardRailContext.ApiAccessKeys">
+            <summary>
+            The <see cref="T:GuardRail.Core.Data.Models.ApiAccessKey"/>s in the database.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.GuardRailContext.UserGroups">
+            <summary>
+            The <see cref="T:GuardRail.Core.Data.Models.UserGroup"/>s in the database.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.GuardRailContext.UserAccessMethods">
+            <summary>
+            The <see cref="T:GuardRail.Core.Data.Models.UserAccessMethod"/>s in the database.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.GuardRailContext.AccessPoints">
+            <summary>
+            The <see cref="T:GuardRail.Core.Data.Models.AccessPoint"/>s in the database.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.GuardRailContext.AccessPointGroups">
+            <summary>
+            The <see cref="T:GuardRail.Core.Data.Models.AccessPointGroup"/>s in the database.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.GuardRailContext.Doors">
+            <summary>
+            The <see cref="T:GuardRail.Core.Data.Models.Door"/>s in the database.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.GuardRailContext.GrantedAccesses">
+            <summary>
+            The <see cref="T:GuardRail.Core.Data.Models.GrantedAccess"/>s in the database.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.GuardRailContext.Restrictions">
+            <summary>
+            The <see cref="T:GuardRail.Core.Data.Models.Restriction"/>s in the database.
+            </summary>
+        </member>
+        <member name="T:GuardRail.Core.Data.Interfaces.IAccountItem">
+            <summary>
+            An item linked to an account.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Interfaces.IAccountItem.AccountGuid">
+            <summary>
+            The ID of the account.
+            </summary>
+        </member>
+        <member name="T:GuardRail.Core.Data.Interfaces.IAddableItem">
+            <summary>
+            An item that can be added.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Interfaces.IAddableItem.Guid">
+            <summary>
+            The global ID for the item.
+            Guid is to be used in all systems for the global ID.
+            This value is set automatically and should not be passed in for adds.
+            </summary>
+        </member>
+        <member name="T:GuardRail.Core.Data.Models.AccessPoint">
+            <summary>
+            Represents a unit at a door used to badge, pass-code, swipe, etc.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.AccessPoint.Guid">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.AccessPoint.AccountGuid">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.AccessPoint.Name">
+            <summary>
+            The device's friendly name.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.AccessPoint.AccessPointGroupGuid">
+            <summary>
+            The Guid of the <see cref="P:GuardRail.Core.Data.Models.AccessPoint.AccessPointGroup"/>, if there is one.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.AccessPoint.AccessPointGroup">
+            <summary>
+            The <see cref="P:GuardRail.Core.Data.Models.AccessPoint.AccessPointGroup"/>, if there is one.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.AccessPoint.Doors">
+            <summary>
+            The <see cref="P:GuardRail.Core.Data.Models.AccessPoint.Doors"/>s, linked to this access point.
+            </summary>
+        </member>
+        <member name="T:GuardRail.Core.Data.Models.AccessPointGroup">
+            <summary>
+            A group of doors in the system.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.AccessPointGroup.Guid">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.AccessPointGroup.AccountGuid">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.AccessPointGroup.Name">
+            <summary>
+            The name of the group.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.AccessPointGroup.AccessPoints">
+            <summary>
+            The <see cref="T:GuardRail.Core.Data.Models.AccessPoint"/>s in this group.
+            </summary>
+        </member>
+        <member name="T:GuardRail.Core.Data.Models.Account">
+            <summary>
+            An account in the system.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.Account.Guid">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.Account.Name">
+            <summary>
+            The name of the account.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.Account.Location">
+            <summary>
+            The location of the installation.
+            </summary>
+        </member>
+        <member name="T:GuardRail.Core.Data.Models.ApiAccessKey">
+            <summary>
+            A user's API access key.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.ApiAccessKey.Guid">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.ApiAccessKey.AccountGuid">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.ApiAccessKey.Expiry">
+            <summary>
+            The time the key expires.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.ApiAccessKey.UserGuid">
+            <summary>
+            The Guid of the <see cref="T:GuardRail.Core.Data.Models.User"/>.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.ApiAccessKey.User">
+            <summary>
+            The <see cref="T:GuardRail.Core.Data.Models.User"/>.
+            </summary>
+        </member>
+        <member name="T:GuardRail.Core.Data.Models.Door">
+            <summary>
+            Represents a door locking device.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.Door.Guid">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.Door.AccountGuid">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.Door.DeviceId">
+            <summary>
+            The ID of the door.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.Door.FriendlyName">
+            <summary>
+            A friendlyName for the door.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.Door.DoorStateRequestType">
+            <summary>
+            The locked status of the door.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.Door.IsConfigured">
+            <summary>
+            Whether or not the door is fully configured.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.Door.AccessPointGuid">
+            <summary>
+            The Guid of the <see cref="P:GuardRail.Core.Data.Models.Door.AccessPoint"/>.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.Door.AccessPoint">
+            <summary>
+            The <see cref="P:GuardRail.Core.Data.Models.Door.AccessPoint"/>.
+            </summary>
+        </member>
+        <member name="T:GuardRail.Core.Data.Models.GrantedAccess">
+            <summary>
+            An access reference table.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.GrantedAccess.Guid">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.GrantedAccess.AccountGuid">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.GrantedAccess.IsDenied">
+            <summary>
+            Whether or not the access defined is a allow or deny.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.GrantedAccess.UserGuid">
+            <summary>
+            The Guid of the <see cref="T:GuardRail.Core.Data.Models.User"/>, if there is one.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.GrantedAccess.User">
+            <summary>
+            The <see cref="T:GuardRail.Core.Data.Models.User"/>, if there is one.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.GrantedAccess.UserGroupGuid">
+            <summary>
+            The Guid of the <see cref="P:GuardRail.Core.Data.Models.GrantedAccess.UserGroup"/>, if there is one.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.GrantedAccess.UserGroup">
+            <summary>
+            The <see cref="P:GuardRail.Core.Data.Models.GrantedAccess.UserGroup"/>, if there is one.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.GrantedAccess.AccessPointGroupGuid">
+            <summary>
+            The Guid of the <see cref="P:GuardRail.Core.Data.Models.GrantedAccess.AccessPointGroup"/>, if there is one.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.GrantedAccess.AccessPointGroup">
+            <summary>
+            The <see cref="P:GuardRail.Core.Data.Models.GrantedAccess.AccessPointGroup"/>, if there is one.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.GrantedAccess.AccessPointGuid">
+            <summary>
+            The Guid of the <see cref="P:GuardRail.Core.Data.Models.GrantedAccess.AccessPoint"/>, if there is one.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.GrantedAccess.AccessPoint">
+            <summary>
+            The <see cref="P:GuardRail.Core.Data.Models.GrantedAccess.AccessPoint"/>, if there is one.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.GrantedAccess.Restrictions">
+            <summary>
+            A list of <see cref="T:GuardRail.Core.Data.Models.Restriction"/>s, if there are any.
+            </summary>
+        </member>
+        <member name="T:GuardRail.Core.Data.Models.Log">
+            <summary>
+            Represents a logged event.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.Log.Guid">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.Log.AccountGuid">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.Log.DateTime">
+            <summary>
+            The timestamp of the log.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.Log.LogMessage">
+            <summary>
+            The message of the log.
+            </summary>
+        </member>
+        <member name="T:GuardRail.Core.Data.Models.Restriction">
+            <summary>
+            Represents any restrictions to a login.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.Restriction.Guid">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.Restriction.AccountGuid">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.Restriction.GrantedAccessGuid">
+            <summary>
+            The Guid of the <see cref="P:GuardRail.Core.Data.Models.Restriction.GrantedAccess"/>.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.Restriction.GrantedAccess">
+            <summary>
+            The <see cref="P:GuardRail.Core.Data.Models.Restriction.GrantedAccess"/>.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.Restriction.StartTime">
+            <summary>
+            The time of day to start allowing access.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.Restriction.EndTime">
+            <summary>
+            The time of day to no longer allow access.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.Restriction.StartDate">
+            <summary>
+            The date to start allowing access.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.Restriction.EndDate">
+            <summary>
+            The date to no longer allow access.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.Restriction.AllowedUnlockRequestTypes">
+            <summary>
+            Allowed access types.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.Restriction.BlockedUnlockRequestTypes">
+            <summary>
+            Blocked access types.
+            </summary>
+        </member>
+        <member name="T:GuardRail.Core.Data.Models.UnLockRequest">
+            <summary>
+            A request to unlock a door.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.UnLockRequest.AccessPointGuid">
+            <summary>
+            The guid of the access point.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.UnLockRequest.UnlockRequestType">
+            <summary>
+            The method used to attempt to access the door.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.UnLockRequest.Data">
+            <summary>
+            The data used.
+            </summary>
+            <remarks>
+            The type of data and how to handle it will be determined by the value of <see cref="P:GuardRail.Core.Data.Models.UnLockRequest.UnlockRequestType"/>.
+            </remarks>
+        </member>
+        <member name="T:GuardRail.Core.Data.Models.User">
+            <summary>
+            A user in the system.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.User.Guid">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.User.AccountGuid">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.User.Username">
+            <summary>
+            The user's username.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.User.Password">
+            <summary>
+            The user's password.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.User.PasswordResetDate">
+            <summary>
+            The next time the users password will expire.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.User.FirstName">
+            <summary>
+            The user's first name.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.User.LastName">
+            <summary>
+            The user's last name.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.User.Phone">
+            <summary>
+            The user's phone.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.User.Email">
+            <summary>
+            The user's email.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.User.UserGroupGuid">
+            <summary>
+            The Guid of the <see cref="P:GuardRail.Core.Data.Models.User.UserGroup"/>, if there is one.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.User.UserGroup">
+            <summary>
+            The <see cref="P:GuardRail.Core.Data.Models.User.UserGroup"/>, if there is one.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.User.UserAccessMethods">
+            <summary>
+            The <see cref="T:GuardRail.Core.Data.Models.UserAccessMethod"/>s, linked to this user.
+            </summary>
+        </member>
+        <member name="T:GuardRail.Core.Data.Models.UserAccessMethod">
+            <summary>
+            A method a user can gain access.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.UserAccessMethod.Guid">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.UserAccessMethod.AccountGuid">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.UserAccessMethod.UnlockRequestType">
+            <summary>
+            The method used for the access method.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.UserAccessMethod.Data">
+            <summary>
+            The data for this type.
+            </summary>
+            <remarks>
+            This can be a phone ID, a pass-code, RFID, etc.
+            </remarks>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.UserAccessMethod.UserGuid">
+            <summary>
+            The Guid of the <see cref="T:GuardRail.Core.Data.Models.User"/>.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.UserAccessMethod.User">
+            <summary>
+            The <see cref="T:GuardRail.Core.Data.Models.User"/>.
+            </summary>
+        </member>
+        <member name="T:GuardRail.Core.Data.Models.UserGroup">
+            <summary>
+            A group of users in the system.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.UserGroup.Guid">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.UserGroup.AccountGuid">
+            <inheritdoc />
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.UserGroup.Name">
+            <summary>
+            The name of the group.
+            </summary>
+        </member>
+        <member name="P:GuardRail.Core.Data.Models.UserGroup.Users">
+            <summary>
+            The <see cref="T:GuardRail.Core.Data.Models.User"/>s in this group.
+            </summary>
+        </member>
+    </members>
+</doc>

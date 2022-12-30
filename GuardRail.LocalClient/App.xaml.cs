@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Windows;
 using GuardRail.Core.CommandLine;
+using GuardRail.Core.Data.Models;
 using GuardRail.LocalClient.Data;
 using GuardRail.LocalClient.Data.Interfaces;
 using GuardRail.LocalClient.Data.Local;
@@ -13,7 +14,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Account = GuardRail.LocalClient.Data.Models.Account;
 
 namespace GuardRail.LocalClient;
 
@@ -54,7 +54,6 @@ public partial class App
         Configuration = builder.Build();
         Account = new Account
         {
-            Id = 1,
             Guid = Guid.NewGuid(),
             Location = "Here",
             Name = "Test"

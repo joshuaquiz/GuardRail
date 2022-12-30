@@ -53,15 +53,12 @@
         background-color: #ccc;
       }
 
-      .options > .menu > .menu_icon.sub {
-      }
-
       .options > .menu > .menu_icon.add {
         background-image: url( '/assets/images/majesticons/line/plus-line.svg' );
       }
 
-      .options > .menu > .menu_icon.rotate {
-        background-image: url( '/assets/images/majesticons/line/reload-line.svg' );
+      .options > .menu > .menu_icon.add_camera {
+        background-image: url( '/assets/images/majesticons/line/camera-line.svg' );
       }
 
       .options > .menu > .menu_icon.delete {

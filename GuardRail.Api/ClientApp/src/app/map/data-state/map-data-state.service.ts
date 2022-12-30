@@ -25,14 +25,14 @@ export class MapDataStateService {
   public addRoom(room: Room): void {
     this.logService.debug('A room add was published', room);
     const newState = new Map<string, Room>(this.CurrentState.value);
-    newState.set(room.Id, room);
+    newState.set(room.Guid, room);
     this.updateState(newState);
   }
 
   public updateRoom(room: Room): void {
     this.logService.debug('A room update was published', room);
     const newState = new Map<string, Room>(this.CurrentState.value);
-    newState.set(room.Id, room);
+    newState.set(room.Guid, room);
     this.updateState(newState);
   }
 

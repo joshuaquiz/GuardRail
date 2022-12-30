@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using GuardRail.Core.DataModels;
+using GuardRail.Core.Data.Interfaces;
 using GuardRail.LocalClient.Data.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -30,7 +30,7 @@ public sealed class DataStore : IDataStore
         {
             dataSink.StartSync();
         }
-            
+
         return Task.CompletedTask;
     }
 
@@ -100,7 +100,7 @@ public sealed class DataStore : IDataStore
         {
             dataSink.Dispose();
         }
-            
+
         return Task.CompletedTask;
     }
 }

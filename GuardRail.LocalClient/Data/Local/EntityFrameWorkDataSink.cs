@@ -3,6 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using GuardRail.Core.Data;
 using GuardRail.LocalClient.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
 

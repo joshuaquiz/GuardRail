@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using GuardRail.Api.Data;
 using GuardRail.Api.Models;
+using GuardRail.Core.Data;
+using GuardRail.Core.Data.Models;
+using GuardRail.Core.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -40,13 +42,39 @@ public sealed class LoginController : ControllerBase
         var user = await _guardRailContext.Users.SingleOrDefaultAsync(
             x =>
                 x.Username == loginModel.Username
-                && x.Password == loginModel.Password,
+                && x.Password == loginModel.Password.GetBytes(),
             cancellationToken);
+        if (user == null)
+        {
+            return new LoginResponseModel(
+                false,
+                null,
+                null,
+                null,
+                false);
+        }
+
+        var needsPasswordReset = user.PasswordResetDate < DateOnly.FromDateTime(DateTime.UtcNow);
+        if (!needsPasswordReset)
+        {
+            await _guardRailContext.ApiAccessKeys.AddAsync(
+                new ApiAccessKey
+                {
+                    Guid = Guid.NewGuid(),
+                    AccountGuid = ApplicationGlobals.Account.Guid,
+                    User = user,
+                    UserGuid = user.Guid,
+                    Expiry = DateTimeOffset.UtcNow.AddDays(24)
+                },
+                cancellationToken);
+            await _guardRailContext.SaveChangesAsync(cancellationToken);
+        }
+
         return new LoginResponseModel(
-            user != null,
-            user?.Email,
-            user?.FirstName + " " + user?.LastName,
+            !needsPasswordReset,
+            user.Email,
+            $"{user.FirstName} {user.LastName}",
             Guid.NewGuid(),
-            false);
+            needsPasswordReset);
     }
 }

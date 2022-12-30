@@ -4,8 +4,8 @@ using Microsoft.Extensions.Logging;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using GuardRail.Core.DataModels;
-using GuardRail.Core.Enums;
+using GuardRail.Core.Data.Enums;
+using GuardRail.Core.Data.Models;
 using GuardRail.DeviceLogic.Models;
 
 namespace GuardRail.DeviceLogic.Implementations.Input;
@@ -56,7 +56,7 @@ public abstract class CoreKeypadInput<TKeypadInput, TKeypadConfiguration, TKeypa
             nameof(UnLockRequest),
             new UnLockRequest
             {
-                DoorId = DeviceConstants.DeviceId,
+                AccessPointGuid = DeviceConstants.DeviceId,
                 UnlockRequestType = UnlockRequestType.Keypad,
                 Data = Encoding.UTF8.GetBytes(inputData)
             },

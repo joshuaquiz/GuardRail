@@ -4,7 +4,8 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using GuardRail.Api.Data;
+using GuardRail.Core.Data;
+using GuardRail.Core.Data.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -15,6 +16,8 @@ namespace GuardRail.Api;
 
 public sealed class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
 {
+    private const string InvalidAuthorizationHeaderErrorMessage = "Invalid Authorization Header";
+
     private readonly GuardRailContext _guardRailContext;
 
     public BasicAuthenticationHandler(
@@ -41,23 +44,23 @@ public sealed class BasicAuthenticationHandler : AuthenticationHandler<Authentic
             var authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
             if (authHeader.Parameter.IsNullOrWhiteSpace())
             {
-                return AuthenticateResult.Fail("Invalid Authorization Header");
+                return AuthenticateResult.Fail(InvalidAuthorizationHeaderErrorMessage);
             }
 
             var credentialBytes = Convert.FromBase64String(authHeader.Parameter);
-            var credentials = Encoding.UTF8.GetString(credentialBytes).Split(new[] { ':' }, 2);
-            var username = credentials[0];
-            var password = credentials[1];
-            user = await _guardRailContext.Users.SingleOrDefaultAsync(x => x.Username == username && x.Password == password);
+            var accessKeyString = Encoding.UTF8.GetString(credentialBytes).Replace("Bearer ", string.Empty);
+            var accessKey = Guid.Parse(accessKeyString);
+            var key = await _guardRailContext.ApiAccessKeys.SingleOrDefaultAsync(x => x.Guid == accessKey && x.Expiry > DateTimeOffset.UtcNow);
+            user = key?.User;
         }
         catch
         {
-            return AuthenticateResult.Fail("Invalid Authorization Header");
+            return AuthenticateResult.Fail(InvalidAuthorizationHeaderErrorMessage);
         }
 
         if (user == null)
         {
-            return AuthenticateResult.Fail("Invalid Username or Password");
+            return AuthenticateResult.Fail(InvalidAuthorizationHeaderErrorMessage);
         }
 
         var claims = new[]

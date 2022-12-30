@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GuardRail.Core.Enums;
 using GuardRail.DeviceLogic.Interfaces.Communication;
 using GuardRail.DeviceLogic.Interfaces.Feedback.Buzzer;
 using GuardRail.DeviceLogic.Interfaces.Feedback.Lights;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using GuardRail.Core.Data.Enums;
 using GuardRail.DeviceLogic.Interfaces.Door;
 using GuardRail.Core.EventModels;
 using GuardRail.DeviceLogic.Interfaces.Feedback;

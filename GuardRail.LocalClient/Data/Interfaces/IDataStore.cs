@@ -3,7 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using GuardRail.Core.DataModels;
+using GuardRail.Core.Data.Interfaces;
 using Microsoft.Extensions.Hosting;
 
 namespace GuardRail.LocalClient.Data.Interfaces;
@@ -23,7 +23,7 @@ internal interface IDataStore : IHostedService
     Task<T> SaveNew<T>(
         T item,
         CancellationToken cancellationToken)
-        where T : class, IAddableItem;
+        where T : IAddableItem;
 
     /// <summary>
     /// Update an existing item.

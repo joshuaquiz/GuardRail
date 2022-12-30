@@ -2,7 +2,9 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -88,10 +90,21 @@ public static class Extensions
     /// <summary>
     /// Extension for IsNullOrWhiteSpace.
     /// </summary>
-    /// <param name="str">The value to use</param>
+    /// <param name="str">The value to use.</param>
     /// <returns>bool</returns>
     public static bool IsNullOrWhiteSpace([NotNullWhen(false)] this string? str) =>
         string.IsNullOrWhiteSpace(str);
+
+    /// <summary>
+    /// Gets the UTF8 encoded bytes from the provided text.
+    /// </summary>
+    /// <param name="str">The value to use.</param>
+    /// <returns><see cref="byte"/>s</returns>
+    public static byte[] GetBytes(this string? str) =>
+        str == null
+        || !str.Any()
+            ? Array.Empty<byte>()
+            : Encoding.UTF8.GetBytes(str);
 
     /// <summary>
     /// Logs an exception with meta-data.

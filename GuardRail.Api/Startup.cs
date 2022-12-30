@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GuardRail.Api.Data;
+using GuardRail.Core.Data;
+using GuardRail.Core.Data.Models;
 using GuardRail.Core.Helpers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
@@ -83,14 +84,23 @@ public sealed class Startup
         });
 
         var db = app.ApplicationServices.GetRequiredService<GuardRailContext>();
+        var account = new Account
+        {
+            Guid = Guid.NewGuid(),
+            Location = "lolz",
+            Name = "lolz"
+        };
+        ApplicationGlobals.Account = account;
+        db.Accounts.Add(account);
         db.Users.Add(
             new User
             {
+                AccountGuid = account.Guid,
                 FirstName = "Joshua",
                 LastName = "Galloway",
                 Email = "joshuaquiz@gmail.com",
                 Phone = "3177603538",
-                Password = "asdf",
+                Password = "asdf".GetBytes(),
                 Username = "asdf"
             });
         db.SaveChanges();

@@ -3,9 +3,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using GuardRail.Core.Data.Models;
 using GuardRail.Core.Helpers;
 using GuardRail.LocalClient.Data.Interfaces;
-using GuardRail.LocalClient.Data.Models;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace GuardRail.LocalClient.Controls.Pages.Users;
@@ -40,7 +40,7 @@ public partial class UsersPageUserControl
 
         if (obj is User user)
         {
-            return user.GetSearchString().Contains(SearchBox.Text, StringComparison.OrdinalIgnoreCase);
+            return string.Join(" ", user.FirstName, user.LastName, user.Email, user.Phone).Contains(SearchBox.Text, StringComparison.OrdinalIgnoreCase);
         }
 
         throw new InvalidCastException("An item in the list was not the correct data type.");
@@ -53,7 +53,7 @@ public partial class UsersPageUserControl
     {
         ViewModel.EditingUser = new User
         {
-            Account = App.Account
+            AccountGuid = App.Account.Guid
         };
         EditViewLabel.Content = "Add new user";
         EditGrid.Visibility = Visibility.Visible;
@@ -78,7 +78,7 @@ public partial class UsersPageUserControl
         }
 
         var dataStore = App.Host.Services.GetRequiredService<IDataStore>();
-        if (ViewModel.EditingUser.Id > 0)
+        if (ViewModel.EditingUser.Guid != default)
         {
             dataStore.UpdateExisting(ViewModel.EditingUser, App.CancellationTokenSource.Token);
         }

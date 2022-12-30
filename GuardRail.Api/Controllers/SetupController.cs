@@ -1,7 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using GuardRail.Api.Data;
 using GuardRail.Api.Models;
+using GuardRail.Core.Data;
+using GuardRail.Core.Data.Models;
+using GuardRail.Core.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -34,9 +36,10 @@ public sealed class SetupController : ControllerBase
         await _guardRailContext.Users.AddAsync(
             new User
             {
+                AccountGuid = ApplicationGlobals.Account.Guid,
                 Email = setupModel.Username,
                 Username = setupModel.Username,
-                Password = setupModel.Password,
+                Password = setupModel.Password.GetBytes(),
                 FirstName = setupModel.FirstName,
                 LastName = setupModel.LastName
             },

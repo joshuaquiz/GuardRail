@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using GuardRail.LocalClient.Data.Models;
+using GuardRail.Core.Data.Models;
 using GuardRail.LocalClient.Data.Remote;
 
 namespace GuardRail.LocalClient.Interfaces;

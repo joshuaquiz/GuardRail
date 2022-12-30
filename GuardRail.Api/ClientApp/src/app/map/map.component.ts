@@ -11,6 +11,7 @@ import { LogService } from '../log.service';
 import { IMapInterfaceState } from './map-interface-state.interface';
 import { Point } from './data-state/point.model';
 import { Room } from './data-state/room.model';
+import { MouseModes } from './menu/mouse-modes.model';
 
 @Component({
   selector: 'app-map',
@@ -22,6 +23,7 @@ export class MapComponent implements AfterViewInit {
   public PanStepAmount: number;
   public GridSpacing: number;
 
+  public Mode: MouseModes | undefined;
   private boundingRect: DOMRect | undefined;
 
   @ViewChild('map')
@@ -139,6 +141,7 @@ export class MapComponent implements AfterViewInit {
     var startPos: Point;
     fromEvent(canvasEl, 'mousedown')
       .pipe(
+        filter(x => this.Mode === MouseModes.AddingRoom),
         tap(x => {
           const start = x as MouseEvent;
           startPos = new Point(

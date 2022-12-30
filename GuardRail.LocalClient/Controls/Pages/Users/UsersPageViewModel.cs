@@ -5,9 +5,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
+using GuardRail.Core.Data.Models;
 using GuardRail.Core.Helpers;
 using GuardRail.LocalClient.Data.Interfaces;
-using GuardRail.LocalClient.Data.Models;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace GuardRail.LocalClient.Controls.Pages.Users;
@@ -44,7 +44,7 @@ public sealed class UsersPageViewModel : IDisposable
                         FirstName = "Joshua1",
                         LastName = "Galloway1",
                         Username = "username1",
-                        Password = "password1",
+                        Password = "password1".GetBytes(),
                         Email = "asdf@asdf1.com",
                         Phone = "3213213214"
                     },
@@ -53,7 +53,7 @@ public sealed class UsersPageViewModel : IDisposable
                         FirstName = "Joshua2",
                         LastName = "Galloway2",
                         Username = "username2",
-                        Password = "password2",
+                        Password = "password2".GetBytes(),
                         Email = "asdf@asdf2.com",
                         Phone = "3213213214"
                     },
@@ -62,7 +62,7 @@ public sealed class UsersPageViewModel : IDisposable
                         FirstName = "Joshua3",
                         LastName = "Galloway3",
                         Username = "username3",
-                        Password = "password3",
+                        Password = "password3".GetBytes(),
                         Email = "asdf@asdf3.com",
                         Phone = "3213213214"
                     }
@@ -78,7 +78,7 @@ public sealed class UsersPageViewModel : IDisposable
                 async ct =>
                 {
                     var dataStore = App.Host.Services.GetRequiredService<IDataStore>();
-                    foreach (var user in await dataStore.GetData<User>(x => x.Account == App.Account, ct))
+                    foreach (var user in await dataStore.GetData<User>(x => x.AccountGuid == App.Account.Guid, ct))
                     {
                         if (!Users.Contains(user))
                         {

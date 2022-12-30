@@ -1,14 +1,14 @@
 import { Point } from './point.model';
 
 export class Room {
-  public readonly Id: string;
+  public readonly Guid: string;
 
   public IsSelected = false;
 
   constructor(
     public readonly P1: Point,
     public readonly P2: Point) {
-    this.Id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
+    this.Guid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
       /[xy]/g,
       c => {
         const r = Math.random() * 16 | 0;
