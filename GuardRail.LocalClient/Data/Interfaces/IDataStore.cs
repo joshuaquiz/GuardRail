@@ -23,7 +23,7 @@ internal interface IDataStore : IHostedService
     Task<T> SaveNew<T>(
         T item,
         CancellationToken cancellationToken)
-        where T : IAddableItem;
+        where T : class, IAddableItem;
 
     /// <summary>
     /// Update an existing item.
