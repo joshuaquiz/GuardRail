@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -179,15 +181,37 @@ public partial class MainWindow
 
     private void CreateShortcut(IWshShell shell, Environment.SpecialFolder folder)
     {
-        var desktopFolderPath = Environment.GetFolderPath(folder);
-        var desktopShortcut = (IWshShortcut) shell.CreateShortcut(Path.Combine(desktopFolderPath, "GuardRail.lnk"));
-        desktopShortcut.Description = "GuardRail Access Control";
-        desktopShortcut.WorkingDirectory = _currentDir + "\\GuardRail.exe";
-        desktopShortcut.TargetPath = _currentDir;
-        desktopShortcut.Save();
+        var folderPath = Environment.GetFolderPath(folder);
+        var link = (IShellLink)new ShellLink();
+        link.SetDescription("GuardRail Access Control");
+        link.SetWorkingDirectory(_currentDir + "\\GuardRail.exe");
+        link.SetPath(_currentDir);
+        var file = (IPersistFile)link;
+        file.Save(Path.Combine(folderPath, "MyLink.lnk"), false);
     }
 
     private bool IsRestricted(string file) =>
         file.Equals(AppDomain.CurrentDomain.FriendlyName)
         || file.Contains(_currentDir + _installConfiguration.UpdateDirectory);
+}
+
+[ComImport]
+[Guid("00021401-0000-0000-C000-000000000046")]
+internal class ShellLink
+{
+}
+
+[ComImport]
+[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+[Guid("000214F9-0000-0000-C000-000000000046")]
+internal interface IShellLink
+{
+    void GetPath([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszFile, int cchMaxPath, out IntPtr pfd, int fFlags);
+    void SetDescription([MarshalAs(UnmanagedType.LPWStr)] string pszName);
+    void SetWorkingDirectory([MarshalAs(UnmanagedType.LPWStr)] string pszDir);
+    void GetArguments([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszArgs, int cchMaxPath);
+    void SetArguments([MarshalAs(UnmanagedType.LPWStr)] string pszArgs);
+    void SetIconLocation([MarshalAs(UnmanagedType.LPWStr)] string pszIconPath, int iIcon);
+    void Resolve(IntPtr hwnd, int fFlags);
+    void SetPath([MarshalAs(UnmanagedType.LPWStr)] string pszFile);
 }
