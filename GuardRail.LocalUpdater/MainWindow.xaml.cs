@@ -153,9 +153,8 @@ public partial class MainWindow
                         })));
         if (_isFirstInstall)
         {
-            var shell = new WshShell();
-            CreateShortcut(shell, Environment.SpecialFolder.Desktop);
-            CreateShortcut(shell, Environment.SpecialFolder.CommonStartup);
+            CreateShortcut(Environment.SpecialFolder.Desktop);
+            CreateShortcut(Environment.SpecialFolder.CommonStartup);
             var commonStartMenuPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu);
             var appStartMenuPath = Path.Combine(commonStartMenuPath, "Programs", "GuardRail");
             if (!Directory.Exists(appStartMenuPath))
@@ -163,7 +162,7 @@ public partial class MainWindow
                 Directory.CreateDirectory(appStartMenuPath);
             }
 
-            CreateShortcut(shell, Environment.SpecialFolder.CommonStartMenu);
+            CreateShortcut(Environment.SpecialFolder.CommonStartMenu);
         }
 
         var finalProcess = new Process
@@ -178,7 +177,7 @@ public partial class MainWindow
         finalProcess.Start();
     }
 
-    private void CreateShortcut(IWshShell shell, Environment.SpecialFolder folder)
+    private void CreateShortcut(Environment.SpecialFolder folder)
     {
         var folderPath = Environment.GetFolderPath(folder);
         var link = (IShellLink)new ShellLink();
