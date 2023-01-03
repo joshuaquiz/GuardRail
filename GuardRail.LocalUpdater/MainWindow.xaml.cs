@@ -14,7 +14,6 @@ using System.Windows;
 using GuardRail.Core;
 using GuardRail.Core.CommandLine;
 using GuardRail.Core.Helpers;
-using IWshRuntimeLibrary;
 using File = System.IO.File;
 
 namespace GuardRail.LocalUpdater;
