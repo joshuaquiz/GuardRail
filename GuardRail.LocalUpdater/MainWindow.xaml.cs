@@ -153,27 +153,16 @@ public partial class MainWindow
         if (_isFirstInstall)
         {
             var shell = new WshShell();
-            var desktopFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            var desktopShortcut = (IWshShortcut)shell.CreateShortcut(Path.Combine(desktopFolderPath, "GuardRail.lnk"));
-            desktopShortcut.Description = "GuardRail Access Control";
-            desktopShortcut.WorkingDirectory = _currentDir + "\\GuardRail.exe";
-            desktopShortcut.TargetPath = _currentDir;
-            desktopShortcut.Save();
-            var startupFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartup);
-            var startupShortcut = (IWshShortcut)shell.CreateShortcut(Path.Combine(startupFolderPath, "GuardRail.lnk"));
-            startupShortcut.Description = "GuardRail Access Control";
-            startupShortcut.WorkingDirectory = _currentDir + "\\GuardRail.exe";
-            startupShortcut.TargetPath = _currentDir;
-            startupShortcut.Save();
+            CreateShortcut(shell, Environment.SpecialFolder.Desktop);
+            CreateShortcut(shell, Environment.SpecialFolder.CommonStartup);
             var commonStartMenuPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu);
             var appStartMenuPath = Path.Combine(commonStartMenuPath, "Programs", "GuardRail");
             if (!Directory.Exists(appStartMenuPath))
+            {
                 Directory.CreateDirectory(appStartMenuPath);
-            var startMenuShortcut = (IWshShortcut)shell.CreateShortcut(Path.Combine(appStartMenuPath, "GuardRail.lnk"));
-            startMenuShortcut.Description = "GuardRail Access Control";
-            startMenuShortcut.WorkingDirectory = _currentDir + "\\GuardRail.exe";
-            startMenuShortcut.TargetPath = _currentDir;
-            startMenuShortcut.Save();
+            }
+
+            CreateShortcut(shell, Environment.SpecialFolder.CommonStartMenu);
         }
 
         var finalProcess = new Process
@@ -186,6 +175,16 @@ public partial class MainWindow
             }
         };
         finalProcess.Start();
+    }
+
+    private void CreateShortcut(IWshShell shell, Environment.SpecialFolder folder)
+    {
+        var desktopFolderPath = Environment.GetFolderPath(folder);
+        var desktopShortcut = (IWshShortcut) shell.CreateShortcut(Path.Combine(desktopFolderPath, "GuardRail.lnk"));
+        desktopShortcut.Description = "GuardRail Access Control";
+        desktopShortcut.WorkingDirectory = _currentDir + "\\GuardRail.exe";
+        desktopShortcut.TargetPath = _currentDir;
+        desktopShortcut.Save();
     }
 
     private bool IsRestricted(string file) =>

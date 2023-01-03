@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Windows;
 using GuardRail.Core.CommandLine;
+using GuardRail.Core.Data;
 using GuardRail.Core.Data.Models;
 using GuardRail.LocalClient.Data;
 using GuardRail.LocalClient.Data.Interfaces;

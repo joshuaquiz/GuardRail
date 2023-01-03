@@ -22,7 +22,6 @@
         <ImplicitUsings>disable</ImplicitUsings>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="..\GuardRail.Core\GuardRail.Core.csproj" />
         <ProjectReference Include="..\GuardRail.DeviceLogic.Hardware\GuardRail.DeviceLogic.Hardware.csproj" />
         <ProjectReference Include="..\GuardRail.DeviceLogic\GuardRail.DeviceLogic.csproj" />
     </ItemGroup>
