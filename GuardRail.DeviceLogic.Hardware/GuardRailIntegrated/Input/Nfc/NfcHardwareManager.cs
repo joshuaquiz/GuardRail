@@ -46,7 +46,7 @@ public sealed class NfcHardwareManager : INfcHardwareManager
     public ValueTask InitAsync()
     {
         LogDispatcher.LoggerFactory = _loggerFactory;
-         _pn532 = new Pn532(_nfcConfiguration.SerialPort);
+        _pn532 = new Pn532(_nfcConfiguration.SerialPort);
         _listener = new TaskFactory()
             .StartNew(
                 () =>
