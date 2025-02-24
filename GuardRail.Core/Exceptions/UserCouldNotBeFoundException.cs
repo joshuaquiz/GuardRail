@@ -1,4 +1,4 @@
-﻿namespace GuardRail.Core.Models.Exceptions;
+﻿namespace GuardRail.Core.Exceptions;
 
 /// <summary>
 /// The user was unable to be located.

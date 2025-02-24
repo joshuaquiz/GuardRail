@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GuardRail.Core.Models.Exceptions;
+namespace GuardRail.Core.Exceptions;
 
 /// <summary>
 /// A base class for all exceptions.

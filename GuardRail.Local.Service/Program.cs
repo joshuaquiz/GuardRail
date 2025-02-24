@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -5,16 +7,21 @@ namespace GuardRail.Local.Service;
 
 public static class Program
 {
-    public static void Main(
+    public static async Task Main(
         string[] args)
     {
-        var builder = Host.CreateApplicationBuilder(
+        var builder = WebApplication.CreateBuilder(
             args);
         builder.Services.AddWindowsService();
         builder.Services.AddHostedService<AutoUpdateCheckerWorker>();
         builder.Services.AddHostedService<DataSyncWorker>();
         builder.Services.AddHostedService<UdpPingListenerWorker>();
-        var host = builder.Build();
-        host.Run();
+        builder.Services.AddRazorPages();
+        builder.Services.AddControllers();
+        var app = builder.Build();
+        app.UseHttpsRedirection();
+        app.UseAuthorization();
+        app.MapControllers();
+        await app.RunAsync();
     }
 }

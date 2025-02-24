@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using GuardRail.Core.Models.Enums;
+using GuardRail.Core.Enums;
 using GuardRail.Core.Models.Models;
 
 namespace GuardRail.Logic.Interfaces;
@@ -37,12 +37,24 @@ public interface IAccessPointManagementService
         CancellationToken cancellationToken);
 
     /// <summary>
-    /// Lists all APs for a location.
+    /// Lists all APs configured for a location.
     /// </summary>
     /// <param name="locationId">The ID of the location.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/>.</param>
     /// <returns>A <see cref="Task{T}"/> of <see cref="IReadOnlyCollection{T}"/> of <see cref="AccessPoint"/> representing the work to get the APs.</returns>
     public Task<IReadOnlyCollection<AccessPoint>> ListAccessPoints(
         Guid locationId,
+        CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Lists all non-configured APs for a location.
+    /// </summary>
+    /// <param name="locationId">The ID of the location.</param>
+    /// <param name="accessPointType">The type of APs to list.</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/>.</param>
+    /// <returns>A <see cref="Task{T}"/> of <see cref="IReadOnlyCollection{T}"/> of <see cref="string"/> representing the work to get the APs.</returns>
+    public Task<IReadOnlyCollection<string>> GetAvailableAccessPoints(
+        Guid locationId,
+        AccessPointType accessPointType,
         CancellationToken cancellationToken);
 }

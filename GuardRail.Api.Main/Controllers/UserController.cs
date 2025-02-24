@@ -1,6 +1,6 @@
 using GuardRail.Api.Models;
 using GuardRail.Api.Models.Requests;
-using GuardRail.Core.Models.Exceptions;
+using GuardRail.Core.Exceptions;
 using GuardRail.Logic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 

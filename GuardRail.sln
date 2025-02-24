@@ -38,6 +38,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuardRail.Local.Updater", "
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "GuardRail.UI.Public", "GuardRail.UI.Public\GuardRail.UI.Public.esproj", "{DDB439AD-C43F-419C-955D-DD6C186EC1FE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SupportedHardware", "SupportedHardware", "{D006245F-D8DA-4C57-AD10-B784AC3F304F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

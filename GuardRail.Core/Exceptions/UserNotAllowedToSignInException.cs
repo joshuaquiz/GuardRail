@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GuardRail.Core.Models.Exceptions;
+namespace GuardRail.Core.Exceptions;
 
 /// <summary>
 /// Base class for all exceptions that indicate that a user is not allowed to sign in.

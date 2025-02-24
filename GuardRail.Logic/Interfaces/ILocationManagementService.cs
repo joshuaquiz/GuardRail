@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using GuardRail.Core.Enums;
 using GuardRail.Core.Models.Models;
 
 namespace GuardRail.Logic.Interfaces;
@@ -31,6 +32,20 @@ public interface ILocationManagementService
         decimal? latitude,
         decimal? longitude,
         decimal? geoFenceDistance,
+        CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Sets the method of communication used by the system to talk to local systems.
+    /// </summary>
+    /// <param name="locationId">The ID of the location.</param>
+    /// <param name="locationCallbackType">The communication type.</param>
+    /// <param name="uri">A potential callback url.</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/>.</param>
+    /// <returns>A <see cref="Task"/> representing the work to update the communication method.</returns>
+    public Task SetCommunicationMethod(
+        Guid locationId,
+        LocationCallbackType locationCallbackType,
+        Uri? uri,
         CancellationToken cancellationToken);
 
     /// <summary>

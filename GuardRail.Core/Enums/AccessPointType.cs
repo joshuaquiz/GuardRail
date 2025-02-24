@@ -1,9 +1,9 @@
-﻿namespace GuardRail.Core.Models.Enums;
+﻿namespace GuardRail.Core.Enums;
 
 /// <summary>
 /// Supported types of access points.
 /// </summary>
-public enum AccessPointType : byte
+public enum AccessPointType : long
 {
     UnKnown = 0,
 

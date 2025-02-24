@@ -5,10 +5,11 @@ namespace GuardRail.Api.Main;
 
 public static class Program
 {
-    public static void Main(
+    public static async Task Main(
         string[] args)
     {
-        var builder = WebApplication.CreateBuilder(args);
+        var builder = WebApplication.CreateBuilder(
+            args);
 
         // Add services to the container.
 
@@ -21,6 +22,8 @@ public static class Program
         builder.Services.AddSingleton<IEmailService, EmailService>();
         builder.Services.AddSingleton<IUserManagementService, UserManagementService>();
         builder.Services.AddSingleton<IAccountManagementService, AccountManagementService>();
+        builder.Services.AddSingleton<ILocationManagementService, LocationManagementService>();
+        builder.Services.AddSingleton<IAccessPointManagementService, AccessPointManagementService>();
 
         var app = builder.Build();
 
@@ -36,6 +39,6 @@ public static class Program
 
         app.MapControllers();
 
-        app.Run();
+        await app.RunAsync();
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace GuardRail.Core.Models.Exceptions;
+﻿namespace GuardRail.Core.Exceptions;
 
 /// <summary>
 /// The provided version was invalid.

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using GuardRail.Core.Models.Exceptions;
+using GuardRail.Core.Exceptions;
 using GuardRail.Logic.Models;
 
 namespace GuardRail.Logic.Interfaces;

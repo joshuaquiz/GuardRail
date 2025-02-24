@@ -23,4 +23,8 @@ public class GuardRailDbContext
     public DbSet<User> Users { get; set; }
 
     public DbSet<UserAccessToken> UserAccessTokens { get; set; }
+
+    public DbSet<Location> Locations { get; set; }
+
+    public DbSet<AccessPoint> AccessPoints { get; set; }
 }

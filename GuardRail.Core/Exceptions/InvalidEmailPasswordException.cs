@@ -1,4 +1,4 @@
-﻿namespace GuardRail.Core.Models.Exceptions;
+﻿namespace GuardRail.Core.Exceptions;
 
 /// <summary>
 /// An exceptions that indicates an invalid email and password was used.

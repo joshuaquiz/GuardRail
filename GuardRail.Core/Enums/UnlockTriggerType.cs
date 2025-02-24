@@ -1,4 +1,4 @@
-﻿namespace GuardRail.Core.Models.Enums;
+﻿namespace GuardRail.Core.Enums;
 
 /// <summary>
 /// Ways an unlock can be triggered.

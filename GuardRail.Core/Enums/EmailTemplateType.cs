@@ -1,4 +1,4 @@
-﻿namespace GuardRail.Core.Models.Enums;
+﻿namespace GuardRail.Core.Enums;
 
 /// <summary>
 /// Types of email templates.

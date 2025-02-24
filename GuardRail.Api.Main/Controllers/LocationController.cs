@@ -1,5 +1,6 @@
 using GuardRail.Api.Models;
 using GuardRail.Api.Models.Requests;
+using GuardRail.Core.Enums;
 using GuardRail.Core.Models.Models;
 using GuardRail.Logic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,23 @@ public class LocationController(
                     createNewLocationRequest.Latitude,
                     createNewLocationRequest.Longitude,
                     createNewLocationRequest.GeoFenceDistance,
+                    cancellationToken));
+
+    [HttpPost(Name = nameof(SetCommunicationMethod))]
+    public async Task<ApiResult> SetCommunicationMethod(
+        [FromQuery]
+        Guid locationId,
+        [FromQuery]
+        LocationCallbackType locationCallbackType,
+        [FromBody]
+        Uri? uri,
+        CancellationToken cancellationToken) =>
+        await GhWrappedApiCall(
+            async () =>
+                await locationManagementService.SetCommunicationMethod(
+                    locationId,
+                    locationCallbackType,
+                    uri,
                     cancellationToken));
 
     [HttpGet(Name = nameof(ListLocations))]

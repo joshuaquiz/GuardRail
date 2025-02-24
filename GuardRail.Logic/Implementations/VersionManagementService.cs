@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using GuardRail.Core.Models.Exceptions;
+using GuardRail.Core.Exceptions;
 using GuardRail.Database.Main;
 using GuardRail.Logic.Interfaces;
 using GuardRail.Logic.Models;

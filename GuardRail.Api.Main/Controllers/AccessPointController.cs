@@ -1,5 +1,6 @@
 using GuardRail.Api.Models;
 using GuardRail.Api.Models.Requests;
+using GuardRail.Core.Enums;
 using GuardRail.Core.Models.Models;
 using GuardRail.Logic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -41,5 +42,19 @@ public class AccessPointController(
             async () =>
                 await accessPointManagementService.ListAccessPoints(
                     locationId,
+                    cancellationToken));
+
+    [HttpGet(Name = nameof(GetAvailableAccessPoints))]
+    public async Task<ApiResult<IReadOnlyCollection<AccessPoint>>> GetAvailableAccessPoints(
+        [FromQuery]
+        Guid locationId,
+        [FromQuery]
+        AccessPointType accessPointType,
+        CancellationToken cancellationToken) =>
+        await GhWrappedApiCall(
+            async () =>
+                await accessPointManagementService.GetAvailableAccessPoints(
+                    locationId,
+                    accessPointType,
                     cancellationToken));
 }

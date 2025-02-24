@@ -1,5 +1,5 @@
 ﻿using System;
-using GuardRail.Core.Models.Enums;
+using GuardRail.Core.Enums;
 
 namespace GuardRail.Core.Models.Models;
 
