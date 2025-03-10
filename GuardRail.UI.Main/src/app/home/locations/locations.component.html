@@ -1,0 +1,86 @@
+<div>
+  <div class="options">
+    <ul>
+      <li (click)="StartAdd">
+        <div></div>
+        <span>
+          Add
+        </span>
+      </li>
+      <li
+        *ngIf="SingleItemSelected"
+        (click)="StartEdit">
+        <div></div>
+        <span>
+          Edit
+        </span>
+      </li>
+      <li
+        *ngIf="SingleItemSelected || MultipleItemsSelected"
+        (click)="StartDelete">
+        <div></div>
+        <span>
+          Delete
+        </span>
+      </li>
+    </ul>
+  </div>
+  <div class="list">
+    <div *ngFor="let l in Locations">
+      <location-item Location="l"></location-item>
+    </div>
+  </div>
+</div>
+<dialog *ngIf="AddItem" Buttons="AddButtons">
+  <TextInput
+    Label="Name"
+    Value="CreateLocationRequest.Name"></TextInput>
+  <TextInput
+    Label="Description"
+    Value="CreateLocationRequest.Description"></TextInput>
+  <TextInput
+    Label="Name"
+    Value="CreateLocationRequest.Name"></TextInput>
+  <NumberInput
+    Label="Latitude"
+    Value="CreateLocationRequest.Latitude"></NumberInput>
+  <NumberInput
+    Label="Geo-fence Distance"
+    Value="CreateLocationRequest.GeoFenceDistance"></NumberInput>
+  <div>
+    <label>
+      <span>
+        IsMobile
+      </span>
+      <input type="checkbox" value="{CreateLocationRequest.IsMobile}" />
+    </label>
+  </div>
+</dialog>
+<dialog *ngIf="EditingSingle" Buttons="EditSingleButtons">
+  <TextInput
+    Label="Name"
+    Value="CreateLocationRequest.Name"></TextInput>
+  <TextInput
+    Label="Description"
+    Value="CreateLocationRequest.Description"></TextInput>
+  <TextInput
+    Label="Name"
+    Value="CreateLocationRequest.Name"></TextInput>
+  <NumberInput
+    Label="Latitude"
+    Value="CreateLocationRequest.Latitude"></NumberInput>
+  <NumberInput
+    Label="Geo-fence Distance"
+    Value="CreateLocationRequest.GeoFenceDistance"></NumberInput>
+  <div>
+    <label>
+      <span>
+        IsMobile
+      </span>
+      <input type="checkbox" value="{CreateLocationRequest.IsMobile}" />
+    </label>
+  </div>
+</dialog>
+<dialog *ngIf="Deleting" Buttons="DeleteButtons">
+  Would you like to delete these item(s)?
+</dialog>

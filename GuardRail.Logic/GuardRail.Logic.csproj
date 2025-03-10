@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GuardRail.Core.Models\GuardRail.Core.Models.csproj" />
+    <ProjectReference Include="..\GuardRail.Core\GuardRail.Core.csproj" />
+    <ProjectReference Include="..\GuardRail.Database.Main\GuardRail.Database.Main.csproj" />
+  </ItemGroup>
+</Project>

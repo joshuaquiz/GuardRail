@@ -1,0 +1,34 @@
+<div>
+  <div>
+    <div class="accounts">
+      <div *ngIf="SingleAccount">
+        <span>
+          {{Accounts[0].Name}}
+        </span>
+      </div>
+      <div *ngIf="MultipleAccounts">
+        <select
+          (change)="LoadAccount"
+          [Value]="SelectedAccount">
+          <option
+            *ngFor="let a in Accounts"
+            [Value]="a.Guid">
+            {{a.Name}}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="left">
+      <nav-bar></nav-bar>
+    </div>
+    <div class="right">
+      <div>
+        <access-points *ngIf="ShowAccessPoints"></access-points>
+        <locations *ngIf="ShowLocations"></locations>
+        <users *ngIf="ShowUsers"></users>
+      </div>
+    </div>
+  </div>
+</div>

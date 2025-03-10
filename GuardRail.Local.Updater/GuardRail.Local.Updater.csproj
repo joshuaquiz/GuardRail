@@ -1,0 +1,77 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <OutputType>exe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <StartupObject>GuardRail.LocalUpdater.App</StartupObject>
+    <ApplicationIcon>logo_icon.ico</ApplicationIcon>
+    <Authors>Joshua Galloway</Authors>
+    <Company>G3 Software</Company>
+    <Product>GuardRail</Product>
+    <Description>The local updater for the GuardRail system.</Description>
+    <PackageProjectUrl>https://github.com/joshuaquiz/GuardRail</PackageProjectUrl>
+    <PackageIcon>logo_icon.png</PackageIcon>
+    <RepositoryUrl>https://github.com/joshuaquiz/GuardRail</RepositoryUrl>
+    <RepositoryType>GitHub</RepositoryType>
+    <AssemblyVersion>0.0.0.1</AssemblyVersion>
+    <FileVersion>0.0.0.1</FileVersion>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <AssemblyName>GuardRailUpdater</AssemblyName>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Assets\logo.png" />
+    <None Remove="Assets\logo_icon.ico" />
+    <None Remove="Assets\logo_icon.png" />
+    <None Remove="Assets\teko-bold.ttf" />
+    <None Remove="Assets\teko-light.ttf" />
+    <None Remove="Assets\teko-medium.ttf" />
+    <None Remove="Assets\teko-regular.ttf" />
+    <None Remove="Assets\teko-semibold.ttf" />
+    <None Remove="logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GuardRail.Core\GuardRail.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\logo_icon.ico" />
+    <Resource Include="Assets\logo_icon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </Resource>
+    <Resource Include="Assets\teko-bold.ttf">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\teko-light.ttf">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\teko-medium.ttf">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\teko-regular.ttf">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\teko-semibold.ttf">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+</Project>
