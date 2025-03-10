@@ -1,15 +1,19 @@
-using GuardRail.Api.Models;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using GuardRail.Api.Models.Requests;
 using GuardRail.Core.Enums;
 using GuardRail.Core.Models.Models;
 using GuardRail.Logic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
-namespace GuardRail.Api.Main.Controllers;
+namespace GuardRail.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class AccessPointController(
+public sealed class AccessPointController(
     IAccessPointManagementService accessPointManagementService,
     ILogger<AccessPointController> logger)
     : GhControllerBase<AccessPointController>(

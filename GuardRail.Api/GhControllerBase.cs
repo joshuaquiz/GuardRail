@@ -1,13 +1,12 @@
-﻿using GuardRail.Core.Models.Exceptions;
-using System.Threading.Tasks;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using GuardRail.Core.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Logging;
 
-namespace GuardRail.Api.Models;
+namespace GuardRail.Api;
 
 public class GhControllerBase<TController>(
     ILogger<TController> logger)
@@ -178,39 +177,4 @@ public class GhControllerBase<TController>(
         new(
             default,
             StatusCodes.Status500InternalServerError);
-}
-
-
-public class ApiResult
-    : ActionResult,
-        IConvertToActionResult,
-        IStatusCodeActionResult
-{
-    public ApiResult(
-        int statusCode)
-    {
-        StatusCode = statusCode;
-    }
-
-    public IActionResult Convert() =>
-        new ActionResult<object>(
-                null)
-            .Result;
-
-    public int? StatusCode { get; }
-}
-
-public sealed class ApiResult<T>
-    : ApiResult
-{
-    private readonly T? _item;
-
-    public ApiResult(
-        T? item,
-        int statusCode)
-        : base(
-            statusCode)
-    {
-        _item = item;
-    }
 }

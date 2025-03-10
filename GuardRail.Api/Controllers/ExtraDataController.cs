@@ -1,11 +1,11 @@
-using GuardRail.Api.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
-namespace GuardRail.Api.Main.Controllers;
+namespace GuardRail.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class ExtraDataController(
+public sealed class ExtraDataController(
     ILogger<AccessPointController> logger)
     : GhControllerBase<AccessPointController>(
         logger);

@@ -11,5 +11,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GuardRail.Api.Models\GuardRail.Api.Models.csproj" />
+    <ProjectReference Include="..\GuardRail.Api\GuardRail.Api.csproj" />
   </ItemGroup>
 </Project>
