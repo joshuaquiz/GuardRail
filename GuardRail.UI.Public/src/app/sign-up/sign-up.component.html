@@ -1,1 +1,63 @@
-<p>sign-up works!</p>
+<div class="signup-container">
+  <h2>Organization Signup</h2>
+  <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="organizationName">Organization Name</label>
+      <input type="text" id="organizationName" formControlName="organizationName">
+      <div *ngIf="signupForm.get('organizationName')?.invalid && (signupForm.get('organizationName')?.dirty || signupForm.get('organizationName')?.touched)" class="error">
+        <div *ngIf="signupForm.get('organizationName')?.errors?.['required']">Organization name is required.</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="contactEmail">Contact Email</label>
+      <input type="email" id="contactEmail" formControlName="contactEmail">
+      <div *ngIf="signupForm.get('contactEmail')?.invalid && (signupForm.get('contactEmail')?.dirty || signupForm.get('contactEmail')?.touched)" class="error">
+        <div *ngIf="signupForm.get('contactEmail')?.errors?.['required']">Email is required.</div>
+        <div *ngIf="signupForm.get('contactEmail')?.errors?.['email']">Email is invalid.</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="contactPhone">Contact Phone</label>
+      <input type="tel" id="contactPhone" formControlName="contactPhone">
+      <div *ngIf="signupForm.get('contactPhone')?.invalid && (signupForm.get('contactPhone')?.dirty || signupForm.get('contactPhone')?.touched)" class="error">
+        <div *ngIf="signupForm.get('contactPhone')?.errors?.['required']">Phone number is required.</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="contactFirstName">Contact First Name</label>
+      <input type="text" id="contactFirstName" formControlName="contactFirstName">
+      <div *ngIf="signupForm.get('contactFirstName')?.invalid && (signupForm.get('contactFirstName')?.dirty || signupForm.get('contactFirstName')?.touched)" class="error">
+        <div *ngIf="signupForm.get('contactFirstName')?.errors?.['required']">First name is required.</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="contactLastName">Contact Last Name</label>
+      <input type="text" id="contactLastName" formControlName="contactLastName">
+      <div *ngIf="signupForm.get('contactLastName')?.invalid && (signupForm.get('contactLastName')?.dirty || signupForm.get('contactLastName')?.touched)" class="error">
+        <div *ngIf="signupForm.get('contactLastName')?.errors?.['required']">Last name is required.</div>
+      </div>
+    </div>
+
+    <div formGroupName="paymentInfo">
+      <h3>Payment Information</h3>
+      <div class="form-group">
+        <label for="cardNumber">Card Number</label>
+        <input type="text" id="cardNumber" formControlName="cardNumber">
+      </div>
+      <div class="form-group">
+        <label for="expiryDate">Expiry Date</label>
+        <input type="text" id="expiryDate" formControlName="expiryDate">
+      </div>
+      <div class="form-group">
+        <label for="cvv">CVV</label>
+        <input type="text" id="cvv" formControlName="cvv">
+      </div>
+    </div>
+
+    <button type="submit">Sign Up</button>
+  </form>
+</div>
