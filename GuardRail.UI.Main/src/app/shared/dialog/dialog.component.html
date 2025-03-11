@@ -1,6 +1,6 @@
 <div class="dialog">
   <div class="header">
-    <span>{{title}}</span>
+    <span>{{Title}}</span>
     <div class="close" (click)="CloseClicked()"></div>
   </div>
   <div class="content">
@@ -9,7 +9,7 @@
     </div>
   </div>
   <div class="footer">
-    <button *ngFor="let b in buttons" (click)="b.Action">
+    <button *ngFor="let b in Buttons" (click)="b.Action">
       {{b.Text}}
     </button>
   </div>

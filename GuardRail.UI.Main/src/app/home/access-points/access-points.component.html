@@ -1,3 +1,4 @@
+<!--
 <div>
   <div class="options">
     <ul>
@@ -25,11 +26,11 @@
   </div>
   <div class="list">
     <div *ngFor="let l in Locations">
-      <location-item Location="l"></location-item>
+      <location-item [Location]="l"></location-item>
     </div>
   </div>
 </div>
-<dialog *ngIf="AddItem" Buttons="AddButtons" (Close)="EndAdd()">
+<dialog *ngIf="AddItem" [Buttons]="AddButtons" (Close)="EndAdd()">
   <TextInput Label="Name"
              Value="CreateAccessPointRequest.Name"></TextInput>
   <TextInput Label="Description"
@@ -49,7 +50,7 @@
     </label>
   </div>
 </dialog>
-<dialog *ngIf="EditingSingle" Buttons="EditSingleButtons">
+<dialog *ngIf="EditingSingle" [Buttons]="EditSingleButtons">
   <TextInput Label="Name"
              Value="CreateAccessPointRequest.Name"></TextInput>
   <TextInput Label="Description"
@@ -69,6 +70,7 @@
     </label>
   </div>
 </dialog>
-<dialog *ngIf="Deleting" Buttons="DeleteButtons">
+<dialog *ngIf="Deleting" [Buttons]="DeleteButtons">
   Would you like to delete these item(s)?
 </dialog>
+-->
