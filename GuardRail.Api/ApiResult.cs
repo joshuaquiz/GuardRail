@@ -5,8 +5,7 @@ namespace GuardRail.Api;
 
 public class ApiResult
     : ActionResult,
-        IConvertToActionResult,
-        IStatusCodeActionResult
+        IConvertToActionResult
 {
     public ApiResult(
         int statusCode)

@@ -49,7 +49,7 @@ public sealed class AccessPointController(
                     cancellationToken));
 
     [HttpGet(Name = nameof(GetAvailableAccessPoints))]
-    public async Task<ApiResult<IReadOnlyCollection<AccessPoint>>> GetAvailableAccessPoints(
+    public async Task<ApiResult<IReadOnlyCollection<string>>> GetAvailableAccessPoints(
         [FromQuery]
         Guid locationId,
         [FromQuery]

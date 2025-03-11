@@ -9,23 +9,19 @@ namespace GuardRail.Local.Updater;
 /// </summary>
 public partial class App
 {
-    private static readonly HttpClient HttpClient;
-
-    static App()
-    {
-        HttpClient = new HttpClient();
-#if DEBUG
-        HttpClient.BaseAddress = new Uri("https://localhost:5050/");
-#else
-        HttpClient.BaseAddress = new Uri("https://url.url:5050/");
-#endif
-    }
+    private static HttpClient? _httpClient;
 
     /// <summary>
     /// Initial app startup configuration.
     /// </summary>
     public App()
     {
+        _httpClient = new HttpClient();
+#if DEBUG
+        _httpClient.BaseAddress = new Uri("https://localhost:5050/");
+#else
+        HttpClient.BaseAddress = new Uri("https://url.url:5050/");
+#endif
         Startup += Application_Startup;
     }
 
@@ -35,7 +31,7 @@ public partial class App
     {
         new MainWindow(
                 Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
-                HttpClient)
+                _httpClient!)
             .Show();
     }
 }

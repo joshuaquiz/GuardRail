@@ -3,7 +3,7 @@
     <OutputType>exe</OutputType>
     <TargetFramework>net9.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
-    <StartupObject>GuardRail.LocalUpdater.App</StartupObject>
+    <StartupObject>GuardRail.Local.Updater.App</StartupObject>
     <ApplicationIcon>logo_icon.ico</ApplicationIcon>
     <Authors>Joshua Galloway</Authors>
     <Company>G3 Software</Company>
