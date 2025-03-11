@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'dialog',
@@ -8,5 +8,10 @@ import { Component } from '@angular/core';
   styleUrl: './dialog.component.css'
 })
 export class DialogComponent {
+  @Output()
+  public Close = new EventEmitter<void>();
 
+  public CloseClicked(): void {
+    this.Close.emit();
+  }
 }

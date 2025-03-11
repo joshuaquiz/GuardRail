@@ -10,5 +10,5 @@ import { ILocation } from '../location';
 })
 export class LocationItemComponent {
   @Input()
-  public Location: ILocation;
+  public Location!: ILocation;
 }
