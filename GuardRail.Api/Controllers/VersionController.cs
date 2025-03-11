@@ -31,6 +31,6 @@ public sealed class VersionController(
                     result.IsLatest,
                     result.IsUpdateRequired,
                     result.LatestVersion,
-                    result.DownloadUrl);
+                    result.InstallFiles);
             });
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -50,7 +51,7 @@ public sealed class VersionManagementService(
             newestVersion.IsRequired,
             newestVersion.Version,
             // TODO: Get URL.
-            new Uri(""));
+            new List<KeyValuePair<string, string>>());
 
     }
 }

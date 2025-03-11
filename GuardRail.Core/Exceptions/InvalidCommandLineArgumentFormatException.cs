@@ -1,11 +1,9 @@
-﻿using System;
-
-namespace GuardRail.Core.CommandLine;
+﻿namespace GuardRail.Core.Exceptions;
 
 /// <summary>
 /// The exception happens when a command line argument is not well formatted.
 /// </summary>
-public sealed class InvalidCommandLineArgumentFormatException : Exception
+public sealed class InvalidCommandLineArgumentFormatException : GuardRailExceptionBase
 {
     /// <summary>
     /// The invalid argument that was passed in.
