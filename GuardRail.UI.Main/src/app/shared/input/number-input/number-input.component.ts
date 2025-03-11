@@ -9,8 +9,8 @@ import { Component, Input } from '@angular/core';
 })
 export class NumberInputComponent {
   @Input()
-  public Label: string;
+  public Label!: string;
 
   @Input()
-  public Value: string;
+  public Value!: string;
 }

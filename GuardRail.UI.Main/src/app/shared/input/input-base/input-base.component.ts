@@ -9,11 +9,11 @@ import { Component, Input } from '@angular/core';
 })
 export class InputBaseComponent {
   @Input()
-  public Label: string;
+  public Label!: string;
 
   @Input()
-  public Type: string;
+  public Type!: string;
 
   @Input()
-  public Value: string;
+  public Value!: string;
 }
