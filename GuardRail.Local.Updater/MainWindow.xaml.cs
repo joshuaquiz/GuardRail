@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -11,7 +12,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using GuardRail.Api.Models.Responses;
-using GuardRail.Core.CommandLine;
 using GuardRail.Core.Helpers;
 using IWshRuntimeLibrary;
 using File = System.IO.File;
@@ -96,12 +96,21 @@ public partial class MainWindow
     private async Task SaveFile(
         KeyValuePair<string, string> installFile)
     {
+        var filePath = _applicationRootFolder + _version + installFile.Key;
         await File.WriteAllBytesAsync(
-            _applicationRootFolder + _version + installFile.Key,
+            filePath,
             await _httpClient
                 .GetByteArrayAsync(
                     installFile.Value),
             _cancellationTokenSource.Token);
+        if (filePath.EndsWith(".zip"))
+        {
+            ZipFile.ExtractToDirectory(
+                filePath,
+                _applicationRootFolder + _version);
+            File.Delete(filePath);
+        }
+
         ProgressBar.Value++;
     }
 
