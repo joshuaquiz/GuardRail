@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.Core.Enums;
+using GuardRail.Core.Helpers;
 using GuardRail.Core.Models.Models;
 using GuardRail.Database.Main;
 using GuardRail.Logic.Interfaces;
@@ -62,6 +63,7 @@ public sealed class AccountManagementService(
                         user.UserType == UserType.SuperAdmin
                         || x.Guid == user.AccountGuid)
                 .ToListAsync(
-                    cancellationToken));
+                    cancellationToken),
+            Extensions.GetEnumDescriptions<AccessPointType>());
     }
 }

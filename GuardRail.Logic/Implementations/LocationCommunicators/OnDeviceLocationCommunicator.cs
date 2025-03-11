@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.Core.Enums;
-using GuardRail.Core.Models.Models;
 using GuardRail.Logic.Interfaces;
 
 namespace GuardRail.Logic.Implementations.LocationCommunicators;

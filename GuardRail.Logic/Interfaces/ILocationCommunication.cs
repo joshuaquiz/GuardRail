@@ -3,7 +3,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.Core.Enums;
-using GuardRail.Core.Models.Models;
 
 namespace GuardRail.Logic.Interfaces;
 

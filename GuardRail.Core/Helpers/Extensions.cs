@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Microsoft.Extensions.Logging;
@@ -152,4 +155,20 @@ public static class Extensions
         [CallerLineNumber] int sourceLineNumber = 0) =>
         logger.LogInformation(
             $"{Path.GetFileName(sourceFilePath)}:{sourceLineNumber}({memberName}): {message}");
+
+    public static IReadOnlyDictionary<string, string> GetEnumDescriptions<T>() where T : Enum
+    {
+        var enumType = typeof(T);
+        var values = Enum.GetValues(enumType);
+        var descriptions = new Dictionary<string, string>();
+        for (var i = 0; i < values.Length; i++)
+        {
+            var enumValue = values.GetValue(i)!.ToString() ?? string.Empty;
+            var fieldInfo = enumType.GetField(enumValue);
+            var attributes = (DescriptionAttribute[]?)fieldInfo?.GetCustomAttributes(typeof(DescriptionAttribute), false) ?? [];
+            descriptions[enumValue] = attributes.ElementAtOrDefault(0)?.Description ?? string.Empty;
+        }
+
+        return descriptions;
+    }
 }
