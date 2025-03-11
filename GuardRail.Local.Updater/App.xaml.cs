@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Net.Http;
 using System.Windows;
-using GuardRail.Core.CommandLine;
 
 namespace GuardRail.Local.Updater;
 

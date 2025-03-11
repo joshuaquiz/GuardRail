@@ -23,7 +23,7 @@ namespace GuardRail.Local.Updater;
 /// </summary>
 public partial class MainWindow
 {
-    private readonly Version? _version;
+    private readonly Version _version;
     private readonly string _applicationRootFolder;
     private readonly HttpClient _httpClient;
     private readonly CancellationTokenSource _cancellationTokenSource;
@@ -37,7 +37,7 @@ public partial class MainWindow
         string applicationRootFolder,
         HttpClient httpClient)
     {
-        _version = Assembly.GetExecutingAssembly().GetName().Version;
+        _version = Assembly.GetExecutingAssembly().GetName().Version ?? new Version(1, 1);
         _applicationRootFolder = applicationRootFolder;
         _httpClient = httpClient;
         InitializeComponent();
@@ -54,7 +54,7 @@ public partial class MainWindow
         if (await HasUpdate())
         {
             await DownloadUpdate();
-            await StartUpdate();
+            StartUpdate();
         }
         else
         {
@@ -114,7 +114,7 @@ public partial class MainWindow
         ProgressBar.Value++;
     }
 
-    private async Task StartUpdate()
+    private void StartUpdate()
     {
         ProgressBar.Value = 0;
         Status.Content = "Stopping GuardRail...";
@@ -127,59 +127,32 @@ public partial class MainWindow
             }
         }
 
-        Status.Content = "Deleting old files...";
-        var oldFiles = Directory.GetFiles(_applicationRootFolder);
-        ProgressBar.Maximum = oldFiles.Length;
-        await Task.WhenAll(
-            oldFiles
-                .Select(x =>
-                    Task.Run(
-                        () =>
-                        {
-                            if (!IsRestricted(x))
-                            {
-                                File.Delete(x);
-                                ProgressBar.Value++;
-                            }
-                            else
-                            {
-                                ProgressBar.Maximum--;
-                            }
-                        })));
-        Status.Content = "Installing new files...";
-        ProgressBar.Value = 0;
-        var newFiles = Directory.GetFiles(_applicationRootFolder + _installConfiguration!.UpdateDirectory);
-        ProgressBar.Maximum = newFiles.Length;
-        await Task.WhenAll(
-            newFiles
-                .Select(x =>
-                    Task.Run(
-                        () =>
-                        {
-                            File.Move(x, x.Replace(_applicationRootFolder + _installConfiguration.UpdateDirectory, _applicationRootFolder));
-                            ProgressBar.Value++;
-                        })));
-        if (_isFirstInstall)
+        Status.Content = "Updating Installation Files...";
+        Directory.Move(
+            Path.Combine(_applicationRootFolder, "Latest"),
+            Path.Combine(_applicationRootFolder, _version.ToString()));
+        Directory.Move(
+            Path.Combine(_applicationRootFolder, _installConfiguration!.LatestVersion!.ToString()),
+            Path.Combine(_applicationRootFolder, "Latest"));
+        Status.Content = "Creating Shortcuts...";
+        CreateShortcut(Environment.SpecialFolder.Desktop);
+        CreateShortcut(Environment.SpecialFolder.CommonStartup);
+        var commonStartMenuPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu);
+        var appStartMenuPath = Path.Combine(commonStartMenuPath, "Programs", "GuardRail");
+        if (!Directory.Exists(appStartMenuPath))
         {
-            CreateShortcut(Environment.SpecialFolder.Desktop);
-            CreateShortcut(Environment.SpecialFolder.CommonStartup);
-            var commonStartMenuPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu);
-            var appStartMenuPath = Path.Combine(commonStartMenuPath, "Programs", "GuardRail");
-            if (!Directory.Exists(appStartMenuPath))
-            {
-                Directory.CreateDirectory(appStartMenuPath);
-            }
-
-            CreateShortcut(Environment.SpecialFolder.CommonStartMenu);
+            Directory.CreateDirectory(appStartMenuPath);
         }
 
+        CreateShortcut(Environment.SpecialFolder.CommonStartMenu);
+        Status.Content = "Starting GuardRail...";
         var finalProcess = new Process
         {
             StartInfo = new ProcessStartInfo
             {
                 WindowStyle = ProcessWindowStyle.Hidden,
-                FileName = "cmd.exe",
-                Arguments = _installConfiguration.RestartCommand
+                CreateNoWindow = true,
+                FileName = Path.Combine(_applicationRootFolder, "Latest", "GuardRail.exe")
             }
         };
         finalProcess.Start();
@@ -189,20 +162,18 @@ public partial class MainWindow
         Environment.SpecialFolder specialFolder)
     {
         var folderPath = Environment.GetFolderPath(specialFolder);
-        if (string.IsNullOrEmpty(folderPath))
+        var shortcutPath = Path.Combine(folderPath, "GuardRail.lnk");
+        if (folderPath.IsNullOrEmpty()
+            || File.Exists(shortcutPath))
         {
             return;
         }
 
         var shell = new WshShell();
-        var shortcut = (IWshShortcut)shell.CreateShortcut(Path.Combine(folderPath, "GuardRail.lnk"));
-        shortcut.TargetPath = Path.Combine(_applicationRootFolder, "GuardRail.exe");
+        var shortcut = (IWshShortcut)shell.CreateShortcut(shortcutPath);
+        shortcut.TargetPath = Path.Combine(_applicationRootFolder, "Latest", "GuardRail.exe");
         shortcut.WorkingDirectory = _applicationRootFolder;
         shortcut.Description = "GuardRail Access Control";
         shortcut.Save();
     }
-
-    private bool IsRestricted(string file) =>
-        file.Equals(AppDomain.CurrentDomain.FriendlyName)
-        || file.Contains(_applicationRootFolder + _installConfiguration!.UpdateDirectory);
 }
