@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using GuardRail.Core.Helpers;
+using GuardRail.Core.Exceptions;
 
 namespace GuardRail.Core.CommandLine;
 
@@ -52,7 +52,7 @@ public sealed class CommandLineArgument
     {
         var type = Type.ToString();
         string? value;
-        if (Value.IsNullOrWhiteSpace())
+        if (string.IsNullOrWhiteSpace(Value))
         {
             value = null;
         }

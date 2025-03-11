@@ -1,4 +1,8 @@
-﻿using System.Windows;
+﻿using System;
+using System.Linq;
+using System.Net.Http;
+using System.Windows;
+using GuardRail.Core.CommandLine;
 
 namespace GuardRail.Local.Updater;
 
@@ -7,6 +11,18 @@ namespace GuardRail.Local.Updater;
 /// </summary>
 public partial class App
 {
+    private static readonly HttpClient HttpClient;
+
+    static App()
+    {
+        HttpClient = new HttpClient();
+#if DEBUG
+        HttpClient.BaseAddress = new Uri("https://localhost:5050/");
+#else
+        HttpClient.BaseAddress = new Uri("https://url.url:5050/");
+#endif
+    }
+
     /// <summary>
     /// Initial app startup configuration.
     /// </summary>
@@ -15,7 +31,13 @@ public partial class App
         Startup += Application_Startup;
     }
 
-    private static void Application_Startup(object sender, StartupEventArgs e) =>
-        new MainWindow(CommandLineArguments.Create(e.Args))
+    private static void Application_Startup(
+        object sender,
+        StartupEventArgs e)
+    {
+        new MainWindow(
+                Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
+                HttpClient)
             .Show();
+    }
 }

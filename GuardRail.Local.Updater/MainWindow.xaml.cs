@@ -1,16 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using GuardRail.Api.Models.Responses;
+using GuardRail.Core.CommandLine;
+using GuardRail.Core.Helpers;
+using IWshRuntimeLibrary;
 using File = System.IO.File;
 
 namespace GuardRail.Local.Updater;
@@ -20,38 +23,37 @@ namespace GuardRail.Local.Updater;
 /// </summary>
 public partial class MainWindow
 {
-    private readonly bool _isFirstInstall;
-    private readonly string _currentDir;
+    private readonly Version? _version;
+    private readonly string _applicationRootFolder;
+    private readonly HttpClient _httpClient;
     private readonly CancellationTokenSource _cancellationTokenSource;
 
-    private InstallConfiguration _installConfiguration;
+    private VersionCheckResponse? _installConfiguration;
 
     /// <summary>
     /// Setup window.
     /// </summary>
-    public MainWindow(CommandLineArguments commandLineArguments)
+    public MainWindow(
+        string applicationRootFolder,
+        HttpClient httpClient)
     {
-        _isFirstInstall = !commandLineArguments.Any()
-                          || commandLineArguments.ContainsKey(CommandLineArgumentType.FreshInstall);
+        _version = Assembly.GetExecutingAssembly().GetName().Version;
+        _applicationRootFolder = applicationRootFolder;
+        _httpClient = httpClient;
         InitializeComponent();
-        _currentDir = _isFirstInstall
-            ? Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
-            : Environment.CurrentDirectory;
         _cancellationTokenSource = new CancellationTokenSource();
         Status.Content = "Checking for updates...";
         Loaded += OnLoaded;
         Unloaded += (_, _) => _cancellationTokenSource.Cancel();
     }
 
-    private async void OnLoaded(object sender, RoutedEventArgs e)
+    private async void OnLoaded(
+        object sender,
+        RoutedEventArgs e)
     {
         if (await HasUpdate())
         {
-            if (!await UpdateDownloaded())
-            {
-                await DownloadUpdate();
-            }
-
+            await DownloadUpdate();
             await StartUpdate();
         }
         else
@@ -70,35 +72,35 @@ public partial class MainWindow
             throw new ConfigurationErrorsException("Error: No download URL");
         }
 
-        var configuration = Encoding.Unicode.GetString(await GetData(new Uri(uriString, UriKind.Absolute)));
-        _installConfiguration = configuration.FromJson<InstallConfiguration?>() ?? new InstallConfiguration(string.Empty, Array.Empty<InstallFile>(), string.Empty, string.Empty);
-        return Assembly.GetExecutingAssembly().GetName().Version < new Version(_installConfiguration.LatestVersion);
+        _installConfiguration = await _httpClient
+            .GetFromJsonAsync<VersionCheckResponse>(
+                $"/VersionCheck?version={_version}");
+        return _installConfiguration?.IsLatest == true;
     }
-
-    private Task<bool> UpdateDownloaded() =>
-        Task.FromResult(
-            Directory.Exists(_currentDir + _installConfiguration.UpdateDirectory)
-            && Directory.GetFiles(_currentDir + _installConfiguration.UpdateDirectory).Any());
 
     private async Task DownloadUpdate()
     {
         Status.Content = "Downloading...";
-        ProgressBar.Maximum = _installConfiguration.InstallFiles.Count;
-        await Task.WhenAll(_installConfiguration.InstallFiles.Select(SaveFile));
+        var latestVersionFolder = _applicationRootFolder + _installConfiguration!.LatestVersion;
+        if (!Directory.Exists(latestVersionFolder))
+        {
+            Directory.Delete(latestVersionFolder, true);
+            Directory.CreateDirectory(latestVersionFolder);
+        }
+
+        ProgressBar.Maximum = _installConfiguration!.InstallFiles?.Count ?? 0;
+        await Task.WhenAll(_installConfiguration.InstallFiles?.Select(SaveFile) ?? []);
         Status.Content = "Downloading complete";
     }
 
-    private static async Task<byte[]> GetData(Uri url)
-    {
-        using var client = new WebClient();
-        return await client.DownloadDataTaskAsync(url);
-    }
-
-    private async Task SaveFile(InstallFile installFile)
+    private async Task SaveFile(
+        KeyValuePair<string, string> installFile)
     {
         await File.WriteAllBytesAsync(
-            _currentDir + _installConfiguration.UpdateDirectory + installFile.LocalPath,
-            await GetData(installFile.DownloadUri),
+            _applicationRootFolder + _version + installFile.Key,
+            await _httpClient
+                .GetByteArrayAsync(
+                    installFile.Value),
             _cancellationTokenSource.Token);
         ProgressBar.Value++;
     }
@@ -117,7 +119,7 @@ public partial class MainWindow
         }
 
         Status.Content = "Deleting old files...";
-        var oldFiles = Directory.GetFiles(_currentDir);
+        var oldFiles = Directory.GetFiles(_applicationRootFolder);
         ProgressBar.Maximum = oldFiles.Length;
         await Task.WhenAll(
             oldFiles
@@ -137,7 +139,7 @@ public partial class MainWindow
                         })));
         Status.Content = "Installing new files...";
         ProgressBar.Value = 0;
-        var newFiles = Directory.GetFiles(_currentDir + _installConfiguration.UpdateDirectory);
+        var newFiles = Directory.GetFiles(_applicationRootFolder + _installConfiguration!.UpdateDirectory);
         ProgressBar.Maximum = newFiles.Length;
         await Task.WhenAll(
             newFiles
@@ -145,7 +147,7 @@ public partial class MainWindow
                     Task.Run(
                         () =>
                         {
-                            File.Move(x, x.Replace(_currentDir + _installConfiguration.UpdateDirectory, _currentDir));
+                            File.Move(x, x.Replace(_applicationRootFolder + _installConfiguration.UpdateDirectory, _applicationRootFolder));
                             ProgressBar.Value++;
                         })));
         if (_isFirstInstall)
@@ -174,39 +176,24 @@ public partial class MainWindow
         finalProcess.Start();
     }
 
-    private void CreateShortcut(Environment.SpecialFolder folder)
+    private void CreateShortcut(
+        Environment.SpecialFolder specialFolder)
     {
-        var folderPath = Environment.GetFolderPath(folder);
-        var link = (IShellLink)new ShellLink();
-        link.SetDescription("GuardRail Access Control");
-        link.SetWorkingDirectory(_currentDir + "\\GuardRail.exe");
-        link.SetPath(_currentDir);
-        var file = (IPersistFile)link;
-        file.Save(Path.Combine(folderPath, "MyLink.lnk"), false);
+        var folderPath = Environment.GetFolderPath(specialFolder);
+        if (string.IsNullOrEmpty(folderPath))
+        {
+            return;
+        }
+
+        var shell = new WshShell();
+        var shortcut = (IWshShortcut)shell.CreateShortcut(Path.Combine(folderPath, "GuardRail.lnk"));
+        shortcut.TargetPath = Path.Combine(_applicationRootFolder, "GuardRail.exe");
+        shortcut.WorkingDirectory = _applicationRootFolder;
+        shortcut.Description = "GuardRail Access Control";
+        shortcut.Save();
     }
 
     private bool IsRestricted(string file) =>
         file.Equals(AppDomain.CurrentDomain.FriendlyName)
-        || file.Contains(_currentDir + _installConfiguration.UpdateDirectory);
-}
-
-[ComImport]
-[Guid("00021401-0000-0000-C000-000000000046")]
-internal class ShellLink
-{
-}
-
-[ComImport]
-[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-[Guid("000214F9-0000-0000-C000-000000000046")]
-internal interface IShellLink
-{
-    void GetPath([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszFile, int cchMaxPath, out IntPtr pfd, int fFlags);
-    void SetDescription([MarshalAs(UnmanagedType.LPWStr)] string pszName);
-    void SetWorkingDirectory([MarshalAs(UnmanagedType.LPWStr)] string pszDir);
-    void GetArguments([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszArgs, int cchMaxPath);
-    void SetArguments([MarshalAs(UnmanagedType.LPWStr)] string pszArgs);
-    void SetIconLocation([MarshalAs(UnmanagedType.LPWStr)] string pszIconPath, int iIcon);
-    void Resolve(IntPtr hwnd, int fFlags);
-    void SetPath([MarshalAs(UnmanagedType.LPWStr)] string pszFile);
+        || file.Contains(_applicationRootFolder + _installConfiguration!.UpdateDirectory);
 }
