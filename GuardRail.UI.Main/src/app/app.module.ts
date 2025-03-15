@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { provideHttpClient } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -17,6 +19,8 @@ import { InputBaseComponent } from './shared/input/input-base/input-base.compone
 import { TextInputComponent } from './shared/input/text-input/text-input.component';
 import { PasswordInputComponent } from './shared/input/password-input/password-input.component';
 import { NumberInputComponent } from './shared/input/number-input/number-input.component';
+
+import { HttpClientService } from './services/http-client.service';
 
 @NgModule({
   declarations: [
@@ -36,9 +40,13 @@ import { NumberInputComponent } from './shared/input/number-input/number-input.c
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule
   ],
-  providers: [],
+  providers: [
+    provideHttpClient(),
+    HttpClientService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

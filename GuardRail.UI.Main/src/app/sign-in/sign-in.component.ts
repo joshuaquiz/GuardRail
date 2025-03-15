@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { Validators, ValidatorFn } from '@angular/forms';
 import { StateService } from '../services/state.service';
 import { HttpClientService } from '../services/http-client.service';
 import { DialogButton } from '../shared/dialog/dialog-button';
@@ -16,32 +17,36 @@ export class SignInComponent {
   private readonly stateService: StateService = inject(StateService);
   private readonly httpClientService: HttpClientService = inject(HttpClientService);
 
-  public email: string | null = null;
-  public password: string | null = null;
+  public Email: string | null = null;
+  public Password: string | null = null;
   public readonly Buttons: DialogButton[] = [
     new DialogButton(
       "Sign In",
-      this.signIn)
+      () => {
+        console.log('this.email', this.Email);
+        this.httpClientService.Post<string>(
+          `/User/SignIn?email=${this.Email}`,
+          {
+            password: this.Password
+          })
+          .subscribe(
+            {
+              next: data => {
+                this.stateService.SetAuthToken(
+                  data);
+                this.router.navigate(
+                  [
+                    '/Home'
+                  ]);
+              },
+              error: error =>
+                alert(error)
+            })
+      })
   ];
 
-  public signIn(): void {
-    this.httpClientService.Post<string>(
-      `/User/SignIn?email=${this.email}`,
-      {
-        password: this.password
-      })
-      .subscribe(
-        {
-          next: data => {
-            this.stateService.SetAuthToken(
-              data);
-            this.router.navigate(
-              [
-                '/Home'
-              ]);
-          },
-          error: error =>
-            alert(error)
-        });
+  requiredValidator: ValidatorFn = Validators.required;
+  minLengthValidator(length: number): ValidatorFn {
+    return Validators.minLength(length);
   }
 }

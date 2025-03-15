@@ -1,13 +1,15 @@
 <div>
   <div>
-    <dialog
-      [Buttons]="Buttons">
-      <TextInput
-        Label="Email"
-        value="{email}"></TextInput>
-      <PasswordInput
-        Label="Password"
-        value="{password}"></PasswordInput>
-    </dialog>
+    <gr-dialog [Buttons]="Buttons"
+               [CanClose]="false">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" [(ngModel)]="Email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" [(ngModel)]="Password" name="password" required>
+      </div>
+    </gr-dialog>
   </div>
 </div>

@@ -1,11 +1,30 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpClientService {
+  private mockData: { [method: string]: { [urlPattern: string]: (data: any | null) => any } } = {
+    'POST': {
+      '/User/SignIn\\?email=.*': (password: string | null) => {
+        return 'auth-token';
+      }
+    }
+  };
+
+  private getMockData<T>(method: string, url: string, data: any | null = null): T {
+    for (const urlPattern in this.mockData[method]) {
+      const regex = new RegExp(urlPattern);
+      if (regex.test(url)) {
+        return this.mockData[method][urlPattern](data) as T;
+      }
+    }
+
+    throw new Error(
+      'No URL match ' + method + ' ' + url);
+  }
 
   private http = inject(HttpClient);
 
@@ -32,22 +51,27 @@ export class HttpClientService {
   }
 
   Get<T>(url: string): Observable<T> {
-    return new Observable<T>();
+    const mockResponse = this.getMockData<T>('GET', url);
+    return of(mockResponse);
   }
 
   Post<T>(url: string, body: any): Observable<T> {
-    return new Observable<T>();
+    const mockResponse = this.getMockData<T>('POST', url, body);
+    return of(mockResponse);
   }
 
   Put<T>(url: string, body: any): Observable<T> {
-    return new Observable<T>();
+    const mockResponse = this.getMockData<T>('PUT', url, body);
+    return of(mockResponse);
   }
 
   Patch<T>(url: string, body: any): Observable<T> {
-    return new Observable<T>();
+    const mockResponse = this.getMockData<T>('PATCH', url, body);
+    return of(mockResponse);
   }
 
   Delete<T>(url: string): Observable<T> {
-    return new Observable<T>();
+    const mockResponse = this.getMockData<T>('DELETE', url);
+    return of(mockResponse);
   }
 }

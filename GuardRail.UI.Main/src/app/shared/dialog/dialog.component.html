@@ -1,16 +1,20 @@
-<div class="dialog">
-  <div class="header">
-    <span>{{Title}}</span>
-    <div class="close" (click)="CloseClicked()"></div>
-  </div>
-  <div class="content">
-    <div>
-      <ng-content></ng-content>
+<div class="dialog-overlay">
+  <div class="dialog">
+    <div class="dialog-header">
+      <span>{{Title}}</span>
+      <span *ngIf="CanClose" class="close-button" (click)="CloseClicked()">&times;</span>
     </div>
-  </div>
-  <div class="footer">
-    <button *ngFor="let b in Buttons" (click)="b.Action">
-      {{b.Text}}
-    </button>
+    <div class="dialog-body">
+      <div>
+        <ng-content></ng-content>
+      </div>
+    </div>
+    <div class="dialog-footer">
+      <span *ngFor="let b of Buttons">
+        <button (click)="b.Action()">
+          {{b.Text}}
+        </button>
+      </span>
+    </div>
   </div>
 </div>

@@ -2,7 +2,7 @@ import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { DialogButton } from './dialog-button';
 
 @Component({
-  selector: 'dialog',
+  selector: 'gr-dialog',
   standalone: false,
   
   templateUrl: './dialog.component.html',
@@ -17,6 +17,9 @@ export class DialogComponent {
 
   @Input()
   public Title!: string;
+
+  @Input()
+  public CanClose!: boolean;
 
   public CloseClicked(): void {
     this.Close.emit();

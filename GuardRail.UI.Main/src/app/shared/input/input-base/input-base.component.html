@@ -1,8 +1,11 @@
-<div>
-  <label>
-    <span>
-      {{Label}}
-    </span>
-    <input type="{{Type}}" value="{{Value}}" />
-  </label>
+<div class="form-group">
+  <label>{{ Label }}</label>
+  <input [type]="type"
+         [value]="value"
+         (input)="onInputChange($event)"
+         (blur)="onTouched()"
+         [ngClass]="{'is-invalid': hasErrors()}" />
+  <div *ngIf="hasErrors()" class="invalid-feedback">
+    <div *ngFor="let error of getErrors()">{{ error }}</div>
+  </div>
 </div>

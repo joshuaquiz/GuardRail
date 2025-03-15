@@ -11,6 +11,11 @@ import { UsersComponent } from './home/users/users.component';
 
 const routes: Routes = [
   {
+    path: '',
+    redirectTo: 'Login',
+    pathMatch: 'full'
+  },
+  {
     path: 'Login',
     component: SignInComponent
   },
@@ -39,7 +44,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    component: NotFoundComponent
+    component: NotFoundComponent,
   }
 ];
 
