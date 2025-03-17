@@ -22,15 +22,6 @@ export class LocationsComponent {
   private readonly stateService: StateService = inject(StateService);
   private readonly httpClientService: HttpClientService = inject(HttpClientService);
 
-  public readonly CreateLocationRequest: CreateLocationRequest =
-    new CreateLocationRequest(
-      this.stateService.GetAccountId(),
-      '',
-      null,
-      null,
-      null,
-      null,
-      false);
   public Locations: ILocation[] = [];
 
   public StartAdd(): void {
@@ -78,7 +69,14 @@ export class LocationsComponent {
   public CreateLocation(): void {
     this.httpClientService.Post(
       `/Location/CreateLocation`,
-      this.CreateLocationRequest)
+      new CreateLocationRequest(
+        this.stateService.GetAccountId(),
+        '',
+        null,
+        null,
+        null,
+        null,
+        false))
       .subscribe(
         {
           next: this.ListLocations,
@@ -90,7 +88,14 @@ export class LocationsComponent {
   public EditLocation(): void {
     this.httpClientService.Post(
       `/Location/EditLocation`,
-      this.CreateLocationRequest)
+      new CreateLocationRequest(
+        this.stateService.GetAccountId(),
+        '',
+        null,
+        null,
+        null,
+        null,
+        false))
       .subscribe(
         {
           next: this.ListLocations,
@@ -102,7 +107,14 @@ export class LocationsComponent {
   public DeleteLocation(): void {
     this.httpClientService.Post(
       `/Location/DeleteLocation`,
-      this.CreateLocationRequest)
+      new CreateLocationRequest(
+        this.stateService.GetAccountId(),
+        '',
+        null,
+        null,
+        null,
+        null,
+        false))
       .subscribe(
         {
           next: this.ListLocations,

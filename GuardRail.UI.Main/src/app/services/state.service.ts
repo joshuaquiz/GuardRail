@@ -1,11 +1,26 @@
-import { Injectable } from '@angular/core';
+import { Injectable, InjectionToken, Optional, Inject } from '@angular/core';
+
+export const LOCAL_STORAGE = new InjectionToken<Storage>(
+  'Browser Local Storage',
+  {
+    providedIn: 'root',
+    factory: () => localStorage,
+  });
 
 @Injectable({
   providedIn: 'root'
 })
 export class StateService {
+  private readonly AUTH_TOKEN_KEY = 'auth_token';
+  private readonly ACCOUNT_ID_KEY = 'account_id';
+
   private authToken: string | null = null;
   private accountId: string | null = null;
+
+  constructor(@Inject(LOCAL_STORAGE) private localStorage: Storage) {
+    this.authToken = this.localStorage.getItem(this.AUTH_TOKEN_KEY);
+    this.accountId = this.localStorage.getItem(this.ACCOUNT_ID_KEY);
+  }
 
   public IsLoggedIn(): boolean {
     return this.authToken !== null;
@@ -14,11 +29,13 @@ export class StateService {
   public SetAuthToken(
     token: string): void {
     this.authToken = token;
+    localStorage.setItem(this.AUTH_TOKEN_KEY, token);
   }
 
   public SetAccountId(
-    accontId: string): void {
-    this.accountId = accontId;
+    accountId: string): void {
+    this.accountId = accountId;
+    localStorage.setItem(this.ACCOUNT_ID_KEY, accountId);
   }
 
   public GetAccountId(): string {
