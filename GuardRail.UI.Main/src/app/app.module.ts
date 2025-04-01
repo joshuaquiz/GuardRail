@@ -1,17 +1,19 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { provideHttpClient } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms'
+import { CommonModule } from '@angular/common'; 
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { HomeComponent } from './home/home.component';
 
+import { NavBarComponent } from './home/nav-bar/nav-bar.component';
 import { AccessPointsComponent } from './home/access-points/access-points.component';
 import { LocationsComponent } from './home/locations/locations.component';
 import { UsersComponent } from './home/users/users.component';
-import { NavBarComponent } from './home/nav-bar/nav-bar.component';
 import { DialogComponent } from './shared/dialog/dialog.component';
 import { LocationItemComponent } from './shared/location-item/location-item.component';
 
@@ -24,13 +26,14 @@ import { HttpClientService } from './services/http-client.service';
 
 @NgModule({
   declarations: [
+    NavBarComponent,
     AppComponent,
     SignInComponent,
     NotFoundComponent,
+    HomeComponent,
     AccessPointsComponent,
     LocationsComponent,
     UsersComponent,
-    NavBarComponent,
     DialogComponent,
     LocationItemComponent,
     InputBaseComponent,
@@ -41,7 +44,8 @@ import { HttpClientService } from './services/http-client.service';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    CommonModule
   ],
   providers: [
     provideHttpClient(),

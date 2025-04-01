@@ -23,7 +23,6 @@ export class SignInComponent {
     new DialogButton(
       "Sign In",
       () => {
-        console.log('this.email', this.Email);
         this.httpClientService.Post<string>(
           `/User/SignIn?email=${this.Email}`,
           {

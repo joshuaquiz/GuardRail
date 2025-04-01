@@ -5,6 +5,7 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { AuthGuardService } from './services/auth-guard.service';
 
+import { HomeComponent } from './home/home.component';
 import { AccessPointsComponent } from './home/access-points/access-points.component';
 import { LocationsComponent } from './home/locations/locations.component';
 import { UsersComponent } from './home/users/users.component';
@@ -22,6 +23,7 @@ const routes: Routes = [
   {
     path: 'Home',
     canActivate: [AuthGuardService],
+    component: HomeComponent,
     children: [
       {
         path: '',
