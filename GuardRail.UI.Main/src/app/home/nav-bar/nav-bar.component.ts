@@ -1,14 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'nav-bar',
+  selector: 'NavBar',
   standalone: false,
   
   templateUrl: './nav-bar.component.html',
   styleUrl: './nav-bar.component.css'
 })
 export class NavBarComponent {
-  public ShowAccessPoints: boolean = false;
-  public ShowLocations: boolean = false;
-  public ShowUsers: boolean = false;
+  @Input()
+  public ShowAccessPoints!: boolean;
+
+  @Input()
+  public ShowLocations!: boolean;
+
+  @Input()
+  public ShowUsers!: boolean;
+
+  constructor() {
+    console.log('NavBar Component Loaded');
+  }
 }

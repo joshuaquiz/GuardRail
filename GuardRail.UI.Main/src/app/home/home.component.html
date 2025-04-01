@@ -1,27 +1,27 @@
 <div>
   <div>
     <div class="accounts">
-      <div *ngIf="SingleAccount">
+      @if (SingleAccount) {
+      <div>
         <span>
-          {{Accounts[0].Name}}
+          {{SelectedAccount.Name}}
         </span>
       </div>
-      <div *ngIf="MultipleAccounts">
-        <select
-          (change)="LoadAccount"
-          [Value]="SelectedAccount">
-          <option
-            *ngFor="let a in Accounts"
-            [Value]="a.Guid">
-            {{a.Name}}
-          </option>
-        </select>
-      </div>
+      } @else {
+      <select (change)="LoadCurrentAccount()"
+              [(value)]="SelectedAccount">
+        @for (acc of Accounts; track acc.Guid) {
+        <option [value]="acc.Guid">
+          {{acc.Name}}
+        </option>
+        }
+      </select>
+      }
     </div>
   </div>
   <div>
     <div class="left">
-      <nav-bar></nav-bar>
+      <NavBar />
     </div>
     <div class="right">
       <div>
