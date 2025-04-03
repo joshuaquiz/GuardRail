@@ -93,7 +93,6 @@ export class InputBaseComponent implements ControlValueAccessor {
   private getErrorMessage(errors: ValidationErrors[]): string[] {
     const errorMessages: string[] = [];
     for (const error of errors) {
-      console.log('error', error);
       if (error['required']) {
         errorMessages.push('You must enter a value.');
       }
