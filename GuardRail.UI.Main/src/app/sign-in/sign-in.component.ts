@@ -44,6 +44,7 @@ export class SignInComponent {
       })
   ];
 
+  emailValidator: ValidatorFn = Validators.email;
   requiredValidator: ValidatorFn = Validators.required;
   minLengthValidator(length: number): ValidatorFn {
     return Validators.minLength(length);

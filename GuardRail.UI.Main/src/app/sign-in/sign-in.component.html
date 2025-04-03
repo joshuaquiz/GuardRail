@@ -2,14 +2,14 @@
   <div>
     <gr-dialog [Buttons]="Buttons"
                [CanClose]="false">
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" [(ngModel)]="Email" name="email" required>
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" [(ngModel)]="Password" name="password" required>
-      </div>
+      <InputBase Label="Email"
+                 [(InputValue)]="Email"
+                 [validators]="[requiredValidator, emailValidator]"
+                 Type="text" />
+      <InputBase Label="Password"
+                 [(InputValue)]="Password"
+                 [validators]="[requiredValidator, minLengthValidator(8)]"
+                 Type="password" />
     </gr-dialog>
   </div>
 </div>
