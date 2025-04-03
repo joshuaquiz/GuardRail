@@ -16,18 +16,28 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR, ValidatorFn, ValidationErrors 
   ]
 })
 export class InputBaseComponent implements ControlValueAccessor {
-  @Input() Label: string | null = '';
-  @Input() value: string | null = '';
-  @Input() type: string = 'text';
-  @Input() validators: ValidatorFn[] = [];
+  @Input()
+  public Label: string | null = '';
 
-  @Output() valueChange = new EventEmitter<string | null>();
+  @Input()
+  public InputValue: string | null = '';
+
+  @Input()
+  public Type: string | null = '';
+
+  @Input()
+  public validators: ValidatorFn[] = [];
+
+  @Output()
+  public InputValueChange = new EventEmitter<string | null>();
+
+  private isDirty: boolean = false;
 
   onChange: any = () => { };
   onTouched: any = () => { };
 
   writeValue(value: any): void {
-    this.value = value || '';
+    this.InputValue = value || '';
   }
 
   registerOnChange(fn: any): void {
@@ -41,9 +51,10 @@ export class InputBaseComponent implements ControlValueAccessor {
   onInputChange(event: Event): void {
     const target = event.target as HTMLInputElement;
     if (target) {
-      this.value = target.value;
-      this.onChange(this.value);
-      this.valueChange.emit(this.value);
+      this.InputValue = target.value;
+      this.onChange(this.InputValue);
+      this.InputValueChange.emit(this.InputValue);
+      this.isDirty = true;
     }
   }
 
@@ -52,27 +63,48 @@ export class InputBaseComponent implements ControlValueAccessor {
       return false;
     }
     const errors = this.getValidationErrors();
-    return errors !== null;
+    return errors !== null && errors.length > 0;
   }
 
   getErrors(): string[] {
     const errors = this.getValidationErrors();
-    if (!errors) {
+    if (!errors || errors.length === 0) {
       return [];
     }
-    return Object.values(errors);
+
+    return this.getErrorMessage(errors);
   }
 
-  private getValidationErrors(): ValidationErrors | null {
-    if (!this.validators || this.validators.length === 0) {
+  private getValidationErrors(): ValidationErrors[] | null {
+    if (!this.isDirty || !this.validators || this.validators.length === 0) {
       return null;
     }
+    const errors: ValidationErrors[] = [];
     for (const validator of this.validators) {
-      const error = validator({ value: this.value } as any);
+      const error = validator({ value: this.InputValue } as any);
       if (error) {
-        return error;
+        errors.push(error);
       }
     }
-    return null;
+
+    return errors;
+  }
+
+  private getErrorMessage(errors: ValidationErrors[]): string[] {
+    const errorMessages: string[] = [];
+    for (const error of errors) {
+      console.log('error', error);
+      if (error['required']) {
+        errorMessages.push('You must enter a value.');
+      }
+      if (error['email']) {
+        errorMessages.push('The value must be in an email.');
+      }
+      if (error['minlength']) {
+        errorMessages.push(`Minimum length is ${error['minlength'].requiredLength}`);
+      }
+    }
+
+    return errorMessages;
   }
 }
