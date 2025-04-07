@@ -31,12 +31,12 @@ const routes: Routes = [
         pathMatch: 'full'
       },
       {
-        path: 'AccessPointes',
-        component: AccessPointsComponent
-      },
-      {
         path: 'Locations',
         component: LocationsComponent
+      },
+      {
+        path: 'AccessPoints',
+        component: AccessPointsComponent
       },
       {
         path: 'Users',

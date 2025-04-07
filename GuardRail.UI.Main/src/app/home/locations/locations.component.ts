@@ -9,7 +9,10 @@ import { ILocation } from '../../shared/location';
   standalone: false,
   
   templateUrl: './locations.component.html',
-  styleUrl: './locations.component.css'
+  styleUrls: [
+    './locations.component.css',
+    '../home.list.css'
+  ]
 })
 export class LocationsComponent implements OnInit {
   public SidebarOpen: boolean = false;
@@ -25,7 +28,6 @@ export class LocationsComponent implements OnInit {
   public Locations: ILocation[] = [];
 
   public ngOnInit(): void {
-    this.stateService.GetAccountId()
     this.ListLocations();
   }
 

@@ -1,7 +1,15 @@
-<!--
 <div>
   <div class="options">
     <ul>
+      <li>
+        <select (change)="LocationSelectionChanged($event)">
+          @for (l of Locations; track l.Guid) {
+          <option [value]="l.Guid">
+            {{l.Name}}
+          </option>
+          }
+        </select>
+      </li>
       <li (click)="StartAdd()">
         <div></div>
         <span>
@@ -25,52 +33,59 @@
     </ul>
   </div>
   <div class="list">
-    <div *ngFor="let l in Locations">
-      <location-item [Location]="l"></location-item>
+    <div>
+      @for (ap of AccessPoints; track ap.Guid) {
+      <div>{{ap.Name}}</div>
+      }
+    </div>
+  </div>
+  <div class="sidebar" *ngIf="SidebarOpen">
+    <div class="close" (click)="CloseSideBar()">X</div>
+    <div *ngIf="AddItem">
+      <TextInput Label="Name"
+                 Value="CreateAccessPointRequest.Name"></TextInput>
+      <TextInput Label="Description"
+                 Value="CreateAccessPointRequest.Description"></TextInput>
+      <TextInput Label="Name"
+                 Value="CreateAccessPointRequest.Name"></TextInput>
+      <NumberInput Label="Latitude"
+                   Value="CreateAccessPointRequest.Latitude"></NumberInput>
+      <NumberInput Label="Geo-fence Distance"
+                   Value="CreateAccessPointRequest.GeoFenceDistance"></NumberInput>
+      <div>
+        <label>
+          <span>
+            IsMobile
+          </span>
+          <input type="checkbox" value="{CreateAccessPointRequest.IsMobile}" />
+        </label>
+      </div>
+      <button (click)="CreateAccessPoint()">Add Access Point</button>
+    </div>
+    <div *ngIf="EditingSingle">
+      <TextInput Label="Name"
+                 Value="CreateAccessPointRequest.Name"></TextInput>
+      <TextInput Label="Description"
+                 Value="CreateAccessPointRequest.Description"></TextInput>
+      <TextInput Label="Name"
+                 Value="CreateAccessPointRequest.Name"></TextInput>
+      <NumberInput Label="Latitude"
+                   Value="CreateAccessPointRequest.Latitude"></NumberInput>
+      <NumberInput Label="Geo-fence Distance"
+                   Value="CreateAccessPointRequest.GeoFenceDistance"></NumberInput>
+      <div>
+        <label>
+          <span>
+            IsMobile
+          </span>
+          <input type="checkbox" value="{CreateAccessPointRequest.IsMobile}" />
+        </label>
+      </div>
+      <button (click)="EditAccessPoint()">Edit Access Point</button>
+    </div>
+    <div *ngIf="Deleting">
+      Would you like to delete these item(s)?
+      <button (click)="DeleteAccessPoint()">Delete Access Point(s)</button>
     </div>
   </div>
 </div>
-<dialog *ngIf="AddItem" [Buttons]="AddButtons" (Close)="EndAdd()">
-  <TextInput Label="Name"
-             Value="CreateAccessPointRequest.Name"></TextInput>
-  <TextInput Label="Description"
-             Value="CreateAccessPointRequest.Description"></TextInput>
-  <TextInput Label="Name"
-             Value="CreateAccessPointRequest.Name"></TextInput>
-  <NumberInput Label="Latitude"
-               Value="CreateAccessPointRequest.Latitude"></NumberInput>
-  <NumberInput Label="Geo-fence Distance"
-               Value="CreateAccessPointRequest.GeoFenceDistance"></NumberInput>
-  <div>
-    <label>
-      <span>
-        IsMobile
-      </span>
-      <input type="checkbox" value="{CreateAccessPointRequest.IsMobile}" />
-    </label>
-  </div>
-</dialog>
-<dialog *ngIf="EditingSingle" [Buttons]="EditSingleButtons">
-  <TextInput Label="Name"
-             Value="CreateAccessPointRequest.Name"></TextInput>
-  <TextInput Label="Description"
-             Value="CreateAccessPointRequest.Description"></TextInput>
-  <TextInput Label="Name"
-             Value="CreateAccessPointRequest.Name"></TextInput>
-  <NumberInput Label="Latitude"
-               Value="CreateAccessPointRequest.Latitude"></NumberInput>
-  <NumberInput Label="Geo-fence Distance"
-               Value="CreateAccessPointRequest.GeoFenceDistance"></NumberInput>
-  <div>
-    <label>
-      <span>
-        IsMobile
-      </span>
-      <input type="checkbox" value="{CreateAccessPointRequest.IsMobile}" />
-    </label>
-  </div>
-</dialog>
-<dialog *ngIf="Deleting" [Buttons]="DeleteButtons">
-  Would you like to delete these item(s)?
-</dialog>
--->

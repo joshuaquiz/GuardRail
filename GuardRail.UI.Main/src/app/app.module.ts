@@ -11,8 +11,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { HomeComponent } from './home/home.component';
 
 import { NavBarComponent } from './home/nav-bar/nav-bar.component';
-import { AccessPointsComponent } from './home/access-points/access-points.component';
 import { LocationsComponent } from './home/locations/locations.component';
+import { AccessPointsComponent } from './home/access-points/access-points.component';
 import { UsersComponent } from './home/users/users.component';
 import { DialogComponent } from './shared/dialog/dialog.component';
 import { LocationItemComponent } from './shared/location-item/location-item.component';
@@ -31,8 +31,8 @@ import { HttpClientService } from './services/http-client.service';
     SignInComponent,
     NotFoundComponent,
     HomeComponent,
-    AccessPointsComponent,
     LocationsComponent,
+    AccessPointsComponent,
     UsersComponent,
     DialogComponent,
     LocationItemComponent,
