@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'NavBar',
@@ -8,16 +9,5 @@ import { Component, Input } from '@angular/core';
   styleUrl: './nav-bar.component.css'
 })
 export class NavBarComponent {
-  @Input()
-  public ShowAccessPoints!: boolean;
-
-  @Input()
-  public ShowLocations!: boolean;
-
-  @Input()
-  public ShowUsers!: boolean;
-
-  constructor() {
-    console.log('NavBar Component Loaded');
-  }
+  constructor(private router: Router) { }
 }

@@ -8,8 +8,8 @@
         </span>
       </div>
       } @else {
-      <select (change)="LoadCurrentAccount()"
-              [(value)]="SelectedAccount">
+      <select [(value)]="SelectedAccount"
+              (change)="AccountSelectionChanged($event)">
         @for (acc of Accounts; track acc.Guid) {
         <option [value]="acc.Guid">
           {{acc.Name}}
@@ -25,9 +25,15 @@
     </div>
     <div class="right">
       <div>
-        <access-points *ngIf="ShowAccessPoints"></access-points>
-        <locations *ngIf="ShowLocations"></locations>
-        <users *ngIf="ShowUsers"></users>
+        @if (ShowLocations) {
+        <locations />
+        }
+        @if (ShowAccessPoints) {
+        <access-points />
+        }
+        @if (ShowUsers) {
+        <users />
+        }
       </div>
     </div>
   </div>

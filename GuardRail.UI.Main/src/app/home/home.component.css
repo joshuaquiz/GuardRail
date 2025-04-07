@@ -1,0 +1,11 @@
+.left {
+  width: 200px;
+  float: left;
+  height: 100vh;
+}
+.right {
+  width: calc(100% - 205px);
+  margin-left: 5px;
+  height: 100vh;
+  float: left;
+}

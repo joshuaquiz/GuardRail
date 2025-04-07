@@ -1,0 +1,46 @@
+nav {
+  width: 200px;
+  background-color: #f0f0f0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+  nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  nav li {
+    width: 100%;
+  }
+
+    nav li a {
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      width: 100%;
+      box-sizing: border-box;
+      text-decoration: none;
+      color: inherit;
+    }
+
+      nav li a div {
+        width: 20px;
+        height: 20px;
+        background-color: #ccc;
+        margin-right: 10px;
+      }
+
+      nav li a span {
+        flex-grow: 1;
+      }
+
+      nav li a.selected {
+        background-color: #ddd;
+      }

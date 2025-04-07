@@ -1,0 +1,77 @@
+div {
+  box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+
+.list {
+  width: 40%;
+  padding: 10px;
+  position: absolute;
+  margin-top: 40px;
+}
+
+  .list div {
+    border-bottom: 1px solid #eee;
+    padding: 10px;
+  }
+
+.options {
+  position: absolute;
+}
+
+  .options ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .options li {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+
+    .options li div {
+      width: 20px;
+      height: 20px;
+      background-color: #ccc;
+      margin-right: 10px;
+    }
+
+.sidebar {
+  position: absolute;
+  width: 40%;
+  padding: 20px;
+  border: 1px solid #ddd;
+  background-color: white;
+  top: 80px;
+  right: 0;
+}
+
+  .sidebar .close {
+    cursor: pointer;
+    float: right;
+    font-weight: bold;
+  }
+
+sidebar TextInput,
+sidebar NumberInput,
+sidebar div {
+  margin-bottom: 10px;
+}
+
+sidebar label {
+  display: flex;
+  align-items: center;
+}
+
+  sidebar label span {
+    margin-right: 10px;
+  }
+
+/* Clear floats to prevent layout issues */
+div::after {
+  content: "";
+  display: table;
+  clear: both;
+}

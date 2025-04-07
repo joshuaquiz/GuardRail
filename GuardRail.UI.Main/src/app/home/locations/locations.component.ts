@@ -1,5 +1,4 @@
-import { Component, inject } from '@angular/core';
-import { DialogButton } from '../../shared/dialog/dialog-button';
+import { Component, OnInit, inject } from '@angular/core';
 import { StateService } from '../../services/state.service';
 import { HttpClientService } from '../../services/http-client.service';
 import { CreateLocationRequest } from '../../shared/create-location-request';
@@ -12,7 +11,8 @@ import { ILocation } from '../../shared/location';
   templateUrl: './locations.component.html',
   styleUrl: './locations.component.css'
 })
-export class LocationsComponent {
+export class LocationsComponent implements OnInit {
+  public SidebarOpen: boolean = false;
   public AddItem: boolean = false;
   public EditingSingle: boolean = false;
   public Deleting: boolean = false;
@@ -24,47 +24,38 @@ export class LocationsComponent {
 
   public Locations: ILocation[] = [];
 
-  public StartAdd(): void {
-    this.AddItem = true;
+  public ngOnInit(): void {
+    this.stateService.GetAccountId()
+    this.ListLocations();
   }
 
-  public EndAdd(): void {
+  public CloseSideBar(): void {
     this.AddItem = false;
+    this.EditingSingle = false;
+    this.Deleting = false;
+    this.SidebarOpen = false;
+  }
+
+  public StartAdd(): void {
+    this.EditingSingle = false;
+    this.Deleting = false;
+    this.AddItem = true;
+    this.SidebarOpen = true;
   }
 
   public StartEdit(): void {
+    this.AddItem = false;
+    this.Deleting = false;
     this.EditingSingle = true;
-  }
-
-  public EndEdit(): void {
-    this.EditingSingle = false;
+    this.SidebarOpen = true;
   }
 
   public StartDelete(): void {
+    this.AddItem = false;
+    this.EditingSingle = false;
     this.Deleting = true;
+    this.SidebarOpen = true;
   }
-
-  public EndDelete(): void {
-    this.Deleting = false;
-  }
-
-  public readonly AddButtons: DialogButton[] = [
-    new DialogButton(
-      "Add Location",
-      this.CreateLocation)
-  ];
-
-  public readonly EditSingleButtons: DialogButton[] = [
-    new DialogButton(
-      "Edit Location",
-      this.EditLocation)
-  ];
-
-  public readonly DeleteButtons: DialogButton[] = [
-    new DialogButton(
-      "Delete Location",
-      this.DeleteLocation)
-  ];
 
   public CreateLocation(): void {
     this.httpClientService.Post(
