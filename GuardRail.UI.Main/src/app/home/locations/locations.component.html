@@ -7,17 +7,15 @@
           Add
         </span>
       </li>
-      <li
-        *ngIf="SingleItemSelected"
-        (click)="StartEdit()">
+      <li *ngIf="SingleItemSelected"
+          (click)="StartEdit()">
         <div></div>
         <span>
           Edit
         </span>
       </li>
-      <li
-        *ngIf="SingleItemSelected || MultipleItemsSelected"
-        (click)="StartDelete()">
+      <li *ngIf="SingleItemSelected || MultipleItemsSelected"
+          (click)="StartDelete()">
         <div></div>
         <span>
           Delete
@@ -26,61 +24,57 @@
     </ul>
   </div>
   <div class="list">
-    <div *ngFor="let l of Locations">
-      <location-item [Location]="l"></location-item>
+    @for (l of Locations; track l.Guid) {
+    <location-item [Location]="l"></location-item>
+    }
+  </div>
+  <div class="sidebar" *ngIf="SidebarOpen">
+    <div class="close" (click)="CloseSideBar()">X</div>
+    <div *ngIf="AddItem">
+      <TextInput Label="Name"
+                 Value="CreateLocationRequest.Name"></TextInput>
+      <TextInput Label="Description"
+                 Value="CreateLocationRequest.Description"></TextInput>
+      <TextInput Label="Name"
+                 Value="CreateLocationRequest.Name"></TextInput>
+      <NumberInput Label="Latitude"
+                   Value="CreateLocationRequest.Latitude"></NumberInput>
+      <NumberInput Label="Geo-fence Distance"
+                   Value="CreateLocationRequest.GeoFenceDistance"></NumberInput>
+      <div>
+        <label>
+          <span>
+            IsMobile
+          </span>
+          <input type="checkbox" value="{CreateLocationRequest.IsMobile}" />
+        </label>
+      </div>
+      <button (click)="CreateLocation()">Add Location</button>
+    </div>
+    <div *ngIf="EditingSingle">
+      <TextInput Label="Name"
+                 Value="CreateLocationRequest.Name"></TextInput>
+      <TextInput Label="Description"
+                 Value="CreateLocationRequest.Description"></TextInput>
+      <TextInput Label="Name"
+                 Value="CreateLocationRequest.Name"></TextInput>
+      <NumberInput Label="Latitude"
+                   Value="CreateLocationRequest.Latitude"></NumberInput>
+      <NumberInput Label="Geo-fence Distance"
+                   Value="CreateLocationRequest.GeoFenceDistance"></NumberInput>
+      <div>
+        <label>
+          <span>
+            IsMobile
+          </span>
+          <input type="checkbox" value="{CreateLocationRequest.IsMobile}" />
+        </label>
+      </div>
+      <button (click)="EditLocation()">Edit Location</button>
+    </div>
+    <div *ngIf="Deleting">
+      Would you like to delete these item(s)?
+      <button (click)="DeleteLocation()">Delete Location</button>
     </div>
   </div>
 </div>
-<gr-dialog *ngIf="AddItem" [Buttons]="AddButtons" (Close)="EndAdd()">
-  <TextInput
-    Label="Name"
-    Value="CreateLocationRequest.Name"></TextInput>
-  <TextInput
-    Label="Description"
-    Value="CreateLocationRequest.Description"></TextInput>
-  <TextInput
-    Label="Name"
-    Value="CreateLocationRequest.Name"></TextInput>
-  <NumberInput
-    Label="Latitude"
-    Value="CreateLocationRequest.Latitude"></NumberInput>
-  <NumberInput
-    Label="Geo-fence Distance"
-    Value="CreateLocationRequest.GeoFenceDistance"></NumberInput>
-  <div>
-    <label>
-      <span>
-        IsMobile
-      </span>
-      <input type="checkbox" value="{CreateLocationRequest.IsMobile}" />
-    </label>
-  </div>
-</gr-dialog>
-<gr-dialog *ngIf="EditingSingle" [Buttons]="EditSingleButtons" (Close)="EndEdit()">
-  <TextInput
-    Label="Name"
-    Value="CreateLocationRequest.Name"></TextInput>
-  <TextInput
-    Label="Description"
-    Value="CreateLocationRequest.Description"></TextInput>
-  <TextInput
-    Label="Name"
-    Value="CreateLocationRequest.Name"></TextInput>
-  <NumberInput
-    Label="Latitude"
-    Value="CreateLocationRequest.Latitude"></NumberInput>
-  <NumberInput
-    Label="Geo-fence Distance"
-    Value="CreateLocationRequest.GeoFenceDistance"></NumberInput>
-  <div>
-    <label>
-      <span>
-        IsMobile
-      </span>
-      <input type="checkbox" value="{CreateLocationRequest.IsMobile}" />
-    </label>
-  </div>
-</gr-dialog>
-<gr-dialog *ngIf="Deleting" [Buttons]="DeleteButtons" (Close)="EndDelete()">
-  Would you like to delete these item(s)?
-</gr-dialog>

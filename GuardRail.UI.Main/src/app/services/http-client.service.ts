@@ -10,12 +10,12 @@ import { ILocation } from '../shared/location';
 export class HttpClientService {
   private mockData: { [method: string]: { [urlPattern: string]: (data: any | null) => any } } = {
     'POST': {
-      '/User/SignIn\\?email=.*': (password: string | null): string => {
+      '^/User/SignIn\\?email=.*$': (password: string | null): string => {
         return 'auth-token';
       }
     },
     'GET': {
-      '/Account/GetDashboardData': (): IDashboardDataResponse => {
+      '^/Account/GetDashboardData$': (): IDashboardDataResponse => {
         return {
           Accounts: [
             {
@@ -31,7 +31,7 @@ export class HttpClientService {
           ]
         };
       },
-      '/Location/ListLocations\\?accountId=1': (): ILocation[] => {
+      '^/Location/ListLocations\\?accountId=1$': (): ILocation[] => {
         return [
           {
             Guid: '1',
@@ -55,7 +55,7 @@ export class HttpClientService {
           }
         ];
       },
-      '/Location/ListLocations\\?accountId=2': (): ILocation[] => {
+      '^/Location/ListLocations\\?accountId=2$': (): ILocation[] => {
         return [
           {
             Guid: '3',
