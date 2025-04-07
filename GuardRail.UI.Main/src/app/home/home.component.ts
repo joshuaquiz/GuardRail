@@ -73,8 +73,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public AccountSelectionChanged(e: Event): void {
     const selectElement = e.target as HTMLSelectElement;
-    if (selectElement && selectElement.selectedIndex > 0) {
-      this.AccountChanged(this.Accounts[selectElement.selectedIndex - 1]);
+    if (selectElement) {
+      this.AccountChanged(this.Accounts[selectElement.selectedIndex]);
     }
   }
 

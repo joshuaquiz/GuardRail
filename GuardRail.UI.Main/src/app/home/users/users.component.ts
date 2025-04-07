@@ -5,7 +5,10 @@ import { Component } from '@angular/core';
   standalone: false,
   
   templateUrl: './users.component.html',
-  styleUrl: './users.component.css'
+  styleUrls: [
+    './users.component.css',
+    '../home.list.css'
+  ]
 })
 export class UsersComponent {
 

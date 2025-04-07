@@ -3,6 +3,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, of } from 'rxjs';
 import { IDashboardDataResponse } from '../shared/dashboard-data-response';
 import { ILocation } from '../shared/location';
+import { IAccessPoint } from '../shared/access-point';
+import { AccessPointType } from '../shared/access-point-type';
 
 @Injectable({
   providedIn: 'root'
@@ -19,23 +21,23 @@ export class HttpClientService {
         return {
           Accounts: [
             {
-              Guid: '1',
+              Guid: 'ac1',
               Name: 'Account 1',
               IsActive: true
             },
             {
-              Guid: '2',
+              Guid: 'ac2',
               Name: 'Account 2',
               IsActive: true
             }
           ]
         };
       },
-      '^/Location/ListLocations\\?accountId=1$': (): ILocation[] => {
+      '^/Location/ListLocations\\?accountId=ac1$': (): ILocation[] => {
         return [
           {
-            Guid: '1',
-            AccountId: '1',
+            Guid: 'l1',
+            AccountId: 'ac1',
             Name: 'Location 1',
             Description: 'Description 1',
             Latitude: 1.0,
@@ -44,8 +46,8 @@ export class HttpClientService {
             IsMobile: false
           },
           {
-            Guid: '2',
-            AccountId: '1',
+            Guid: 'l2',
+            AccountId: 'ac1',
             Name: 'Location 2',
             Description: 'Description 2',
             Latitude: 1.0,
@@ -55,11 +57,11 @@ export class HttpClientService {
           }
         ];
       },
-      '^/Location/ListLocations\\?accountId=2$': (): ILocation[] => {
+      '^/Location/ListLocations\\?accountId=ac2$': (): ILocation[] => {
         return [
           {
-            Guid: '3',
-            AccountId: '2',
+            Guid: 'l3',
+            AccountId: 'ac2',
             Name: 'Location 3',
             Description: 'Description 3',
             Latitude: 1.0,
@@ -68,14 +70,87 @@ export class HttpClientService {
             IsMobile: false
           },
           {
-            Guid: '4',
-            AccountId: '2',
+            Guid: 'l4',
+            AccountId: 'ac2',
             Name: 'Location 4',
             Description: 'Description 4',
             Latitude: 1.0,
             Longitude: 1.0,
             GeoFenceDistance: 1.0,
             IsMobile: false
+          }
+        ];
+      },
+      '^/AccessPoint/ListAccessPoints\\?locationId=l1$': (): IAccessPoint[] => {
+        return [
+          {
+            Guid: 'ap1',
+            Name: 'Main Office Front Door',
+            LocationGuid: 'l1',
+            AccessPointType: AccessPointType.GuardRailCustom,
+            Latitude: null,
+            Longitude: null,
+            GeoFenceDistance: .5,
+            RequiresAllAccessMethods: true,
+            AccessMethodTimeout: null,
+            IsLocked: true,
+            IsOpen: false
+          },
+          {
+            Guid: 'ap2',
+            Name: 'Main Office Back Door',
+            LocationGuid: 'l1',
+            AccessPointType: AccessPointType.GuardRailCustom,
+            Latitude: null,
+            Longitude: null,
+            GeoFenceDistance: .5,
+            RequiresAllAccessMethods: true,
+            AccessMethodTimeout: null,
+            IsLocked: true,
+            IsOpen: false
+          }
+        ];
+      },
+      '^/AccessPoint/ListAccessPoints\\?locationId=l2$': (): IAccessPoint[] => {
+        return [
+          {
+            Guid: 'ap3',
+            Name: 'Lab Front Door',
+            LocationGuid: 'l2',
+            AccessPointType: AccessPointType.GuardRailCustom,
+            Latitude: null,
+            Longitude: null,
+            GeoFenceDistance: .5,
+            RequiresAllAccessMethods: true,
+            AccessMethodTimeout: null,
+            IsLocked: true,
+            IsOpen: false
+          },
+          {
+            Guid: 'ap4',
+            Name: 'Lab Side Door',
+            LocationGuid: 'l2',
+            AccessPointType: AccessPointType.GuardRailCustom,
+            Latitude: null,
+            Longitude: null,
+            GeoFenceDistance: .5,
+            RequiresAllAccessMethods: true,
+            AccessMethodTimeout: null,
+            IsLocked: true,
+            IsOpen: false
+          },
+          {
+            Guid: 'ap5',
+            Name: 'Lab Back Door',
+            LocationGuid: 'l2',
+            AccessPointType: AccessPointType.GuardRailCustom,
+            Latitude: null,
+            Longitude: null,
+            GeoFenceDistance: .5,
+            RequiresAllAccessMethods: true,
+            AccessMethodTimeout: null,
+            IsLocked: true,
+            IsOpen: false
           }
         ];
       }
