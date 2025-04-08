@@ -1,1 +1,46 @@
-<p>users works!</p>
+<div>
+  <div class="options">
+    <ul>
+      <li (click)="StartAdd()">
+        <div></div>
+        <span>
+          Add
+        </span>
+      </li>
+      <li *ngIf="SingleItemSelected"
+          (click)="StartEdit()">
+        <div></div>
+        <span>
+          Edit
+        </span>
+      </li>
+      <li *ngIf="SingleItemSelected || MultipleItemsSelected"
+          (click)="StartDelete()">
+        <div></div>
+        <span>
+          Delete
+        </span>
+      </li>
+    </ul>
+  </div>
+  <div class="list">
+    @for (u of Users; track u.Guid) {
+    <div>{{u.FirstName}} {{u.LastName}}</div>
+    }
+  </div>
+  <div class="sidebar" *ngIf="SidebarOpen">
+    <div class="close" (click)="CloseSideBar()">X</div>
+    <div *ngIf="AddItem">
+      Input fields for adding a user
+      <button (click)="CreateUser()">Add User</button>
+    </div>
+    <div *ngIf="EditingSingle">
+      Input fields for editing a user
+      <button (click)="EditUser()">Edit User</button>
+    </div>
+    <div *ngIf="Deleting">
+      Would you like to delete these users(s)?
+      <button (click)="DeleteUser()">Delete User(s)</button>
+    </div>
+  </div>
+</div>
