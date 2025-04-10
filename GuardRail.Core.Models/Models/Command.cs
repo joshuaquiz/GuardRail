@@ -46,14 +46,14 @@ public class Command
     public required string Body { get; set; }
 
     /// <summary>
+    /// The number of times the command has been retried.
+    /// </summary>
+    public required int Retries { get; set; }
+
+    /// <summary>
     /// The body of the response to the command.
     /// </summary>
     public string? Response { get; set; }
-
-    /// <summary>
-    /// The number of times the command has been retried.
-    /// </summary>
-    public int? Retries { get; set; }
 
     /// <summary>
     /// The time the command was started.
