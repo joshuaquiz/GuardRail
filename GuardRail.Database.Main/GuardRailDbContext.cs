@@ -16,6 +16,8 @@ public class GuardRailDbContext
 
     public DbSet<VersionHistory> VersionHistories { get; set; }
 
+    public DbSet<Command> Commands { get; set; }
+
     public DbSet<Account> Accounts { get; set; }
 
     public DbSet<EmailTemplate> EmailTemplates { get; set; }
