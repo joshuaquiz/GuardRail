@@ -38,4 +38,21 @@ public sealed class CommandController(
                     cancellationToken);
                 return command.Guid;
             });
+
+    [HttpPost(Name = nameof(UpdateCommand))]
+    public async Task<ApiResult> UpdateCommand(
+        [FromQuery]
+        Guid commandId,
+        [FromQuery]
+        CommandStatus status,
+        [FromBody]
+        string? response,
+        CancellationToken cancellationToken) =>
+        await GhWrappedApiCall(
+            async () =>
+                await commandManagementService.UpdateCommand(
+                    commandId,
+                    status,
+                    response,
+                    cancellationToken));
 }

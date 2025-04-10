@@ -26,4 +26,18 @@ public interface ICommandManagementService
         int? maxRetries,
         string body,
         CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Adds a new command into the system.
+    /// </summary>
+    /// <param name="commandId">The ID of the command.</param>
+    /// <param name="status">The status of the command.</param>
+    /// <param name="response">The body of the response to the command.</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/>.</param>
+    /// <returns>A <see cref="Task"/>  representing the work to update a command.</returns>
+    public Task UpdateCommand(
+        Guid commandId,
+        CommandStatus status,
+        string? response,
+        CancellationToken cancellationToken);
 }
