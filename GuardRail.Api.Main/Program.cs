@@ -24,6 +24,7 @@ public static class Program
         builder.Services.AddSingleton<IAccountManagementService, AccountManagementService>();
         builder.Services.AddSingleton<ILocationManagementService, LocationManagementService>();
         builder.Services.AddSingleton<IAccessPointManagementService, AccessPointManagementService>();
+        builder.Services.AddSingleton<ICommandManagementService, CommandManagementService>();
 
         var app = builder.Build();
 
