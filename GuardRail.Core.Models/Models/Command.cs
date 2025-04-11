@@ -16,6 +16,11 @@ public class Command
     public Guid Guid { get; set; }
 
     /// <summary>
+    /// The ID of the location.
+    /// </summary>
+    public required Guid LocationGuid { get; set; }
+
+    /// <summary>
     /// The command type.
     /// </summary>
     public required CommandType Type { get; set; }
