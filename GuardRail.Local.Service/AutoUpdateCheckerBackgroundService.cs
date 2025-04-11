@@ -10,9 +10,9 @@ using Microsoft.Extensions.Logging;
 
 namespace GuardRail.Local.Service;
 
-public sealed class AutoUpdateCheckerWorker(
+public sealed class AutoUpdateCheckerBackgroundService(
     HttpClient httpClient,
-    ILogger<AutoUpdateCheckerWorker> logger)
+    ILogger<AutoUpdateCheckerBackgroundService> logger)
     : BackgroundService
 {
     private readonly Version? _currentVersion = Assembly.GetCallingAssembly()

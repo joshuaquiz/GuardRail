@@ -13,7 +13,7 @@ namespace GuardRail.Logic.Interfaces;
 public interface ICommandManagementService
 {
     /// <summary>
-    /// Adds a new command into the system.
+    /// Gets all commands for a location by type.
     /// </summary>
     /// <param name="locationId">The ID of the location to get the commands for.</param>
     /// <param name="status">The status of the command.</param>
@@ -22,6 +22,16 @@ public interface ICommandManagementService
     public Task<List<Command>> ListCommands(
         Guid locationId,
         CommandStatus? status,
+        CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Get a command by ID.
+    /// </summary>
+    /// <param name="commandId">The ID of the command.</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/>.</param>
+    /// <returns>A <see cref="Task{T}"/> of <see cref="IReadOnlyCollection{T}"/> of <see cref="Command"/> representing the work to get the commands.</returns>
+    public Task<Command?> GetCommand(
+        Guid commandId,
         CancellationToken cancellationToken);
 
     /// <summary>

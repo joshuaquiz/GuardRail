@@ -36,6 +36,20 @@ public sealed class CommandManagementService(
     }
 
     /// <inheritdoc />
+    public async Task<Command?> GetCommand(
+        Guid commandId,
+        CancellationToken cancellationToken)
+    {
+        await using var db = await dbContextFactory.CreateDbContextAsync(
+            cancellationToken);
+        return await db.Commands
+            .FirstOrDefaultAsync(
+                x =>
+                    x.Guid == commandId,
+                cancellationToken);
+    }
+
+    /// <inheritdoc />
     public async Task<Command> AddNewCommand(
         Guid locationId,
         CommandType type,
@@ -56,7 +70,7 @@ public sealed class CommandManagementService(
                 Body = body,
                 Status = CommandStatus.Pending,
                 CreatedDate = DateTimeOffset.UtcNow,
-                Retries = 0
+                Attempts = 0
             },
             cancellationToken);
         await db.SaveChangesAsync(
@@ -100,15 +114,16 @@ public sealed class CommandManagementService(
             case CommandStatus.CompletedSuccessfully:
                 command.EndDate = DateTimeOffset.UtcNow;
                 command.Status = CommandStatus.CompletedSuccessfully;
+                command.Attempts += 1;
                 break;
             case CommandStatus.CompletedWithErrors:
                 command.EndDate = DateTimeOffset.UtcNow;
                 command.Status = CommandStatus.CompletedWithErrors;
+                command.Attempts += 1;
                 break;
             case CommandStatus.Failed:
                 command.EndDate = DateTimeOffset.UtcNow;
                 command.Status = CommandStatus.Failed;
-                command.Retries += 1;
                 break;
             case CommandStatus.Expired:
                 command.EndDate = DateTimeOffset.UtcNow;

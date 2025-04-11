@@ -2,9 +2,13 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using GuardRail.Core.Enums;
+using GuardRail.Database.Main;
 using GuardRail.Logic.Commands.Implementations;
 using GuardRail.Logic.Commands.Interfaces;
+using GuardRail.Logic.Implementations;
+using GuardRail.Logic.Interfaces;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,7 +30,7 @@ public static class Program
             builder.Configuration.AddJsonFile("appsettings.local.json", true, true);
         }
 
-        //builder.Services.AddWindowsService();
+        builder.Services.AddWindowsService();
 #if DEBUG
         builder.Services
             .AddSingleton<DevelopmentHttpMessageHandlerOverride>()
@@ -46,7 +50,7 @@ public static class Program
                     "https://lol.fake.com",
                     UriKind.Absolute));
 #endif
-        builder.Services.AddHostedService<AutoUpdateCheckerWorker>();
+        builder.Services.AddHostedService<AutoUpdateCheckerBackgroundService>();
         builder.Services.AddHostedService(
             serviceProvider =>
                 new CommandProcessorBackgroundService(
@@ -56,28 +60,20 @@ public static class Program
                     serviceProvider.GetRequiredService<ILogger<CommandProcessorBackgroundService>>()));
         //builder.Services.AddHostedService<UdpPingListenerWorker>();
         builder.Services.AddKeyedSingleton<ICommandHandler, PingCommandHandler>(CommandType.Ping);
-        //builder.Services.AddRazorPages();
+        builder.Services.AddKeyedSingleton<ICommandHandler, GetAvailableAccessPointsCommandHandler>(CommandType.GetAvailableAccessPoints);
         //builder.Services.AddControllers();
-        if (true) // TODO: Check install settings to see if we are using remote or local for handlers.
+        if (true) // TODO: Using data configured on install, we only need to set services up if we are locally hosted.
         {
-            /*builder.Services.AddSingleton<IVersionManagementService, VersionManagementService>();
-            builder.Services.AddSingleton<IEmailService, EmailService>();
-            builder.Services.AddSingleton<IUserManagementService, UserManagementService>();
-            builder.Services.AddSingleton<IAccountManagementService, AccountManagementService>();
-            builder.Services.AddSingleton<ILocationManagementService, LocationManagementService>();
-            builder.Services.AddSingleton<IAccessPointManagementService, AccessPointManagementService>();*/
+            builder.Services.AddDbContextFactory<GuardRailDbContext>(
+                x =>
+                    x.UseInMemoryDatabase(
+                        Guid.NewGuid().ToString()));
+            builder.Services.AddSingleton<ICommandManagementService, CommandManagementService>();
+            builder.Services.AddSingleton<ILocationCommunicationService, LocationCommunicationService>();
         }
-        else
-        {
-            /*builder.Services.AddSingleton<IVersionManagementService, VersionManagementService>();
-            builder.Services.AddSingleton<IEmailService, EmailService>();
-            builder.Services.AddSingleton<IUserManagementService, UserManagementService>();
-            builder.Services.AddSingleton<IAccountManagementService, AccountManagementService>();
-            builder.Services.AddSingleton<ILocationManagementService, LocationManagementService>();
-            builder.Services.AddSingleton<IAccessPointManagementService, AccessPointManagementService>();*/
-        }
+
         var app = builder.Build();
-        //app.UseHttpsRedirection();
+        app.UseHttpsRedirection();
         //app.UseAuthorization();
         //app.MapControllers();
         await app.RunAsync();

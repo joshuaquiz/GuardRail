@@ -16,7 +16,7 @@ namespace GuardRail.Local.Service;
 
 public partial class DevelopmentHttpMessageHandlerOverride : DelegatingHandler
 {
-    [GeneratedRegex(@"^/Version/VersionCheck?version=(?:\d+\.?)+$")]
+    [GeneratedRegex(@"^/Version/VersionCheck\?version=(?:\d+\.?)+$")]
     private static partial Regex VersionCheckRegex();
 
     [GeneratedRegex(@"^/Command/ListPendingCommands\?locationId=[{(]?[0-9A-Fa-f]{8}[-]?([0-9A-Fa-f]{4}[-]?){3}[0-9A-Fa-f]{12}[)}]?$")]
@@ -51,8 +51,9 @@ public partial class DevelopmentHttpMessageHandlerOverride : DelegatingHandler
                             CreateStringContent(
                                 new List<Command>
                                 {
-                                    new Command
+                                    new()
                                     {
+                                        Guid = Guid.NewGuid(),
                                         LocationGuid = Guid.NewGuid(),
                                         Type = CommandType.Ping,
                                         Status = CommandStatus.Pending,
@@ -60,7 +61,19 @@ public partial class DevelopmentHttpMessageHandlerOverride : DelegatingHandler
                                         ExpiryDate = DateTimeOffset.UtcNow.AddDays(1),
                                         MaxRetries = 0,
                                         Body = DateTimeOffset.UtcNow.ToString("O").ToJson(),
-                                        Retries = 0
+                                        Attempts = 0
+                                    },
+                                    new()
+                                    {
+                                        Guid = Guid.NewGuid(),
+                                        LocationGuid = Guid.NewGuid(),
+                                        Type = CommandType.GetAvailableAccessPoints,
+                                        Status = CommandStatus.Pending,
+                                        CreatedDate = DateTimeOffset.UtcNow,
+                                        ExpiryDate = DateTimeOffset.UtcNow.AddDays(1),
+                                        MaxRetries = 0,
+                                        Body = AccessPointType.GuardRailCustom.ToString("G"),
+                                        Attempts = 0
                                     }
                                 }.ToJson())))
             ]),

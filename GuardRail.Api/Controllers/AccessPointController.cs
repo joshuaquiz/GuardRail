@@ -54,11 +54,14 @@ public sealed class AccessPointController(
         Guid locationId,
         [FromQuery]
         AccessPointType accessPointType,
+        [FromQuery]
+        TimeSpan timeout,
         CancellationToken cancellationToken) =>
         await GhWrappedApiCall(
             async () =>
                 await accessPointManagementService.GetAvailableAccessPoints(
                     locationId,
                     accessPointType,
+                    timeout,
                     cancellationToken));
 }

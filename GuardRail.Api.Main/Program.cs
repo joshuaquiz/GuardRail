@@ -19,6 +19,7 @@ public static class Program
 
         // TODO: build auth validation attrs.
         builder.Services.AddSingleton<IVersionManagementService, VersionManagementService>();
+        builder.Services.AddSingleton<ILocationCommunicationService, LocationCommunicationService>();
         builder.Services.AddSingleton<IEmailService, EmailService>();
         builder.Services.AddSingleton<IUserManagementService, UserManagementService>();
         builder.Services.AddSingleton<IAccountManagementService, AccountManagementService>();

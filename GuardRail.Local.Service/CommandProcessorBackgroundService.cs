@@ -24,18 +24,36 @@ public sealed class CommandProcessorBackgroundService(
     {
         while (!stoppingToken.IsCancellationRequested)
         {
+            logger.LogInformation(
+                "Checking for commands");
             var commands = await httpClient.GetFromJsonAsync<List<Command>>(
                 $"/Command/ListPendingCommands?locationId={locationId}",
                 stoppingToken);
+            logger.LogInformation(
+                $"Found {commands?.Count ?? 0} commands");
             foreach (var command in commands ?? [])
             {
+                logger.LogInformation(
+                    $"Processing command: {command.Guid} {command.Type} {command.Body}");
                 await serviceProvider
                     .GetRequiredKeyedService<ICommandHandler>(
                         command.Type)
                     .ProcessCommand(
                         command,
                         stoppingToken);
+                logger.LogInformation(
+                    $"Completed command: {command.Guid}");
             }
+
+            if (commands is { Count: > 0 })
+            {
+                logger.LogInformation(
+                    "Completed all command");
+            }
+
+            await Task.Delay(
+                TimeSpan.FromSeconds(1),
+                stoppingToken);
         }
     }
 }

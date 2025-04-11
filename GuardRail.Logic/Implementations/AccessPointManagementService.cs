@@ -15,7 +15,7 @@ namespace GuardRail.Logic.Implementations;
 /// </summary>
 public sealed class AccessPointManagementService(
     IDbContextFactory<GuardRailDbContext> dbContextFactory,
-    ILocationCommunication locationCommunication)
+    ILocationCommunicationService locationCommunicationService)
     : IAccessPointManagementService
 {
     /// <inheritdoc />
@@ -65,9 +65,11 @@ public sealed class AccessPointManagementService(
     public async Task<IReadOnlyCollection<string>> GetAvailableAccessPoints(
         Guid locationId,
         AccessPointType accessPointType,
+        TimeSpan timeout,
         CancellationToken cancellationToken) =>
-        await locationCommunication.GetAvailableAccessPoints(
+        await locationCommunicationService.GetAvailableAccessPoints(
             locationId,
             accessPointType,
+            timeout,
             cancellationToken);
 }

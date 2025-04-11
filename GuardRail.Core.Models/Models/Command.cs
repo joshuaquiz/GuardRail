@@ -53,7 +53,7 @@ public class Command
     /// <summary>
     /// The number of times the command has been retried.
     /// </summary>
-    public required int Retries { get; set; }
+    public required int Attempts { get; set; }
 
     /// <summary>
     /// The body of the response to the command.
