@@ -46,7 +46,7 @@ public static class Program
                     "https://lol.fake.com",
                     UriKind.Absolute));
 #endif
-        //builder.Services.AddHostedService<AutoUpdateCheckerWorker>();
+        builder.Services.AddHostedService<AutoUpdateCheckerWorker>();
         builder.Services.AddHostedService(
             serviceProvider =>
                 new CommandProcessorBackgroundService(

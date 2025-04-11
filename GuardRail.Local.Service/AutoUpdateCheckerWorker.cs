@@ -27,7 +27,7 @@ public sealed class AutoUpdateCheckerWorker(
             logger.LogInformation(
                 $"Checking the status of version '{_currentVersion}'");
             var response = await httpClient.GetFromJsonAsync<VersionCheckResponse>(
-                $"/Version?version={_currentVersion}",
+                $"/Version/VersionCheck?version={_currentVersion}",
                 stoppingToken);
             if (response?.IsLatest == true)
             {

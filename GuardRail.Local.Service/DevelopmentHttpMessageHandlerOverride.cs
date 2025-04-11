@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using GuardRail.Api.Models.Responses;
 using GuardRail.Core.Enums;
 using GuardRail.Core.Helpers;
 using GuardRail.Core.Models.Models;
@@ -15,6 +16,9 @@ namespace GuardRail.Local.Service;
 
 public partial class DevelopmentHttpMessageHandlerOverride : DelegatingHandler
 {
+    [GeneratedRegex(@"^/Version/VersionCheck?version=(?:\d+\.?)+$")]
+    private static partial Regex VersionCheckRegex();
+
     [GeneratedRegex(@"^/Command/ListPendingCommands\?locationId=[{(]?[0-9A-Fa-f]{8}[-]?([0-9A-Fa-f]{4}[-]?){3}[0-9A-Fa-f]{12}[)}]?$")]
     private static partial Regex GetPendingCommandsRegex();
 
@@ -23,6 +27,20 @@ public partial class DevelopmentHttpMessageHandlerOverride : DelegatingHandler
 
     private readonly IReadOnlyCollection<MockedHttpRequest> _mockedHttpRequests =
     [
+        new(
+            VersionCheckRegex(),
+            [
+                new MockedHttpRequestMethodActions(
+                    HttpMethod.Get,
+                    (_, _) =>
+                        ValueTask.FromResult<HttpContent>(
+                            CreateStringContent(
+                                new VersionCheckResponse(
+                                    true,
+                                    null,
+                                    null,
+                                    null).ToJson())))
+            ]),
         new(
             GetPendingCommandsRegex(),
             [
