@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.Core.Enums;
@@ -17,7 +19,25 @@ public sealed class CommandManagementService(
     : ICommandManagementService
 {
     /// <inheritdoc />
+    public async Task<List<Command>> ListCommands(
+        Guid locationId,
+        CommandStatus? status,
+        CancellationToken cancellationToken)
+    {
+        await using var db = await dbContextFactory.CreateDbContextAsync(
+            cancellationToken);
+        return await db.Commands
+            .Where(
+                x =>
+                    x.LocationGuid == locationId
+                    && (status == null || x.Status == status))
+            .ToListAsync(
+                cancellationToken);
+    }
+
+    /// <inheritdoc />
     public async Task<Command> AddNewCommand(
+        Guid locationId,
         CommandType type,
         DateTimeOffset expiryDate,
         int? maxRetries,
@@ -29,6 +49,7 @@ public sealed class CommandManagementService(
         var newCommand = await db.Commands.AddAsync(
             new Command
             {
+                LocationGuid = locationId,
                 Type = type,
                 ExpiryDate = expiryDate,
                 MaxRetries = maxRetries ?? 0,

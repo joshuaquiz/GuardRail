@@ -16,8 +16,36 @@ public sealed class CommandController(
     : GhControllerBase<CommandController>(
         logger)
 {
+    [HttpGet(Name = nameof(ListCommands))]
+    public async Task<ApiResult> ListCommands(
+        [FromQuery]
+        Guid locationId,
+        [FromQuery]
+        CommandStatus? status,
+        CancellationToken cancellationToken) =>
+        await GhWrappedApiCall(
+            async () =>
+                await commandManagementService.ListCommands(
+                    locationId,
+                    status,
+                    cancellationToken));
+
+    [HttpGet(Name = nameof(ListPendingCommands))]
+    public async Task<ApiResult> ListPendingCommands(
+        [FromQuery]
+        Guid accountId,
+        CancellationToken cancellationToken) =>
+        await GhWrappedApiCall(
+            async () =>
+                await commandManagementService.ListCommands(
+                    accountId,
+                    CommandStatus.Pending,
+                    cancellationToken));
+
     [HttpPost(Name = nameof(CreateCommand))]
     public async Task<ApiResult<Guid>> CreateCommand(
+        [FromQuery]
+        Guid locationId,
         [FromQuery]
         CommandType type,
         [FromQuery]
@@ -31,6 +59,7 @@ public sealed class CommandController(
             async () =>
             {
                 var command = await commandManagementService.AddNewCommand(
+                    locationId,
                     type,
                     expiryDate,
                     maxRetries,
