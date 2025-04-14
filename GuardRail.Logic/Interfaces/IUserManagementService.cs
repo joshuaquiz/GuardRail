@@ -60,6 +60,16 @@ public interface IUserManagementService
         CancellationToken cancellationToken);
 
     /// <summary>
+    /// Checks if the auth token is valid.
+    /// </summary>
+    /// <param name="authToken"></param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/>.</param>
+    /// <returns>A <see cref="Task{T}"/> of <see cref="bool"/> representing the work to determine if the auth token is valid.</returns>
+    public Task<bool> IsAuthTokenValid(
+        Guid authToken,
+        CancellationToken cancellationToken);
+
+    /// <summary>
     /// Gets all the users for an account.
     /// </summary>
     /// <param name="accountId">The ID of the account.</param>

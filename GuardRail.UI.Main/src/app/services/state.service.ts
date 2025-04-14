@@ -32,6 +32,10 @@ export class StateService {
     this.storage.setItem(this.AUTH_TOKEN_KEY, token);
   }
 
+  public GetAuthToken(): string | null {
+    return this.authToken;
+  }
+
   public SetAccountId(
     accountId: string): void {
     this.accountId = accountId;
