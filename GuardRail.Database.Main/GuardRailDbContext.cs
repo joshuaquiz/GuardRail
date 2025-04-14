@@ -29,4 +29,6 @@ public class GuardRailDbContext
     public DbSet<Location> Locations { get; set; }
 
     public DbSet<AccessPoint> AccessPoints { get; set; }
+
+    public DbSet<Tag> Tags { get; set; }
 }

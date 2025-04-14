@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.Core.Enums;
@@ -56,5 +57,17 @@ public interface IUserManagementService
     public Task ResetPassword(
         Guid userId,
         string newPassword,
+        CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Gets all the users for an account.
+    /// </summary>
+    /// <param name="accountId">The ID of the account.</param>
+    /// <param name="tags">Any tags to use for filtering.</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/>.</param>
+    /// <returns>A <see cref="Task{T}"/> of <see cref="IReadOnlyCollection{T}"/> of <see cref="User"/> representing the work to get the list of users.</returns>
+    public Task<IReadOnlyCollection<User>> ListUsers(
+        Guid accountId,
+        IReadOnlyCollection<string>? tags,
         CancellationToken cancellationToken);
 }
