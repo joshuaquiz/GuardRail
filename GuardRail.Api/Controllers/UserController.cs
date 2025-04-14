@@ -19,7 +19,7 @@ public sealed class UserController(
     : GhControllerBase<UserController>(
         logger)
 {
-    [HttpPost(Name = nameof(SignIn))]
+    [HttpPost(nameof(SignIn), Name = nameof(SignIn))]
     public async Task<ApiResult<Guid>> SignIn(
         [FromQuery]
         string email,
@@ -48,7 +48,7 @@ public sealed class UserController(
                 }
             });
 
-    [HttpPost(Name = nameof(ResetPassword))]
+    [HttpPost(nameof(ResetPassword), Name = nameof(ResetPassword))]
     public async Task<ApiResult> ResetPassword(
         [FromQuery]
         Guid userId,
@@ -77,7 +77,7 @@ public sealed class UserController(
                 }
             });
 
-    [HttpPost(Name = nameof(CreateNewUser))]
+    [HttpPost(nameof(CreateNewUser), Name = nameof(CreateNewUser))]
     [UserAccessTokenAuthorization]
     public async Task<ApiResult> CreateNewUser(
         [FromBody]
@@ -94,7 +94,7 @@ public sealed class UserController(
                     createNewUserRequest.UserType,
                     cancellationToken));
 
-    [HttpGet(Name = nameof(ListUsers))]
+    [HttpGet(nameof(ListUsers), Name = nameof(ListUsers))]
     [UserAccessTokenAuthorization]
     public async Task<ApiResult<IReadOnlyCollection<User>>> ListUsers(
         [FromQuery]
