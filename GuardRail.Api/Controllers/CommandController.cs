@@ -17,7 +17,7 @@ public sealed class CommandController(
     : GhControllerBase<CommandController>(
         logger)
 {
-    [HttpGet(Name = nameof(ListCommands))]
+    [HttpGet(nameof(ListCommands), Name = nameof(ListCommands))]
     public async Task<ApiResult> ListCommands(
         [FromQuery]
         Guid locationId,
@@ -31,7 +31,7 @@ public sealed class CommandController(
                     status,
                     cancellationToken));
 
-    [HttpGet(Name = nameof(ListPendingCommands))]
+    [HttpGet(nameof(ListPendingCommands), Name = nameof(ListPendingCommands))]
     public async Task<ApiResult> ListPendingCommands(
         [FromQuery]
         Guid accountId,
@@ -43,7 +43,7 @@ public sealed class CommandController(
                     CommandStatus.Pending,
                     cancellationToken));
 
-    [HttpPost(Name = nameof(CreateCommand))]
+    [HttpPost(nameof(CreateCommand), Name = nameof(CreateCommand))]
     public async Task<ApiResult<Guid>> CreateCommand(
         [FromQuery]
         Guid locationId,
@@ -69,7 +69,7 @@ public sealed class CommandController(
                 return command.Guid;
             });
 
-    [HttpPost(Name = nameof(UpdateCommand))]
+    [HttpPost(nameof(UpdateCommand), Name = nameof(UpdateCommand))]
     public async Task<ApiResult> UpdateCommand(
         [FromQuery]
         Guid commandId,

@@ -18,7 +18,7 @@ public sealed class AccountController(
     : GhControllerBase<AccountController>(
         logger)
 {
-    [HttpPost(Name = nameof(CreateAccount))]
+    [HttpPost(nameof(CreateAccount), Name = nameof(CreateAccount))]
     public async Task<ApiResult> CreateAccount(
         [FromBody]
         CreateNewAccountRequest createNewAccountRequest,
@@ -33,7 +33,7 @@ public sealed class AccountController(
                     createNewAccountRequest.Email,
                     cancellationToken));
 
-    [HttpGet(Name = nameof(GetDashboardData))]
+    [HttpGet(nameof(GetDashboardData), Name = nameof(GetDashboardData))]
     public async Task<ApiResult<DashboardDataResponse>> GetDashboardData(
         [FromHeader]
         User user,

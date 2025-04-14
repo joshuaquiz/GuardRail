@@ -17,7 +17,7 @@ public sealed class VersionController(
     : GhControllerBase<VersionController>(
         logger)
 {
-    [HttpGet(Name = nameof(VersionCheck))]
+    [HttpGet(nameof(VersionCheck), Name = nameof(VersionCheck))]
     public async Task<ApiResult<VersionCheckResponse>> VersionCheck(
         [FromQuery]
         Version version,

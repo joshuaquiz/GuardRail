@@ -11,10 +11,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.2" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ContainerPort Include="8081" />
   </ItemGroup>
 

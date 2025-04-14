@@ -20,7 +20,7 @@ public sealed class AccessPointController(
     : GhControllerBase<AccessPointController>(
         logger)
 {
-    [HttpPost(Name = nameof(CreateAccessPoint))]
+    [HttpPost(nameof(CreateAccessPoint), Name = nameof(CreateAccessPoint))]
     public async Task<ApiResult> CreateAccessPoint(
         [FromBody]
         CreateNewAccessPointRequest createNewAccessPointRequest,
@@ -38,7 +38,7 @@ public sealed class AccessPointController(
                     createNewAccessPointRequest.AccessMethodTimeout,
                     cancellationToken));
 
-    [HttpGet(Name = nameof(ListAccessPoints))]
+    [HttpGet(nameof(ListAccessPoints), Name = nameof(ListAccessPoints))]
     public async Task<ApiResult<IReadOnlyCollection<AccessPoint>>> ListAccessPoints(
         [FromQuery]
         Guid locationId,
@@ -49,7 +49,7 @@ public sealed class AccessPointController(
                     locationId,
                     cancellationToken));
 
-    [HttpGet(Name = nameof(GetAvailableAccessPoints))]
+    [HttpGet(nameof(GetAvailableAccessPoints), Name = nameof(GetAvailableAccessPoints))]
     public async Task<ApiResult<IReadOnlyCollection<string>>> GetAvailableAccessPoints(
         [FromQuery]
         Guid locationId,
