@@ -128,6 +128,22 @@ public sealed class UserManagementService(
     }
 
     /// <inheritdoc />
+    public async Task<bool> IsAuthTokenValid(
+        Guid authToken,
+        CancellationToken cancellationToken)
+    {
+        await using var db = await dbContextFactory.CreateDbContextAsync(
+            cancellationToken);
+        var token = await db.UserAccessTokens
+            .FirstOrDefaultAsync(
+                x =>
+                    x.Guid == authToken,
+                cancellationToken);
+        return token is { IsActive: true }
+               && token.DateTime + token.Duration > DateTimeOffset.UtcNow;
+    }
+
+    /// <inheritdoc />
     public async Task<IReadOnlyCollection<User>> ListUsers(
         Guid accountId,
         IReadOnlyCollection<string>? tags,

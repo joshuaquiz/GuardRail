@@ -1,10 +1,12 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError, of } from 'rxjs';
 import { IDashboardDataResponse } from '../shared/dashboard-data-response';
 import { ILocation } from '../shared/location';
 import { IAccessPoint } from '../shared/access-point';
 import { AccessPointType } from '../shared/access-point-type';
+import { environment } from '../../environments/environment';
+import { StateService } from './state.service';
 
 @Injectable({
   providedIn: 'root'
@@ -172,6 +174,7 @@ export class HttpClientService {
   }
 
   private http = inject(HttpClient);
+  private stateService = inject(StateService);
 
   private handleError(
     error: HttpErrorResponse): Observable<never> {
@@ -195,28 +198,85 @@ export class HttpClientService {
           'Something bad happened; please try again later.'));
   }
 
+  private getHeaders(
+    authToken: string | null): HttpHeaders {
+    return new HttpHeaders({
+      'x-auth-header': authToken ?? '',
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    });
+    }
+
   Get<T>(url: string): Observable<T> {
-    const mockResponse = this.getMockData<T>('GET', url);
-    return of(mockResponse);
+    if (environment.production) {
+      return this.http.get<T>(
+        url,
+        {
+          headers: this.getHeaders(
+            this.stateService.GetAuthToken()),
+        })
+    } else {
+      const mockResponse = this.getMockData<T>('GET', url);
+      return of(mockResponse);
+    }
   }
 
   Post<T>(url: string, body: any): Observable<T> {
-    const mockResponse = this.getMockData<T>('POST', url, body);
-    return of(mockResponse);
+    if (environment.production) {
+      return this.http.post<T>(
+        url,
+        body,
+        {
+          headers: this.getHeaders(
+            this.stateService.GetAuthToken()),
+        })
+    } else {
+      const mockResponse = this.getMockData<T>('POST', url, body);
+      return of(mockResponse);
+    }
   }
 
   Put<T>(url: string, body: any): Observable<T> {
-    const mockResponse = this.getMockData<T>('PUT', url, body);
-    return of(mockResponse);
+    if (environment.production) {
+      return this.http.put<T>(
+        url,
+        body,
+        {
+          headers: this.getHeaders(
+            this.stateService.GetAuthToken()),
+        })
+    } else {
+      const mockResponse = this.getMockData<T>('PUT', url, body);
+      return of(mockResponse);
+    }
   }
 
   Patch<T>(url: string, body: any): Observable<T> {
-    const mockResponse = this.getMockData<T>('PATCH', url, body);
-    return of(mockResponse);
+    if (environment.production) {
+      return this.http.patch<T>(
+        url,
+        body,
+        {
+          headers: this.getHeaders(
+            this.stateService.GetAuthToken()),
+        })
+    } else {
+      const mockResponse = this.getMockData<T>('PATCH', url, body);
+      return of(mockResponse);
+    }
   }
 
   Delete<T>(url: string): Observable<T> {
-    const mockResponse = this.getMockData<T>('DELETE', url);
-    return of(mockResponse);
+    if (environment.production) {
+      return this.http.delete<T>(
+        url,
+        {
+          headers: this.getHeaders(
+            this.stateService.GetAuthToken()),
+        })
+    } else {
+      const mockResponse = this.getMockData<T>('DELETE', url);
+      return of(mockResponse);
+    }
   }
 }

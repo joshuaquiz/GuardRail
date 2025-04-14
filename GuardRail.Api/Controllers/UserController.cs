@@ -78,6 +78,7 @@ public sealed class UserController(
             });
 
     [HttpPost(Name = nameof(CreateNewUser))]
+    [UserAccessTokenAuthorization]
     public async Task<ApiResult> CreateNewUser(
         [FromBody]
         CreateNewUserRequest createNewUserRequest,
@@ -94,6 +95,7 @@ public sealed class UserController(
                     cancellationToken));
 
     [HttpGet(Name = nameof(ListUsers))]
+    [UserAccessTokenAuthorization]
     public async Task<ApiResult<IReadOnlyCollection<User>>> ListUsers(
         [FromQuery]
         Guid accountId,

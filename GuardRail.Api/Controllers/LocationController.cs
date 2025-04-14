@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 namespace GuardRail.Api.Controllers;
 
 [ApiController]
+[UserAccessTokenAuthorization]
 [Route("[controller]")]
 public sealed class LocationController(
     ILocationManagementService locationManagementService,
