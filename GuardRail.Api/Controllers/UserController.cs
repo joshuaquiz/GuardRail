@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.Api.Models.Requests;
 using GuardRail.Core.Exceptions;
+using GuardRail.Core.Models.Models;
 using GuardRail.Logic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -90,5 +91,19 @@ public sealed class UserController(
                     createNewUserRequest.Phone,
                     createNewUserRequest.Email,
                     createNewUserRequest.UserType,
+                    cancellationToken));
+
+    [HttpGet(Name = nameof(ListUsers))]
+    public async Task<ApiResult<IReadOnlyCollection<User>>> ListUsers(
+        [FromQuery]
+        Guid accountId,
+        [FromQuery]
+        IReadOnlyCollection<string>? tags,
+        CancellationToken cancellationToken) =>
+        await GhWrappedApiCall(
+            async () =>
+                await userManagementService.ListUsers(
+                    accountId,
+                    tags,
                     cancellationToken));
 }

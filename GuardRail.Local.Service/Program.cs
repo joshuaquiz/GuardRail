@@ -59,8 +59,10 @@ public static class Program
                     serviceProvider,
                     serviceProvider.GetRequiredService<ILogger<CommandProcessorBackgroundService>>()));
         //builder.Services.AddHostedService<UdpPingListenerWorker>();
+
         builder.Services.AddKeyedSingleton<ICommandHandler, PingCommandHandler>(CommandType.Ping);
         builder.Services.AddKeyedSingleton<ICommandHandler, GetAvailableAccessPointsCommandHandler>(CommandType.GetAvailableAccessPoints);
+
         //builder.Services.AddControllers();
         if (true) // TODO: Using data configured on install, we only need to set services up if we are locally hosted.
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -124,5 +125,39 @@ public sealed class UserManagementService(
                 90));
         await db.SaveChangesAsync(
             cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<IReadOnlyCollection<User>> ListUsers(
+        Guid accountId,
+        IReadOnlyCollection<string>? tags,
+        CancellationToken cancellationToken)
+    {
+        await using var db = await dbContextFactory.CreateDbContextAsync(
+            cancellationToken);
+        var usersForAccountQuery = db.Users
+            .Where(
+                x =>
+                    x.AccountGuid == accountId);
+        if (tags is { Count: > 0 })
+        {
+            usersForAccountQuery = usersForAccountQuery
+                .GroupJoin(
+                    db.Tags
+                        .Where(
+                            y =>
+                                y.AccountGuid == accountId
+                                && tags.Contains(y.TaggedItemName)),
+                    u =>
+                        u.Guid,
+                    t =>
+                        t.TaggedItemGuid,
+                    (u, t) =>
+                        u);
+        }
+
+        return await usersForAccountQuery
+            .ToListAsync(
+                cancellationToken);
     }
 }
