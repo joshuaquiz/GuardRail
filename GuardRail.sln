@@ -44,6 +44,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuardRail.Api", "GuardRail.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuardRail.Hardware.Common", "GuardRail.Hardware.Common\GuardRail.Hardware.Common.csproj", "{2BBC9C63-6E7E-401A-AD94-DD15A1F9DF41}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuardRail.Hardware.GuardRailCustom", "GuardRail.Hardware.GuardRailCustom\GuardRail.Hardware.GuardRailCustom.csproj", "{95B79BEE-8FD1-41B3-B967-4BAA53440229}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuardRail.Hardware.GuardRailCustom.Device", "GuardRail.Hardware.GuardRailCustom.Device\GuardRail.Hardware.GuardRailCustom.Device.csproj", "{1598524B-FA54-4C72-9B28-4FD396CEEEA6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -102,6 +106,14 @@ Global
 		{2BBC9C63-6E7E-401A-AD94-DD15A1F9DF41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BBC9C63-6E7E-401A-AD94-DD15A1F9DF41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BBC9C63-6E7E-401A-AD94-DD15A1F9DF41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95B79BEE-8FD1-41B3-B967-4BAA53440229}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95B79BEE-8FD1-41B3-B967-4BAA53440229}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95B79BEE-8FD1-41B3-B967-4BAA53440229}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95B79BEE-8FD1-41B3-B967-4BAA53440229}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1598524B-FA54-4C72-9B28-4FD396CEEEA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1598524B-FA54-4C72-9B28-4FD396CEEEA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1598524B-FA54-4C72-9B28-4FD396CEEEA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1598524B-FA54-4C72-9B28-4FD396CEEEA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -109,6 +121,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{31A383D9-9140-4E7F-B40A-C3678FF85A24} = {2E349CD8-91AC-4393-8DF5-C5DFD8955BDF}
 		{21FACDB2-4A66-4C08-9BE5-3BB16E1F56B3} = {31A383D9-9140-4E7F-B40A-C3678FF85A24}
+		{95B79BEE-8FD1-41B3-B967-4BAA53440229} = {D006245F-D8DA-4C57-AD10-B784AC3F304F}
+		{1598524B-FA54-4C72-9B28-4FD396CEEEA6} = {D006245F-D8DA-4C57-AD10-B784AC3F304F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {53D85FEE-AA1A-4A9E-9448-93FF31EAD61A}
