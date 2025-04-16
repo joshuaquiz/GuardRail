@@ -72,7 +72,7 @@ public partial class DevelopmentHttpMessageHandlerOverride : DelegatingHandler
                                         CreatedDate = DateTimeOffset.UtcNow,
                                         ExpiryDate = DateTimeOffset.UtcNow.AddDays(1),
                                         MaxRetries = 0,
-                                        Body = AccessPointType.GuardRailCustom.ToString("G"),
+                                        Body = AccessPointType.GuardRailCustom.ToString("G").ToJson(),
                                         Attempts = 0
                                     }
                                 }.ToJson())))
