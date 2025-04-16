@@ -2,10 +2,8 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using GuardRail.Api;
-using GuardRail.Core.Enums;
+using GuardRail.Hardware.Common;
 using GuardRail.Local.Service.BackgroundServices;
-using GuardRail.Logic.Commands.Implementations;
-using GuardRail.Logic.Commands.Interfaces;
 using GuardRail.Logic.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -59,9 +57,8 @@ public static class Program
                     serviceProvider.GetRequiredService<ILogger<CommandProcessorBackgroundService>>()));
         //builder.Services.AddHostedService<UdpPingListenerBackgroundService>();
 
-        builder.Services.AddKeyedSingleton<ICommandHandler, PingCommandHandler>(CommandType.Ping);
-        builder.Services.AddKeyedSingleton<ICommandHandler, GetAvailableAccessPointsCommandHandler>(CommandType.GetAvailableAccessPoints);
-
+        builder.Services.AddGuardRailCommandHandlers();
+        builder.Services.AddGuardRailSupportedHardware();
         builder.Services.AddGuardRailApi();
         if (bool.Parse(builder.Configuration["IsAirGapped"] ?? "false"))
         {

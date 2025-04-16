@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using GuardRail.Core.Enums;
 using GuardRail.Core.Helpers;
 using GuardRail.Core.Models.Models;
 using GuardRail.Logic.Commands.Interfaces;
@@ -10,8 +11,8 @@ namespace GuardRail.Logic.Commands.Implementations;
 /// <summary>
 /// Base handler for commands
 /// </summary>
-public abstract class CommandHandlerBase<T>
-    : ICommandHandler
+public abstract class TypedCommandHandlerBase<T>
+    : ITypedCommandHandler<T>
 {
     /// <inheritdoc />
     public async Task ProcessCommand(
@@ -22,8 +23,12 @@ public abstract class CommandHandlerBase<T>
             command.Body.FromJson<T>(),
             cancellationToken);
 
+    /// <inheritdoc />
     public abstract Task ProcessCommandBody(
         Guid commandId,
         T? body,
         CancellationToken cancellationToken);
+
+    /// <inheritdoc />
+    public abstract CommandType CommandType { get; }
 }

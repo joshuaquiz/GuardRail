@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using GuardRail.Core.Enums;
 using GuardRail.Core.Models.Models;
 
 namespace GuardRail.Logic.Commands.Interfaces;
@@ -18,4 +19,9 @@ public interface ICommandHandler
     public Task ProcessCommand(
         Command command,
         CancellationToken cancellationToken);
+
+    /// <summary>
+    /// The command type associated with this handler.
+    /// </summary>
+    public CommandType CommandType { get; }
 }

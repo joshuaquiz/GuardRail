@@ -9,9 +9,9 @@ namespace GuardRail.Logic.Commands.Implementations;
 /// <summary>
 /// Handles the <see cref="CommandType.Ping"/> command type.
 /// </summary>
-public sealed class PingCommandHandler(
+public sealed class PingTypedCommandHandler(
     HttpClient httpClient)
-    : CommandHandlerBase<DateTimeOffset>
+    : TypedCommandHandlerBase<DateTimeOffset>
 {
     /// <inheritdoc />
     public override async Task ProcessCommandBody(
@@ -24,4 +24,8 @@ public sealed class PingCommandHandler(
             new StringContent(DateTimeOffset.UtcNow.ToString("O")),
             cancellationToken);
     }
+
+    /// <inheritdoc />
+    public override CommandType CommandType =>
+        CommandType.Ping;
 }

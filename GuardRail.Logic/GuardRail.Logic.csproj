@@ -8,5 +8,6 @@
     <ProjectReference Include="..\GuardRail.Core.Models\GuardRail.Core.Models.csproj" />
     <ProjectReference Include="..\GuardRail.Core\GuardRail.Core.csproj" />
     <ProjectReference Include="..\GuardRail.Database.Main\GuardRail.Database.Main.csproj" />
+    <ProjectReference Include="..\GuardRail.Hardware.Common\GuardRail.Hardware.Common.csproj" />
   </ItemGroup>
 </Project>

@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using GuardRail.Core.Enums;
+﻿using GuardRail.Core.Enums;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace GuardRail.Logic.Interfaces;
+namespace GuardRail.Hardware.Common;
 
 public interface ISupportedHardware
 {
@@ -11,6 +9,14 @@ public interface ISupportedHardware
     /// The type associated with this hardware.
     /// </summary>
     public AccessPointType AccessPointType { get; }
+
+    /// <summary>
+    /// Sets up the hardware for this provider.
+    /// </summary>
+    /// <param name="serviceCollection">A <see cref="IServiceCollection"/> to modify.</param>
+    /// <returns>The modified <see cref="IServiceCollection"/>.</returns>
+    public IServiceCollection Setup(
+        IServiceCollection serviceCollection);
 
     /// <summary>
     /// Lists all non-configured APs of this hardware type.
