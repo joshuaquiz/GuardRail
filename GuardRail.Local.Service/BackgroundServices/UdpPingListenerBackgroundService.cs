@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace GuardRail.Local.Service;
+namespace GuardRail.Local.Service.BackgroundServices;
 
-public sealed class UdpPingListenerWorker(
-    ILogger<UdpPingListenerWorker> logger)
+public sealed class UdpPingListenerBackgroundService(
+    ILogger<UdpPingListenerBackgroundService> logger)
     : BackgroundService
 {
     protected override async Task ExecuteAsync(
@@ -17,7 +17,7 @@ public sealed class UdpPingListenerWorker(
         {
             if (logger.IsEnabled(LogLevel.Information))
             {
-                logger.LogInformation("UdpPingListenerWorker running at: {time}", DateTimeOffset.Now);
+                logger.LogInformation("UdpPingListenerBackgroundService running at: {time}", DateTimeOffset.Now);
             }
 
             await Task.Delay(1000, stoppingToken);

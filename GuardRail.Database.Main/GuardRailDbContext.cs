@@ -3,17 +3,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GuardRail.Database.Main;
 
-public class GuardRailDbContext
-    : DbContext
+public class GuardRailDbContext(
+    DbContextOptions<GuardRailDbContext> options)
+    : DbContext(
+        options)
 {
-    public GuardRailDbContext(
-        DbContextOptions<GuardRailDbContext> options)
-        : base(
-            options)
-    {
-
-    }
-
     public DbSet<VersionHistory> VersionHistories { get; set; }
 
     public DbSet<Command> Commands { get; set; }

@@ -1,6 +1,14 @@
 ﻿{
   "$schema": "https://json.schemastore.org/launchsettings.json",
   "profiles": {
+    "https": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "https://localhost:7276"
+    },
     "GuardRail.Local.Service": {
       "commandName": "Project",
       "dotnetRunMessages": true,

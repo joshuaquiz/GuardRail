@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace GuardRail.Local.Service;
+namespace GuardRail.Local.Service.BackgroundServices;
 
 public sealed class CommandProcessorBackgroundService(
     Guid locationId,

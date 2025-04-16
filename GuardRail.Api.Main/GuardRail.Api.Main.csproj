@@ -15,10 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GuardRail.Api.Models\GuardRail.Api.Models.csproj" />
     <ProjectReference Include="..\GuardRail.Api\GuardRail.Api.csproj" />
-    <ProjectReference Include="..\GuardRail.Core.Models\GuardRail.Core.Models.csproj" />
-    <ProjectReference Include="..\GuardRail.Core\GuardRail.Core.csproj" />
     <ProjectReference Include="..\GuardRail.Logic\GuardRail.Logic.csproj" />
   </ItemGroup>
 
