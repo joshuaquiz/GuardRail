@@ -1,6 +1,9 @@
-﻿using System.Net;
+﻿using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 
 namespace GuardRail.Hardware.GuardRailCustom;
@@ -35,6 +38,7 @@ public sealed class HardwareUdpDiscoveryBackgroundWorker(
             $"{ServiceName}:{GetLocalIpAddress()}:{GetServicePort()}",
             typeof(Encryption).Assembly.FullName!)!;
         var buffer = Encoding.UTF8.GetBytes(encryptedData);
+        var okayBuffer = "OKAY"u8.ToArray();
         try
         {
             await udpClient.SendAsync(buffer, buffer.Length, broadcastEndpoint);
@@ -65,6 +69,7 @@ public sealed class HardwareUdpDiscoveryBackgroundWorker(
                     continue;
                 }
 
+                await udpClient.SendAsync(okayBuffer, okayBuffer.Length, result.RemoteEndPoint);
                 networkHardwareCache
                     .Add(
                         name,

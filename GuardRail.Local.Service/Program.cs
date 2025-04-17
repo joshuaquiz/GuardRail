@@ -2,7 +2,6 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using GuardRail.Api;
-using GuardRail.Hardware.Common;
 using GuardRail.Local.Service.BackgroundServices;
 using GuardRail.Logic.Helpers;
 using Microsoft.AspNetCore.Builder;
