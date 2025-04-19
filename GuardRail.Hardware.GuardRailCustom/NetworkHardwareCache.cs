@@ -1,4 +1,6 @@
-﻿namespace GuardRail.Hardware.GuardRailCustom;
+﻿using System.Collections.Generic;
+
+namespace GuardRail.Hardware.GuardRailCustom;
 
 public sealed class NetworkHardwareCache
 {

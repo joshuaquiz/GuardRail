@@ -1,6 +1,10 @@
+using System;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Communication;
+using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Input.Keypad;
+using GuardRail.Hardware.GuardRailCustom.Device.Models;
 using Microsoft.Extensions.Logging;
 
 namespace GuardRail.Hardware.GuardRailCustom.Device.Implementations.Input;
@@ -44,18 +48,21 @@ public abstract class CoreKeypadInput<TKeypadInput, TKeypadConfiguration, TKeypa
         ValueTask.CompletedTask;
 
     /// <inheritdoc />
-    public virtual async ValueTask OnKeypadSubmit(
+    public virtual ValueTask OnKeypadSubmit(
         string inputData,
-        CancellationToken cancellationToken) =>
-        await CentralServerCommunication.SendDataAsync(
-            nameof(UnLockRequest),
-            new UnLockRequest
-            {
-                AccessPointGuid = DeviceConstants.DeviceId,
-                UnlockRequestType = UnlockRequestType.Keypad,
-                Data = Encoding.UTF8.GetBytes(inputData)
-            },
-            cancellationToken);
+        CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    } /* =>
+    await CentralServerCommunication.SendDataAsync(
+        nameof(UnLockRequest),
+        new UnLockRequest
+        {
+            AccessPointGuid = DeviceConstants.DeviceId,
+            UnlockRequestType = UnlockRequestType.Keypad,
+            Data = Encoding.UTF8.GetBytes(inputData)
+        },
+        cancellationToken);*/
 
     /// <inheritdoc />
     public void Dispose() =>

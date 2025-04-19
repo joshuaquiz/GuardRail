@@ -127,3 +127,7 @@ public abstract class CoreCentralServerPushCommunication<T> : ICentralServerPush
         return Task.CompletedTask;
     }
 }
+
+public interface ICentralServerPushCommunication
+{
+}

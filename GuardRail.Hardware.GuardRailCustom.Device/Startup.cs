@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
+using GuardRail.Hardware.GuardRailCustom.Device.DependencyHelpers;
 using GuardRail.Hardware.GuardRailCustom.Device.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -19,8 +20,8 @@ public class Startup(
         services
             .AddOptions()
             .AddLogging()
-            /*.AddGuardRailIntegratedHardware(configuration)
-            .AddSingleton<ICentralServerCommunication, CentralServerCommunication>()
+            .AddGuardRailIntegratedHardware(configuration)
+            /*.AddSingleton<ICentralServerCommunication, CentralServerCommunication>()
             .AddSingleton<ICentralServerPushCommunication, CentralServerPushCommunication>()*/
             .AddHostedService<HardwareUdpDiscoveryBackgroundWorker>()
             /*.AddHostedService<CentralServerPushCommunication>()*/;

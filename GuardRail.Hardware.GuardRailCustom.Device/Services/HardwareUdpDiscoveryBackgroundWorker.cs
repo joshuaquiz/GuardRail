@@ -11,7 +11,7 @@ using Microsoft.Extensions.Hosting;
 namespace GuardRail.Hardware.GuardRailCustom.Device.Services;
 
 public sealed class HardwareUdpDiscoveryBackgroundWorker(
-    /*ILightManager lightManager*/)
+    ILightManager lightManager)
     : BackgroundService
 {
     private const int DiscoveryPort = 12345;
@@ -86,16 +86,16 @@ public sealed class HardwareUdpDiscoveryBackgroundWorker(
     private async Task NotifySuccessfullyConnected(
         CancellationToken cancellationToken)
     {
-        //await lightManager.TurnOnGreenLightAsync(TimeSpan.FromMilliseconds(500), cancellationToken);
+        await lightManager.TurnOnGreenLightAsync(TimeSpan.FromMilliseconds(500), cancellationToken);
         await Task.Delay(TimeSpan.FromMilliseconds(200), cancellationToken);
-        //await lightManager.TurnOnGreenLightAsync(TimeSpan.FromMilliseconds(500), cancellationToken);
+        await lightManager.TurnOnGreenLightAsync(TimeSpan.FromMilliseconds(500), cancellationToken);
     }
 
     private async Task NotifyDisconnected(
         CancellationToken cancellationToken)
     {
-        //await lightManager.TurnOnRedLightAsync(TimeSpan.FromMilliseconds(500), cancellationToken);
+        await lightManager.TurnOnRedLightAsync(TimeSpan.FromMilliseconds(500), cancellationToken);
         await Task.Delay(TimeSpan.FromMilliseconds(200), cancellationToken);
-        //await lightManager.TurnOnRedLightAsync(TimeSpan.FromMilliseconds(500), cancellationToken);
+        await lightManager.TurnOnRedLightAsync(TimeSpan.FromMilliseconds(500), cancellationToken);
     }
 }

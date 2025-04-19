@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -41,9 +42,12 @@ public abstract class CoreNfcInput<TNfcInput, TNfcConfiguration> : INfcInput
     }
 
     /// <inheritdoc />
-    public virtual async ValueTask OnNfcSubmit(
+    public virtual ValueTask OnNfcSubmit(
         string inputData,
-        CancellationToken cancellationToken) =>
+        CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }/* =>
         await CentralServerCommunication.SendDataAsync(
             nameof(UnLockRequest),
             new UnLockRequest
@@ -52,7 +56,7 @@ public abstract class CoreNfcInput<TNfcInput, TNfcConfiguration> : INfcInput
                 UnlockRequestType = UnlockRequestType.Nfc,
                 Data = Encoding.UTF8.GetBytes(inputData)
             },
-            cancellationToken);
+            cancellationToken);*/
 
     /// <inheritdoc />
     public void Dispose() =>

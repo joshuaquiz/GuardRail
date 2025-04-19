@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.Core.Helpers;
+using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Input.Keypad;
 using Microsoft.Extensions.Logging;
 
 namespace GuardRail.Hardware.GuardRailCustom.Device.Implementations.Input;
