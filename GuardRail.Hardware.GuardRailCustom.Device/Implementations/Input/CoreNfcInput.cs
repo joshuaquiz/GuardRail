@@ -16,6 +16,12 @@ public abstract class CoreNfcInput<TNfcInput, TNfcConfiguration>(
     where TNfcInput : CoreNfcInput<TNfcInput, TNfcConfiguration>
     where TNfcConfiguration : INfcConfiguration
 {
+    public TNfcConfiguration NfcConfiguration { get; } = nfcConfiguration;
+
+    public INfcHardwareManager? NfcHardwareManager { get; } = nfcHardwareManager;
+
+    public ICentralServerCommunication CentralServerCommunication { get; } = centralServerCommunication;
+
     /// <inheritdoc />
     public ValueTask InitAsync()
     {

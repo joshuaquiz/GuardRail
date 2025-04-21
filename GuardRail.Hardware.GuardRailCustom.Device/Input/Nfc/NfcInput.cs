@@ -9,11 +9,12 @@ namespace GuardRail.Hardware.GuardRailCustom.Device.Input.Nfc;
 
 public sealed class NfcInput(
     NfcConfiguration nfcConfiguration,
-    INfcHardwareManager nfcManager,
+    INfcHardwareManager? nfcHardwareManager,
     ICentralServerCommunication centralServerCommunication,
     ILogger<NfcInput> logger)
-    : CoreNfcInput<NfcInput, NfcConfiguration>(nfcConfiguration,
-        nfcManager,
+    : CoreNfcInput<NfcInput, NfcConfiguration>(
+        nfcConfiguration,
+        nfcHardwareManager,
         centralServerCommunication,
         logger)
 {
