@@ -1,12 +1,14 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using GuardRail.Hardware.GuardRailCustom.Device.Interfaces;
 using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Feedback.Buzzer;
 using Microsoft.Extensions.Logging;
 
 namespace GuardRail.Hardware.GuardRailCustom.Device.Implementations.Feedback;
 
-public class CoreBuzzerManager<TCoreBuzzerManager, TBuzzerConfigurationType> : IBuzzerManager
+public class CoreBuzzerManager<TCoreBuzzerManager, TBuzzerConfigurationType>
+    : IBuzzerManager, IAsyncInit
     where TCoreBuzzerManager : CoreBuzzerManager<TCoreBuzzerManager, TBuzzerConfigurationType>
 {
     protected readonly IBuzzerConfiguration<TBuzzerConfigurationType> BuzzerConfiguration;
@@ -50,5 +52,12 @@ public class CoreBuzzerManager<TCoreBuzzerManager, TBuzzerConfigurationType> : I
     {
         await BuzzerManager.DisposeAddressAsync(
             BuzzerConfiguration.BuzzerAddress);
+        GC.SuppressFinalize(this);
     }
+
+    /// <inheritdoc />
+    public async ValueTask InitAsync() =>
+        await BuzzAsync(
+            TimeSpan.FromMilliseconds(200),
+            CancellationToken.None);
 }

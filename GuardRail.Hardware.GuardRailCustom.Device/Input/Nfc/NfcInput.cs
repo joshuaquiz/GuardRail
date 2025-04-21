@@ -7,20 +7,16 @@ using Microsoft.Extensions.Logging;
 
 namespace GuardRail.Hardware.GuardRailCustom.Device.Input.Nfc;
 
-public sealed class NfcInput : CoreNfcInput<NfcInput, NfcConfiguration>
+public sealed class NfcInput(
+    NfcConfiguration nfcConfiguration,
+    INfcHardwareManager nfcManager,
+    ICentralServerCommunication centralServerCommunication,
+    ILogger<NfcInput> logger)
+    : CoreNfcInput<NfcInput, NfcConfiguration>(nfcConfiguration,
+        nfcManager,
+        centralServerCommunication,
+        logger)
 {
-    public NfcInput(NfcConfiguration nfcConfiguration,
-        INfcHardwareManager nfcManager,
-        ICentralServerCommunication centralServerCommunication,
-        ILogger<NfcInput> logger)
-        : base(
-            nfcConfiguration,
-            nfcManager,
-            centralServerCommunication,
-            logger)
-    {
-    }
-
     public override async ValueTask DisposeAsync()
     {
         if (NfcHardwareManager is not null)

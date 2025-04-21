@@ -10,28 +10,18 @@ using Microsoft.Extensions.Logging;
 
 namespace GuardRail.Hardware.GuardRailCustom.Device.Implementations.Communication;
 
-public abstract class CoreCentralServerPushCommunication<T> : ICentralServerPushCommunication where T : CoreCentralServerPushCommunication<T>
+public abstract class CoreCentralServerPushCommunication<T>(ILogger<T> logger) : ICentralServerPushCommunication
+    where T : CoreCentralServerPushCommunication<T>
 {
-    protected readonly ILogger<T> Logger;
-    protected readonly IDictionary<string, IList<Func<string, CancellationToken, ValueTask>>> EventHandlers;
-    protected readonly SemaphoreSlim ReceiverSetupSemaphoreSlim;
-    protected readonly SemaphoreSlim UdpClientGetSemaphoreSlim;
-    protected readonly TaskFactory TaskFactory;
+    protected readonly ILogger<T> Logger = logger;
+    protected readonly IDictionary<string, IList<Func<string, CancellationToken, ValueTask>>> EventHandlers = new ConcurrentDictionary<string, IList<Func<string, CancellationToken, ValueTask>>>();
+    protected readonly SemaphoreSlim ReceiverSetupSemaphoreSlim = new(1);
+    protected readonly SemaphoreSlim UdpClientGetSemaphoreSlim = new(1);
+    protected readonly TaskFactory TaskFactory = new();
 
     protected UdpClient? UdpClient;
-    protected CancellationTokenSource CancellationTokenSource;
+    protected CancellationTokenSource CancellationTokenSource = new();
     protected Task? Worker;
-
-    protected CoreCentralServerPushCommunication(
-        ILogger<T> logger)
-    {
-        Logger = logger;
-        EventHandlers = new ConcurrentDictionary<string, IList<Func<string, CancellationToken, ValueTask>>>();
-        ReceiverSetupSemaphoreSlim = new SemaphoreSlim(1);
-        UdpClientGetSemaphoreSlim = new SemaphoreSlim(1);
-        TaskFactory = new TaskFactory();
-        CancellationTokenSource = new CancellationTokenSource();
-    }
 
     /// <inheritdoc />
     public async ValueTask ConfigureDataReceiverAsync<TData>(Func<TData?, CancellationToken, ValueTask> handler) where TData : class

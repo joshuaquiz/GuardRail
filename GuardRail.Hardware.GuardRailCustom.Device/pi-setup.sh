@@ -70,16 +70,17 @@ sudo apt-get install -y curl libunwind8 gettext apt-transport-https git
 echo "Installing .NET 9..."
 # Add Microsoft package repository
 sudo curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel STS
-sudo echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
-sudo echo 'export PATH=$PATH:$HOME/.dotnet' >> ~/.bashrc
+echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
+echo 'export PATH=$PATH:$HOME/.dotnet' >> ~/.bashrc
 
 # Verify installation
-dotnet --version
+$HOME/.dotnet/dotnet --version
 
 # Create directory for GuardRail
 echo "Setting up GuardRail project..."
 GUARDRAIL_DIR="/home/pi/guardrail"
 mkdir -p $GUARDRAIL_DIR
+rm -rf $GUARDRAIL_DIR
 
 # Deploy the project based on the selected method
 if [ "$DEPLOY_METHOD" = "git" ]; then
@@ -126,8 +127,8 @@ echo "Building the GuardRail.Hardware.GuardRailCustom.Device project..."
 cd $GUARDRAIL_DIR
 
 # Check if the project file exists
-if [ -f "GuardRail.Hardware.GuardRailCustom.Device/GuardRail.Hardware.GuardRailCustom.Device.csproj" ]; then
-  dotnet publish GuardRail.Hardware.GuardRailCustom.Device/GuardRail.Hardware.GuardRailCustom.Device.csproj -c Release
+if [ -f "$GUARDRAIL_DIR/GuardRail.Hardware.GuardRailCustom.Device/GuardRail.Hardware.GuardRailCustom.Device.csproj" ]; then
+  $HOME/.dotnet/dotnet publish "$GUARDRAIL_DIR/GuardRail.Hardware.GuardRailCustom.Device/GuardRail.Hardware.GuardRailCustom.Device.csproj" -c Release
 else
   echo "Error: Project file not found. Please check the project path."
   exit 1

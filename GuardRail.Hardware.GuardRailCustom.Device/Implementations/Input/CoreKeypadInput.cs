@@ -1,34 +1,25 @@
 using System;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Communication;
 using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Input.Keypad;
-using GuardRail.Hardware.GuardRailCustom.Device.Models;
 using Microsoft.Extensions.Logging;
 
 namespace GuardRail.Hardware.GuardRailCustom.Device.Implementations.Input;
 
-public abstract class CoreKeypadInput<TKeypadInput, TKeypadConfiguration, TKeypadConfigurationType> : IKeypadInput
+public abstract class CoreKeypadInput<TKeypadInput, TKeypadConfiguration, TKeypadConfigurationType>(
+    TKeypadConfiguration keypadConfiguration,
+    IKeypadHardwareManager<TKeypadConfigurationType>? keypadHardwareManager,
+    ICentralServerCommunication centralServerCommunication,
+    ILogger<TKeypadInput> logger)
+    : IKeypadInput
     where TKeypadInput : CoreKeypadInput<TKeypadInput, TKeypadConfiguration, TKeypadConfigurationType>
     where TKeypadConfiguration : IKeypadConfiguration<TKeypadConfigurationType>
 {
-    protected readonly TKeypadConfiguration KeypadConfiguration;
-    protected readonly IKeypadHardwareManager<TKeypadConfigurationType>? KeypadHardwareManager;
-    protected readonly ICentralServerCommunication CentralServerCommunication;
-    protected readonly ILogger<TKeypadInput> Logger;
-
-    protected CoreKeypadInput(
-        TKeypadConfiguration keypadConfiguration,
-        IKeypadHardwareManager<TKeypadConfigurationType>? keypadHardwareManager,
-        ICentralServerCommunication centralServerCommunication,
-        ILogger<TKeypadInput> logger)
-    {
-        KeypadConfiguration = keypadConfiguration;
-        KeypadHardwareManager = keypadHardwareManager;
-        CentralServerCommunication = centralServerCommunication;
-        Logger = logger;
-    }
+    protected readonly TKeypadConfiguration KeypadConfiguration = keypadConfiguration;
+    protected readonly IKeypadHardwareManager<TKeypadConfigurationType>? KeypadHardwareManager = keypadHardwareManager;
+    protected readonly ICentralServerCommunication CentralServerCommunication = centralServerCommunication;
+    protected readonly ILogger<TKeypadInput> Logger = logger;
 
     /// <inheritdoc />
     public ValueTask InitAsync()

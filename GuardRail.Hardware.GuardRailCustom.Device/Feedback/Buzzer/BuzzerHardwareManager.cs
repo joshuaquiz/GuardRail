@@ -7,25 +7,17 @@ using Microsoft.Extensions.Logging;
 
 namespace GuardRail.Hardware.GuardRailCustom.Device.Feedback.Buzzer;
 
-public sealed class BuzzerHardwareManager : IBuzzerHardwareManager<int>
+public sealed class BuzzerHardwareManager(
+    IGpio gpio,
+    IBuzzerConfiguration<int> buzzerConfiguration,
+    ILogger<BuzzerHardwareManager> logger)
+    : IBuzzerHardwareManager<int>
 {
-    private readonly IGpio _gpio;
-    private readonly IBuzzerConfiguration<int> _buzzerConfiguration;
-    private readonly ILogger<BuzzerHardwareManager> _logger;
-
-    public BuzzerHardwareManager(
-        IGpio gpio,
-        IBuzzerConfiguration<int> buzzerConfiguration,
-        ILogger<BuzzerHardwareManager> logger)
-    {
-        _gpio = gpio;
-        _buzzerConfiguration = buzzerConfiguration;
-        _logger = logger;
-    }
+    private readonly ILogger<BuzzerHardwareManager> _logger = logger;
 
     public ValueTask InitAsync()
     {
-        _gpio.OpenPin(_buzzerConfiguration.BuzzerAddress, PinMode.Output);
+        gpio.OpenPin(buzzerConfiguration.BuzzerAddress, PinMode.Output);
         return ValueTask.CompletedTask;
     }
 
@@ -33,7 +25,7 @@ public sealed class BuzzerHardwareManager : IBuzzerHardwareManager<int>
         int address,
         CancellationToken cancellationToken)
     {
-        _gpio.Write(
+        gpio.Write(
             address,
             PinValue.High);
         return ValueTask.CompletedTask;
@@ -43,7 +35,7 @@ public sealed class BuzzerHardwareManager : IBuzzerHardwareManager<int>
         int address,
         CancellationToken cancellationToken)
     {
-        _gpio.Write(
+        gpio.Write(
             address,
             PinValue.Low);
         return ValueTask.CompletedTask;
@@ -51,7 +43,7 @@ public sealed class BuzzerHardwareManager : IBuzzerHardwareManager<int>
 
     public ValueTask DisposeAddressAsync(int address)
     {
-        _gpio.ClosePin(address);
+        gpio.ClosePin(address);
         return ValueTask.CompletedTask;
     }
 }

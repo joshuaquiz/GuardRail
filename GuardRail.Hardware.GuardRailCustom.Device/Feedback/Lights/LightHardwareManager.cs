@@ -6,23 +6,15 @@ using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Feedback.Lights;
 
 namespace GuardRail.Hardware.GuardRailCustom.Device.Feedback.Lights;
 
-public sealed class LightHardwareManager : ILightHardwareManager<int>
+public sealed class LightHardwareManager(
+    IGpio gpio,
+    ILightConfiguration<int> lightConfiguration)
+    : ILightHardwareManager<int>
 {
-    private readonly IGpio _gpio;
-    private readonly ILightConfiguration<int> _lightConfiguration;
-
-    public LightHardwareManager(
-        IGpio gpio,
-        ILightConfiguration<int> lightConfiguration)
-    {
-        _gpio = gpio;
-        _lightConfiguration = lightConfiguration;
-    }
-
     public ValueTask InitAsync()
     {
-        _gpio.OpenPin(_lightConfiguration.RedLightAddress, PinMode.Output);
-        _gpio.OpenPin(_lightConfiguration.GreenLightAddress, PinMode.Output);
+        gpio.OpenPin(lightConfiguration.RedLightAddress, PinMode.Output);
+        gpio.OpenPin(lightConfiguration.GreenLightAddress, PinMode.Output);
         return ValueTask.CompletedTask;
     }
 
@@ -30,7 +22,7 @@ public sealed class LightHardwareManager : ILightHardwareManager<int>
         int address,
         CancellationToken cancellationToken)
     {
-        _gpio.Write(address, PinValue.High);
+        gpio.Write(address, PinValue.High);
         return ValueTask.CompletedTask;
     }
 
@@ -38,13 +30,13 @@ public sealed class LightHardwareManager : ILightHardwareManager<int>
         int address,
         CancellationToken cancellationToken)
     {
-        _gpio.Write(address, PinValue.Low);
+        gpio.Write(address, PinValue.Low);
         return ValueTask.CompletedTask;
     }
 
     public ValueTask DisposeAddressAsync(int address)
     {
-        _gpio.ClosePin(address);
+        gpio.ClosePin(address);
         return ValueTask.CompletedTask;
     }
 }

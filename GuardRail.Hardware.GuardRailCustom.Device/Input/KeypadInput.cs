@@ -11,39 +11,31 @@ using Microsoft.Extensions.Logging;
 
 namespace GuardRail.Hardware.GuardRailCustom.Device.Input;
 
-public sealed class KeypadInput : CoreKeypadInput<KeypadInput, KeypadConfiguration, int>
+public sealed class KeypadInput(
+    ILightManager lightManager,
+    KeypadConfiguration keypadConfiguration,
+    ICentralServerCommunication centralServerCommunication,
+    IKeypadHardwareManager<int> keypadHardwareManager,
+    ILogger<KeypadInput> logger)
+    : CoreKeypadInput<KeypadInput, KeypadConfiguration, int>(keypadConfiguration,
+        keypadHardwareManager,
+        centralServerCommunication,
+        logger)
 {
     private const int TimerIntervalMilliseconds = 20;
 
-    private readonly ILightManager _lightManager;
-    private readonly Timer? _dispatcherTimer;
-
-    public KeypadInput(
-        ILightManager lightManager,
-        KeypadConfiguration keypadConfiguration,
-        ICentralServerCommunication centralServerCommunication,
-        IKeypadHardwareManager<int> keypadHardwareManager,
-        ILogger<KeypadInput> logger)
-        : base(
-            keypadConfiguration,
-            keypadHardwareManager,
-            centralServerCommunication,
-            logger)
-    {
-        _lightManager = lightManager;
-        _dispatcherTimer = new Timer(
-            _ => keypadHardwareManager.TimerTick(),
-            null,
-            TimeSpan.Zero,
-            TimeSpan.FromMilliseconds(TimerIntervalMilliseconds));
-    }
+    private readonly Timer? _dispatcherTimer = new(
+        _ => keypadHardwareManager.TimerTick(),
+        null,
+        TimeSpan.Zero,
+        TimeSpan.FromMilliseconds(TimerIntervalMilliseconds));
 
     /// <inheritdoc />
     public override async ValueTask OnKeypadReset(CancellationToken cancellationToken)
     {
-        await _lightManager.TurnOnRedLightAsync(TimeSpan.FromMilliseconds(300), cancellationToken);
+        await lightManager.TurnOnRedLightAsync(TimeSpan.FromMilliseconds(300), cancellationToken);
         await Task.Delay(TimeSpan.FromMilliseconds(200), cancellationToken);
-        await _lightManager.TurnOnRedLightAsync(TimeSpan.FromMilliseconds(300), cancellationToken);
+        await lightManager.TurnOnRedLightAsync(TimeSpan.FromMilliseconds(300), cancellationToken);
     }
 
     public override async ValueTask DisposeAsync()

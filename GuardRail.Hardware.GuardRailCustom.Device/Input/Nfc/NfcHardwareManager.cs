@@ -14,42 +14,30 @@ using Microsoft.Extensions.Logging;
 
 namespace GuardRail.Hardware.GuardRailCustom.Device.Input.Nfc;
 
-public sealed class NfcHardwareManager : INfcHardwareManager
+public sealed class NfcHardwareManager(
+    INfcConfiguration nfcConfiguration,
+    ILoggerFactory loggerFactory,
+    ILogger<NfcHardwareManager> logger,
+    GpioController gpioController)
+    : INfcHardwareManager
 {
-    private readonly INfcConfiguration _nfcConfiguration;
-    private readonly ILoggerFactory _loggerFactory;
-    private readonly ILogger<NfcHardwareManager> _logger;
-    private readonly CancellationTokenSource _cancellationTokenSource;
+    private readonly CancellationTokenSource _cancellationTokenSource = new();
 
     private I2cBus? _i2CBus;
     private Task? _listener;
-    private GpioController _gpioController;
-
-    public NfcHardwareManager(
-        INfcConfiguration nfcConfiguration,
-        ILoggerFactory loggerFactory,
-        ILogger<NfcHardwareManager> logger,
-        GpioController gpioController)
-    {
-        _nfcConfiguration = nfcConfiguration;
-        _loggerFactory = loggerFactory;
-        _logger = logger;
-        _gpioController = gpioController;
-
-        _cancellationTokenSource = new CancellationTokenSource();
-    }
+    private GpioController _gpioController = gpioController;
 
     public ValueTask InitAsync()
     {
-        LogDispatcher.LoggerFactory = _loggerFactory;
-        _i2CBus = I2cBus.Create(int.Parse(_nfcConfiguration.SerialPort));
+        LogDispatcher.LoggerFactory = loggerFactory;
+        _i2CBus = I2cBus.Create(int.Parse(nfcConfiguration.SerialPort));
         _listener = new TaskFactory()
             .StartNew(() =>
             {
                 Functions.nfc_init(out var nfcContext);
                 var nfcDevice = Functions.nfc_open(nfcContext, "pn532_i2c:/dev/i2c-1");
-                _logger.LogGuardRailInformation($"Opened: {nfcDevice.ToJson()}");
-                _logger.LogGuardRailInformation("Polling");
+                logger.LogGuardRailInformation($"Opened: {nfcDevice.ToJson()}");
+                logger.LogGuardRailInformation("Polling");
                 var stopwatch = Stopwatch.StartNew();
                 nfc_modulation[] nfcModulations = [
                     new nfc_modulation
@@ -93,7 +81,7 @@ public sealed class NfcHardwareManager : INfcHardwareManager
                     1,
                     out var nfcTarget);
                 stopwatch.Stop();
-                _logger.LogGuardRailInformation($"Polled ({result}): {stopwatch.Elapsed:c}");
+                logger.LogGuardRailInformation($"Polled ({result}): {stopwatch.Elapsed:c}");
                 if (result < 0)
                 {
                     Functions.nfc_perror(
@@ -102,15 +90,15 @@ public sealed class NfcHardwareManager : INfcHardwareManager
                 }
 
                 Functions.str_nfc_target(out var buff, nfcTarget, true);
-                _logger.LogGuardRailInformation("nfc_target: " + (nfcTarget.Equals(default(nfc_target)) ? "default" : "new") + "~~~" + nfcTarget.ToJson());
-                _logger.LogGuardRailInformation("buffer: " + buff);
+                logger.LogGuardRailInformation("nfc_target: " + (nfcTarget.Equals(default(nfc_target)) ? "default" : "new") + "~~~" + nfcTarget.ToJson());
+                logger.LogGuardRailInformation("buffer: " + buff);
                 using var device = _i2CBus.CreateDevice(0x70);
                 while (!_cancellationTokenSource.IsCancellationRequested)
                 {
                     var buffer = new Span<byte>(new byte[64]);
                     device.Read(
                         buffer);
-                    _logger.LogGuardRailInformation(Encoding.UTF8.GetString(buffer));
+                    logger.LogGuardRailInformation(Encoding.UTF8.GetString(buffer));
                 }
             },
             _cancellationTokenSource.Token,

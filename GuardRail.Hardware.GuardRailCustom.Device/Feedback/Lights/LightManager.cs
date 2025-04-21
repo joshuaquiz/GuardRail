@@ -4,16 +4,11 @@ using Microsoft.Extensions.Logging;
 
 namespace GuardRail.Hardware.GuardRailCustom.Device.Feedback.Lights;
 
-public sealed class LightManager : CoreLightManager<LightManager, int>
-{
-    public LightManager(
-        ILightConfiguration<int> lightConfiguration,
-        ILightHardwareManager<int> lightManager,
-        ILogger<LightManager> logger)
-        : base(
-            lightConfiguration,
-            lightManager,
-            logger)
-    {
-    }
-}
+public sealed class LightManager(
+    ILightConfiguration<int> lightConfiguration,
+    ILightHardwareManager<int> lightManager,
+    ILogger<LightManager> logger)
+    : CoreLightManager<LightManager, int>(
+        lightConfiguration,
+        lightManager,
+        logger);

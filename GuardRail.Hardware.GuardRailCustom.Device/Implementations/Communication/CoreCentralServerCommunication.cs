@@ -10,18 +10,13 @@ using Microsoft.Extensions.Logging;
 
 namespace GuardRail.Hardware.GuardRailCustom.Device.Implementations.Communication;
 
-public class CoreCentralServerCommunication<T> : ICentralServerCommunication where T : CoreCentralServerCommunication<T>
+public class CoreCentralServerCommunication<T>(
+    IServiceProvider serviceProvider,
+    ILogger<T> logger) : ICentralServerCommunication
+    where T : CoreCentralServerCommunication<T>
 {
-    protected readonly IServiceProvider ServiceProvider;
-    protected readonly ILogger<T> Logger;
-
-    public CoreCentralServerCommunication(
-        IServiceProvider serviceProvider,
-        ILogger<T> logger)
-    {
-        ServiceProvider = serviceProvider;
-        Logger = logger;
-    }
+    protected readonly IServiceProvider ServiceProvider = serviceProvider;
+    protected readonly ILogger<T> Logger = logger;
 
     /// <inheritdoc />
     public async ValueTask<bool> SendDataAsync<TData>(

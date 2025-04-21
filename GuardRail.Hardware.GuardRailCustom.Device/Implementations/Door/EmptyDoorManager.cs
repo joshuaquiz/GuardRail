@@ -9,22 +9,15 @@ namespace GuardRail.Hardware.GuardRailCustom.Device.Implementations.Door;
 /// <summary>
 /// Provides an empty implementation.
 /// </summary>
-public sealed class EmptyDoorManager : CoreDoorManager<EmptyDoorManager>
+public sealed class EmptyDoorManager(ILogger<EmptyDoorManager> logger)
+    : CoreDoorManager<EmptyDoorManager>(null!, null!, null!, null!)
 {
-    private readonly ILogger<EmptyDoorManager> _logger;
-
-    public EmptyDoorManager(ILogger<EmptyDoorManager> logger)
-        : base(null!, null!, null!, null!)
-    {
-        _logger = logger;
-    }
-
     /// <inheritdoc />
     public override ValueTask UnLockAsync(
         TimeSpan duration,
         CancellationToken cancellationToken)
     {
-        _logger.LogGuardRailInformation($"Unlocking for {duration:g}");
+        logger.LogGuardRailInformation($"Unlocking for {duration:g}");
         return ValueTask.CompletedTask;
     }
 
@@ -32,7 +25,7 @@ public sealed class EmptyDoorManager : CoreDoorManager<EmptyDoorManager>
     public override ValueTask LockAsync(
         CancellationToken cancellationToken)
     {
-        _logger.LogGuardRailInformation("Locking");
+        logger.LogGuardRailInformation("Locking");
         return ValueTask.CompletedTask;
     }
 
@@ -41,7 +34,7 @@ public sealed class EmptyDoorManager : CoreDoorManager<EmptyDoorManager>
         TimeSpan duration,
         CancellationToken cancellationToken)
     {
-        _logger.LogGuardRailInformation($"Opening for {duration:g}");
+        logger.LogGuardRailInformation($"Opening for {duration:g}");
         return ValueTask.CompletedTask;
     }
 
@@ -49,7 +42,7 @@ public sealed class EmptyDoorManager : CoreDoorManager<EmptyDoorManager>
     public override ValueTask CloseAsync(
         CancellationToken cancellationToken)
     {
-        _logger.LogGuardRailInformation("Closing");
+        logger.LogGuardRailInformation("Closing");
         return ValueTask.CompletedTask;
     }
 }

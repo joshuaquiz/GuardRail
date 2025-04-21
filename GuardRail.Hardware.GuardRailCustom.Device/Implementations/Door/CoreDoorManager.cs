@@ -6,24 +6,18 @@ using Microsoft.Extensions.Logging;
 
 namespace GuardRail.Hardware.GuardRailCustom.Device.Implementations.Door;
 
-public abstract class CoreDoorManager<T> : IDoorManager where T : CoreDoorManager<T>
+public abstract class CoreDoorManager<T>(
+    IDoorConfiguration doorConfiguration,
+    ILockableDoorHardwareManager? lockableDoorHardwareManager,
+    IOpenableDoorHardwareManager? openableDoorHardwareManager,
+    ILogger<T> logger)
+    : IDoorManager
+    where T : CoreDoorManager<T>
 {
-    protected readonly IDoorConfiguration DoorConfiguration;
-    protected readonly ILockableDoorHardwareManager? LockableDoorHardwareManager;
-    protected readonly IOpenableDoorHardwareManager? OpenableDoorHardwareManager;
-    protected readonly ILogger<T> Logger;
-
-    protected CoreDoorManager(
-        IDoorConfiguration doorConfiguration,
-        ILockableDoorHardwareManager? lockableDoorHardwareManager,
-        IOpenableDoorHardwareManager? openableDoorHardwareManager,
-        ILogger<T> logger)
-    {
-        DoorConfiguration = doorConfiguration;
-        LockableDoorHardwareManager = lockableDoorHardwareManager;
-        OpenableDoorHardwareManager = openableDoorHardwareManager;
-        Logger = logger;
-    }
+    protected readonly IDoorConfiguration DoorConfiguration = doorConfiguration;
+    protected readonly ILockableDoorHardwareManager? LockableDoorHardwareManager = lockableDoorHardwareManager;
+    protected readonly IOpenableDoorHardwareManager? OpenableDoorHardwareManager = openableDoorHardwareManager;
+    protected readonly ILogger<T> Logger = logger;
 
     /// <inheritdoc />
     public virtual async ValueTask UnLockAsync(

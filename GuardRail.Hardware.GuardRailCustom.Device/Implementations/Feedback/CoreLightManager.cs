@@ -1,12 +1,14 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using GuardRail.Hardware.GuardRailCustom.Device.Interfaces;
 using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Feedback.Lights;
 using Microsoft.Extensions.Logging;
 
 namespace GuardRail.Hardware.GuardRailCustom.Device.Implementations.Feedback;
 
-public class CoreLightManager<TCoreLightManager, TLightConfigurationType> : ILightManager
+public class CoreLightManager<TCoreLightManager, TLightConfigurationType>
+    : ILightManager, IAsyncInit
     where TCoreLightManager : CoreLightManager<TCoreLightManager, TLightConfigurationType>
 {
     protected readonly ILightConfiguration<TLightConfigurationType> LightConfiguration;
@@ -67,5 +69,17 @@ public class CoreLightManager<TCoreLightManager, TLightConfigurationType> : ILig
             LightConfiguration.RedLightAddress);
         await LightManager.DisposeAddressAsync(
             LightConfiguration.GreenLightAddress);
+        GC.SuppressFinalize(this);
+    }
+
+    /// <inheritdoc />
+    public async ValueTask InitAsync()
+    {
+        await TurnOnRedLightAsync(
+            TimeSpan.FromMilliseconds(250),
+            CancellationToken.None);
+        await TurnOnGreenLightAsync(
+            TimeSpan.FromMilliseconds(250),
+            CancellationToken.None);
     }
 }

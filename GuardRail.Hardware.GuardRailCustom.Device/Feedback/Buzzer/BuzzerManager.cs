@@ -4,16 +4,11 @@ using Microsoft.Extensions.Logging;
 
 namespace GuardRail.Hardware.GuardRailCustom.Device.Feedback.Buzzer;
 
-public sealed class BuzzerManager : CoreBuzzerManager<BuzzerManager, int>
-{
-    public BuzzerManager(
-        IBuzzerConfiguration<int> buzzerConfiguration,
-        IBuzzerHardwareManager<int> buzzerManager,
-        ILogger<BuzzerManager> logger)
-        : base(
-            buzzerConfiguration,
-            buzzerManager,
-            logger)
-    {
-    }
-}
+public sealed class BuzzerManager(
+    IBuzzerConfiguration<int> buzzerConfiguration,
+    IBuzzerHardwareManager<int> buzzerManager,
+    ILogger<BuzzerManager> logger)
+    : CoreBuzzerManager<BuzzerManager, int>(
+        buzzerConfiguration,
+        buzzerManager,
+        logger);

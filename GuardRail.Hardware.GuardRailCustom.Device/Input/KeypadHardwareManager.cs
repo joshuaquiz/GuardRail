@@ -12,7 +12,11 @@ using Microsoft.Extensions.Logging;
 
 namespace GuardRail.Hardware.GuardRailCustom.Device.Input;
 
-public sealed class KeypadHardwareManager : IKeypadHardwareManager<int>
+public sealed class KeypadHardwareManager(
+    IGpio gpio,
+    KeypadConfiguration keypadConfiguration,
+    ILogger<KeypadHardwareManager> logger)
+    : IKeypadHardwareManager<int>
 {
     private const int ButtonDebounceMilliseconds = 25;
 
@@ -23,68 +27,52 @@ public sealed class KeypadHardwareManager : IKeypadHardwareManager<int>
         {'*', '0', '#', 'D'}
     };
 
-    private readonly IGpio _gpio;
-    private readonly KeypadConfiguration _keypadConfiguration;
-    private readonly ILogger<KeypadHardwareManager> _logger;
-
     public readonly List<int> Rows = new();
     public readonly List<int> Columns = new();
 
-    private CancellationTokenSource _cancellationTokenSource;
+    private CancellationTokenSource _cancellationTokenSource = new();
     private List<char> _pressedKeys = new(0);
     private string _lastPinValue = string.Empty;
     private DateTime _clearLastPinValueTime = DateTime.UtcNow;
 
-    public KeypadHardwareManager(
-        IGpio gpio,
-        KeypadConfiguration keypadConfiguration,
-        ILogger<KeypadHardwareManager> logger)
-    {
-        _gpio = gpio;
-        _keypadConfiguration = keypadConfiguration;
-        _logger = logger;
-
-        _cancellationTokenSource = new CancellationTokenSource();
-    }
-
     public ValueTask InitAsync()
     {
         // Initialize Column GPIO Pins
-        _gpio.OpenPin(_keypadConfiguration.ColumnPins[0], PinMode.Output);
-        _gpio.Write(_keypadConfiguration.ColumnPins[0], PinValue.Low);
-        _gpio.OpenPin(_keypadConfiguration.ColumnPins[1], PinMode.Output);
-        _gpio.Write(_keypadConfiguration.ColumnPins[1], PinValue.Low);
-        _gpio.OpenPin(_keypadConfiguration.ColumnPins[2], PinMode.Output);
-        _gpio.Write(_keypadConfiguration.ColumnPins[2], PinValue.Low);
-        _gpio.OpenPin(_keypadConfiguration.ColumnPins[3], PinMode.Output);
-        _gpio.Write(_keypadConfiguration.ColumnPins[3], PinValue.Low);
+        gpio.OpenPin(keypadConfiguration.ColumnPins[0], PinMode.Output);
+        gpio.Write(keypadConfiguration.ColumnPins[0], PinValue.Low);
+        gpio.OpenPin(keypadConfiguration.ColumnPins[1], PinMode.Output);
+        gpio.Write(keypadConfiguration.ColumnPins[1], PinValue.Low);
+        gpio.OpenPin(keypadConfiguration.ColumnPins[2], PinMode.Output);
+        gpio.Write(keypadConfiguration.ColumnPins[2], PinValue.Low);
+        gpio.OpenPin(keypadConfiguration.ColumnPins[3], PinMode.Output);
+        gpio.Write(keypadConfiguration.ColumnPins[3], PinValue.Low);
 
         // Add to Cols Array
-        Columns.Add(_keypadConfiguration.ColumnPins[0]);
-        Columns.Add(_keypadConfiguration.ColumnPins[1]);
-        Columns.Add(_keypadConfiguration.ColumnPins[2]);
-        Columns.Add(_keypadConfiguration.ColumnPins[3]);
+        Columns.Add(keypadConfiguration.ColumnPins[0]);
+        Columns.Add(keypadConfiguration.ColumnPins[1]);
+        Columns.Add(keypadConfiguration.ColumnPins[2]);
+        Columns.Add(keypadConfiguration.ColumnPins[3]);
 
         // Initialize Row GPIO Pins
-        _gpio.OpenPin(_keypadConfiguration.RowPins[0]);
-        _gpio.RegisterCallbackForPinValueChangedEvent(_keypadConfiguration.RowPins[0], PinEventTypes.Falling | PinEventTypes.Rising, (_, args) => Pin_Changed(args.PinNumber).GetAwaiter().GetResult());
-        _gpio.OpenPin(_keypadConfiguration.RowPins[1]);
-        _gpio.RegisterCallbackForPinValueChangedEvent(_keypadConfiguration.RowPins[1], PinEventTypes.Falling | PinEventTypes.Rising, (_, args) => Pin_Changed(args.PinNumber).GetAwaiter().GetResult());
-        _gpio.OpenPin(_keypadConfiguration.RowPins[2]);
-        _gpio.RegisterCallbackForPinValueChangedEvent(_keypadConfiguration.RowPins[2], PinEventTypes.Falling | PinEventTypes.Rising, (_, args) => Pin_Changed(args.PinNumber).GetAwaiter().GetResult());
-        _gpio.OpenPin(_keypadConfiguration.RowPins[3]);
-        _gpio.RegisterCallbackForPinValueChangedEvent(_keypadConfiguration.RowPins[3], PinEventTypes.Falling | PinEventTypes.Rising, (_, args) => Pin_Changed(args.PinNumber).GetAwaiter().GetResult());
+        gpio.OpenPin(keypadConfiguration.RowPins[0]);
+        gpio.RegisterCallbackForPinValueChangedEvent(keypadConfiguration.RowPins[0], PinEventTypes.Falling | PinEventTypes.Rising, (_, args) => Pin_Changed(args.PinNumber).GetAwaiter().GetResult());
+        gpio.OpenPin(keypadConfiguration.RowPins[1]);
+        gpio.RegisterCallbackForPinValueChangedEvent(keypadConfiguration.RowPins[1], PinEventTypes.Falling | PinEventTypes.Rising, (_, args) => Pin_Changed(args.PinNumber).GetAwaiter().GetResult());
+        gpio.OpenPin(keypadConfiguration.RowPins[2]);
+        gpio.RegisterCallbackForPinValueChangedEvent(keypadConfiguration.RowPins[2], PinEventTypes.Falling | PinEventTypes.Rising, (_, args) => Pin_Changed(args.PinNumber).GetAwaiter().GetResult());
+        gpio.OpenPin(keypadConfiguration.RowPins[3]);
+        gpio.RegisterCallbackForPinValueChangedEvent(keypadConfiguration.RowPins[3], PinEventTypes.Falling | PinEventTypes.Rising, (_, args) => Pin_Changed(args.PinNumber).GetAwaiter().GetResult());
 
         // Add to Row Array
-        Rows.Add(_keypadConfiguration.RowPins[0]);
-        Rows.Add(_keypadConfiguration.RowPins[1]);
-        Rows.Add(_keypadConfiguration.RowPins[2]);
-        Rows.Add(_keypadConfiguration.RowPins[3]);
+        Rows.Add(keypadConfiguration.RowPins[0]);
+        Rows.Add(keypadConfiguration.RowPins[1]);
+        Rows.Add(keypadConfiguration.RowPins[2]);
+        Rows.Add(keypadConfiguration.RowPins[3]);
 
         // Set the rows up for input
         foreach (var r in Rows)
         {
-            _gpio.SetPinMode(r, PinMode.InputPullUp);
+            gpio.SetPinMode(r, PinMode.InputPullUp);
         }
 
         return ValueTask.CompletedTask;
@@ -99,7 +87,7 @@ public sealed class KeypadHardwareManager : IKeypadHardwareManager<int>
     public ValueTask DisposeAddressAsync(
         int address)
     {
-        _gpio.ClosePin(address);
+        gpio.ClosePin(address);
         return ValueTask.CompletedTask;
     }
 
@@ -109,7 +97,7 @@ public sealed class KeypadHardwareManager : IKeypadHardwareManager<int>
         var rowNumber = -1;
         try
         {
-            var senderValue = _gpio.Read(pinNumber);
+            var senderValue = gpio.Read(pinNumber);
             if (senderValue.ToString() == _lastPinValue)
             {
                 // Skipping duplicate value for pin.
@@ -127,19 +115,19 @@ public sealed class KeypadHardwareManager : IKeypadHardwareManager<int>
             _clearLastPinValueTime = DateTime.UtcNow.AddMilliseconds(ButtonDebounceMilliseconds);
 
             // Get the corresponding row index for conversion later
-            if (pinNumber == _keypadConfiguration.RowPins[0])
+            if (pinNumber == keypadConfiguration.RowPins[0])
             {
                 rowNumber = 0;
             }
-            else if (pinNumber == _keypadConfiguration.RowPins[1])
+            else if (pinNumber == keypadConfiguration.RowPins[1])
             {
                 rowNumber = 1;
             }
-            else if (pinNumber == _keypadConfiguration.RowPins[2])
+            else if (pinNumber == keypadConfiguration.RowPins[2])
             {
                 rowNumber = 2;
             }
-            else if (pinNumber == _keypadConfiguration.RowPins[3])
+            else if (pinNumber == keypadConfiguration.RowPins[3])
             {
                 rowNumber = 3;
             }
@@ -147,33 +135,33 @@ public sealed class KeypadHardwareManager : IKeypadHardwareManager<int>
             // Set all the columns to low value using output mode
             foreach (var c in Columns)
             {
-                _gpio.SetPinMode(c, PinMode.Output);
-                _gpio.Write(c, PinValue.Low);
+                gpio.SetPinMode(c, PinMode.Output);
+                gpio.Write(c, PinValue.Low);
             }
 
             // Now switch the columns to input mode
             foreach (var c in Columns)
             {
-                _gpio.SetPinMode(c, PinMode.InputPullDown);
+                gpio.SetPinMode(c, PinMode.InputPullDown);
             }
 
             // Scan the columns to see which one is pressed
-            foreach (var c in Columns.Where(c => _gpio.Read(c) == PinValue.High))
+            foreach (var c in Columns.Where(c => gpio.Read(c) == PinValue.High))
             {
                 // Get the corresponding column index for conversion later
-                if (c == _keypadConfiguration.ColumnPins[0])
+                if (c == keypadConfiguration.ColumnPins[0])
                 {
                     colNumber = 0;
                 }
-                else if (c == _keypadConfiguration.ColumnPins[1])
+                else if (c == keypadConfiguration.ColumnPins[1])
                 {
                     colNumber = 1;
                 }
-                else if (c == _keypadConfiguration.ColumnPins[2])
+                else if (c == keypadConfiguration.ColumnPins[2])
                 {
                     colNumber = 2;
                 }
-                else if (c == _keypadConfiguration.ColumnPins[3])
+                else if (c == keypadConfiguration.ColumnPins[3])
                 {
                     colNumber = 3;
                 }
@@ -189,7 +177,7 @@ public sealed class KeypadHardwareManager : IKeypadHardwareManager<int>
         }
         catch (Exception ex)
         {
-            _logger.LogGuardRailError(ex, $"Pin_Changed Error: {pinNumber} {rowNumber} {colNumber} {ex.Message}");
+            logger.LogGuardRailError(ex, $"Pin_Changed Error: {pinNumber} {rowNumber} {colNumber} {ex.Message}");
         }
     }
 
@@ -200,13 +188,13 @@ public sealed class KeypadHardwareManager : IKeypadHardwareManager<int>
     private async Task FoundADigit(char key)
     {
         _cancellationTokenSource.Cancel();
-        _logger.LogGuardRailInformation($"Key pressed: {key}");
-        if (key == _keypadConfiguration.SubmitKey)
+        logger.LogGuardRailInformation($"Key pressed: {key}");
+        if (key == keypadConfiguration.SubmitKey)
         {
             var keyData = _pressedKeys.ToList();
             _pressedKeys = new List<char>(0);
-            _logger.LogGuardRailInformation($"Sending keys: {string.Join(", ", keyData)}");
-            var cancellationTokenSource = new CancellationTokenSource(_keypadConfiguration.KeypadTimeout * 2);
+            logger.LogGuardRailInformation($"Sending keys: {string.Join(", ", keyData)}");
+            var cancellationTokenSource = new CancellationTokenSource(keypadConfiguration.KeypadTimeout * 2);
             if (Submit != null)
             {
                 await Submit(
@@ -216,7 +204,7 @@ public sealed class KeypadHardwareManager : IKeypadHardwareManager<int>
         }
 
         _pressedKeys.Add(key);
-        _logger.LogGuardRailInformation($"Keys pressed so far: {string.Join(", ", _pressedKeys)}");
+        logger.LogGuardRailInformation($"Keys pressed so far: {string.Join(", ", _pressedKeys)}");
         _cancellationTokenSource = new CancellationTokenSource();
 #pragma warning disable 4014
         // We want this to be fire-and-forget
@@ -242,13 +230,13 @@ public sealed class KeypadHardwareManager : IKeypadHardwareManager<int>
     {
         try
         {
-            await Task.Delay(_keypadConfiguration.KeypadTimeout, _cancellationTokenSource.Token);
+            await Task.Delay(keypadConfiguration.KeypadTimeout, _cancellationTokenSource.Token);
             if (_cancellationTokenSource.Token.IsCancellationRequested)
             {
                 return;
             }
 
-            _logger.LogGuardRailInformation("Keypad entry timed out.");
+            logger.LogGuardRailInformation("Keypad entry timed out.");
             _pressedKeys = new List<char>(0);
             if (Reset != null)
             {
@@ -257,7 +245,7 @@ public sealed class KeypadHardwareManager : IKeypadHardwareManager<int>
         }
         catch (TaskCanceledException)
         {
-            _logger.LogGuardRailInformation("Keypad entry time out canceled.");
+            logger.LogGuardRailInformation("Keypad entry time out canceled.");
         }
     }
 }
