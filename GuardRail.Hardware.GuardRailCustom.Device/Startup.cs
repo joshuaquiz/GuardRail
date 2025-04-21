@@ -19,6 +19,7 @@ public class Startup(
     public void ConfigureServices(IServiceCollection services)
     {
         DeviceConstants.DeviceId = configuration["Name"] ?? $"Not-configured-{Guid.NewGuid()}";
+        Console.WriteLine("asdf");
         services.AddLogging(
             x => x.AddConsole());
         services
