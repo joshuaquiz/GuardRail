@@ -23,8 +23,10 @@ public static class GuardRailIntegratedSetup
             .AddSingleton<IGpio, Gpio>()
             .AddBuzzer<BuzzerConfiguration, int, BuzzerHardwareManager, BuzzerManager>(configuration)
             .AddLight<LightConfiguration, int, LightHardwareManager, LightManager>(configuration)
-            .AddKeypad<KeypadConfiguration, int, KeypadHardwareManager, KeypadInput>(configuration)
-            .AddNfc<NfcConfiguration, NfcHardwareManager, NfcInput>(configuration)
+            //.AddKeypad<KeypadConfiguration, int, KeypadHardwareManager, KeypadInput>(configuration)
+            //.AddNfc<NfcConfiguration, NfcHardwareManager, NfcInput>(configuration)
+            .AddEmptyKeypad()
+            .AddEmptyNfc()
             .AddEmptyScreen()
             .AddEmptyDoor();
 }

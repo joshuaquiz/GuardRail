@@ -107,6 +107,7 @@ Description=GuardRail Device Service
 After=network.target
 
 [Service]
+User=root
 WorkingDirectory=/home/pi/guardrail/GuardRail.Hardware.GuardRailCustom.Device
 ExecStart=/usr/bin/dotnet /home/pi/guardrail/GuardRail.Hardware.GuardRailCustom.Device/bin/Release/net9.0/GuardRail.Hardware.GuardRailCustom.Device.dll
 Restart=always
@@ -114,7 +115,6 @@ Restart=always
 RestartSec=10
 KillSignal=SIGINT
 SyslogIdentifier=guardrail-device
-User=joshua
 Environment=ASPNETCORE_ENVIRONMENT=Production
 Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
 
@@ -147,14 +147,7 @@ sudo systemctl enable guardrail-device.service
 sudo systemctl start guardrail-device.service
 sudo systemctl status guardrail-device.service
 
-# Configure the service to start on boot
-echo "Configuring service to start on boot..."
-sudo systemctl enable guardrail-device.service
-
 echo "Setup complete! GuardRail device is now running as a service."
 echo "Hostname: $NEW_HOSTNAME"
 echo "Service status can be checked with: sudo systemctl status guardrail-device.service"
 echo "Project location: $GUARDRAIL_DIR"
-
-# Make the script executable
-chmod +x $GUARDRAIL_DIR/pi-setup.sh
