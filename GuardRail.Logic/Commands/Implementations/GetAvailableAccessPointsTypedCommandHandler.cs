@@ -36,7 +36,9 @@ public sealed class GetAvailableAccessPointsTypedCommandHandler(
             cancellationToken);
     }
 
-    /// <inheritdoc />
-    public override CommandType CommandType =>
+    /// <summary>
+    /// The command type associated with this handler.
+    /// </summary>
+    public static CommandType CommandType =>
         CommandType.GetAvailableAccessPoints;
 }

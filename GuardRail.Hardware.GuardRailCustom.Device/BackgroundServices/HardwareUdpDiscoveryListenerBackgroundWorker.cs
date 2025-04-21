@@ -8,9 +8,9 @@ using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Feedback.Lights;
 using GuardRail.Hardware.GuardRailCustom.Device.Models;
 using Microsoft.Extensions.Hosting;
 
-namespace GuardRail.Hardware.GuardRailCustom.Device.Services;
+namespace GuardRail.Hardware.GuardRailCustom.Device.BackgroundServices;
 
-public sealed class HardwareUdpDiscoveryBackgroundWorker(
+public sealed class HardwareUdpDiscoveryListenerBackgroundWorker(
     ILightManager lightManager)
     : BackgroundService
 {
@@ -28,12 +28,20 @@ public sealed class HardwareUdpDiscoveryBackgroundWorker(
             try
             {
                 var result = await udpClient.ReceiveAsync(stoppingToken);
+                if (result.RemoteEndPoint.Address
+                    .Equals(
+                        DeviceConstants.RemoteHostIpAddress))
+                {
+                    // We do not need to respond in the configuration is still the same.
+                    continue;
+                }
+
                 var response = Encryption.Decrypt(
                     Encoding.UTF8.GetString(
                         result.Buffer),
                     typeof(Encryption).Assembly.FullName!)!;
                 var parts = response.Split(':');
-                if (parts.Length != 4)
+                if (parts.Length != 3)
                 {
                     continue;
                 }

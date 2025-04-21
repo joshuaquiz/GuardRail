@@ -1,15 +1,20 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace GuardRail.Hardware.GuardRailCustom;
 
 public sealed class HardwareUdpDiscoveryBackgroundWorker(
-    NetworkHardwareCache networkHardwareCache)
+    NetworkHardwareCache networkHardwareCache,
+    ILogger<HardwareUdpDiscoveryBackgroundWorker> logger)
     : BackgroundService
 {
     private const int DiscoveryPort = 12345;
@@ -41,15 +46,22 @@ public sealed class HardwareUdpDiscoveryBackgroundWorker(
         var okayBuffer = "OKAY"u8.ToArray();
         try
         {
-            await udpClient.SendAsync(buffer, buffer.Length, broadcastEndpoint);
-            var localEndpoint = new IPEndPoint(IPAddress.Any, DiscoveryPort);
-            udpClient.Client.Bind(localEndpoint);
-            UdpReceiveResult result;
-            while ((result = await udpClient.ReceiveAsync(cancellationToken)) != default)
+            logger.LogInformation($"Sending {encryptedData} to {broadcastEndpoint}");
+            await udpClient.SendAsync(
+                buffer,
+                buffer.Length,
+                broadcastEndpoint);
+            using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            cts.CancelAfter(TimeSpan.FromSeconds(5));
+            await foreach (var result in GetUdpResponses(
+                               udpClient,
+                               cts.Token))
             {
+                var encryptedResponseData = Encoding.UTF8.GetString(
+                    result.Buffer);
+                logger.LogInformation($"Got {encryptedResponseData} from {result.RemoteEndPoint}");
                 var response = Encryption.Decrypt(
-                    Encoding.UTF8.GetString(
-                        result.Buffer),
+                    encryptedResponseData,
                     typeof(Encryption).Assembly.FullName!)!;
                 var parts = response.Split(':');
                 if (parts.Length != 4)
@@ -69,9 +81,12 @@ public sealed class HardwareUdpDiscoveryBackgroundWorker(
                     continue;
                 }
 
-                await udpClient.SendAsync(okayBuffer, okayBuffer.Length, result.RemoteEndPoint);
+                await udpClient.SendAsync(
+                    okayBuffer,
+                    okayBuffer.Length,
+                    result.RemoteEndPoint);
                 networkHardwareCache
-                    .Add(
+                    .AddOrUpdate(
                         name,
                         new CustomHardwareSettings(
                             name,
@@ -81,9 +96,21 @@ public sealed class HardwareUdpDiscoveryBackgroundWorker(
                                 port)));
             }
         }
-        catch
+        catch (Exception e)
         {
             // Ignored.
+        }
+    }
+
+    private static async IAsyncEnumerable<UdpReceiveResult> GetUdpResponses(
+        UdpClient udpClient,
+        [EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+        UdpReceiveResult result;
+        while (!cancellationToken.IsCancellationRequested
+               && (result = await udpClient.ReceiveAsync(cancellationToken)) != default)
+        {
+            yield return result;
         }
     }
 

@@ -1,6 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using GuardRail.Core.Enums;
+using GuardRail.Core.Helpers;
 using GuardRail.Database.Main;
 using GuardRail.Hardware.Common;
 using GuardRail.Logic.Commands.Implementations;
@@ -42,44 +45,92 @@ namespace GuardRail.Logic.Helpers
 
         public static IServiceCollection AddCommandHandler<TCommandHandler>(
             this IServiceCollection serviceCollection)
-            where TCommandHandler : class, ICommandHandler =>
-            serviceCollection
+            where TCommandHandler : class, ICommandHandler
+        {
+            var propertyValue = typeof(TCommandHandler)
+                .GetProperty(
+                    nameof(CommandType),
+                    BindingFlags.Static | BindingFlags.Public | BindingFlags.GetProperty)
+                ?.GetValue(null);
+            return serviceCollection
                 .AddKeyedSingleton<ICommandHandler, TCommandHandler>(
-                    typeof(TCommandHandler)
-                            .GetProperty(
-                                nameof(ICommandHandler.CommandType),
-                                BindingFlags.Static | BindingFlags.Public | BindingFlags.GetProperty)
-                            !.GetValue(null)
-                        as string);
+                    propertyValue is CommandType c
+                        ? c
+                        : throw new NotImplementedException($"The implementation for {typeof(TCommandHandler).Name} does not include a property called {nameof(CommandType)} or type {nameof(CommandType)}."));
+        }
 
         public static IServiceCollection AddGuardRailSupportedHardware(
             this IServiceCollection serviceCollection)
         {
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            // Get all currently loaded assemblies.
+            var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
+            var loadedPaths = loadedAssemblies.Select(a => a.Location).ToArray();
+
+            // Find and load all referenced assemblies that aren't already loaded.
+            var referencedPaths = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll");
+            var toLoad = referencedPaths.Where(r => !loadedPaths.Contains(r, StringComparer.InvariantCultureIgnoreCase));
+
+            // Load the assemblies.
+            foreach (var path in toLoad)
+            {
+                try
+                {
+                    var assemblyName = AssemblyName.GetAssemblyName(path);
+                    var assembly = Assembly.Load(assemblyName);
+                    loadedAssemblies.Add(assembly);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error loading assembly from {path}: {ex.Message}");
+                }
+            }
+
+            // Filter out system and Microsoft assemblies.
+            var assemblies = loadedAssemblies
+                .Where(x =>
+                    !x.FullName.IsNullOrWhiteSpace()
+                    && !x.FullName.StartsWith("Microsoft")
+                    && !x.FullName.StartsWith("System"));
+
+            // Register all ISupportedHardware implementations.
             foreach (var assembly in assemblies)
             {
                 try
                 {
-                    var types = assembly.GetTypes()
+                    var supportedHardwareInterface = typeof(ISupportedHardware);
+                    var types = assembly
+                        .GetTypes()
                         .Where(
                             x =>
                                 x is { IsInterface: false, IsAbstract: false }
-                                && typeof(ISupportedHardware)
+                                && supportedHardwareInterface
                                     .IsAssignableFrom(
                                         x));
                     foreach (var hardwareType in types)
                     {
-                        serviceCollection.AddSingleton(hardwareType);
-                        serviceCollection.AddSingleton(typeof(ISupportedHardware), hardwareType);
+                        var setupMethod = hardwareType
+                                              .GetMethod(
+                                                  nameof(ISupportedHardware.Setup))
+                                          ?? throw new NotImplementedException($"The type {hardwareType.Name} does not implement {nameof(ISupportedHardware.Setup)}");
+                        setupMethod
+                            .Invoke(
+                                hardwareType,
+                                [
+                                    serviceCollection
+                                ]);
                     }
                 }
                 catch (ReflectionTypeLoadException ex)
                 {
-                    // Handle cases where an assembly's types cannot be loaded
+                    // Handle cases where an assembly's types cannot be loaded.
                     foreach (var loaderException in ex.LoaderExceptions)
                     {
                         Console.WriteLine($"Error loading types from assembly {assembly.FullName}: {loaderException?.Message}");
                     }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error processing assembly {assembly.FullName}: {ex.Message}");
                 }
             }
 

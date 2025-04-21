@@ -1,7 +1,10 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using GuardRail.Hardware.GuardRailCustom.Device.DependencyHelpers;
 using GuardRail.Hardware.GuardRailCustom.Device.Interfaces;
+using GuardRail.Hardware.GuardRailCustom.Device.Models;
+using GuardRail.Hardware.GuardRailCustom.Device.BackgroundServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -15,6 +18,7 @@ public class Startup(
 {
     public void ConfigureServices(IServiceCollection services)
     {
+        DeviceConstants.DeviceId = configuration["Name"] ?? $"Not-configured-{Guid.NewGuid()}";
         services.AddLogging(
             x => x.AddConsole());
         services
@@ -23,7 +27,7 @@ public class Startup(
             .AddGuardRailIntegratedHardware(configuration)
             /*.AddSingleton<ICentralServerCommunication, CentralServerCommunication>()
             .AddSingleton<ICentralServerPushCommunication, CentralServerPushCommunication>()*/
-            .AddHostedService<HardwareUdpDiscoveryBackgroundWorker>()
+            .AddHostedService<HardwareUdpDiscoveryListenerBackgroundWorker>()
             /*.AddHostedService<CentralServerPushCommunication>()*/;
     }
 

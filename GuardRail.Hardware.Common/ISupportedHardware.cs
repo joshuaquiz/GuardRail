@@ -6,17 +6,17 @@ namespace GuardRail.Hardware.Common;
 public interface ISupportedHardware
 {
     /// <summary>
-    /// The type associated with this hardware.
-    /// </summary>
-    public AccessPointType AccessPointType { get; }
-
-    /// <summary>
     /// Sets up the hardware for this provider.
     /// </summary>
     /// <param name="serviceCollection">A <see cref="IServiceCollection"/> to modify.</param>
     /// <returns>The modified <see cref="IServiceCollection"/>.</returns>
-    public IServiceCollection Setup(
-        IServiceCollection serviceCollection);
+    public static virtual IServiceCollection Setup(
+        IServiceCollection serviceCollection) => serviceCollection;
+
+    /// <summary>
+    /// The type associated with this hardware.
+    /// </summary>
+    public AccessPointType AccessPointType { get; }
 
     /// <summary>
     /// Lists all non-configured APs of this hardware type.

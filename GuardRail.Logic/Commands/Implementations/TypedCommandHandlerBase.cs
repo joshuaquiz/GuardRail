@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using GuardRail.Core.Enums;
 using GuardRail.Core.Helpers;
 using GuardRail.Core.Models.Models;
 using GuardRail.Logic.Commands.Interfaces;
@@ -28,7 +27,4 @@ public abstract class TypedCommandHandlerBase<T>
         Guid commandId,
         T? body,
         CancellationToken cancellationToken);
-
-    /// <inheritdoc />
-    public abstract CommandType CommandType { get; }
 }

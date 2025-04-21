@@ -25,7 +25,9 @@ public sealed class PingTypedCommandHandler(
             cancellationToken);
     }
 
-    /// <inheritdoc />
-    public override CommandType CommandType =>
+    /// <summary>
+    /// The command type associated with this handler.
+    /// </summary>
+    public static CommandType CommandType =>
         CommandType.Ping;
 }

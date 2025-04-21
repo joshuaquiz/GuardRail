@@ -6,14 +6,18 @@ public sealed class NetworkHardwareCache
 {
     private readonly Dictionary<string, CustomHardwareSettings> _cache = new Dictionary<string, CustomHardwareSettings>();
 
-    public void Add(
+    public void AddOrUpdate(
         string key,
         CustomHardwareSettings settings) =>
         _cache[key] = settings;
 
-    public CustomHardwareSettings Get(
+    public CustomHardwareSettings? Get(
         string key) =>
-        _cache[key];
+        _cache.TryGetValue(
+            key,
+            out var item)
+            ? item
+            : null;
 
     public IReadOnlyCollection<CustomHardwareSettings> GetAll() =>
         _cache.Values;

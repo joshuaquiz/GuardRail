@@ -12,17 +12,18 @@ public sealed class GuardRailCustomHardware(
     NetworkHardwareCache networkHardwareCache) : ISupportedHardware
 {
     /// <inheritdoc />
-    public AccessPointType AccessPointType =>
-        AccessPointType.GuardRailCustom;
-
-    /// <inheritdoc />
-    public IServiceCollection Setup(
+    public static IServiceCollection Setup(
         IServiceCollection serviceCollection)
     {
         serviceCollection.AddSingleton<NetworkHardwareCache>();
+        serviceCollection.AddSingleton<ISupportedHardware, GuardRailCustomHardware>();
         serviceCollection.AddHostedService<HardwareUdpDiscoveryBackgroundWorker>();
         return serviceCollection;
     }
+
+    /// <inheritdoc />
+    public AccessPointType AccessPointType =>
+        AccessPointType.GuardRailCustom;
 
     /// <inheritdoc />
     public Task<IReadOnlyCollection<string>> GetAvailableAccessPoints(
