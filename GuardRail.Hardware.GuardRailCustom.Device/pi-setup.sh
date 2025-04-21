@@ -114,7 +114,7 @@ Restart=always
 RestartSec=10
 KillSignal=SIGINT
 SyslogIdentifier=guardrail-device
-User=pi
+User=joshua
 Environment=ASPNETCORE_ENVIRONMENT=Production
 Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
 
