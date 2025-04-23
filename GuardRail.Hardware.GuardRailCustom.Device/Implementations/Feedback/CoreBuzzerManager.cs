@@ -56,8 +56,11 @@ public class CoreBuzzerManager<TCoreBuzzerManager, TBuzzerConfigurationType>
     }
 
     /// <inheritdoc />
-    public async ValueTask InitAsync() =>
+    public async ValueTask InitAsync()
+    {
+        Logger.LogInformation("Should buzz");
         await BuzzAsync(
             TimeSpan.FromMilliseconds(200),
             CancellationToken.None);
+    }
 }

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using GuardRail.Hardware.GuardRailCustom.Device.Feedback.Buzzer;
 
 namespace GuardRail.Hardware.GuardRailCustom.Device;
 
@@ -25,6 +26,7 @@ public class Startup(
             .AddOptions()
             .AddLogging()
             .AddGuardRailIntegratedHardware(configuration)
+            .AddSingleton<IAsyncInit, BuzzerManager>()
             /*.AddSingleton<ICentralServerCommunication, CentralServerCommunication>()
             .AddSingleton<ICentralServerPushCommunication, CentralServerPushCommunication>()*/
             .AddHostedService<HardwareUdpDiscoveryListenerBackgroundWorker>()
@@ -34,10 +36,17 @@ public class Startup(
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         /*app.UseCoreEventHandlers();*/
-        var inits = app.ApplicationServices.GetServices<IAsyncInit>();
+        var inits = app.ApplicationServices.GetServices<IAsyncInit>().ToList();
         var logger = app.ApplicationServices.GetRequiredService<ILogger<Startup>>();
-        logger.LogInformation("Initializing stuff");
-        Task.WhenAll(inits.Select(async x => await x.InitAsync())).GetAwaiter().GetResult();
+        logger.LogInformation($"Initializing stuff ({inits.Count})");
+        Task.WhenAll(
+            inits
+                .Select(
+                    async x =>
+                    {
+                        logger.LogInformation($"Initializing {x.GetType().Name}");
+                        await x.InitAsync();
+                    })).GetAwaiter().GetResult();
         logger.LogInformation("Done with initializing");
     }
 }

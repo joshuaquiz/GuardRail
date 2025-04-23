@@ -8,12 +8,22 @@
 # Exit on error
 set -e
 
+# Default values
+USERNAME="gruser"
+
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
   case $1 in
     --username)
       USERNAME="$2"
       shift 2
+      ;;
+    --help)
+      echo "Usage: $0 [options]"
+      echo "Options:"
+      echo "  --username USERNAME  Specify the username (default: pi)"
+      echo "  --help              Show this help message"
+      exit 0
       ;;
     *)
       echo "Unknown option: $1"
@@ -48,25 +58,29 @@ sudo curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 
 echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
 echo 'export PATH=$PATH:$HOME/.dotnet' >> ~/.bashrc
 
+# Set environment variables for current session
+export DOTNET_ROOT=$HOME/.dotnet
+export PATH=$PATH:$HOME/.dotnet
+
 # Verify installation
 $HOME/.dotnet/dotnet --version
 
 # Create directory for GuardRail
 echo "Setting up GuardRail project..."
 GUARDRAIL_DIR="/home/$USERNAME/guardrail"
-echo 'export GUARDRAIL_DIR=$GUARDRAIL_DIR' >> ~/.bashrc
+echo "export GUARDRAIL_DIR=$GUARDRAIL_DIR" >> ~/.bashrc
 
 # Create the systemd service file
 echo "Creating systemd service..."
-sudo bash -c 'cat > /etc/systemd/system/guardrail-device.service << EOL
+sudo bash -c "cat > /etc/systemd/system/guardrail-device.service << EOL
 [Unit]
 Description=GuardRail Device Service
 After=network.target
 
 [Service]
 User=root
-WorkingDirectory=\$GUARDRAIL_DIR
-ExecStart=/usr/bin/dotnet \$GUARDRAIL_DIR/GuardRail.Hardware.GuardRailCustom.Device.dll
+WorkingDirectory=$GUARDRAIL_DIR
+ExecStart=/usr/bin/dotnet $GUARDRAIL_DIR/GuardRail.Hardware.GuardRailCustom.Device.dll
 Restart=always
 # Restart service after 10 seconds if it crashes
 RestartSec=10
@@ -77,7 +91,7 @@ Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
 
 [Install]
 WantedBy=multi-user.target
-EOL'
+EOL"
 
 # Enable and start the service
 echo "Enabling and starting the GuardRail service..."
