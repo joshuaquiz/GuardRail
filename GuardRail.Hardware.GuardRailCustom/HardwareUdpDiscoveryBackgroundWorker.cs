@@ -96,7 +96,7 @@ public sealed class HardwareUdpDiscoveryBackgroundWorker(
                                 port)));
             }
         }
-        catch (Exception e)
+        catch
         {
             // Ignored.
         }

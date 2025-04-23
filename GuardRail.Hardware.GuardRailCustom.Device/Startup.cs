@@ -35,6 +35,9 @@ public class Startup(
     {
         /*app.UseCoreEventHandlers();*/
         var inits = app.ApplicationServices.GetServices<IAsyncInit>();
+        var logger = app.ApplicationServices.GetRequiredService<ILogger<Startup>>();
+        logger.LogInformation("Initializing stuff");
         Task.WhenAll(inits.Select(async x => await x.InitAsync())).GetAwaiter().GetResult();
+        logger.LogInformation("Done with initializing");
     }
 }

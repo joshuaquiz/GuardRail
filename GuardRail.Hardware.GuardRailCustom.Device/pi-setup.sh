@@ -8,37 +8,12 @@
 # Exit on error
 set -e
 
-# Default values
-GIT_REPO=""
-LOCAL_PATH=""
-DEPLOY_METHOD="local"
-BRANCH="main"
-
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
   case $1 in
-    --git)
-      DEPLOY_METHOD="git"
-      GIT_REPO="$2"
+    --username)
+      USERNAME="$2"
       shift 2
-      ;;
-    --branch)
-      BRANCH="$2"
-      shift 2
-      ;;
-    --local)
-      DEPLOY_METHOD="local"
-      LOCAL_PATH="$2"
-      shift 2
-      ;;
-    --help)
-      echo "Usage: $0 [options]"
-      echo "Options:"
-      echo "  --git REPO_URL    Clone from git repository"
-      echo "  --branch BRANCH   Git branch to use (default: main)"
-      echo "  --local PATH      Use local project files"
-      echo "  --help            Show this help message"
-      exit 0
       ;;
     *)
       echo "Unknown option: $1"
@@ -78,26 +53,8 @@ $HOME/.dotnet/dotnet --version
 
 # Create directory for GuardRail
 echo "Setting up GuardRail project..."
-GUARDRAIL_DIR="/home/pi/guardrail"
-mkdir -p $GUARDRAIL_DIR
-rm -rf $GUARDRAIL_DIR
-
-# Deploy the project based on the selected method
-if [ "$DEPLOY_METHOD" = "git" ]; then
-  if [ -z "$GIT_REPO" ]; then
-    echo "Error: Git repository URL not provided. Use --git REPO_URL"
-    exit 1
-  fi
-  echo "Cloning repository from $GIT_REPO (branch: $BRANCH)..."
-  git clone -b $BRANCH $GIT_REPO $GUARDRAIL_DIR
-elif [ "$DEPLOY_METHOD" = "local" ]; then
-  if [ -n "$LOCAL_PATH" ]; then
-    echo "Copying project from local path: $LOCAL_PATH"
-    cp -r $LOCAL_PATH/* $GUARDRAIL_DIR/
-  else
-    echo "Warning: No local path provided. Assuming project files will be copied manually."
-  fi
-fi
+GUARDRAIL_DIR="/home/$USERNAME/guardrail"
+echo 'export GUARDRAIL_DIR=$GUARDRAIL_DIR' >> ~/.bashrc
 
 # Create the systemd service file
 echo "Creating systemd service..."
@@ -108,8 +65,8 @@ After=network.target
 
 [Service]
 User=root
-WorkingDirectory=/home/pi/guardrail/GuardRail.Hardware.GuardRailCustom.Device
-ExecStart=/usr/bin/dotnet /home/pi/guardrail/GuardRail.Hardware.GuardRailCustom.Device/bin/Release/net9.0/GuardRail.Hardware.GuardRailCustom.Device.dll
+WorkingDirectory=\$GUARDRAIL_DIR
+ExecStart=/usr/bin/dotnet \$GUARDRAIL_DIR/GuardRail.Hardware.GuardRailCustom.Device.dll
 Restart=always
 # Restart service after 10 seconds if it crashes
 RestartSec=10
@@ -121,25 +78,6 @@ Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
 [Install]
 WantedBy=multi-user.target
 EOL'
-
-# Build the project
-echo "Building the GuardRail.Hardware.GuardRailCustom.Device project..."
-cd $GUARDRAIL_DIR
-
-# Check if the project file exists
-if [ -f "$GUARDRAIL_DIR/GuardRail.Hardware.GuardRailCustom.Device/GuardRail.Hardware.GuardRailCustom.Device.csproj" ]; then
-  $HOME/.dotnet/dotnet publish "$GUARDRAIL_DIR/GuardRail.Hardware.GuardRailCustom.Device/GuardRail.Hardware.GuardRailCustom.Device.csproj" -c Release
-else
-  echo "Error: Project file not found. Please check the project path."
-  exit 1
-fi
-
-# Create appsettings.Production.json if it doesn't exist
-if [ ! -f "$GUARDRAIL_DIR/GuardRail.Hardware.GuardRailCustom.Device/bin/Release/net9.0/appsettings.Production.json" ]; then
-  echo "Creating Production settings file..."
-  cp "$GUARDRAIL_DIR/GuardRail.Hardware.GuardRailCustom.Device/bin/Release/net9.0/appsettings.json" \
-     "$GUARDRAIL_DIR/GuardRail.Hardware.GuardRailCustom.Device/bin/Release/net9.0/appsettings.Production.json"
-fi
 
 # Enable and start the service
 echo "Enabling and starting the GuardRail service..."
