@@ -7,12 +7,13 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.4" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.4" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.4" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GuardRail.Api.Models\GuardRail.Api.Models.csproj" />
     <ProjectReference Include="..\GuardRail.Api\GuardRail.Api.csproj" />
+    <ProjectReference Include="..\GuardRail.Hardware.GuardRailCustom\GuardRail.Hardware.GuardRailCustom.csproj" />
   </ItemGroup>
 </Project>

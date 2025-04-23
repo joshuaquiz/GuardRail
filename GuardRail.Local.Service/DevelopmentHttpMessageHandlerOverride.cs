@@ -11,10 +11,13 @@ using GuardRail.Api.Models.Responses;
 using GuardRail.Core.Enums;
 using GuardRail.Core.Helpers;
 using GuardRail.Core.Models.Models;
+using Microsoft.Extensions.Logging;
 
 namespace GuardRail.Local.Service;
 
-public partial class DevelopmentHttpMessageHandlerOverride : DelegatingHandler
+public partial class DevelopmentHttpMessageHandlerOverride(
+    ILogger<DevelopmentHttpMessageHandlerOverride> logger)
+    : DelegatingHandler
 {
     [GeneratedRegex(@"^/Version/VersionCheck\?version=(?:\d+\.?)+$")]
     private static partial Regex VersionCheckRegex();
@@ -100,6 +103,12 @@ public partial class DevelopmentHttpMessageHandlerOverride : DelegatingHandler
         HttpRequestMessage request,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation($"{request.Method.Method} {request.RequestUri?.PathAndQuery}");
+        if (request.Content != null)
+        {
+            logger.LogInformation(await request.Content.ReadAsStringAsync(cancellationToken));
+        }
+
         var resultFunction = _mockedHttpRequests
             .FirstOrDefault(x =>
                 x.UriPattern.IsMatch(

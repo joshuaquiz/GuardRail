@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi;
 
 namespace GuardRail.Api;
@@ -10,6 +11,9 @@ public static class ApiSetupExtensions
     public static void AddGuardRailApi(
         this IServiceCollection services)
     {
+        services.AddLogging(
+            x =>
+                x.AddConsole());
         services.AddControllers();
         services.AddOpenApi(
             "GuardRail",
