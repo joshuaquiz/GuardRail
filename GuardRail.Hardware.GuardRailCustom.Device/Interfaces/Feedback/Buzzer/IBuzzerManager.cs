@@ -7,7 +7,7 @@ namespace GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Feedback.Buzzer;
 /// <summary>
 /// The high level API for interacting with a feedback buzzer.
 /// </summary>
-public interface IBuzzerManager : IAsyncDisposable, IDisposable
+public interface IBuzzerManager : IAsyncInit, IAsyncDisposable, IDisposable
 {
     /// <summary>
     /// Turns on a buzzer on.

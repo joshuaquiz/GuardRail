@@ -1,14 +1,14 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using GuardRail.Hardware.GuardRailCustom.Device.Interfaces;
+using GuardRail.Core.Helpers;
 using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Feedback.Buzzer;
 using Microsoft.Extensions.Logging;
 
 namespace GuardRail.Hardware.GuardRailCustom.Device.Implementations.Feedback;
 
 public class CoreBuzzerManager<TCoreBuzzerManager, TBuzzerConfigurationType>
-    : IBuzzerManager, IAsyncInit
+    : IBuzzerManager
     where TCoreBuzzerManager : CoreBuzzerManager<TCoreBuzzerManager, TBuzzerConfigurationType>
 {
     protected readonly IBuzzerConfiguration<TBuzzerConfigurationType> BuzzerConfiguration;
@@ -30,18 +30,15 @@ public class CoreBuzzerManager<TCoreBuzzerManager, TBuzzerConfigurationType>
         TimeSpan duration,
         CancellationToken cancellationToken)
     {
-        LogDebug("Turning buzzer on");
+        Logger.LogGuardRailDebug("Turning buzzer on");
         await BuzzerManager.TurnBuzzerOnAsync(BuzzerConfiguration.BuzzerAddress, cancellationToken);
         if (duration > TimeSpan.Zero)
         {
             await Task.Delay(duration, cancellationToken);
-            LogDebug("Turning buzzer off");
+            Logger.LogGuardRailDebug("Turning buzzer off");
             await BuzzerManager.TurnBuzzerOffAsync(BuzzerConfiguration.BuzzerAddress, cancellationToken);
         }
     }
-
-    protected void LogDebug(string message) =>
-        Logger.LogDebug("[buzzer manager] " + message);
 
     /// <inheritdoc />
     public void Dispose() =>
@@ -50,6 +47,7 @@ public class CoreBuzzerManager<TCoreBuzzerManager, TBuzzerConfigurationType>
     /// <inheritdoc />
     public virtual async ValueTask DisposeAsync()
     {
+        Logger.LogGuardRailDebug("Disposing buzzer manager");
         await BuzzerManager.DisposeAddressAsync(
             BuzzerConfiguration.BuzzerAddress);
         GC.SuppressFinalize(this);
@@ -58,7 +56,7 @@ public class CoreBuzzerManager<TCoreBuzzerManager, TBuzzerConfigurationType>
     /// <inheritdoc />
     public async ValueTask InitAsync()
     {
-        Logger.LogInformation("Should buzz");
+        Logger.LogGuardRailDebug("Starting buzzer manager");
         await BuzzAsync(
             TimeSpan.FromMilliseconds(200),
             CancellationToken.None);

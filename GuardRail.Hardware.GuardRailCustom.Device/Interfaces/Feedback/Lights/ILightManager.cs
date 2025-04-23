@@ -7,7 +7,7 @@ namespace GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Feedback.Lights;
 /// <summary>
 /// The high level API for interacting with feedback lights.
 /// </summary>
-public interface ILightManager : IAsyncDisposable, IDisposable
+public interface ILightManager : IAsyncInit, IAsyncDisposable, IDisposable
 {
     /// <summary>
     /// Turns on a red light.

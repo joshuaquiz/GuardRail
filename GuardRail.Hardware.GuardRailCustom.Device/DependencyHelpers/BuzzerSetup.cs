@@ -35,7 +35,8 @@ public static class BuzzerSetup
             .AddSingleton<IBuzzerConfiguration<TBuzzerConfigurationType>>(x => x.GetRequiredService<TBuzzerConfiguration>())
             .AddSingleton<TBuzzerHardwareManager>()
             .AddSingleton<IBuzzerHardwareManager<TBuzzerConfigurationType>>(s => s.GetRequiredService<TBuzzerHardwareManager>())
-            .AddSingleton<IAsyncInit>(s => s.GetRequiredService<TBuzzerHardwareManager>())
+            .AddSingleton<IAsyncInit>(s => s.GetRequiredService<IBuzzerHardwareManager<TBuzzerConfigurationType>>())
+            .AddSingleton<IAsyncInit>(s => s.GetRequiredService<IBuzzerManager>())
             .AddSingleton<IBuzzerManager, TBuzzerManager>();
 
     /// <summary>

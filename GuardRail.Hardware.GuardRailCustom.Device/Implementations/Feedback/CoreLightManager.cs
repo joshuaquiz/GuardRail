@@ -1,14 +1,14 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using GuardRail.Hardware.GuardRailCustom.Device.Interfaces;
+using GuardRail.Core.Helpers;
 using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Feedback.Lights;
 using Microsoft.Extensions.Logging;
 
 namespace GuardRail.Hardware.GuardRailCustom.Device.Implementations.Feedback;
 
 public class CoreLightManager<TCoreLightManager, TLightConfigurationType>
-    : ILightManager, IAsyncInit
+    : ILightManager
     where TCoreLightManager : CoreLightManager<TCoreLightManager, TLightConfigurationType>
 {
     protected readonly ILightConfiguration<TLightConfigurationType> LightConfiguration;
@@ -30,12 +30,12 @@ public class CoreLightManager<TCoreLightManager, TLightConfigurationType>
         TimeSpan duration,
         CancellationToken cancellationToken)
     {
-        LogDebug("Turning red light on");
+        Logger.LogGuardRailDebug("Turning red light on");
         await LightManager.TurnLightOnAsync(LightConfiguration.RedLightAddress, cancellationToken);
         if (duration > TimeSpan.Zero)
         {
             await Task.Delay(duration, cancellationToken);
-            LogDebug("Turning red light off");
+            Logger.LogGuardRailDebug("Turning red light off");
             await LightManager.TurnLightOffAsync(LightConfiguration.RedLightAddress, cancellationToken);
         }
     }
@@ -45,18 +45,15 @@ public class CoreLightManager<TCoreLightManager, TLightConfigurationType>
         TimeSpan duration,
         CancellationToken cancellationToken)
     {
-        LogDebug("Turning green light on");
+        Logger.LogGuardRailDebug("Turning green light on");
         await LightManager.TurnLightOnAsync(LightConfiguration.GreenLightAddress, cancellationToken);
         if (duration > TimeSpan.Zero)
         {
             await Task.Delay(duration, cancellationToken);
-            LogDebug("Turning green light off");
+            Logger.LogGuardRailDebug("Turning green light off");
             await LightManager.TurnLightOffAsync(LightConfiguration.GreenLightAddress, cancellationToken);
         }
     }
-
-    protected void LogDebug(string message) =>
-        Logger.LogDebug("[light manager] " + message);
 
     /// <inheritdoc />
     public void Dispose() =>
@@ -65,6 +62,7 @@ public class CoreLightManager<TCoreLightManager, TLightConfigurationType>
     /// <inheritdoc />
     public virtual async ValueTask DisposeAsync()
     {
+        Logger.LogGuardRailDebug("Disposing buzzer manager");
         await LightManager.DisposeAddressAsync(
             LightConfiguration.RedLightAddress);
         await LightManager.DisposeAddressAsync(
@@ -75,6 +73,7 @@ public class CoreLightManager<TCoreLightManager, TLightConfigurationType>
     /// <inheritdoc />
     public async ValueTask InitAsync()
     {
+        Logger.LogGuardRailDebug("Starting light manager");
         await TurnOnRedLightAsync(
             TimeSpan.FromMilliseconds(250),
             CancellationToken.None);

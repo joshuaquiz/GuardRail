@@ -136,7 +136,37 @@ public static class Extensions
         where TException : Exception =>
         logger.LogError(
             exception,
-            $"{Path.GetFileName(sourceFilePath)}:{sourceLineNumber}({memberName}) {(additionalMessage.IsNullOrWhiteSpace() ? string.Empty : additionalMessage + " ")}{exception.Message}");
+            $"[{memberName}:{sourceLineNumber}({Path.GetFileName(sourceFilePath)})] {(additionalMessage.IsNullOrWhiteSpace() ? string.Empty : additionalMessage + " ")}{exception.Message}");
+
+    /// <summary>
+    /// Logs an informational message with meta-data.
+    /// </summary>
+    /// <param name="logger">The logger to write the informational log to.</param>
+    /// <param name="message">The message to log.</param>
+    /// <param name="memberName">DO NOT USE: Auto-populated by <see cref="CallerMemberNameAttribute"/>.</param>
+    /// <typeparam name="TLoggerType">The logger type.</typeparam>
+    public static void LogGuardRailInformation<TLoggerType>(
+        this ILogger<TLoggerType> logger,
+        string? message,
+        [CallerMemberName] string memberName = "") =>
+        logger.LogInformation(
+            $"[{memberName}]: {message}");
+
+    /// <summary>
+    /// Logs an informational message with meta-data.
+    /// </summary>
+    /// <param name="logger">The logger to write the informational log to.</param>
+    /// <param name="message">The message to log.</param>
+    /// <param name="memberName">DO NOT USE: Auto-populated by <see cref="CallerMemberNameAttribute"/>.</param>
+    /// <param name="sourceLineNumber">DO NOT USE: Auto-populated by <see cref="CallerLineNumberAttribute"/>.</param>
+    /// <typeparam name="TLoggerType">The logger type.</typeparam>
+    public static void LogGuardRailDebug<TLoggerType>(
+        this ILogger<TLoggerType> logger,
+        string? message,
+        [CallerMemberName] string memberName = "",
+        [CallerLineNumber] int sourceLineNumber = 0) =>
+        logger.LogDebug(
+            $"[{memberName}:{sourceLineNumber}] {message}");
 
     /// <summary>
     /// Logs an informational message with meta-data.
@@ -147,14 +177,14 @@ public static class Extensions
     /// <param name="sourceFilePath">DO NOT USE: Auto-populated by <see cref="CallerFilePathAttribute"/>.</param>
     /// <param name="sourceLineNumber">DO NOT USE: Auto-populated by <see cref="CallerLineNumberAttribute"/>.</param>
     /// <typeparam name="TLoggerType">The logger type.</typeparam>
-    public static void LogGuardRailInformation<TLoggerType>(
+    public static void LogGuardRailTrace<TLoggerType>(
         this ILogger<TLoggerType> logger,
         string? message,
         [CallerMemberName] string memberName = "",
         [CallerFilePath] string sourceFilePath = "",
         [CallerLineNumber] int sourceLineNumber = 0) =>
-        logger.LogInformation(
-            $"{Path.GetFileName(sourceFilePath)}:{sourceLineNumber}({memberName}): {message}");
+        logger.LogTrace(
+            $"[{memberName}:{sourceLineNumber}({Path.GetFileName(sourceFilePath)})] {message}");
 
     public static IReadOnlyDictionary<string, string> GetEnumDescriptions<T>() where T : Enum
     {

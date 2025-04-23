@@ -4,14 +4,17 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using GuardRail.Core.Helpers;
 using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Feedback.Lights;
 using GuardRail.Hardware.GuardRailCustom.Device.Models;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace GuardRail.Hardware.GuardRailCustom.Device.BackgroundServices;
 
 public sealed class HardwareUdpDiscoveryListenerBackgroundWorker(
-    ILightManager lightManager)
+    ILightManager lightManager,
+    ILogger<HardwareUdpDiscoveryListenerBackgroundWorker> logger)
     : BackgroundService
 {
     private const int DiscoveryPort = 12345;
@@ -33,6 +36,7 @@ public sealed class HardwareUdpDiscoveryListenerBackgroundWorker(
                         DeviceConstants.RemoteHostIpAddress))
                 {
                     // We do not need to respond in the configuration is still the same.
+                    logger.LogGuardRailDebug("The remote hose has not hanged");
                     continue;
                 }
 
@@ -43,6 +47,7 @@ public sealed class HardwareUdpDiscoveryListenerBackgroundWorker(
                 var parts = response.Split(':');
                 if (parts.Length != 3)
                 {
+                    logger.LogGuardRailDebug("The data received did not match the required format");
                     continue;
                 }
 
@@ -65,8 +70,13 @@ public sealed class HardwareUdpDiscoveryListenerBackgroundWorker(
                         stoppingToken);
                 }
             }
-            catch
+            catch (TaskCanceledException)
             {
+                // Ignored.
+            }
+            catch (Exception e)
+            {
+                logger.LogGuardRailError(e);
                 // Ignored.
             }
         }
@@ -94,6 +104,7 @@ public sealed class HardwareUdpDiscoveryListenerBackgroundWorker(
     private async Task NotifySuccessfullyConnected(
         CancellationToken cancellationToken)
     {
+        logger.LogGuardRailDebug("Alerting that the connection attempt was successful");
         await lightManager.TurnOnGreenLightAsync(TimeSpan.FromMilliseconds(500), cancellationToken);
         await Task.Delay(TimeSpan.FromMilliseconds(200), cancellationToken);
         await lightManager.TurnOnGreenLightAsync(TimeSpan.FromMilliseconds(500), cancellationToken);
@@ -102,6 +113,7 @@ public sealed class HardwareUdpDiscoveryListenerBackgroundWorker(
     private async Task NotifyDisconnected(
         CancellationToken cancellationToken)
     {
+        logger.LogGuardRailDebug("Alerting that the connection attempt was NON successful");
         await lightManager.TurnOnRedLightAsync(TimeSpan.FromMilliseconds(500), cancellationToken);
         await Task.Delay(TimeSpan.FromMilliseconds(200), cancellationToken);
         await lightManager.TurnOnRedLightAsync(TimeSpan.FromMilliseconds(500), cancellationToken);

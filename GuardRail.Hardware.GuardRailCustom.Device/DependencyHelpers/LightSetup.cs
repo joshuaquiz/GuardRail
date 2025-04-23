@@ -35,7 +35,8 @@ public static class LightSetup
             .AddSingleton<ILightConfiguration<TLightConfigurationType>>(s => s.GetRequiredService<TLightConfiguration>())
             .AddSingleton<TLightHardwareManager>()
             .AddSingleton<ILightHardwareManager<TLightConfigurationType>>(s => s.GetRequiredService<TLightHardwareManager>())
-            .AddSingleton<IAsyncInit>(s => s.GetRequiredService<TLightHardwareManager>())
+            .AddSingleton<IAsyncInit>(s => s.GetRequiredService<ILightHardwareManager<TLightConfigurationType>>())
+            .AddSingleton<IAsyncInit>(s => s.GetRequiredService<ILightManager>())
             .AddSingleton<ILightManager, TLightManager>();
 
     /// <summary>

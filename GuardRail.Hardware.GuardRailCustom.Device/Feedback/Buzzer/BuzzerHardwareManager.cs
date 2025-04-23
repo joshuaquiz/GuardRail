@@ -1,6 +1,7 @@
 using System.Device.Gpio;
 using System.Threading;
 using System.Threading.Tasks;
+using GuardRail.Core.Helpers;
 using GuardRail.Hardware.GuardRailCustom.Device.Interfaces;
 using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Feedback.Buzzer;
 using Microsoft.Extensions.Logging;
@@ -13,10 +14,9 @@ public sealed class BuzzerHardwareManager(
     ILogger<BuzzerHardwareManager> logger)
     : IBuzzerHardwareManager<int>
 {
-    private readonly ILogger<BuzzerHardwareManager> _logger = logger;
-
     public ValueTask InitAsync()
     {
+        logger.LogGuardRailDebug("Starting buzzer hardware, opening pin {buzzerConfiguration.BuzzerAddress} as Output");
         gpio.OpenPin(buzzerConfiguration.BuzzerAddress, PinMode.Output);
         return ValueTask.CompletedTask;
     }
@@ -25,6 +25,7 @@ public sealed class BuzzerHardwareManager(
         int address,
         CancellationToken cancellationToken)
     {
+        logger.LogGuardRailDebug("Writing High to pin {address}");
         gpio.Write(
             address,
             PinValue.High);
@@ -35,6 +36,7 @@ public sealed class BuzzerHardwareManager(
         int address,
         CancellationToken cancellationToken)
     {
+        logger.LogGuardRailDebug("Writing Low to pin {buzzerConfiguration.BuzzerAddress}");
         gpio.Write(
             address,
             PinValue.Low);
@@ -43,6 +45,7 @@ public sealed class BuzzerHardwareManager(
 
     public ValueTask DisposeAddressAsync(int address)
     {
+        logger.LogGuardRailDebug("Closing pin {buzzerConfiguration.BuzzerAddress}");
         gpio.ClosePin(address);
         return ValueTask.CompletedTask;
     }
