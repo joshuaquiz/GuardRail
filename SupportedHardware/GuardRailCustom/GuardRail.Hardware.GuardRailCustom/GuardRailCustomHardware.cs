@@ -24,7 +24,6 @@ public sealed class GuardRailCustomHardware(
     {
         serviceCollection.AddSingleton<NetworkHardwareCache>();
         serviceCollection.AddSingleton<ISupportedHardware, GuardRailCustomHardware>();
-        serviceCollection.AddSingleton<GuardRailBroadcastUdpClient>();
         serviceCollection.AddHostedService<HardwareUdpDiscoveryBackgroundWorker>();
         return serviceCollection;
     }

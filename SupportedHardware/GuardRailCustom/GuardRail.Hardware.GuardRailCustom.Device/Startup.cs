@@ -29,30 +29,7 @@ public class Startup(
             .AddLogging()
             .AddSingleton<GuardRailUdpClientFactory>()
             .AddKeyedSingleton<IUdpCommandHandler, SyncUdpCommandHandler>(SyncUdpCommandHandler.CommandName)
-            .AddSingleton(
-                s =>
-                {
-                    var guardRailUdpClient = new GuardRailUdpClient(
-                        new IPEndPoint(IPAddress.Any, GuardRailCustomConstants.UdpDiscoveryPort),
-                        s.GetRequiredService<ILogger<GuardRailUdpClient>>());
-                    guardRailUdpClient.OnUnMatchedRequestReceived +=
-                        async (response, ct) =>
-                        {
-                            if (response.CommandName != GuardRailCustomConstants.UdpCommandNames.Sync)
-                            {
-                                return null;
-                            }
-
-                            var handler = s.GetRequiredKeyedService<IUdpCommandHandler>(
-                                response.CommandName);
-                            return await handler
-                                .HandleCommand(
-                                    response,
-                                    ct);
-                        };
-                    return guardRailUdpClient;
-                })
-            .AddHostedService<GuardRailUdpBroadcastCommandListener>()
+            .AddHostedService<HardwareUdpDiscoveryListenerBackgroundWorker>()
             .AddGuardRailIntegratedHardware(configuration);
     }
 
