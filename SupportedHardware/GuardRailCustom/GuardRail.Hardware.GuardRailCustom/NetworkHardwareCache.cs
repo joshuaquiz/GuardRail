@@ -10,8 +10,19 @@ public sealed class NetworkHardwareCache : IDisposable
 
     public void AddOrUpdate(
         string key,
-        CustomHardwareSettings settings) =>
+        CustomHardwareSettings settings)
+    {
+        if (_cache.TryGetValue(
+                key,
+                out var item))
+        {
+            // TODO: check to see if the items are different. If not then we can return.
+            item.Dispose();
+            _cache.Remove(key);
+        }
+
         _cache[key] = settings;
+    }
 
     public CustomHardwareSettings? Get(
         string key) =>

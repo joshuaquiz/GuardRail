@@ -1,18 +1,18 @@
 ﻿using System;
-using System.Linq;
+using System.Net;
 using Newtonsoft.Json;
 
 namespace GuardRail.Core.Helpers;
 
 /// <inheritdoc/>
-public class VersionConverter : JsonConverter
+public class IpAddressConverter : JsonConverter
 {
     /// <inheritdoc/>
     public override void WriteJson(
         JsonWriter writer,
         object value,
         JsonSerializer serializer) =>
-        serializer.Serialize(writer, value);
+        serializer.Serialize(writer, value is IPAddress ipAddress ? ipAddress.ToString() : IPAddress.None.ToString());
 
     /// <inheritdoc/>
     public override object ReadJson(
@@ -21,15 +21,11 @@ public class VersionConverter : JsonConverter
         object existingValue,
         JsonSerializer serializer)
     {
-        var sections = serializer.Deserialize<string>(reader).Split('.');
-        return new Version(
-            sections.ElementAtOrDefault(0).Convert<int>(),
-            sections.ElementAtOrDefault(1).Convert<int>(),
-            sections.ElementAtOrDefault(2).Convert<int>(),
-            sections.ElementAtOrDefault(3).Convert<int>());
+        var sections = serializer.Deserialize<string>(reader);
+        return IPAddress.Parse(sections);
     }
 
     /// <inheritdoc/>
     public override bool CanConvert(Type objectType) =>
-        objectType == typeof(Version);
+        objectType == typeof(IPAddress);
 }

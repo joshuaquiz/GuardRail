@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using GuardRail.Core.Enums;
 using GuardRail.Core.Helpers;
 using GuardRail.Hardware.Common;
+using GuardRail.Hardware.GuardRailCustom.BackgroundServices;
 using GuardRail.Hardware.GuardRailCustom.Core;
 using GuardRail.Logic.Commands.Models;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,7 +25,7 @@ public sealed class GuardRailCustomHardware(
     {
         serviceCollection.AddSingleton<NetworkHardwareCache>();
         serviceCollection.AddSingleton<ISupportedHardware, GuardRailCustomHardware>();
-        serviceCollection.AddHostedService<HardwareUdpDiscoveryBackgroundWorker>();
+        serviceCollection.AddHostedService<ServerHardwareUdpDiscoveryListenerBackgroundWorker>();
         return serviceCollection;
     }
 

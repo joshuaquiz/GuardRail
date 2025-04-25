@@ -28,8 +28,8 @@ public class Startup(
             .AddOptions()
             .AddLogging()
             .AddSingleton<GuardRailUdpClientFactory>()
-            .AddKeyedSingleton<IUdpCommandHandler, SyncUdpCommandHandler>(SyncUdpCommandHandler.CommandName)
-            .AddHostedService<HardwareUdpDiscoveryListenerBackgroundWorker>()
+            .AddKeyedSingleton<IUdpCommandHandler, UnLockDoorUdpCommandHandler>(UnLockDoorUdpCommandHandler.CommandName)
+            .AddHostedService<DeviceHardwareUdpDiscoveryListenerBackgroundWorker>()
             .AddGuardRailIntegratedHardware(configuration);
     }
 

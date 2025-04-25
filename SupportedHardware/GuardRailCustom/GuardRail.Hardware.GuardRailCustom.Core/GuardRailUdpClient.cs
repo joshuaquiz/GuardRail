@@ -14,16 +14,18 @@ namespace GuardRail.Hardware.GuardRailCustom.Core;
 public sealed class GuardRailUdpClient : UdpClient
 {
     private readonly ConcurrentDictionary<Guid, ObservableCollection<UdpResponse>> _pendingRequests = new();
-    private readonly IPEndPoint _localEp;
     private readonly ILogger<GuardRailUdpClient> _logger;
+    private readonly CancellationTokenSource _cancellationTokenSource = new();
+
+    public IPEndPoint LocalEp { get; }
 
     public GuardRailUdpClient(
         IPEndPoint localEp,
         ILogger<GuardRailUdpClient> logger)
         : base(
-            localEp)
+            localEp.Port)
     {
-        _localEp = localEp;
+        LocalEp = localEp;
         _logger = logger;
         this.ConfigureEncryptedTrafficLogging(_logger);
     }
@@ -44,11 +46,12 @@ public sealed class GuardRailUdpClient : UdpClient
         CancellationToken cancellationToken,
         Func<T, string>? converter = null)
     {
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(_cancellationTokenSource.Token, cancellationToken);
         converter ??= x => x.ToJson();
         await this.SendEncryptedData(
-            _localEp,
+            LocalEp,
             $"{Guid.NewGuid()}{GuardRailCustomConstants.UdpSeparator}{commandName}{GuardRailCustomConstants.UdpSeparator}{converter(data)}",
-            cancellationToken);
+            cts.Token);
     }
 
     /// <summary>
@@ -64,6 +67,7 @@ public sealed class GuardRailUdpClient : UdpClient
         CancellationToken cancellationToken,
         Func<string, T?>? converter = null)
     {
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(_cancellationTokenSource.Token, cancellationToken);
         converter ??= x => x.FromJson<T>();
         var requestId = Guid.NewGuid();
         var incomingData = new ObservableCollection<UdpResponse>();
@@ -80,7 +84,7 @@ public sealed class GuardRailUdpClient : UdpClient
                     out var _);
             }
         };
-        cancellationToken
+        cts.Token
             .Register(
                 () =>
                 {
@@ -91,8 +95,9 @@ public sealed class GuardRailUdpClient : UdpClient
                 });
         _pendingRequests.TryAdd(requestId, incomingData);
         await this.SendEncryptedData(
+            LocalEp,
             $"{requestId}:{commandName}",
-            cancellationToken);
+            cts.Token);
         return await tcs.Task;
     }
 
@@ -114,6 +119,7 @@ public sealed class GuardRailUdpClient : UdpClient
         Func<TRequest, string>? requestConverter = null,
         Func<string, TResponse?>? responseConverter = null)
     {
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(_cancellationTokenSource.Token, cancellationToken);
         requestConverter ??= x => x.ToJson();
         responseConverter ??= x => x.FromJson<TResponse>();
         var requestId = Guid.NewGuid();
@@ -131,7 +137,7 @@ public sealed class GuardRailUdpClient : UdpClient
                     out var _);
             }
         };
-        cancellationToken
+        cts.Token
             .Register(
                 () =>
                 {
@@ -142,8 +148,9 @@ public sealed class GuardRailUdpClient : UdpClient
                 });
         _pendingRequests.TryAdd(requestId, incomingData);
         await this.SendEncryptedData(
+            LocalEp,
             $"{requestId}{GuardRailCustomConstants.UdpSeparator}{commandName}{GuardRailCustomConstants.UdpSeparator}{requestConverter(requestData)}",
-            cancellationToken);
+            cts.Token);
         return await tcs.Task;
     }
 
@@ -159,7 +166,7 @@ public sealed class GuardRailUdpClient : UdpClient
     /// <param name="requestConverter">A converter method for the request (defaults to using ToJson).</param>
     /// <param name="responseConverter">A converter method for the response (defaults to using FromJson).</param>
     /// <returns>The response data deserialized to the specified type.</returns>
-    public Task GetDataSeries<TRequest, TResponse>(
+    public async Task GetDataSeries<TRequest, TResponse>(
         string commandName,
         TRequest requestData,
         Func<TResponse, Task> handler,
@@ -167,6 +174,7 @@ public sealed class GuardRailUdpClient : UdpClient
         Func<TRequest, string>? requestConverter = null,
         Func<string, TResponse?>? responseConverter = null)
     {
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(_cancellationTokenSource.Token, cancellationToken);
         requestConverter ??= x => x.ToJson();
         responseConverter ??= x => x.FromJson<TResponse>();
         var requestId = Guid.NewGuid();
@@ -184,48 +192,45 @@ public sealed class GuardRailUdpClient : UdpClient
             }
         };
         _pendingRequests.TryAdd(requestId, incomingData);
-        return Task.Run(
-            async () =>
+        try
+        {
+            await this.SendEncryptedData(
+                LocalEp,
+                $"{requestId}{GuardRailCustomConstants.UdpSeparator}{commandName}{GuardRailCustomConstants.UdpSeparator}{requestConverter(requestData)}",
+                cts.Token);
+            while (!cts.Token.IsCancellationRequested)
             {
                 try
                 {
-                    await this.SendEncryptedData(
-                        $"{requestId}{GuardRailCustomConstants.UdpSeparator}{commandName}{GuardRailCustomConstants.UdpSeparator}{requestConverter(requestData)}",
-                        cancellationToken);
-                    while (!cancellationToken.IsCancellationRequested)
-                    {
-                        try
-                        {
-                            await Task.Delay(
-                                TimeSpan.FromSeconds(
-                                    1),
-                                cancellationToken);
-                        }
-                        catch (TaskCanceledException)
-                        {
-                            // Ignored.
-                        }
-                    }
+                    await Task.Delay(
+                        TimeSpan.FromSeconds(
+                            1),
+                        cts.Token);
                 }
-                finally
+                catch (TaskCanceledException)
                 {
-                    _pendingRequests.TryRemove(
-                        requestId,
-                        out _);
+                    // Ignored.
                 }
-            },
-            cancellationToken);
+            }
+        }
+        finally
+        {
+            _pendingRequests.TryRemove(
+                requestId,
+                out _);
+        }
     }
 
     public async Task StartReceivingData(
         CancellationToken cancellationToken)
     {
-        while (!cancellationToken.IsCancellationRequested)
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(_cancellationTokenSource.Token, cancellationToken);
+        while (!cts.Token.IsCancellationRequested)
         {
             try
             {
                 var (receivedString, receivedFrom) = await this.ReceiveEncryptedData(
-                    cancellationToken);
+                    cts.Token);
                 var requestIdEnd = receivedString
                     .IndexOf(
                         GuardRailCustomConstants.UdpSeparator,
@@ -278,18 +283,18 @@ public sealed class GuardRailUdpClient : UdpClient
                 }
                 else if (OnUnMatchedRequestReceived != null)
                 {
-                    _logger.LogGuardRailInformation($"Received new command ({requestId}), processing...");
+                    _logger.LogGuardRailInformation($"{requestId}: Processing...");
                     var result = await OnUnMatchedRequestReceived
                         .Invoke(
                             udpResponse,
-                            cancellationToken);
+                            cts.Token);
                     if (result != null)
                     {
-                        _logger.LogGuardRailInformation($"Sending {result} as the response to {requestId}");
+                        _logger.LogGuardRailInformation($"{requestId}: Sending {result} to {receivedFrom}");
                         await this.SendEncryptedData(
                             receivedFrom,
                             $"{requestId}{GuardRailCustomConstants.UdpSeparator}{commandName}{GuardRailCustomConstants.UdpSeparator}{result}",
-                            cancellationToken);
+                            cts.Token);
                     }
                 }
             }
@@ -300,5 +305,12 @@ public sealed class GuardRailUdpClient : UdpClient
                         e);
             }
         }
+    }
+
+    public new void Dispose()
+    {
+        _cancellationTokenSource.Cancel();
+        _pendingRequests.Clear();
+        base.Dispose();
     }
 }
