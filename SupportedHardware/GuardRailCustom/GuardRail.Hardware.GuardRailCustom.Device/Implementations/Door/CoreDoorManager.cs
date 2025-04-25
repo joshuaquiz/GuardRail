@@ -1,0 +1,89 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using GuardRail.Core.Helpers;
+using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Door;
+using Microsoft.Extensions.Logging;
+using UnitsNet;
+
+namespace GuardRail.Hardware.GuardRailCustom.Device.Implementations.Door;
+
+public abstract class CoreDoorManager<TCoreDoorManager, TDoorConfigurationType> : IDoorManager
+    where TCoreDoorManager : CoreDoorManager<TCoreDoorManager, TDoorConfigurationType>
+{
+    protected readonly IDoorConfiguration<TDoorConfigurationType> DoorConfiguration;
+    protected readonly ILockableDoorHardwareManager<TDoorConfigurationType> LockableDoorHardwareManager;
+    /*protected readonly IOpenableDoorHardwareManager? OpenableDoorHardwareManager;*/
+    protected readonly ILogger<TCoreDoorManager> Logger;
+
+    protected CoreDoorManager(IDoorConfiguration<TDoorConfigurationType> doorConfiguration,
+        ILockableDoorHardwareManager<TDoorConfigurationType> lockableDoorHardwareManager,
+        /*IOpenableDoorHardwareManager? openableDoorHardwareManager,*/
+        ILogger<TCoreDoorManager> logger)
+    {
+        DoorConfiguration = doorConfiguration;
+        LockableDoorHardwareManager = lockableDoorHardwareManager;
+        /*OpenableDoorHardwareManager = openableDoorHardwareManager;*/
+        Logger = logger;
+    }
+
+    /// <inheritdoc />
+    public virtual async ValueTask UnLockAsync(
+        TimeSpan duration,
+        CancellationToken cancellationToken)
+    {
+        Logger.LogGuardRailDebug("Unlocking door");
+        await LockableDoorHardwareManager.UnLockAsync(DoorConfiguration.DoorAddress, cancellationToken);
+        if (duration > TimeSpan.Zero)
+        {
+            await Task.Delay(duration, cancellationToken);
+            Logger.LogGuardRailDebug("Locking door");
+            await LockableDoorHardwareManager.LockAsync(DoorConfiguration.DoorAddress, cancellationToken);
+        }
+    }
+
+    /// <inheritdoc />
+    public virtual async ValueTask LockAsync(
+        CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <inheritdoc />
+    public virtual async ValueTask OpenAsync(
+        TimeSpan duration,
+        CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <inheritdoc />
+    public virtual async ValueTask CloseAsync(
+        CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <inheritdoc />
+    public virtual void Dispose() =>
+        DisposeAsync().GetAwaiter().GetResult();
+
+    /// <inheritdoc />
+    public virtual async ValueTask DisposeAsync()
+    {
+        /*if (LockableDoorHardwareManager is not null)
+        {
+            await LockableDoorHardwareManager.DisposeAddressAsync(DoorConfiguration.DoorAddress);
+        }
+        await DoorManager.DisposeAddressAsync(
+            DoorConfiguration.DoorAddress);*/
+    }
+
+    public async ValueTask InitAsync()
+    {
+        Logger.LogGuardRailDebug("Starting door manager");
+        await UnLockAsync(
+            TimeSpan.FromSeconds(5),
+            CancellationToken.None);
+    }
+}

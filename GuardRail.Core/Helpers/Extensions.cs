@@ -68,6 +68,22 @@ public static class Extensions
         return jsonSerializer.Deserialize<T>(reader);
     }
 
+    /// <summary>
+    /// Deserialize JSON to type.
+    /// </summary>
+    /// <typeparam name="T">The type of the item to deserialize.</typeparam>
+    /// <param name="s">The JSON string.</param>
+    /// <returns>T</returns>
+    public static T? FromJson<T>(this byte[] s)
+    {
+        using var memoryStream = new MemoryStream(s);
+        using var streamReader = new StreamReader(memoryStream);
+        using JsonReader reader = new JsonTextReader(streamReader);
+        var jsonSerializer = new JsonSerializer();
+        jsonSerializer.Converters.Add(new VersionConverter());
+        return jsonSerializer.Deserialize<T>(reader);
+    }
+
     #endregion
 
     /// <summary>

@@ -5,39 +5,51 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.Core.Enums;
-using GuardRail.Core.Helpers;
 using GuardRail.Hardware.Common;
+using GuardRail.Logic.Commands.Models;
 
 namespace GuardRail.Logic.Commands.Implementations;
 
 /// <summary>
-/// Handles the <see cref="CommandType.GetAvailableAccessPoints"/> command type.
+/// Handles the <see cref="CommandType.UnlockDoor"/> command type.
 /// </summary>
-public sealed class GetAvailableAccessPointsTypedCommandHandler(
+public sealed class UnlockDoorTypedCommandHandler(
     IEnumerable<ISupportedHardware> supportedHardware,
     HttpClient httpClient)
-    : TypedCommandHandlerBase<AccessPointType>
+    : TypedCommandHandlerBase<UnlockDoorCommandData>
 {
     /// <inheritdoc />
     public override async Task ProcessCommandBody(
         Guid commandId,
-        AccessPointType body,
+        UnlockDoorCommandData? body,
         CancellationToken cancellationToken)
     {
-        var hardware = supportedHardware.FirstOrDefault(x => x.AccessPointType == body);
+        if (body == null)
+        {
+            return;
+        }
+
+        var matchedHardware = supportedHardware
+            .FirstOrDefault(
+                x =>
+                    x.AccessPointType == body.AccessPointType);
+        if (matchedHardware == null)
+        {
+            return;
+        }
+
         await httpClient.PostAsync(
             $"/Command/UpdateCommand?commandId={commandId}&status={CommandStatus.InProgress}",
             new StringContent(
                 "LOADING"),
             cancellationToken);
-        var availableAccessPoints = await hardware
-            !.GetAvailableAccessPoints(
-                cancellationToken);
+        await matchedHardware.UnlockDoor(
+            body,
+            cancellationToken);
         await httpClient.PostAsync(
             $"/Command/UpdateCommand?commandId={commandId}&status={CommandStatus.CompletedSuccessfully}",
             new StringContent(
-                availableAccessPoints
-                    .ToJson()),
+                $"The door {body.HardwareId} was unlocked"),
             cancellationToken);
     }
 
@@ -45,5 +57,5 @@ public sealed class GetAvailableAccessPointsTypedCommandHandler(
     /// The command type associated with this handler.
     /// </summary>
     public static CommandType CommandType =>
-        CommandType.GetAvailableAccessPoints;
+        CommandType.UnlockDoor;
 }

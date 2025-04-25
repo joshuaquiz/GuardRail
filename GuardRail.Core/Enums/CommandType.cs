@@ -13,5 +13,10 @@ public enum CommandType : long
     /// <summary>
     /// A command to list all access points of a type connected to the local system.
     /// </summary>
-    GetAvailableAccessPoints = 1
+    GetAvailableAccessPoints = 1,
+
+    /// <summary>
+    /// A command to unlock a door.
+    /// </summary>
+    UnlockDoor = 2
 }

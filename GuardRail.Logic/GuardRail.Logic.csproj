@@ -5,9 +5,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="9.0.4" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\GuardRail.Core.Models\GuardRail.Core.Models.csproj" />
     <ProjectReference Include="..\GuardRail.Core\GuardRail.Core.csproj" />
     <ProjectReference Include="..\GuardRail.Database.Main\GuardRail.Database.Main.csproj" />
     <ProjectReference Include="..\GuardRail.Hardware.Common\GuardRail.Hardware.Common.csproj" />
+    <ProjectReference Include="..\SupportedHardware\GuardRail.Hardware.Common\GuardRail.Hardware.Common.csproj" />
   </ItemGroup>
 </Project>

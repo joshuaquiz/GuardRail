@@ -26,14 +26,14 @@ public static class Program
             builder.Configuration.AddJsonFile("appsettings.local.json", true, true);
         }
 
-        builder.Services.AddWindowsService();
+        //builder.Services.AddWindowsService();
 #if DEBUG
         builder.Services
-            .AddSingleton<DevelopmentHttpMessageHandlerOverride>()
+            .AddSingleton<HttpOverrides.DevelopmentHttpMessageHandlerOverride>()
             .AddSingleton(
                 serviceProvider =>
                     new HttpClient(
-                        serviceProvider.GetRequiredService<DevelopmentHttpMessageHandlerOverride>())
+                        serviceProvider.GetRequiredService<HttpOverrides.DevelopmentHttpMessageHandlerOverride>())
                     {
                         BaseAddress = new Uri(
                             builder.Configuration["WebHost"] ?? string.Empty,
