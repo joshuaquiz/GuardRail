@@ -16,7 +16,11 @@ public sealed class NetworkHardwareCache : IDisposable
                 key,
                 out var item))
         {
-            // TODO: check to see if the items are different. If not then we can return.
+            if (item.Equals(settings))
+            {
+                return;
+            }
+
             item.Dispose();
             _cache.Remove(key);
         }

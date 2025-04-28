@@ -12,6 +12,7 @@ using System.Net;
 using GuardRail.Hardware.GuardRailCustom.Core;
 using GuardRail.Hardware.GuardRailCustom.Device.BackgroundServices;
 using GuardRail.Hardware.GuardRailCustom.Device.CommandHandlers;
+using System.Net.Sockets;
 
 namespace GuardRail.Hardware.GuardRailCustom.Device;
 
@@ -27,6 +28,20 @@ public class Startup(
         services
             .AddOptions()
             .AddLogging()
+            .AddSingleton(
+                new HardwareDiscoveryPacket
+                {
+                    Port = new IPEndPoint(IPAddress.Loopback, 0).Port,
+                    IpAddress = Dns.GetHostEntry(
+                                        Dns.GetHostName())
+                                    .AddressList
+                                    .FirstOrDefault(x =>
+                                        x.AddressFamily == AddressFamily.InterNetwork)
+                                ?? IPAddress.Parse(
+                                    "127.0.0.1"),
+                    Name = Dns.GetHostName(),
+                    IsRunningOnDevice = false
+                })
             .AddSingleton<GuardRailUdpClientFactory>()
             .AddKeyedSingleton<IUdpCommandHandler, UnLockDoorUdpCommandHandler>(UnLockDoorUdpCommandHandler.CommandName)
             .AddHostedService<DeviceHardwareUdpDiscoveryListenerBackgroundWorker>()

@@ -11,7 +11,7 @@ using Microsoft.Extensions.Hosting;
 namespace GuardRail.Hardware.GuardRailCustom.Core.BackgroundServices;
 
 public abstract class HardwareUdpDiscoveryListenerBackgroundWorkerBase(
-    bool isRunningOnDevice)
+    HardwareDiscoveryPacket hardwareDiscoveryPacket)
     : BackgroundService
 {
     protected abstract ValueTask HandleNewConnectionDetected(
@@ -32,20 +32,12 @@ public abstract class HardwareUdpDiscoveryListenerBackgroundWorkerBase(
             {
                 using (var broadcastUdpClient = new UdpClient())
                 {
-                    var discoveryPacket = new HardwareDiscoveryPacket
-                    {
-                        // TODO: Validate this, if we are already using a port, we should not try to get a new one.
-                        Port = new IPEndPoint(IPAddress.Loopback, 0).Port,
-                        IpAddress = GetLocalIpAddress(),
-                        Name = Dns.GetHostName(),
-                        IsRunningOnDevice = isRunningOnDevice
-                    };
                     broadcastUdpClient.EnableBroadcast = true;
                     var broadcastEndpoint = new IPEndPoint(IPAddress.Broadcast, GuardRailCustomConstants.UdpDiscoveryPort);
                     await broadcastUdpClient
                         .SendEncryptedData(
                             broadcastEndpoint,
-                            discoveryPacket.ToJson(),
+                            hardwareDiscoveryPacket.ToJson(),
                             stoppingToken);
                 }
 
@@ -61,7 +53,7 @@ public abstract class HardwareUdpDiscoveryListenerBackgroundWorkerBase(
                 {
                     var data = result.Response.FromJson<HardwareDiscoveryPacket>();
                     if (data != null
-                        && isRunningOnDevice != data.IsRunningOnDevice)
+                        && hardwareDiscoveryPacket.IsRunningOnDevice != data.IsRunningOnDevice)
                     {
                         gotValidResponses = true;
                         await HandleNewConnectionDetected(
@@ -93,19 +85,5 @@ public abstract class HardwareUdpDiscoveryListenerBackgroundWorkerBase(
         {
             yield return result;
         }
-    }
-
-    private static IPAddress GetLocalIpAddress()
-    {
-        var host = Dns.GetHostEntry(Dns.GetHostName());
-        foreach (var ip in host.AddressList)
-        {
-            if (ip.AddressFamily == AddressFamily.InterNetwork)
-            {
-                return ip;
-            }
-        }
-
-        return IPAddress.Parse("127.0.0.1");
     }
 }

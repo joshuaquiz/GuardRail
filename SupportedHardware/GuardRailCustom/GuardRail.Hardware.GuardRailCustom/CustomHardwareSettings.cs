@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using GuardRail.Hardware.GuardRailCustom.Core;
 
 namespace GuardRail.Hardware.GuardRailCustom;
@@ -6,7 +7,7 @@ namespace GuardRail.Hardware.GuardRailCustom;
 public sealed class CustomHardwareSettings(
     string name,
     GuardRailUdpClient udpClient)
-    : IDisposable
+    : IEqualityComparer<CustomHardwareSettings>, IDisposable
 {
     public string Name { get; } = name;
 
@@ -15,5 +16,20 @@ public sealed class CustomHardwareSettings(
     public void Dispose()
     {
         UdpClient.Dispose();
+    }
+
+    public bool Equals(CustomHardwareSettings? x, CustomHardwareSettings? y)
+    {
+        if (ReferenceEquals(x, y)) return true;
+        if (x is null) return false;
+        if (y is null) return false;
+        if (x.GetType() != y.GetType()) return false;
+        return x.Name == y.Name
+               && x.UdpClient.LocalEp.Equals(y.UdpClient.LocalEp);
+    }
+
+    public int GetHashCode(CustomHardwareSettings obj)
+    {
+        return HashCode.Combine(obj.Name, obj.UdpClient);
     }
 }

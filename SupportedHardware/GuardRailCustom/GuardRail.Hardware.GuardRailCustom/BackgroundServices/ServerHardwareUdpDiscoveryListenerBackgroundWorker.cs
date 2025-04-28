@@ -10,10 +10,11 @@ using Microsoft.Extensions.Logging;
 namespace GuardRail.Hardware.GuardRailCustom.BackgroundServices;
 
 public sealed class ServerHardwareUdpDiscoveryListenerBackgroundWorker(
+    HardwareDiscoveryPacket hardwareDiscoveryPacket,
     NetworkHardwareCache networkHardwareCache,
     IServiceProvider serviceProvider)
     : HardwareUdpDiscoveryListenerBackgroundWorkerBase(
-        false)
+        hardwareDiscoveryPacket)
 {
     protected override ValueTask HandleNewConnectionDetected(
         HardwareDiscoveryPacket data,

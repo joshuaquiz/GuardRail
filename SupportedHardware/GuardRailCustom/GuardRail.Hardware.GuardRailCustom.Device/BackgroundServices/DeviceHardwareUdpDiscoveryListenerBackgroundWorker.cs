@@ -10,11 +10,12 @@ using Microsoft.Extensions.Logging;
 namespace GuardRail.Hardware.GuardRailCustom.Device.BackgroundServices;
 
 public sealed class DeviceHardwareUdpDiscoveryListenerBackgroundWorker(
+    HardwareDiscoveryPacket hardwareDiscoveryPacket,
     ILightManager lightManager,
     GuardRailUdpClientFactory udpClientFactory,
     ILogger<DeviceHardwareUdpDiscoveryListenerBackgroundWorker> logger)
     : HardwareUdpDiscoveryListenerBackgroundWorkerBase(
-        true)
+        hardwareDiscoveryPacket)
 {
     protected override async ValueTask HandleNewConnectionDetected(
         HardwareDiscoveryPacket data,

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.Core.Enums;
@@ -24,6 +26,21 @@ public sealed class GuardRailCustomHardware(
         IServiceCollection serviceCollection)
     {
         serviceCollection.AddSingleton<NetworkHardwareCache>();
+        serviceCollection
+            .AddSingleton(
+                new HardwareDiscoveryPacket
+                {
+                    Port = new IPEndPoint(IPAddress.Loopback, 0).Port,
+                    IpAddress = Dns.GetHostEntry(
+                                        Dns.GetHostName())
+                                    .AddressList
+                                    .FirstOrDefault(x =>
+                                        x.AddressFamily == AddressFamily.InterNetwork)
+                                ?? IPAddress.Parse(
+                                    "127.0.0.1"),
+                    Name = Dns.GetHostName(),
+                    IsRunningOnDevice = false
+                });
         serviceCollection.AddSingleton<ISupportedHardware, GuardRailCustomHardware>();
         serviceCollection.AddHostedService<ServerHardwareUdpDiscoveryListenerBackgroundWorker>();
         return serviceCollection;
