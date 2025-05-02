@@ -74,9 +74,10 @@ public abstract class CoreDoorManager<TCoreDoorManager, TDoorConfigurationType> 
         /*if (LockableDoorHardwareManager is not null)
         {
             await LockableDoorHardwareManager.DisposeAddressAsync(DoorConfiguration.DoorAddress);
-        }
-        await DoorManager.DisposeAddressAsync(
-            DoorConfiguration.DoorAddress);*/
+        }*/
+        await LockableDoorHardwareManager
+            .DisposeAddressAsync(
+                DoorConfiguration.DoorAddress);
     }
 
     public async ValueTask InitAsync()

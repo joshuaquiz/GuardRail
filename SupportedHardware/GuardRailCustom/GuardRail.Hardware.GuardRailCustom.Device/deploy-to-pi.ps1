@@ -42,7 +42,7 @@ try {
     New-Item -ItemType Directory -Path $tempDir | Out-Null
 
     # Build the project
-    dotnet publish "GuardRail.Hardware.GuardRailCustom.Device.csproj" -c Release -o $tempDir
+    dotnet publish "GuardRail.Hardware.GuardRailCustom.Device.csproj" -c Debug -o $tempDir
     
     if ($LASTEXITCODE -ne 0) {
         Write-Host "Failed to build the project." -ForegroundColor Red

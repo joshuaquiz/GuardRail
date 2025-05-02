@@ -55,20 +55,18 @@ sudo apt-get install -y curl libunwind8 gettext apt-transport-https git
 echo "Installing .NET 9..."
 # Add Microsoft package repository
 sudo curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel STS
+
 echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
 echo 'export PATH=$PATH:$HOME/.dotnet' >> ~/.bashrc
+echo 'export GUARDRAIL_DIR=$HOME/guardrail' >> ~/.bashrc
 
 # Set environment variables for current session
 export DOTNET_ROOT=$HOME/.dotnet
 export PATH=$PATH:$HOME/.dotnet
-
-# Verify installation
-$HOME/.dotnet/dotnet --version
+export GUARDRAIL_DIR=$HOME/guardrail
 
 # Create directory for GuardRail
 echo "Setting up GuardRail project..."
-GUARDRAIL_DIR="/home/$USERNAME/guardrail"
-echo "export GUARDRAIL_DIR=$GUARDRAIL_DIR" >> ~/.bashrc
 
 # Create the systemd service file
 echo "Creating systemd service..."
@@ -80,7 +78,7 @@ After=network.target
 [Service]
 User=root
 WorkingDirectory=$GUARDRAIL_DIR
-ExecStart=/usr/bin/dotnet $GUARDRAIL_DIR/GuardRail.Hardware.GuardRailCustom.Device.dll
+ExecStart=$DOTNET_ROOT $GUARDRAIL_DIR/GuardRail.Hardware.GuardRailCustom.Device.dll
 Restart=always
 # Restart service after 10 seconds if it crashes
 RestartSec=10
