@@ -33,7 +33,7 @@ public sealed class GuardRailUdpClientFactory(
                         .GetRequiredKeyedService<IUdpCommandHandler>(
                             udpResponse.CommandName)
                         .HandleCommand(
-                            udpResponse,
+                            udpResponse.Body ?? string.Empty,
                             cancellationToken);
             _ = _guardRailUdpClient.StartReceivingData(
                 CancellationToken.None);

@@ -78,7 +78,7 @@ After=network.target
 [Service]
 User=root
 WorkingDirectory=$GUARDRAIL_DIR
-ExecStart=$DOTNET_ROOT $GUARDRAIL_DIR/GuardRail.Hardware.GuardRailCustom.Device.dll
+ExecStart=dotnet $GUARDRAIL_DIR/GuardRail.Hardware.GuardRailCustom.Device.dll
 Restart=always
 # Restart service after 10 seconds if it crashes
 RestartSec=10

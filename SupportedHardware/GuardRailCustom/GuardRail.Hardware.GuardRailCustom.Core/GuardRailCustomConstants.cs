@@ -7,6 +7,7 @@ public static class GuardRailCustomConstants
 
     public static class UdpCommandNames
     {
+        public const string Connect = nameof(Connect);
         public const string UnLockDoor = nameof(UnLockDoor);
     }
 }

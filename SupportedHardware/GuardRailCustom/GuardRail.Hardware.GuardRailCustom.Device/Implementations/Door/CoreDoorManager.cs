@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using GuardRail.Core.Helpers;
 using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Door;
 using Microsoft.Extensions.Logging;
-using UnitsNet;
 
 namespace GuardRail.Hardware.GuardRailCustom.Device.Implementations.Door;
 
@@ -84,7 +83,7 @@ public abstract class CoreDoorManager<TCoreDoorManager, TDoorConfigurationType> 
     {
         Logger.LogGuardRailDebug("Starting door manager");
         await UnLockAsync(
-            TimeSpan.FromSeconds(5),
+            TimeSpan.FromMicroseconds(500),
             CancellationToken.None);
     }
 }

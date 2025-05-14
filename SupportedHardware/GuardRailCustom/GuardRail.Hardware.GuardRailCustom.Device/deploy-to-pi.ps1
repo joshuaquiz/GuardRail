@@ -42,7 +42,7 @@ try {
     New-Item -ItemType Directory -Path $tempDir | Out-Null
 
     # Build the project
-    dotnet publish "GuardRail.Hardware.GuardRailCustom.Device.csproj" -c Debug -o $tempDir
+    dotnet publish "GuardRail.Hardware.GuardRailCustom.Device.csproj" -c Production -o $tempDir
     
     if ($LASTEXITCODE -ne 0) {
         Write-Host "Failed to build the project." -ForegroundColor Red
@@ -85,8 +85,10 @@ try {
     }
 
     # Step 2: Make the script executable and running it
-    Write-Host "Making script executable and running it..." -ForegroundColor Cyan
-    ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no -v -p 22 $PiUsername@$PiHostname "sudo chmod +x /home/$PiUsername/pi-setup.sh && sudo /home/$PiUsername/pi-setup.sh --username $PiUsername"
+    Write-Host "Making script executable..." -ForegroundColor Cyan
+    ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no -v -p 22 $PiUsername@$PiHostname "sudo chmod +x /home/$PiUsername/pi-setup.sh"
+    Write-Host "Running script..." -ForegroundColor Cyan
+    ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no -v -p 22 $PiUsername@$PiHostname "sudo /home/$PiUsername/pi-setup.sh --username $PiUsername"
     
     if ($LASTEXITCODE -ne 0) {
         Write-Host "Failed to execute setup script on Raspberry Pi." -ForegroundColor Red

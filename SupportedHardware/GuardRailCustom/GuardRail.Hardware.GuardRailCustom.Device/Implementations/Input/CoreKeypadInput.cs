@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Communication;
 using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Input.Keypad;
 using Microsoft.Extensions.Logging;
 
@@ -10,7 +9,6 @@ namespace GuardRail.Hardware.GuardRailCustom.Device.Implementations.Input;
 public abstract class CoreKeypadInput<TKeypadInput, TKeypadConfiguration, TKeypadConfigurationType>(
     TKeypadConfiguration keypadConfiguration,
     IKeypadHardwareManager<TKeypadConfigurationType>? keypadHardwareManager,
-    ICentralServerCommunication centralServerCommunication,
     ILogger<TKeypadInput> logger)
     : IKeypadInput
     where TKeypadInput : CoreKeypadInput<TKeypadInput, TKeypadConfiguration, TKeypadConfigurationType>
@@ -18,7 +16,6 @@ public abstract class CoreKeypadInput<TKeypadInput, TKeypadConfiguration, TKeypa
 {
     protected readonly TKeypadConfiguration KeypadConfiguration = keypadConfiguration;
     protected readonly IKeypadHardwareManager<TKeypadConfigurationType>? KeypadHardwareManager = keypadHardwareManager;
-    protected readonly ICentralServerCommunication CentralServerCommunication = centralServerCommunication;
     protected readonly ILogger<TKeypadInput> Logger = logger;
 
     /// <inheritdoc />

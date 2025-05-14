@@ -24,28 +24,45 @@ public class Startup(
     {
         DeviceConstants.DeviceId = Dns.GetHostName();
         services.AddLogging(
-            x => x.AddConsole());
+            x =>
+            {
+                x.ClearProviders();
+                x.AddConsole();
+                x.SetMinimumLevel(LogLevel.Trace);
+            });
         services
             .AddOptions()
             .AddLogging()
             .AddSingleton(
                 new HardwareDiscoveryPacket
                 {
-                    Port = new IPEndPoint(IPAddress.Loopback, 0).Port,
+                    Port = GetAvailablePort(),
                     IpAddress = Dns.GetHostEntry(
                                         Dns.GetHostName())
                                     .AddressList
                                     .FirstOrDefault(x =>
-                                        x.AddressFamily == AddressFamily.InterNetwork)
+                                        x.AddressFamily == AddressFamily.InterNetwork
+                                        && !x.ToString().StartsWith("127"))
                                 ?? IPAddress.Parse(
                                     "127.0.0.1"),
                     Name = Dns.GetHostName(),
-                    IsRunningOnDevice = false
+                    IsRunningOnDevice = true
                 })
             .AddSingleton<GuardRailUdpClientFactory>()
+            .AddKeyedSingleton<IUdpCommandHandler, ConnectUdpCommandHandler>(ConnectUdpCommandHandler.CommandName)
             .AddKeyedSingleton<IUdpCommandHandler, UnLockDoorUdpCommandHandler>(UnLockDoorUdpCommandHandler.CommandName)
-            .AddHostedService<DeviceHardwareUdpDiscoveryListenerBackgroundWorker>()
+            .AddHostedService<UdpListenerBackgroundWorker>()
+            .AddHostedService<DeviceHardwareUdpDiscoveryBroadcasterBackgroundWorker>()
             .AddGuardRailIntegratedHardware(configuration);
+    }
+
+    private static int GetAvailablePort()
+    {
+        var listener = new TcpListener(IPAddress.Loopback, 0);
+        listener.Start();
+        var port = ((IPEndPoint)listener.LocalEndpoint).Port;
+        listener.Stop();
+        return port;
     }
 
     public void Configure(
@@ -54,7 +71,9 @@ public class Startup(
     {
         var inits = app.ApplicationServices.GetServices<IAsyncInit>().ToList();
         var logger = app.ApplicationServices.GetRequiredService<ILogger<Startup>>();
+        var hwp = app.ApplicationServices.GetRequiredService<HardwareDiscoveryPacket>();
         logger.LogDebug($"Initializing items ({inits.Count})");
+        logger.LogDebug($"IP config: {hwp.IpAddress}. Port: {hwp.Port}");
         Task.WhenAll(
             inits
                 .Select(

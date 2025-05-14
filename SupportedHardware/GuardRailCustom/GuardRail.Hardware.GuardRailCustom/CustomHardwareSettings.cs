@@ -25,7 +25,7 @@ public sealed class CustomHardwareSettings(
         if (y is null) return false;
         if (x.GetType() != y.GetType()) return false;
         return x.Name == y.Name
-               && x.UdpClient.LocalEp.Equals(y.UdpClient.LocalEp);
+               && x.UdpClient.RemoteEndPoint.Equals(y.UdpClient.RemoteEndPoint);
     }
 
     public int GetHashCode(CustomHardwareSettings obj)

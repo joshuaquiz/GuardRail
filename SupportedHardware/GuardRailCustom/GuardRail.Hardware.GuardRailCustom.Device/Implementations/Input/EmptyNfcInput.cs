@@ -14,7 +14,7 @@ public sealed class EmptyNfcInput : CoreNfcInput<EmptyNfcInput, INfcConfiguratio
     private readonly ILogger<EmptyNfcInput> _logger;
 
     public EmptyNfcInput(ILogger<EmptyNfcInput> logger)
-        : base(null!, null!, null!, null!)
+        : base(null!, null!, null!)
     {
         _logger = logger;
         _logger.LogGuardRailInformation("Setting up");

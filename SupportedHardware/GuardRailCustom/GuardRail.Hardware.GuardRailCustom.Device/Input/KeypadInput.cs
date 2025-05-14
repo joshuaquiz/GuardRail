@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.Hardware.GuardRailCustom.Device.Configuration;
 using GuardRail.Hardware.GuardRailCustom.Device.Implementations.Input;
-using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Communication;
 using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Feedback.Lights;
 using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Input.Keypad;
 using Microsoft.Extensions.Logging;
@@ -14,12 +13,10 @@ namespace GuardRail.Hardware.GuardRailCustom.Device.Input;
 public sealed class KeypadInput(
     ILightManager lightManager,
     KeypadConfiguration keypadConfiguration,
-    ICentralServerCommunication centralServerCommunication,
     IKeypadHardwareManager<int> keypadHardwareManager,
     ILogger<KeypadInput> logger)
     : CoreKeypadInput<KeypadInput, KeypadConfiguration, int>(keypadConfiguration,
         keypadHardwareManager,
-        centralServerCommunication,
         logger)
 {
     private const int TimerIntervalMilliseconds = 20;

@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Communication;
 using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Input.Nfc;
 using Microsoft.Extensions.Logging;
 
@@ -10,7 +9,6 @@ namespace GuardRail.Hardware.GuardRailCustom.Device.Implementations.Input;
 public abstract class CoreNfcInput<TNfcInput, TNfcConfiguration>(
     TNfcConfiguration nfcConfiguration,
     INfcHardwareManager? nfcHardwareManager,
-    ICentralServerCommunication centralServerCommunication,
     ILogger<TNfcInput> logger)
     : INfcInput
     where TNfcInput : CoreNfcInput<TNfcInput, TNfcConfiguration>
@@ -19,8 +17,6 @@ public abstract class CoreNfcInput<TNfcInput, TNfcConfiguration>(
     public TNfcConfiguration NfcConfiguration { get; } = nfcConfiguration;
 
     public INfcHardwareManager? NfcHardwareManager { get; } = nfcHardwareManager;
-
-    public ICentralServerCommunication CentralServerCommunication { get; } = centralServerCommunication;
 
     /// <inheritdoc />
     public ValueTask InitAsync()

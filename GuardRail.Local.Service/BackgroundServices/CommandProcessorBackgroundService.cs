@@ -51,9 +51,16 @@ public sealed class CommandProcessorBackgroundService(
                     "Completed all command");
             }
 
-            await Task.Delay(
-                TimeSpan.FromSeconds(1),
-                stoppingToken);
+            try
+            {
+                await Task.Delay(
+                    TimeSpan.FromSeconds(5),
+                    stoppingToken);
+            }
+            catch (TaskCanceledException)
+            {
+                // Ignored.
+            }
         }
     }
 }

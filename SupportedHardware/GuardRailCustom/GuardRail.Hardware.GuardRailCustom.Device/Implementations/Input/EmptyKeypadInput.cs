@@ -14,7 +14,7 @@ public sealed class EmptyKeypadInput : CoreKeypadInput<EmptyKeypadInput, IKeypad
     private readonly ILogger<EmptyKeypadInput> _logger;
 
     public EmptyKeypadInput(ILogger<EmptyKeypadInput> logger)
-        : base(null!, null!, null!, null!)
+        : base(null!, null!, null!)
     {
         _logger = logger;
         _logger.LogGuardRailInformation("Starting");

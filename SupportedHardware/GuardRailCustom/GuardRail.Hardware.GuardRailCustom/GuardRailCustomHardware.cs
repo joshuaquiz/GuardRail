@@ -30,12 +30,13 @@ public sealed class GuardRailCustomHardware(
             .AddSingleton(
                 new HardwareDiscoveryPacket
                 {
-                    Port = new IPEndPoint(IPAddress.Loopback, 0).Port,
+                    Port = new IPEndPoint(IPAddress.Loopback, GetAvailablePort()).Port,
                     IpAddress = Dns.GetHostEntry(
                                         Dns.GetHostName())
                                     .AddressList
                                     .FirstOrDefault(x =>
-                                        x.AddressFamily == AddressFamily.InterNetwork)
+                                        x.AddressFamily == AddressFamily.InterNetwork
+                                        && !x.ToString().StartsWith("127"))
                                 ?? IPAddress.Parse(
                                     "127.0.0.1"),
                     Name = Dns.GetHostName(),
@@ -44,6 +45,15 @@ public sealed class GuardRailCustomHardware(
         serviceCollection.AddSingleton<ISupportedHardware, GuardRailCustomHardware>();
         serviceCollection.AddHostedService<ServerHardwareUdpDiscoveryListenerBackgroundWorker>();
         return serviceCollection;
+    }
+
+    private static int GetAvailablePort()
+    {
+        var listener = new TcpListener(IPAddress.Loopback, 0);
+        listener.Start();
+        var port = ((IPEndPoint)listener.LocalEndpoint).Port;
+        listener.Stop();
+        return port;
     }
 
     /// <inheritdoc />

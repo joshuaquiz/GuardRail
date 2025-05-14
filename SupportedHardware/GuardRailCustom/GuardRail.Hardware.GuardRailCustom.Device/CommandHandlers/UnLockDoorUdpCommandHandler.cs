@@ -7,23 +7,26 @@ using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Door;
 using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Feedback.Buzzer;
 using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Feedback.Lights;
 using GuardRail.Logic.Commands.Models;
+using Microsoft.Extensions.Logging;
 
 namespace GuardRail.Hardware.GuardRailCustom.Device.CommandHandlers;
 
 public sealed class UnLockDoorUdpCommandHandler(
     IDoorManager doorManager,
     IBuzzerManager buzzerManager,
-    ILightManager lightManager)
+    ILightManager lightManager,
+    ILogger<UnLockDoorUdpCommandHandler> logger)
     : IUdpCommandHandler
 {
     public static string CommandName =>
         GuardRailCustomConstants.UdpCommandNames.UnLockDoor;
 
     public async ValueTask<string?> HandleCommand(
-        UdpResponse data,
+        string commandBody,
         CancellationToken cancellationToken)
     {
-        var unlockRequest = data.Body?.FromJson<UnlockDoorCommandData>();
+        logger.LogGuardRailInformation($"Processing {CommandName}: {commandBody}");
+        var unlockRequest = commandBody.FromJson<UnlockDoorCommandData>();
         if (unlockRequest == null)
         {
             return null;
