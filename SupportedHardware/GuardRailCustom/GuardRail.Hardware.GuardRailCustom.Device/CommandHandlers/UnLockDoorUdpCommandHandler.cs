@@ -37,7 +37,6 @@ public sealed class UnLockDoorUdpCommandHandler(
             doorManager.UnLockAsync(
                     unlockRequest.UnlockDuration,
                     cancellationToken)
-                .AsTask()
         };
         if (unlockRequest.BuzzerDuration != null)
         {

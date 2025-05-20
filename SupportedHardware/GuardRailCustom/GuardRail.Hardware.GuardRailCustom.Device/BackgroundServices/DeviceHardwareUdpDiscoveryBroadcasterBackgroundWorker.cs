@@ -39,12 +39,19 @@ public sealed class DeviceHardwareUdpDiscoveryBroadcasterBackgroundWorker(
                     broadcastEndpoint,
                     hardwareDiscoveryPacket.ToJson(),
                     stoppingToken);
-            await Task.Delay(
-                TimeSpan.FromSeconds(
-                    udpClientFactory.GetGuardRailUdpClient() == null
-                    ? 5
-                    : 30),
-                stoppingToken);
+            try
+            {
+                await Task.Delay(
+                    TimeSpan.FromSeconds(
+                        udpClientFactory.GetGuardRailUdpClient() == null
+                            ? 5
+                            : 30),
+                    stoppingToken);
+            }
+            catch (OperationCanceledException)
+            {
+                // Ignored.
+            }
         }
     }
 }

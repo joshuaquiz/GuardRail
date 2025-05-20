@@ -27,11 +27,11 @@ public abstract class CoreDoorManager<TCoreDoorManager, TDoorConfigurationType> 
     }
 
     /// <inheritdoc />
-    public virtual async ValueTask UnLockAsync(
+    public virtual async Task UnLockAsync(
         TimeSpan duration,
         CancellationToken cancellationToken)
     {
-        Logger.LogGuardRailDebug("Unlocking door");
+        Logger.LogGuardRailDebug($"Unlocking door for {duration:g}");
         await LockableDoorHardwareManager.UnLockAsync(DoorConfiguration.DoorAddress, cancellationToken);
         if (duration > TimeSpan.Zero)
         {
@@ -42,14 +42,14 @@ public abstract class CoreDoorManager<TCoreDoorManager, TDoorConfigurationType> 
     }
 
     /// <inheritdoc />
-    public virtual async ValueTask LockAsync(
+    public virtual async Task LockAsync(
         CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
     /// <inheritdoc />
-    public virtual async ValueTask OpenAsync(
+    public virtual async Task OpenAsync(
         TimeSpan duration,
         CancellationToken cancellationToken)
     {
@@ -57,7 +57,7 @@ public abstract class CoreDoorManager<TCoreDoorManager, TDoorConfigurationType> 
     }
 
     /// <inheritdoc />
-    public virtual async ValueTask CloseAsync(
+    public virtual async Task CloseAsync(
         CancellationToken cancellationToken)
     {
         throw new NotImplementedException();

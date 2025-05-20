@@ -13,36 +13,36 @@ public sealed class EmptyDoorManager(ILogger<EmptyDoorManager> logger)
     : CoreDoorManager<EmptyDoorManager, int>(null!, null!, null!)
 {
     /// <inheritdoc />
-    public override ValueTask UnLockAsync(
+    public override Task UnLockAsync(
         TimeSpan duration,
         CancellationToken cancellationToken)
     {
         logger.LogGuardRailInformation($"Unlocking for {duration:g}");
-        return ValueTask.CompletedTask;
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc />
-    public override ValueTask LockAsync(
+    public override Task LockAsync(
         CancellationToken cancellationToken)
     {
         logger.LogGuardRailInformation("Locking");
-        return ValueTask.CompletedTask;
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc />
-    public override ValueTask OpenAsync(
+    public override Task OpenAsync(
         TimeSpan duration,
         CancellationToken cancellationToken)
     {
         logger.LogGuardRailInformation($"Opening for {duration:g}");
-        return ValueTask.CompletedTask;
+        return Task.CompletedTask;
     }
 
     /// <inheritdoc />
-    public override ValueTask CloseAsync(
+    public override Task CloseAsync(
         CancellationToken cancellationToken)
     {
         logger.LogGuardRailInformation("Closing");
-        return ValueTask.CompletedTask;
+        return Task.CompletedTask;
     }
 }

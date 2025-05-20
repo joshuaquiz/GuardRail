@@ -54,7 +54,7 @@ public sealed class CommandProcessorBackgroundService(
             try
             {
                 await Task.Delay(
-                    TimeSpan.FromSeconds(5),
+                    TimeSpan.FromSeconds(15),
                     stoppingToken);
             }
             catch (TaskCanceledException)

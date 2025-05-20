@@ -29,41 +29,38 @@ public sealed class UdpListenerBackgroundWorker(
         localListenerUdpClient
             .ConfigureEncryptedTrafficLogging(
                 udpClientLogger);
-        while (!stoppingToken.IsCancellationRequested)
+        (string? Response, IPEndPoint ReceivedFrom)? result;
+        while (!stoppingToken.IsCancellationRequested
+               && (result = await localListenerUdpClient.ReceiveEncryptedData(stoppingToken)) != default)
         {
-            using var cts = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
-            cts.CancelAfter(TimeSpan.FromSeconds(5));
-            (string? Response, IPEndPoint ReceivedFrom)? result;
-            while (!stoppingToken.IsCancellationRequested
-                   && (result = await localListenerUdpClient.ReceiveEncryptedData(cts.Token)) != default)
+            try
             {
-                try
+                var sections = result.Value.Response?.Split(GuardRailCustomConstants.UdpSeparator) ?? [];
+                if (sections.Length != 3)
                 {
-                    logger.LogGuardRailInformation($"Got {result.Value.Response} from {result.Value.ReceivedFrom}");
-                    var sections = result.Value.Response?.Split(GuardRailCustomConstants.UdpSeparator) ?? [];
-                    if (sections.Length != 3)
-                    {
-                        continue;
-                    }
+                    continue;
+                }
 
-                    logger.LogGuardRailInformation($"Sections {sections[0]} {sections[1]} {sections[2]}");
-                    await serviceProvider
-                        .GetRequiredKeyedService<IUdpCommandHandler>(
-                            sections[1])
-                        .HandleCommand(
-                            sections[2],
-                            cts.Token);
-                }
-                catch (OperationCanceledException)
-                {
-                    // Ignored.
-                }
-                catch (Exception e)
-                {
-                    logger.LogGuardRailError(
-                        e,
-                        $"Error processing UDP command: {e.Message}");
-                }
+                logger.LogGuardRailDebug($"Sections {sections[0]} {sections[1]} {sections[2]}");
+                _ = Task.Run(
+                    async () =>
+                        await serviceProvider
+                            .GetRequiredKeyedService<IUdpCommandHandler>(
+                                sections[1])
+                            .HandleCommand(
+                                sections[2],
+                                stoppingToken),
+                    stoppingToken);
+            }
+            catch (OperationCanceledException)
+            {
+                // Ignored.
+            }
+            catch (Exception e)
+            {
+                logger.LogGuardRailError(
+                    e,
+                    $"Error processing UDP command: {e.Message}");
             }
         }
     }

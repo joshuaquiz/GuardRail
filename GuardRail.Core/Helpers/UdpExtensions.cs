@@ -42,7 +42,6 @@ public static class UdpExtensions
     {
         try
         {
-            _logger?.LogGuardRailDebug($"Waiting for data from {udpClient.Client.RemoteEndPoint}");
             var response = await udpClient.ReceiveAsync(cancellationToken);
             var encryptedResponseData = Encoding.UTF8
                 .GetString(

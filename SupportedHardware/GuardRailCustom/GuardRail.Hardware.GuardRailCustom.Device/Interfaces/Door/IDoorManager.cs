@@ -14,8 +14,8 @@ public interface IDoorManager : IAsyncInit, IAsyncDisposable, IDisposable
     /// </summary>
     /// <param name="duration">The duration to leave the door unlocked.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
-    /// <returns>A <see cref="ValueTask"/> representing the work to unlock the door.</returns>
-    public ValueTask UnLockAsync(
+    /// <returns>A <see cref="Task"/> representing the work to unlock the door.</returns>
+    public Task UnLockAsync(
         TimeSpan duration,
         CancellationToken cancellationToken);
 
@@ -23,8 +23,8 @@ public interface IDoorManager : IAsyncInit, IAsyncDisposable, IDisposable
     /// Locks the door.
     /// </summary>
     /// <param name="cancellationToken">A cancellation token.</param>
-    /// <returns>A <see cref="ValueTask"/> representing the work to lock the door.</returns>
-    public ValueTask LockAsync(
+    /// <returns>A <see cref="Task"/> representing the work to lock the door.</returns>
+    public Task LockAsync(
         CancellationToken cancellationToken);
 
     /// <summary>
@@ -32,8 +32,8 @@ public interface IDoorManager : IAsyncInit, IAsyncDisposable, IDisposable
     /// </summary>
     /// <param name="duration">The duration to leave the door open.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
-    /// <returns>A <see cref="ValueTask"/> representing the work to open the door.</returns>
-    public ValueTask OpenAsync(
+    /// <returns>A <see cref="Task"/> representing the work to open the door.</returns>
+    public Task OpenAsync(
         TimeSpan duration,
         CancellationToken cancellationToken);
 
@@ -41,7 +41,7 @@ public interface IDoorManager : IAsyncInit, IAsyncDisposable, IDisposable
     /// Closes the door.
     /// </summary>
     /// <param name="cancellationToken">A cancellation token.</param>
-    /// <returns>A <see cref="ValueTask"/> representing the work to close the door.</returns>
-    public ValueTask CloseAsync(
+    /// <returns>A <see cref="Task"/> representing the work to close the door.</returns>
+    public Task CloseAsync(
         CancellationToken cancellationToken);
 }
