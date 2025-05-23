@@ -1,17 +1,19 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
 namespace GuardRail.Hardware.GuardRailCustom.Device;
 
-public sealed class Program
+public static class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(
+        string[] args)
     {
         AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
-        CreateHostBuilder(args)
+        await CreateHostBuilder(args)
             .Build()
-            .Run();
+            .RunAsync();
     }
 
     private static IHostBuilder CreateHostBuilder(string[] args) =>

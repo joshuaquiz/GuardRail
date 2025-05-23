@@ -5,5 +5,7 @@ namespace GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Input.Nfc;
 /// </summary>
 public interface INfcConfiguration
 {
-    public string SerialPort { get; set; }
+    public int BusId { get; set; }
+
+    public int DeviceAddress { get; set; }
 }

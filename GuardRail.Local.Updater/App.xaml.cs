@@ -20,7 +20,7 @@ public partial class App
 #if DEBUG
         _httpClient.BaseAddress = new Uri("https://localhost:5050/");
 #else
-        HttpClient.BaseAddress = new Uri("https://url.url:5050/");
+        _httpClient.BaseAddress = new Uri("https://url.url:5050/");
 #endif
         Startup += Application_Startup;
     }

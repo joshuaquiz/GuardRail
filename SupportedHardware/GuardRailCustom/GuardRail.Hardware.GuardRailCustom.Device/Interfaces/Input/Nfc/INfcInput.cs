@@ -1,12 +1,5 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
 
 namespace GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Input.Nfc;
 
-public interface INfcInput : IAsyncInit, IAsyncDisposable, IDisposable
-{
-    public ValueTask OnNfcSubmit(
-        string inputData,
-        CancellationToken cancellationToken);
-}
+public interface INfcInput : IHostedService;
