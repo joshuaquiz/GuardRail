@@ -1,3 +1,7 @@
+using System;
+using System.Linq;
+using GuardRail.Core.Helpers;
+using GuardRail.Hardware.GuardRailCustom.Device.Exceptions;
 using GuardRail.Hardware.GuardRailCustom.Device.Interfaces;
 using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Feedback.Lights;
 using Microsoft.Extensions.Configuration;
@@ -10,6 +14,62 @@ namespace GuardRail.Hardware.GuardRailCustom.Device.Implementations.Feedback.Lig
 /// </summary>
 public static class LightSetup
 {
+    private const string SectionName = "Light";
+
+    private static TLightConfiguration ValidateAndParseLightConfiguration<TLightConfiguration, TLightConfigurationType>(
+        this IConfiguration configuration)
+        where TLightConfiguration : class, ILightConfiguration<TLightConfigurationType>, new()
+    {
+        var section = configuration.GetSection(SectionName);
+        var configurationSections = section.GetChildren().ToList();
+        if (configurationSections == null
+            || configurationSections.Count == 0)
+        {
+            throw new InvalidConfigurationException(
+                SectionName,
+                null);
+        }
+
+        var value = configurationSections.ToDictionary(x => x.Path, x => x.Value).ToJson();
+        try
+        {
+            var lightConfiguration = section.Get<TLightConfiguration?>();
+            if (lightConfiguration == null)
+            {
+                throw new InvalidConfigurationException(
+                    SectionName,
+                    value,
+                    " Parsed value is null.");
+            }
+
+            if (lightConfiguration.RedLightAddress is <= 0)
+            {
+                throw new InvalidConfigurationException(
+                    SectionName,
+                    value,
+                    $" {nameof(ILightConfiguration<TLightConfigurationType>.RedLightAddress)} has a value of {lightConfiguration.RedLightAddress}");
+            }
+
+            if (lightConfiguration.GreenLightAddress is <= 0)
+            {
+                throw new InvalidConfigurationException(
+                    SectionName,
+                    value,
+                    $" {nameof(ILightConfiguration<TLightConfigurationType>.GreenLightAddress)} has a value of {lightConfiguration.GreenLightAddress}");
+            }
+
+            return lightConfiguration;
+        }
+        catch (Exception e)
+        {
+            throw new InvalidConfigurationException(
+                SectionName,
+                value,
+                $" Could not parse the value as {typeof(TLightConfiguration).FullName}.",
+                e);
+        }
+    }
+
     /// <summary>
     /// Adds implementations for <see cref="ILightConfiguration{T}"/>, <see cref="ILightManager"/>, and <see cref="ILightManager"/> to manage and control a hardware Light.
     /// </summary>
@@ -30,13 +90,14 @@ public static class LightSetup
         where TLightHardwareManager : class, ILightHardwareManager<TLightConfigurationType>
         where TLightManager : class, ILightManager =>
         services
-            .AddSingleton(configuration.GetSection("Light").Get<TLightConfiguration>() ?? new TLightConfiguration())
-            .AddSingleton<ILightConfiguration<TLightConfigurationType>, TLightConfiguration>()
+            .AddSingleton(configuration.ValidateAndParseLightConfiguration<TLightConfiguration, TLightConfigurationType>())
             .AddSingleton<TLightHardwareManager>()
-            .AddSingleton<ILightHardwareManager<TLightConfigurationType>, TLightHardwareManager>()
-            .AddSingleton<IAsyncInit, TLightHardwareManager>()
-            .AddSingleton<IAsyncInit, TLightManager>()
-            .AddSingleton<ILightManager, TLightManager>();
+            .AddSingleton<TLightManager>()
+            .AddSingleton<ILightConfiguration<TLightConfigurationType>>(x => x.GetRequiredService<TLightConfiguration>())
+            .AddSingleton<ILightHardwareManager<TLightConfigurationType>>(x => x.GetRequiredService<TLightHardwareManager>())
+            .AddSingleton<ILightManager>(x => x.GetRequiredService<TLightManager>())
+            .AddSingleton<IAsyncInit, TLightHardwareManager>(x => x.GetRequiredService<TLightHardwareManager>())
+            .AddSingleton<IAsyncInit, TLightManager>(x => x.GetRequiredService<TLightManager>());
 
     /// <summary>
     /// Adds an empty <see cref="ILightManager"/> configuration.

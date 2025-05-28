@@ -1,11 +1,5 @@
 #if !DEBUG
 using System.Device.Gpio;
-using GuardRail.Hardware.GuardRailCustom.Device.Configuration;
-using GuardRail.Hardware.GuardRailCustom.Device.Feedback.Buzzer;
-using GuardRail.Hardware.GuardRailCustom.Device.Feedback.Door;
-using GuardRail.Hardware.GuardRailCustom.Device.Feedback.Lights;
-using GuardRail.Hardware.GuardRailCustom.Device.Input;
-using GuardRail.Hardware.GuardRailCustom.Device.Input.Nfc;
 using GuardRail.Hardware.GuardRailCustom.Device.Interfaces;
 #endif
 using GuardRail.Hardware.GuardRailCustom.Device.Implementations.Feedback.Buzzer;
@@ -24,11 +18,6 @@ namespace GuardRail.Hardware.GuardRailCustom.Device;
 /// </summary>
 public static class GuardRailIntegratedSetup
 {
-    public static IConfiguration ValidateGuardRailIntegratedHardware(
-        this IConfiguration configuration) =>
-        configuration
-            .ValidateNfcConfiguration<NfcConfiguration>();
-
     public static IServiceCollection AddGuardRailIntegratedHardware(
         this IServiceCollection services,
         IConfiguration configuration) =>

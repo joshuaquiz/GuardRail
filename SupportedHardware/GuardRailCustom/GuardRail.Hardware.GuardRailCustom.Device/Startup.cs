@@ -1,18 +1,17 @@
-using System;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Threading.Tasks;
+using GuardRail.Core.Helpers;
+using GuardRail.Hardware.GuardRailCustom.Core;
+using GuardRail.Hardware.GuardRailCustom.Device.BackgroundServices;
+using GuardRail.Hardware.GuardRailCustom.Device.CommandHandlers;
 using GuardRail.Hardware.GuardRailCustom.Device.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System.Net;
-using GuardRail.Hardware.GuardRailCustom.Core;
-using GuardRail.Hardware.GuardRailCustom.Device.BackgroundServices;
-using GuardRail.Hardware.GuardRailCustom.Device.CommandHandlers;
-using System.Net.Sockets;
-using GuardRail.Core.Helpers;
 
 namespace GuardRail.Hardware.GuardRailCustom.Device;
 
@@ -22,7 +21,6 @@ public class Startup(
     public void ConfigureServices(
         IServiceCollection services)
     {
-        ValidateConfiguration();
         DeviceConstants.DeviceId = Dns.GetHostName();
         services
             .AddSingleton(
@@ -36,7 +34,7 @@ public class Startup(
                                         x.AddressFamily == AddressFamily.InterNetwork
                                         && !x.ToString().StartsWith("127"))
                                 ?? IPAddress.Parse(
-                                    "127.0.0.1"),
+                                    "0.0.0.0"),
                     Name = Dns.GetHostName(),
                     IsRunningOnDevice = true
                 })
@@ -59,23 +57,13 @@ public class Startup(
             .AddKeyedSingleton<IUdpCommandHandler, ConnectUdpCommandHandler>(ConnectUdpCommandHandler.CommandName)
             .AddKeyedSingleton<IUdpCommandHandler, UnLockDoorUdpCommandHandler>(UnLockDoorUdpCommandHandler.CommandName)
             .AddHostedService<UdpListenerBackgroundWorker>()
-            .AddGuardRailIntegratedHardware(configuration)
-            .AddHostedService<DeviceHardwareUdpDiscoveryBroadcasterBackgroundWorker>();
-    }
-
-    private void ValidateConfiguration()
-    {
-        if (configuration == null)
-        {
-            throw new ArgumentNullException(nameof(configuration));
-        }
-
-        configuration.ValidateGuardRailIntegratedHardware();
+            .AddHostedService<DeviceHardwareUdpDiscoveryBroadcasterBackgroundWorker>()
+            .AddGuardRailIntegratedHardware(configuration);
     }
 
     private static int GetAvailablePort()
     {
-        var listener = new TcpListener(IPAddress.Loopback, 0);
+        var listener = new TcpListener(IPAddress.Any, 0);
         listener.Start();
         var port = ((IPEndPoint)listener.LocalEndpoint).Port;
         listener.Stop();

@@ -5,8 +5,8 @@ namespace GuardRail.Hardware.GuardRailCustom.Device.Implementations.Input.Nfc;
 public sealed class NfcConfiguration : INfcConfiguration
 {
     /// <inheritdoc />
-    public int BusId { get; set; } = 1;
+    public int BusId { get; set; }
 
     /// <inheritdoc />
-    public int DeviceAddress { get; set; } = 0x24;
+    public int DeviceAddress { get; set; }
 }

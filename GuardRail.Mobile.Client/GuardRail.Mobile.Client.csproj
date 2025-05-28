@@ -69,20 +69,20 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CommunityToolkit.Maui" Version="10.0.0" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="11.2.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.21" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.21" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="9.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.0" />
-		<PackageReference Include="Microsoft.Maui.Essentials" Version="9.0.21" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.70" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.70" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.5" />
+		<PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="9.0.5" />
+		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.5" />
+		<PackageReference Include="Microsoft.Maui.Essentials" Version="9.0.70" />
 		<PackageReference Include="Plugin.Fingerprint" Version="3.0.0-beta.1" />
 		<PackageReference Include="Plugin.NFC" Version="0.1.26" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\GuardRail.ApiModels\GuardRail.ApiModels.csproj" />
+	  <ProjectReference Include="..\GuardRail.Api.Models\GuardRail.Api.Models.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

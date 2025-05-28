@@ -9,5 +9,6 @@ public static class GuardRailCustomConstants
     {
         public const string Connect = nameof(Connect);
         public const string UnLockDoor = nameof(UnLockDoor);
+        public const string UnlockRequest = nameof(UnlockRequest);
     }
 }

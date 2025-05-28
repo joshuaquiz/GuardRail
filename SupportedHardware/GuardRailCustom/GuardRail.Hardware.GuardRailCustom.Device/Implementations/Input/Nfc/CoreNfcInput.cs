@@ -8,7 +8,6 @@ using Microsoft.Extensions.Logging;
 namespace GuardRail.Hardware.GuardRailCustom.Device.Implementations.Input.Nfc;
 
 public abstract class CoreNfcInput<TNfcInput, TNfcConfiguration>(
-    TNfcConfiguration nfcConfiguration,
     INfcHardwareManager nfcHardwareManager,
     GuardRailUdpClientFactory guardRailUdpClientFactory,
     ILogger<TNfcInput> logger)
@@ -20,7 +19,7 @@ public abstract class CoreNfcInput<TNfcInput, TNfcConfiguration>(
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        _ = Task.Run(
+        Task.Run(
             async () =>
             {
                 await foreach (var tag in nfcHardwareManager.ReadTags(_cancellationTokenSource.Token))
@@ -29,7 +28,7 @@ public abstract class CoreNfcInput<TNfcInput, TNfcConfiguration>(
                     var sendData = guardRailUdpClientFactory
                         .GetGuardRailUdpClient()
                         ?.SendData(
-                            GuardRailCustomConstants.UdpCommandNames.Connect,
+                            GuardRailCustomConstants.UdpCommandNames.UnlockRequest,
                             tag,
                             _cancellationTokenSource.Token);
                     if (sendData != null)
