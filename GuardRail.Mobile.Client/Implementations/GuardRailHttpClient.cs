@@ -5,9 +5,11 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using G3.Maui.Core.Models;
 using GuardRail.Mobile.Client.Exceptions;
 using Microsoft.Maui.Networking;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Devices;
 
 namespace GuardRail.Mobile.Client.Implementations;
@@ -17,11 +19,20 @@ public sealed class GuardRailHttpClient(
         HttpClient httpClient,
         IMemoryCache memoryCache,
         IGuardRailStorage storage,
-        IWiFi wifi)
-    : IGuardRailHttpClient
+        IWiFi wifi,
+        ILogger<BaseHttpClient> logger)
+    : BaseHttpClient(
+        connectivity,
+        httpClient,
+        memoryCache,
+        logger), IGuardRailHttpClient
 {
     private readonly SemaphoreSlim _lookupSemaphore = new(1);
     private readonly ConcurrentDictionary<string, ConcurrentDictionary<HttpMethod, SemaphoreSlim>> _semaphoreSlims = new();
+
+    private readonly IConnectivity _connectivity = connectivity;
+    private readonly HttpClient _httpClient = httpClient;
+    private readonly IMemoryCache _memoryCache = memoryCache;
 
     public async ValueTask<TResponse> GetData<TResponse>(
         string path,
@@ -80,7 +91,7 @@ public sealed class GuardRailHttpClient(
             cancellationToken);
         try
         {
-            var result = await httpClient.PostAsJsonAsync(
+            var result = await _httpClient.PostAsJsonAsync(
                 url,
                 data,
                 cancellationToken);
@@ -93,7 +104,7 @@ public sealed class GuardRailHttpClient(
             }
             else
             {
-                memoryCache.Remove(
+                _memoryCache.Remove(
                     path);
                 return resultModel;
             }
@@ -119,7 +130,7 @@ public sealed class GuardRailHttpClient(
             cancellationToken);
         try
         {
-            return await memoryCache.GetOrCreateAsync(
+            return await _memoryCache.GetOrCreateAsync(
                        path,
                        async item =>
                        {
@@ -128,7 +139,7 @@ public sealed class GuardRailHttpClient(
                                var url = GetUrl(
                                    path,
                                    securityCheck);
-                               var result = await httpClient.GetFromJsonAsync<TResponse>(
+                               var result = await _httpClient.GetFromJsonAsync<TResponse>(
                                                 url,
                                                 cancellationToken)
                                             ?? throw new Exception(
@@ -159,7 +170,7 @@ public sealed class GuardRailHttpClient(
     {
         var user = storage.GetUser();
         if ((user == null || (securityCheck && !user.UseLocalNetwork))
-            && connectivity.NetworkAccess
+            && _connectivity.NetworkAccess
                 is NetworkAccess.Internet
                 or NetworkAccess.ConstrainedInternet)
         {

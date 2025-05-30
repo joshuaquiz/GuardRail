@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="NfcCardEmulator.Views.MainPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="NFC Card Emulator">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="25" Padding="30,0" VerticalOptions="Center">
+
+            <!-- App Title -->
+            <Label x:Name="WelcomeLabel"
+                   Text="NFC Card Emulator"
+                   FontSize="32"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <!-- Status Section -->
+            <Frame BackgroundColor="LightGray" Padding="20" CornerRadius="10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Status" FontSize="18" FontAttributes="Bold" />
+                    
+                    <Label Text="{Binding StatusMessage}"
+                           FontSize="16"
+                           TextColor="{Binding StatusColor}"
+                           HorizontalOptions="Center" />
+                    
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="5">
+                        <Label Grid.Row="0" Grid.Column="0" Text="NFC Available:" FontSize="14" />
+                        <Label Grid.Row="0" Grid.Column="1" Text="{Binding IsNfcAvailable}" FontSize="14" FontAttributes="Bold" />
+                        
+                        <Label Grid.Row="1" Grid.Column="0" Text="Biometric Available:" FontSize="14" />
+                        <Label Grid.Row="1" Grid.Column="1" Text="{Binding IsBiometricAvailable}" FontSize="14" FontAttributes="Bold" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Controls Section -->
+            <Frame BackgroundColor="LightBlue" Padding="20" CornerRadius="10">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Controls" FontSize="18" FontAttributes="Bold" />
+                    
+                    <!-- HCE Toggle -->
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                        <Label Grid.Column="0" Text="Enable HCE Service" FontSize="16" VerticalOptions="Center" />
+                        <Switch Grid.Column="1" IsToggled="{Binding IsHceEnabled}" />
+                    </Grid>
+                    
+                    <!-- Toggle Button -->
+                    <Button Text="{Binding IsHceEnabled, StringFormat='HCE Service: {0}'}"
+                            Command="{Binding ToggleHceCommand}"
+                            BackgroundColor="{Binding IsHceEnabled, Converter={StaticResource BoolToColorConverter}}"
+                            TextColor="White" />
+                    
+                    <!-- Test Biometric Button -->
+                    <Button Text="Test Biometric Authentication"
+                            Command="{Binding TestBiometricCommand}"
+                            BackgroundColor="Orange"
+                            TextColor="White"
+                            IsEnabled="{Binding IsBiometricAvailable}" />
+                    
+                    <!-- Settings Button -->
+                    <Button Text="Settings"
+                            Command="{Binding OpenSettingsCommand}"
+                            BackgroundColor="Gray"
+                            TextColor="White" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Instructions Section -->
+            <Frame BackgroundColor="LightYellow" Padding="20" CornerRadius="10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Instructions" FontSize="18" FontAttributes="Bold" />
+                    
+                    <Label FontSize="14" LineBreakMode="WordWrap">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="1. Ensure NFC and biometric authentication are enabled on your device.&#x0a;" />
+                                <Span Text="2. Enable the HCE service using the toggle above.&#x0a;" />
+                                <Span Text="3. When an NFC reader approaches your device:&#x0a;" />
+                                <Span Text="   • You'll be prompted for biometric authentication&#x0a;" />
+                                <Span Text="   • The app will fetch data from the configured API&#x0a;" />
+                                <Span Text="   • Data will be transmitted to the NFC reader&#x0a;" />
+                                <Span Text="4. Check the status above for real-time updates." />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

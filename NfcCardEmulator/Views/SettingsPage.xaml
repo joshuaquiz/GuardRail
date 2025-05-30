@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="NfcCardEmulator.Views.SettingsPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="Settings">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
+
+            <!-- API Settings -->
+            <Frame BackgroundColor="LightBlue" Padding="15" CornerRadius="10">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="API Configuration" FontSize="18" FontAttributes="Bold" />
+                    
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="API Endpoint URL:" FontSize="14" />
+                        <Entry Text="{Binding ApiEndpointUrl}" 
+                               Placeholder="https://yourapi.example.com/api/getNfcData"
+                               Keyboard="Url" />
+                    </VerticalStackLayout>
+                    
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="JSON Field Name:" FontSize="14" />
+                        <Entry Text="{Binding JsonFieldName}" 
+                               Placeholder="payload" />
+                    </VerticalStackLayout>
+                    
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="HTTP Timeout (seconds):" FontSize="14" />
+                        <Entry Text="{Binding HttpTimeoutSeconds}" 
+                               Placeholder="10"
+                               Keyboard="Numeric" />
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- NFC Settings -->
+            <Frame BackgroundColor="LightGreen" Padding="15" CornerRadius="10">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="NFC Configuration" FontSize="18" FontAttributes="Bold" />
+                    
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="NFC Application ID (AID):" FontSize="14" />
+                        <Entry Text="{Binding NfcApplicationId}" 
+                               Placeholder="A000000123456789" />
+                        <Label Text="Note: Changing AID requires app restart" 
+                               FontSize="12" 
+                               TextColor="Gray" />
+                    </VerticalStackLayout>
+                    
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                        <Label Grid.Column="0" 
+                               Text="Enable HCE Service" 
+                               FontSize="16" 
+                               VerticalOptions="Center" />
+                        <Switch Grid.Column="1" 
+                                IsToggled="{Binding HceServiceEnabled}" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Information -->
+            <Frame BackgroundColor="LightYellow" Padding="15" CornerRadius="10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Information" FontSize="18" FontAttributes="Bold" />
+                    
+                    <Label FontSize="12" LineBreakMode="WordWrap">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="• API Endpoint: The URL where the app will fetch NFC data&#x0a;" />
+                                <Span Text="• JSON Field: The field name in the API response containing the data to transmit&#x0a;" />
+                                <Span Text="• AID: The Application ID that NFC readers will use to select this app&#x0a;" />
+                                <Span Text="• Timeout: Maximum time to wait for API response before failing" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Action Buttons -->
+            <VerticalStackLayout Spacing="10">
+                <Button Text="Save Settings"
+                        Command="{Binding SaveCommand}"
+                        BackgroundColor="Green"
+                        TextColor="White" />
+                
+                <Button Text="Reset to Defaults"
+                        Command="{Binding ResetCommand}"
+                        BackgroundColor="Orange"
+                        TextColor="White" />
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

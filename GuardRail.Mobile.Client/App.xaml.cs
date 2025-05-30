@@ -6,19 +6,19 @@ namespace GuardRail.Mobile.Client;
 public partial class App
 {
     public App(
-        IGuardRailStorage cookbookStorage,
+        IGuardRailStorage guardRailStorage,
         Login login)
     {
-        if (cookbookStorage.GetUser() is null)
+        if (guardRailStorage.GetUser() is null)
         {
-            MainPage = login;
+            Windows[0].Page = login;
         }
         else
         {
-            MainPage = new AppShell();
+            Windows[0].Page = new AppShell();
         }
 
         InitializeComponent();
-        UserAppTheme = cookbookStorage.GetCurrentAppTheme(this).GetAwaiter().GetResult();
+        UserAppTheme = guardRailStorage.GetCurrentAppTheme(this).GetAwaiter().GetResult();
     }
 }

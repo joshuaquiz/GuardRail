@@ -5,10 +5,12 @@ using Microsoft.Maui.Hosting;
 using Microsoft.Maui.Networking;
 using Microsoft.Maui.Storage;
 using System.Net.Http;
+using G3.Maui.Core;
 using GuardRail.Mobile.Client.Implementations;
 using GuardRail.Mobile.Client.Interfaces;
 using GuardRail.Mobile.Client.ViewModels;
 using GuardRail.Mobile.Client.Views;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Devices.Sensors;
 using Plugin.NFC;
@@ -31,16 +33,19 @@ public static class MauiProgram
             });
 #if DEBUG
         builder.Services
-            .AddSingleton(
-                serviceProvider =>
-                    new FakedDataDelegatingHandler(
-                        serviceProvider.GetRequiredService<GuardRailDelegatingHandler>()))
-            .AddSingleton(
-                serviceProvider =>
-                {
-                    var handler = serviceProvider.GetRequiredService<FakedDataDelegatingHandler>();
-                    return new HttpClient(handler);
-                });
+            .AddDevelopmentHttpClient<FakedGuardRailDataDelegatingHandler, GuardRailHttpClient>(
+                (serviceProvider, baseDelegatingHandler, baseUri) =>
+                    new GuardRailHttpClient(
+                        serviceProvider.GetRequiredService<IConnectivity>(),
+                        new HttpClient(
+                            baseDelegatingHandler)
+                        {
+                            BaseAddress = baseUri
+                        },
+                        serviceProvider.GetRequiredService<IMemoryCache>(),
+                        serviceProvider.GetRequiredService<IGuardRailStorage>(),
+                        serviceProvider.GetRequiredService<IWiFi>(),
+                        serviceProvider.GetRequiredService<ILogger<GuardRailHttpClient>>()));
 #else
         builder.Services
             .AddSingleton(
@@ -51,10 +56,9 @@ public static class MauiProgram
                 });
 #endif
         builder.Services
-            .AddMemoryCache()
+            .AddCoreDeviceServices()
             .AddSingleton(SecureStorage.Default)
             .AddSingleton(Preferences.Default)
-            .AddSingleton(Connectivity.Current)
             .AddSingleton(Geolocation.Default)
             .AddSingleton(CrossNFC.Current)
             .AddSingleton(CrossFingerprint.Current);

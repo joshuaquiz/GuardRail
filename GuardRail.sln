@@ -54,6 +54,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuardRail.Hardware.GuardRai
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuardRail.Mobile.Client", "GuardRail.Mobile.Client\GuardRail.Mobile.Client.csproj", "{B4B7A3F7-2C67-445D-4DB8-CAE0DDE9205D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NfcCardEmulator", "NfcCardEmulator\NfcCardEmulator.csproj", "{E1879EB9-0847-5384-06BD-8957FEC3D210}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -130,6 +132,10 @@ Global
 		{B4B7A3F7-2C67-445D-4DB8-CAE0DDE9205D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4B7A3F7-2C67-445D-4DB8-CAE0DDE9205D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B4B7A3F7-2C67-445D-4DB8-CAE0DDE9205D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{E1879EB9-0847-5384-06BD-8957FEC3D210}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1879EB9-0847-5384-06BD-8957FEC3D210}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1879EB9-0847-5384-06BD-8957FEC3D210}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1879EB9-0847-5384-06BD-8957FEC3D210}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
