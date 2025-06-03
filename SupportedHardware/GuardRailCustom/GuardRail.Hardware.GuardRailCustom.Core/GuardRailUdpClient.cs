@@ -14,19 +14,23 @@ namespace GuardRail.Hardware.GuardRailCustom.Core;
 public sealed class GuardRailUdpClient : UdpClient
 {
     private readonly ConcurrentDictionary<Guid, ObservableCollection<UdpResponse>> _pendingRequests = new();
+    private readonly string _encryptionKey;
     private readonly ILogger<GuardRailUdpClient> _logger;
     private readonly CancellationTokenSource _cancellationTokenSource = new();
 
     public IPEndPoint RemoteEndPoint { get; }
 
     public GuardRailUdpClient(
+        string encryptionKey,
         IPEndPoint remoteEndPoint,
         ILogger<GuardRailUdpClient> logger)
         : base(
             remoteEndPoint.Port)
     {
+        _encryptionKey = encryptionKey;
         RemoteEndPoint = remoteEndPoint;
         _logger = logger;
+        Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, 1);
         this.ConfigureEncryptedTrafficLogging(_logger);
     }
 
@@ -48,9 +52,25 @@ public sealed class GuardRailUdpClient : UdpClient
     {
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(_cancellationTokenSource.Token, cancellationToken);
         converter ??= x => x.ToJson();
+        await SendRawData(
+            $"{Guid.NewGuid()}{GuardRailCustomConstants.UdpSeparator}{commandName}{GuardRailCustomConstants.UdpSeparator}{converter(data)}",
+            cts.Token);
+    }
+
+    /// <summary>
+    /// Sends data to the client.
+    /// </summary>
+    /// <param name="data">The data to send.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    public async Task SendRawData(
+        string data,
+        CancellationToken cancellationToken)
+    {
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(_cancellationTokenSource.Token, cancellationToken);
         await this.SendEncryptedData(
             RemoteEndPoint,
-            $"{Guid.NewGuid()}{GuardRailCustomConstants.UdpSeparator}{commandName}{GuardRailCustomConstants.UdpSeparator}{converter(data)}",
+            data,
+            _encryptionKey,
             cts.Token);
     }
 
@@ -97,6 +117,7 @@ public sealed class GuardRailUdpClient : UdpClient
         await this.SendEncryptedData(
             RemoteEndPoint,
             $"{requestId}:{commandName}",
+            _encryptionKey,
             cts.Token);
         return await tcs.Task;
     }
@@ -150,6 +171,7 @@ public sealed class GuardRailUdpClient : UdpClient
         await this.SendEncryptedData(
             RemoteEndPoint,
             $"{requestId}{GuardRailCustomConstants.UdpSeparator}{commandName}{GuardRailCustomConstants.UdpSeparator}{requestConverter(requestData)}",
+            _encryptionKey,
             cts.Token);
         return await tcs.Task;
     }
@@ -197,6 +219,7 @@ public sealed class GuardRailUdpClient : UdpClient
             await this.SendEncryptedData(
                 RemoteEndPoint,
                 $"{requestId}{GuardRailCustomConstants.UdpSeparator}{commandName}{GuardRailCustomConstants.UdpSeparator}{requestConverter(requestData)}",
+                _encryptionKey,
                 cts.Token);
             while (!cts.Token.IsCancellationRequested)
             {
@@ -227,7 +250,7 @@ public sealed class GuardRailUdpClient : UdpClient
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(_cancellationTokenSource.Token, cancellationToken);
         (string? Response, IPEndPoint ReceivedFrom)? result;
         while (!cts.Token.IsCancellationRequested
-               && (result = await this.ReceiveEncryptedData(cts.Token)) != default)
+               && (result = await this.ReceiveEncryptedData(_encryptionKey, cts.Token)) != default)
         {
             try
             {
@@ -299,6 +322,7 @@ public sealed class GuardRailUdpClient : UdpClient
                         await this.SendEncryptedData(
                             result.Value.ReceivedFrom,
                             $"{requestId}{GuardRailCustomConstants.UdpSeparator}{commandName}{GuardRailCustomConstants.UdpSeparator}{result}",
+                            _encryptionKey,
                             cts.Token);
                     }
                 }

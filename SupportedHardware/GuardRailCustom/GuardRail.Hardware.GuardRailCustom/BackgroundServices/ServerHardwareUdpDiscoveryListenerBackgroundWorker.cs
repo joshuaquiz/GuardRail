@@ -32,7 +32,7 @@ public sealed class ServerHardwareUdpDiscoveryListenerBackgroundWorker(
                     udpClientLogger);
             (string? Response, IPEndPoint ReceivedFrom)? result;
             while (!stoppingToken.IsCancellationRequested
-                   && (result = await broadcastResponseUdpClient.ReceiveEncryptedData(stoppingToken)) != default)
+                   && (result = await broadcastResponseUdpClient.ReceiveEncryptedData(GuardRailCustomConstants.DiscoveryKey, stoppingToken)) != default)
             {
                 try
                 {
@@ -62,11 +62,11 @@ public sealed class ServerHardwareUdpDiscoveryListenerBackgroundWorker(
 
                     existingConnection?.Dispose();
                     var guardRailUdpClient = new GuardRailUdpClient(
+                        data.EncryptionKey,
                         new IPEndPoint(data.IpAddress, data.Port),
                         serviceProvider.GetRequiredService<ILogger<GuardRailUdpClient>>());
-                    await guardRailUdpClient.SendData(
-                        GuardRailCustomConstants.UdpCommandNames.Connect,
-                        hardwareDiscoveryPacket,
+                    await guardRailUdpClient.SendRawData(
+                        hardwareDiscoveryPacket.ToJson(),
                         stoppingToken);
                     guardRailUdpClient.OnUnMatchedRequestReceived +=
                         async (udpResponse, ct) =>

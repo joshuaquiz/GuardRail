@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 using GuardRail.Api.Models.Responses;
 using GuardRail.Core.Enums;
 using GuardRail.Core.Helpers;
+using GuardRail.Core.Models;
 using GuardRail.Core.Models.Models;
-using GuardRail.Logic.Commands.Models;
 using Microsoft.Extensions.Logging;
 
 namespace GuardRail.Local.Service.HttpOverrides;
@@ -55,7 +55,7 @@ public partial class DevelopmentHttpMessageHandlerOverride(
                             CreateStringContent(
                                 new List<Command>
                                 {
-                                    new()
+                                    /*new()
                                     {
                                         Guid = Guid.NewGuid(),
                                         LocationGuid = Guid.NewGuid(),
@@ -95,7 +95,7 @@ public partial class DevelopmentHttpMessageHandlerOverride(
                                             TimeSpan.FromSeconds(3),
                                             TimeSpan.FromSeconds(3)).ToJson(),
                                         Attempts = 0
-                                    }
+                                    }*/
                                 }.ToJson())))
             ]),
         new(

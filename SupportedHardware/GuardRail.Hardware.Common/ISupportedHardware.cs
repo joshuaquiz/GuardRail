@@ -1,5 +1,5 @@
 ﻿using GuardRail.Core.Enums;
-using GuardRail.Logic.Commands.Models;
+using GuardRail.Core.Models;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace GuardRail.Hardware.Common;

@@ -2,11 +2,11 @@
 using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.Core.Helpers;
+using GuardRail.Core.Models;
 using GuardRail.Hardware.GuardRailCustom.Core;
 using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Feedback.Buzzer;
 using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Feedback.Door;
 using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Feedback.Lights;
-using GuardRail.Logic.Commands.Models;
 using Microsoft.Extensions.Logging;
 
 namespace GuardRail.Hardware.GuardRailCustom.Device.CommandHandlers;

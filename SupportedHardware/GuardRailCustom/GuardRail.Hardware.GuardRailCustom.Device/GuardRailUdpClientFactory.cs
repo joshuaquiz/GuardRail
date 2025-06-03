@@ -18,6 +18,7 @@ public sealed class GuardRailUdpClientFactory(
         _guardRailUdpClient;
 
     public void InitializeGuardRailUdpClient(
+        string encryptionKey,
         IPAddress ipAddress,
         int port)
     {
@@ -25,6 +26,7 @@ public sealed class GuardRailUdpClientFactory(
         try
         {
             _guardRailUdpClient = new GuardRailUdpClient(
+                encryptionKey,
                 new IPEndPoint(ipAddress, port),
                 logger);
             _guardRailUdpClient.OnUnMatchedRequestReceived +=

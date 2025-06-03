@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -26,6 +27,7 @@ public class Startup(
             .AddSingleton(
                 new HardwareDiscoveryPacket
                 {
+                    EncryptionKey = Guid.NewGuid().ToString(),
                     Port = GetAvailablePort(),
                     IpAddress = Dns.GetHostEntry(
                                         Dns.GetHostName())
@@ -54,9 +56,7 @@ public class Startup(
                 })
             .AddOptions()
             .AddSingleton<GuardRailUdpClientFactory>()
-            .AddKeyedSingleton<IUdpCommandHandler, ConnectUdpCommandHandler>(ConnectUdpCommandHandler.CommandName)
             .AddKeyedSingleton<IUdpCommandHandler, UnLockDoorUdpCommandHandler>(UnLockDoorUdpCommandHandler.CommandName)
-            .AddHostedService<UdpListenerBackgroundWorker>()
             .AddHostedService<DeviceHardwareUdpDiscoveryBroadcasterBackgroundWorker>()
             .AddGuardRailIntegratedHardware(configuration);
     }

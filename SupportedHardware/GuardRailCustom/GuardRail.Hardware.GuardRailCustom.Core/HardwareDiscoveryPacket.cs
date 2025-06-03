@@ -4,6 +4,8 @@ namespace GuardRail.Hardware.GuardRailCustom.Core;
 
 public sealed class HardwareDiscoveryPacket
 {
+    public required string EncryptionKey { get; set; }
+
     public required int Port { get; set; }
 
     public required IPAddress IpAddress { get; set; }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.Core.Enums;
+using GuardRail.Core.Models;
 using GuardRail.Core.Models.Models;
 using GuardRail.Database.Main;
 using GuardRail.Logic.Interfaces;
@@ -15,7 +16,8 @@ namespace GuardRail.Logic.Implementations;
 /// </summary>
 public sealed class AccessPointManagementService(
     IDbContextFactory<GuardRailDbContext> dbContextFactory,
-    ILocationCommunicationService locationCommunicationService)
+    ILocationCommunicationService locationCommunicationService,
+    ICommandManagementService commandManagementService)
     : IAccessPointManagementService
 {
     /// <inheritdoc />
@@ -72,4 +74,22 @@ public sealed class AccessPointManagementService(
             accessPointType,
             timeout,
             cancellationToken);
+
+    public async Task RequestAccess(
+        UnlockRequestCommandData unlockRequest,
+        CancellationToken cancellationToken)
+    {
+        await commandManagementService.AddNewCommand(
+            unlockRequest.LocationId,
+            CommandType.UnlockDoor,
+            unlockRequest.EventTime.Add(unlockRequest.Expiry),
+            0,
+            new UnlockDoorCommandData(
+                unlockRequest.DeviceId,
+                AccessPointType.GuardRailCustom,
+                TimeSpan.FromSeconds(3),
+                TimeSpan.FromSeconds(2),
+                TimeSpan.FromSeconds(3)).ToString(),
+            cancellationToken);
+    }
 }

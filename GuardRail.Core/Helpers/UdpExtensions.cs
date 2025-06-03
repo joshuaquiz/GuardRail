@@ -13,7 +13,7 @@ public static class UdpExtensions
     private static ILogger<UdpClient>? _logger;
 
     public static void ConfigureEncryptedTrafficLogging<T>(
-        this T udpClient,
+        this T _,
         ILogger<T> logger)
         where T : UdpClient
     {
@@ -24,6 +24,7 @@ public static class UdpExtensions
         this UdpClient udpClient,
         IPEndPoint endPoint,
         string data,
+        string encryptionKey,
         CancellationToken cancellationToken)
     {
         _logger?.LogGuardRailDebug($"Sending {data} to non-client endpoint {endPoint}");
@@ -31,13 +32,14 @@ public static class UdpExtensions
             Encoding.UTF8.GetBytes(
                 Encryption.Encrypt(
                     data,
-                    typeof(Encryption).Assembly.FullName!)!),
+                    typeof(Encryption).Assembly.FullName! + encryptionKey)!),
             endPoint,
             cancellationToken);
     }
 
     public static async Task<(string? Response, IPEndPoint ReceivedFrom)?> ReceiveEncryptedData(
         this UdpClient udpClient,
+        string encryptionKey,
         CancellationToken cancellationToken)
     {
         try
@@ -49,7 +51,7 @@ public static class UdpExtensions
             _logger?.LogGuardRailDebug($"Got {encryptedResponseData} from {response.RemoteEndPoint}");
             var decryptedString = Encryption.Decrypt(
                 encryptedResponseData,
-                typeof(Encryption).Assembly.FullName!)!;
+                typeof(Encryption).Assembly.FullName! + encryptionKey)!;
             _logger?.LogGuardRailDebug($"Got {decryptedString} from {response.RemoteEndPoint}");
             return (Response: decryptedString, ReceivedFrom: response.RemoteEndPoint);
         }

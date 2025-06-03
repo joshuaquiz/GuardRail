@@ -2,8 +2,10 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using GuardRail.Api;
+using GuardRail.Hardware.Common;
 using GuardRail.Local.Service.BackgroundServices;
 using GuardRail.Logic.Helpers;
+using GuardRail.Logic.Implementations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -59,6 +61,7 @@ public static class Program
         builder.Services.AddGuardRailCommandHandlers();
         builder.Services.AddGuardRailSupportedHardware();
         builder.Services.AddGuardRailApi();
+        builder.Services.AddSingleton<IAccessRequestProvider, AccessRequestProvider>();
         if (bool.Parse(builder.Configuration["IsAirGapped"] ?? "false"))
         {
             builder.Services.AddGuardRailLocalServices();

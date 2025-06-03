@@ -5,8 +5,8 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.Core.Enums;
+using GuardRail.Core.Models;
 using GuardRail.Hardware.Common;
-using GuardRail.Logic.Commands.Models;
 
 namespace GuardRail.Logic.Commands.Implementations;
 

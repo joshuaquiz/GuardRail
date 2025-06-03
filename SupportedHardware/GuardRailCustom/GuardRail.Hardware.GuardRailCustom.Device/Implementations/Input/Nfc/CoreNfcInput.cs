@@ -1,6 +1,9 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
+using GuardRail.Core.Enums;
 using GuardRail.Core.Helpers;
+using GuardRail.Core.Models;
 using GuardRail.Hardware.GuardRailCustom.Core;
 using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Input.Nfc;
 using Microsoft.Extensions.Logging;
@@ -25,16 +28,26 @@ public abstract class CoreNfcInput<TNfcInput, TNfcConfiguration>(
                 await foreach (var tag in nfcHardwareManager.ReadTags(_cancellationTokenSource.Token))
                 {
                     logger.LogGuardRailDebug($"NFC input submitting {tag}");
-                    var sendData = guardRailUdpClientFactory
-                        .GetGuardRailUdpClient()
-                        ?.SendData(
-                            GuardRailCustomConstants.UdpCommandNames.UnlockRequest,
-                            tag,
-                            _cancellationTokenSource.Token);
-                    if (sendData != null)
+                    var guardRailUdpClient = guardRailUdpClientFactory.GetGuardRailUdpClient();
+                    if (guardRailUdpClient == null)
                     {
-                        await sendData;
+                        return;
                     }
+
+                    using var cts = CancellationTokenSource.CreateLinkedTokenSource(_cancellationTokenSource.Token);
+                    cts.CancelAfter(TimeSpan.FromSeconds(5));
+                    await guardRailUdpClient
+                        .SendData(
+                            GuardRailCustomConstants.UdpCommandNames.UnlockRequest,
+                            new UnlockRequestCommandData(
+                                DateTimeOffset.UtcNow,
+                                TimeSpan.FromSeconds(5),
+                                UnlockTriggerType.Nfc,
+                                tag,
+                                DeviceConstants.DeviceId,
+                                DeviceConstants.LocationId!.Value),
+                            cts.Token);
+
                 }
             },
             _cancellationTokenSource.Token);

@@ -1,7 +1,7 @@
 ﻿using System;
 using GuardRail.Core.Enums;
 
-namespace GuardRail.Logic.Commands.Models;
+namespace GuardRail.Core.Models;
 
 /// <summary>
 /// Data needed for an unlock command.

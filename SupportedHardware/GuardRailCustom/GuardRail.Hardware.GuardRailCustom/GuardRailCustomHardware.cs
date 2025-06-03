@@ -7,10 +7,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.Core.Enums;
 using GuardRail.Core.Helpers;
+using GuardRail.Core.Models;
 using GuardRail.Hardware.Common;
 using GuardRail.Hardware.GuardRailCustom.BackgroundServices;
+using GuardRail.Hardware.GuardRailCustom.CommandHandlers;
 using GuardRail.Hardware.GuardRailCustom.Core;
-using GuardRail.Logic.Commands.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -30,6 +31,7 @@ public sealed class GuardRailCustomHardware(
             .AddSingleton(
                 new HardwareDiscoveryPacket
                 {
+                    EncryptionKey = "FIND",
                     Port = new IPEndPoint(IPAddress.Loopback, GetAvailablePort()).Port,
                     IpAddress = Dns.GetHostEntry(
                                         Dns.GetHostName())
@@ -43,6 +45,8 @@ public sealed class GuardRailCustomHardware(
                     IsRunningOnDevice = false
                 });
         serviceCollection.AddSingleton<ISupportedHardware, GuardRailCustomHardware>();
+        serviceCollection.AddKeyedSingleton<IUdpCommandHandler, UnlockRequestCommandHandler>(UnlockRequestCommandHandler.CommandName);
+        serviceCollection.AddKeyedSingleton<IUdpCommandHandler, ConfirmConnectionCommandHandler>(ConfirmConnectionCommandHandler.CommandName);
         serviceCollection.AddHostedService<ServerHardwareUdpDiscoveryListenerBackgroundWorker>();
         return serviceCollection;
     }
