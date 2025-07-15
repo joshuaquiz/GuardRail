@@ -7,7 +7,7 @@ namespace GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Feedback.Door;
 public interface IDoorConfiguration<T>
 {
     /// <summary>
-    /// The address of the buzzer.
+    /// The address of the door.
     /// </summary>
     public T DoorAddress { get; set; }
 }

@@ -46,6 +46,7 @@ public sealed class NfcHardwareManager(
         logger.LogGuardRailDebug("NFC Task: Starting loop");
         string? lastTarget = null;
         var sameTargetTimes = 0;
+        const int MaxDuplicateTagDetectionCount = 10;
         while (!cancellationToken.IsCancellationRequested)
         {
             var retData = _pn532?.AutoPoll(5, 200, [PollingType.Passive106kbpsISO144443_4A, PollingType.Passive106kbpsISO144443_4B, PollingType.MifareCard]);
@@ -107,7 +108,7 @@ public sealed class NfcHardwareManager(
                 if (currentTarget == lastTarget)
                 {
                     sameTargetTimes++;
-                    if (sameTargetTimes > 10)
+                    if (sameTargetTimes > MaxDuplicateTagDetectionCount)
                     {
                         sameTargetTimes = 0;
                     }
@@ -155,6 +156,7 @@ public sealed class NfcHardwareManager(
     {
         logger.LogGuardRailInformation("Disposing NFC manager");
         _pn532?.Dispose();
+        _device?.Dispose();
         return ValueTask.CompletedTask;
     }
 }

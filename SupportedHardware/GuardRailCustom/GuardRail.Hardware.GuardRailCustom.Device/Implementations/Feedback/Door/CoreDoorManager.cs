@@ -45,7 +45,8 @@ public abstract class CoreDoorManager<TCoreDoorManager, TDoorConfigurationType> 
     public virtual async Task LockAsync(
         CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        Logger.LogGuardRailDebug("Locking door");
+        await LockableDoorHardwareManager.LockAsync(DoorConfiguration.DoorAddress, cancellationToken);
     }
 
     /// <inheritdoc />
@@ -68,22 +69,16 @@ public abstract class CoreDoorManager<TCoreDoorManager, TDoorConfigurationType> 
         DisposeAsync().GetAwaiter().GetResult();
 
     /// <inheritdoc />
-    public virtual async ValueTask DisposeAsync()
-    {
-        /*if (LockableDoorHardwareManager is not null)
-        {
-            await LockableDoorHardwareManager.DisposeAddressAsync(DoorConfiguration.DoorAddress);
-        }*/
+    public virtual async ValueTask DisposeAsync() =>
         await LockableDoorHardwareManager
             .DisposeAddressAsync(
                 DoorConfiguration.DoorAddress);
-    }
 
     public async ValueTask InitAsync()
     {
         Logger.LogGuardRailDebug("Starting door manager");
         await UnLockAsync(
-            TimeSpan.FromMicroseconds(500),
+            TimeSpan.FromMilliseconds(500),
             CancellationToken.None);
     }
 }

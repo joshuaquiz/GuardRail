@@ -50,7 +50,7 @@ public sealed class LockableDoorHardwareManager(
     public ValueTask DisposeAddressAsync(
         int address)
     {
-        logger.LogGuardRailDebug($"Closing pin {doorConfiguration.DoorAddress}");
+        logger.LogGuardRailDebug($"Closing pin {address}");
         gpio.ClosePin(address);
         return ValueTask.CompletedTask;
     }

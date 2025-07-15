@@ -328,7 +328,7 @@ public sealed class GuardRailUdpClient : IDisposable
                         _logger.LogGuardRailInformation($"{requestId}: Sending {processResult} to {result.Value.ReceivedFrom}");
                         await _sendingClient.SendEncryptedData(
                             result.Value.ReceivedFrom,
-                            $"{requestId}{GuardRailCustomConstants.UdpSeparator}{commandName}{GuardRailCustomConstants.UdpSeparator}{result}",
+                            $"{requestId}{GuardRailCustomConstants.UdpSeparator}{commandName}{GuardRailCustomConstants.UdpSeparator}{processResult}",
                             _encryptionKey,
                             cts.Token);
                     }
