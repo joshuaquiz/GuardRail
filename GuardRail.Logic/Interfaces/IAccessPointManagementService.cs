@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.Core.Enums;
+using GuardRail.Core.Models;
 using GuardRail.Core.Models.Models;
 
 namespace GuardRail.Logic.Interfaces;
@@ -58,5 +59,15 @@ public interface IAccessPointManagementService
         Guid locationId,
         AccessPointType accessPointType,
         TimeSpan timeout,
+        CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Lists all non-configured APs for a location.
+    /// </summary>
+    /// <param name="unlockRequest">The request data for this unlock request.</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/>.</param>
+    /// <returns>A <see cref="Task"/> representing the work to get the APs.</returns>
+    public Task RequestAccess(
+        UnlockRequestCommandData unlockRequest,
         CancellationToken cancellationToken);
 }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<!-- NFC Permissions -->
+	<uses-permission android:name="android.permission.NFC" />
+	
+	<!-- Biometric Permissions -->
+	<uses-permission android:name="android.permission.USE_BIOMETRIC" />
+	<uses-permission android:name="android.permission.USE_FINGERPRINT" />
+	
+	<!-- Internet Permission for API calls -->
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+	<!-- NFC Features -->
+	<uses-feature 
+		android:name="android.hardware.nfc" 
+		android:required="true" />
+	<uses-feature 
+		android:name="android.hardware.nfc.hce" 
+		android:required="true" />
+	
+	<!-- Biometric Features -->
+	<uses-feature 
+		android:name="android.hardware.fingerprint" 
+		android:required="false" />
+
+	<application android:allowBackup="true" android:icon="@mipmap/appicon" android:supportsRtl="true">
+		
+		<!-- HCE Service Declaration -->
+		<service
+			android:name="nfccardemu.platforms.android.NfcHceService"
+			android:exported="true"
+			android:permission="android.permission.BIND_NFC_SERVICE">
+			<intent-filter>
+				<action android:name="android.nfc.cardemulation.action.HOST_APDU_SERVICE" />
+			</intent-filter>
+			<meta-data
+				android:name="android.nfc.cardemulation.host_apdu_service"
+				android:resource="@xml/apduservice" />
+		</service>
+
+	</application>
+
+</manifest>

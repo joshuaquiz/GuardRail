@@ -25,6 +25,11 @@ public sealed class GetAvailableAccessPointsTypedCommandHandler(
         CancellationToken cancellationToken)
     {
         var hardware = supportedHardware.FirstOrDefault(x => x.AccessPointType == body);
+        await httpClient.PostAsync(
+            $"/Command/UpdateCommand?commandId={commandId}&status={CommandStatus.InProgress}",
+            new StringContent(
+                "LOADING"),
+            cancellationToken);
         var availableAccessPoints = await hardware
             !.GetAvailableAccessPoints(
                 cancellationToken);

@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using GuardRail.Api.Models.Requests;
 using GuardRail.Core.Enums;
+using GuardRail.Core.Models;
 using GuardRail.Core.Models.Models;
 using GuardRail.Logic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -64,5 +65,16 @@ public sealed class AccessPointController(
                     locationId,
                     accessPointType,
                     timeout,
+                    cancellationToken));
+
+    [HttpGet(nameof(RequestAccess), Name = nameof(RequestAccess))]
+    public async Task RequestAccess(
+        [FromBody]
+        UnlockRequestCommandData unlockRequest,
+        CancellationToken cancellationToken) =>
+        await GhWrappedApiCall(
+            async () =>
+                await accessPointManagementService.RequestAccess(
+                    unlockRequest,
                     cancellationToken));
 }

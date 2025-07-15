@@ -31,15 +31,22 @@ public sealed class AutoUpdateCheckerBackgroundService(
                 stoppingToken);
             if (response?.IsLatest == true)
             {
-                await Task.Delay(
-                    TimeSpan.FromDays(
-                        1)
-                    + TimeSpan.FromSeconds(
-                        Random.Shared.Next(
-                            -100,
-                            100)),
-                    stoppingToken);
-                continue;
+                try
+                {
+                    await Task.Delay(
+                        TimeSpan.FromDays(
+                            1)
+                        + TimeSpan.FromSeconds(
+                            Random.Shared.Next(
+                                -100,
+                                100)),
+                        stoppingToken);
+                    continue;
+                }
+                catch (OperationCanceledException)
+                {
+                    continue;
+                }
             }
 
             // TODO: Trigger update.

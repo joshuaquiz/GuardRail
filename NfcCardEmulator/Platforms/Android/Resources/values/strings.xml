@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NFC Card Emulator</string>
+    <string name="servicedesc">NFC Card Emulation Service with Biometric Authentication</string>
+    <string name="aiddescription">Custom NFC Card Emulation AID</string>
+</resources>

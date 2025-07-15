@@ -6,14 +6,8 @@
     <UserSecretsId>dotnet-GuardRail.Local.Service-fa371ff2-f04a-4e9f-94ca-131e0981296d</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.4" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.4" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.4" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.4" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\GuardRail.Api.Models\GuardRail.Api.Models.csproj" />
     <ProjectReference Include="..\GuardRail.Api\GuardRail.Api.csproj" />
-    <ProjectReference Include="..\GuardRail.Hardware.GuardRailCustom\GuardRail.Hardware.GuardRailCustom.csproj" />
+    <ProjectReference Include="..\SupportedHardware\GuardRailCustom\GuardRail.Hardware.GuardRailCustom\GuardRail.Hardware.GuardRailCustom.csproj" />
   </ItemGroup>
 </Project>

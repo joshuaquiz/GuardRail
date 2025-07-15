@@ -12,7 +12,7 @@ public class VersionConverter : JsonConverter
         JsonWriter writer,
         object value,
         JsonSerializer serializer) =>
-        serializer?.Serialize(writer, value);
+        serializer.Serialize(writer, value);
 
     /// <inheritdoc/>
     public override object ReadJson(
@@ -21,11 +21,6 @@ public class VersionConverter : JsonConverter
         object existingValue,
         JsonSerializer serializer)
     {
-        if (serializer == null)
-        {
-            return new Version();
-        }
-
         var sections = serializer.Deserialize<string>(reader).Split('.');
         return new Version(
             sections.ElementAtOrDefault(0).Convert<int>(),

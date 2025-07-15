@@ -20,6 +20,16 @@ public static class Extensions
 
     #region Serialization Extensions
 
+    private static readonly JsonSerializerSettings SerializerSettings = new()
+    {
+        NullValueHandling = NullValueHandling.Ignore,
+        Converters = new List<JsonConverter>
+        {
+            new VersionConverter(),
+            new IpAddressConverter()
+        }
+    };
+
     /// <summary>
     /// Outputs the object as a JSON string.
     /// </summary>
@@ -29,14 +39,13 @@ public static class Extensions
     /// <returns>string</returns>
     public static string ToJson<T>(
         this T item,
-        JsonSerializerSettings? jsonSerializerSettings = null) =>
-        JsonConvert.SerializeObject(
+        JsonSerializerSettings? jsonSerializerSettings = null)
+    {
+        return JsonConvert.SerializeObject(
             item,
             jsonSerializerSettings
-            ?? new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore
-            });
+            ?? SerializerSettings);
+    }
 
     /// <summary>
     /// Deserialize JSON to type.
@@ -50,6 +59,7 @@ public static class Extensions
         using JsonReader reader = new JsonTextReader(stringReader);
         var jsonSerializer = new JsonSerializer();
         jsonSerializer.Converters.Add(new VersionConverter());
+        jsonSerializer.Converters.Add(new IpAddressConverter());
         return jsonSerializer.Deserialize<T>(reader);
     }
 
@@ -65,6 +75,24 @@ public static class Extensions
         using JsonReader reader = new JsonTextReader(streamReader);
         var jsonSerializer = new JsonSerializer();
         jsonSerializer.Converters.Add(new VersionConverter());
+        jsonSerializer.Converters.Add(new IpAddressConverter());
+        return jsonSerializer.Deserialize<T>(reader);
+    }
+
+    /// <summary>
+    /// Deserialize JSON to type.
+    /// </summary>
+    /// <typeparam name="T">The type of the item to deserialize.</typeparam>
+    /// <param name="s">The JSON string.</param>
+    /// <returns>T</returns>
+    public static T? FromJson<T>(this byte[] s)
+    {
+        using var memoryStream = new MemoryStream(s);
+        using var streamReader = new StreamReader(memoryStream);
+        using JsonReader reader = new JsonTextReader(streamReader);
+        var jsonSerializer = new JsonSerializer();
+        jsonSerializer.Converters.Add(new VersionConverter());
+        jsonSerializer.Converters.Add(new IpAddressConverter());
         return jsonSerializer.Deserialize<T>(reader);
     }
 
