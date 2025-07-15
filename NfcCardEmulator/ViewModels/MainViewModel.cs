@@ -1,7 +1,12 @@
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Extensions.Logging;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Controls;
 using NfcCardEmulator.Models;
 using NfcCardEmulator.Services;
 

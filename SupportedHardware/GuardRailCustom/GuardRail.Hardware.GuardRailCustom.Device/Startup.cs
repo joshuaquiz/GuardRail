@@ -74,6 +74,7 @@ public class Startup(
         IApplicationBuilder app,
         IWebHostEnvironment env)
     {
+        UdpExtensions.ConfigureEncryptedTrafficLogging(app.ApplicationServices.GetRequiredService<ILogger<UdpClient>>());
         var logger = app.ApplicationServices.GetRequiredService<ILogger<Startup>>();
         logger.LogGuardRailInformation("Configuring Application");
         var inits = app.ApplicationServices.GetServices<IAsyncInit>().ToList();

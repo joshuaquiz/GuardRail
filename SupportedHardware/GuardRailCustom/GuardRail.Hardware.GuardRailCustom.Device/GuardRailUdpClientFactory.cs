@@ -19,15 +19,16 @@ public sealed class GuardRailUdpClientFactory(
 
     public void InitializeGuardRailUdpClient(
         string encryptionKey,
-        IPAddress ipAddress,
-        int port)
+        IPEndPoint localEndPoint,
+        IPEndPoint remoteEndPoint)
     {
-        logger.LogGuardRailDebug($"Setting {ipAddress}:{port} as the address for this device's UdpClient");
+        logger.LogGuardRailDebug($"Setting {remoteEndPoint.Address}:{remoteEndPoint.Port} as the address for this device's remote UdpClient connection");
         try
         {
             _guardRailUdpClient = new GuardRailUdpClient(
                 encryptionKey,
-                new IPEndPoint(ipAddress, port),
+                localEndPoint,
+                remoteEndPoint,
                 logger);
             _guardRailUdpClient.OnUnMatchedRequestReceived +=
                 async (udpResponse, cancellationToken) =>
@@ -42,7 +43,7 @@ public sealed class GuardRailUdpClientFactory(
         }
         catch (Exception e)
         {
-            logger.LogGuardRailError(e, $"Setting {ipAddress}:{port} as the address for this device's UdpClient");
+            logger.LogGuardRailError(e, $"Error setting {remoteEndPoint.Address}:{remoteEndPoint.Port} as the address for this device's remote UdpClient connection");
             throw;
         }
     }

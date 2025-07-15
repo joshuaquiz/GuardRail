@@ -1,3 +1,5 @@
+using System;
+
 namespace NfcCardEmulator.Models;
 
 public class AppSettings

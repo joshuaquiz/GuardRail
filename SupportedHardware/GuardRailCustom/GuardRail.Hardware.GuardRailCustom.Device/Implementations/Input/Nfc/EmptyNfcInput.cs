@@ -10,7 +10,7 @@ namespace GuardRail.Hardware.GuardRailCustom.Device.Implementations.Input.Nfc;
 public sealed class EmptyNfcInput : CoreNfcInput<EmptyNfcInput, INfcConfiguration>
 {
     public EmptyNfcInput(ILogger<EmptyNfcInput> logger)
-        : base(null!, null!, null!)
+        : base(null!, null!, null!, null!)
     {
         logger.LogGuardRailInformation("Setting up");
     }

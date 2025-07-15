@@ -14,8 +14,7 @@ namespace GuardRail.Hardware.GuardRailCustom.BackgroundServices;
 public sealed class ServerHardwareUdpDiscoveryListenerBackgroundWorker(
     HardwareDiscoveryPacket hardwareDiscoveryPacket,
     NetworkHardwareCache networkHardwareCache,
-    IServiceProvider serviceProvider,
-    ILogger<GuardRailUdpClient> udpClientLogger)
+    IServiceProvider serviceProvider)
     : BackgroundService
 {
     protected override async Task ExecuteAsync(
@@ -27,9 +26,6 @@ public sealed class ServerHardwareUdpDiscoveryListenerBackgroundWorker(
             broadcastResponseUdpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, 1);
             var localEndpoint = new IPEndPoint(IPAddress.Any, GuardRailCustomConstants.UdpDiscoveryPort);
             broadcastResponseUdpClient.Client.Bind(localEndpoint);
-            broadcastResponseUdpClient
-                .ConfigureEncryptedTrafficLogging(
-                    udpClientLogger);
             (string? Response, IPEndPoint ReceivedFrom)? result;
             while (!stoppingToken.IsCancellationRequested
                    && (result = await broadcastResponseUdpClient.ReceiveEncryptedData(GuardRailCustomConstants.DiscoveryKey, stoppingToken)) != default)
@@ -63,6 +59,7 @@ public sealed class ServerHardwareUdpDiscoveryListenerBackgroundWorker(
                     existingConnection?.Dispose();
                     var guardRailUdpClient = new GuardRailUdpClient(
                         data.EncryptionKey,
+                        new IPEndPoint(hardwareDiscoveryPacket.IpAddress, hardwareDiscoveryPacket.Port),
                         new IPEndPoint(data.IpAddress, data.Port),
                         serviceProvider.GetRequiredService<ILogger<GuardRailUdpClient>>());
                     await guardRailUdpClient.SendRawData(

@@ -1,4 +1,8 @@
+using System.Net.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Maui.Controls.Hosting;
+using Microsoft.Maui.Hosting;
 using NfcCardEmulator.Services;
 using NfcCardEmulator.ViewModels;
 using NfcCardEmulator.Views;

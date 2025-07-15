@@ -73,15 +73,15 @@ echo "Creating systemd service..."
 sudo bash -c "cat > /etc/systemd/system/guardrail-device.service << EOL
 [Unit]
 Description=GuardRail Device Service
-After=network.target
+After=network-online.target
 
 [Service]
-User=root
+ExecStart=$DOTNET_ROOT/dotnet GuardRail.Hardware.GuardRailCustom.Device.dll
 WorkingDirectory=$GUARDRAIL_DIR
-ExecStart=dotnet $GUARDRAIL_DIR/GuardRail.Hardware.GuardRailCustom.Device.dll
 Restart=always
 # Restart service after 10 seconds if it crashes
 RestartSec=10
+User=root
 KillSignal=SIGINT
 SyslogIdentifier=guardrail-device
 Environment=ASPNETCORE_ENVIRONMENT=Production
@@ -89,6 +89,7 @@ Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
 
 [Install]
 WantedBy=multi-user.target
+
 EOL"
 
 # Enable and start the service

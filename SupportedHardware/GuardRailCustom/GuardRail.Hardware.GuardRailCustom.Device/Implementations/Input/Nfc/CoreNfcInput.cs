@@ -5,6 +5,7 @@ using GuardRail.Core.Enums;
 using GuardRail.Core.Helpers;
 using GuardRail.Core.Models;
 using GuardRail.Hardware.GuardRailCustom.Core;
+using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Feedback.Lights;
 using GuardRail.Hardware.GuardRailCustom.Device.Interfaces.Input.Nfc;
 using Microsoft.Extensions.Logging;
 
@@ -13,6 +14,7 @@ namespace GuardRail.Hardware.GuardRailCustom.Device.Implementations.Input.Nfc;
 public abstract class CoreNfcInput<TNfcInput, TNfcConfiguration>(
     INfcHardwareManager nfcHardwareManager,
     GuardRailUdpClientFactory guardRailUdpClientFactory,
+    ILightManager lightManager,
     ILogger<TNfcInput> logger)
     : INfcInput
     where TNfcInput : CoreNfcInput<TNfcInput, TNfcConfiguration>
@@ -34,6 +36,7 @@ public abstract class CoreNfcInput<TNfcInput, TNfcConfiguration>(
                         return;
                     }
 
+                    await lightManager.TurnOnGreenLightAsync(TimeSpan.FromMilliseconds(300), _cancellationTokenSource.Token);
                     using var cts = CancellationTokenSource.CreateLinkedTokenSource(_cancellationTokenSource.Token);
                     cts.CancelAfter(TimeSpan.FromSeconds(5));
                     await guardRailUdpClient

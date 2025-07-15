@@ -22,11 +22,11 @@ public sealed class DeviceHardwareUdpDiscoveryBroadcasterBackgroundWorker(
     protected override async Task ExecuteAsync(
         CancellationToken stoppingToken)
     {
-        var successfullyConnected = false;
         while (!stoppingToken.IsCancellationRequested)
         {
             try
             {
+                bool successfullyConnected;
                 using (var cts = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken))
                 {
                     cts.CancelAfter(TimeSpan.FromSeconds(5));
@@ -41,6 +41,7 @@ public sealed class DeviceHardwareUdpDiscoveryBroadcasterBackgroundWorker(
                     {
                         using var guardRailUdpClient = new GuardRailUdpClient(
                             hardwareDiscoveryPacket.EncryptionKey,
+                            new IPEndPoint(hardwareDiscoveryPacket.IpAddress, hardwareDiscoveryPacket.Port),
                             existingConnection.RemoteEndPoint,
                             udpClientLogger);
                         result = await guardRailUdpClient.GetDataAsync<string, HardwareDiscoveryPacket>(
@@ -59,8 +60,8 @@ public sealed class DeviceHardwareUdpDiscoveryBroadcasterBackgroundWorker(
                             existingConnection?.Dispose();
                             udpClientFactory.InitializeGuardRailUdpClient(
                                 result!.EncryptionKey,
-                                result.IpAddress,
-                                result.Port);
+                                new IPEndPoint(hardwareDiscoveryPacket.IpAddress, hardwareDiscoveryPacket.Port),
+                                new IPEndPoint(result.IpAddress, result.Port));
                             await NotifySuccessfullyConnected(
                                     CancellationToken.None)
                                 .ConfigureAwait(false);
@@ -96,13 +97,7 @@ public sealed class DeviceHardwareUdpDiscoveryBroadcasterBackgroundWorker(
     {
         using var broadcastUdpClient = new UdpClient();
         broadcastUdpClient.EnableBroadcast = true;
-        broadcastUdpClient
-            .ConfigureEncryptedTrafficLogging(
-                udpClientLogger);
         var broadcastEndpoint = new IPEndPoint(IPAddress.Broadcast, GuardRailCustomConstants.UdpDiscoveryPort);
-        broadcastUdpClient
-            .ConfigureEncryptedTrafficLogging(
-                udpClientLogger);
         await broadcastUdpClient
             .SendEncryptedData(
                 broadcastEndpoint,
@@ -113,9 +108,6 @@ public sealed class DeviceHardwareUdpDiscoveryBroadcasterBackgroundWorker(
         localListenerUdpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, 1);
         var localEndpoint = new IPEndPoint(hardwareDiscoveryPacket.IpAddress, hardwareDiscoveryPacket.Port);
         localListenerUdpClient.Client.Bind(localEndpoint);
-        localListenerUdpClient
-            .ConfigureEncryptedTrafficLogging(
-                udpClientLogger);
         var resultString = await localListenerUdpClient.ReceiveEncryptedData(
             hardwareDiscoveryPacket.EncryptionKey,
             cancellationToken);

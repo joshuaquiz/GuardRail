@@ -11,27 +11,34 @@ using Microsoft.Extensions.Logging;
 
 namespace GuardRail.Hardware.GuardRailCustom.Core;
 
-public sealed class GuardRailUdpClient : UdpClient
+public sealed class GuardRailUdpClient : IDisposable
 {
     private readonly ConcurrentDictionary<Guid, ObservableCollection<UdpResponse>> _pendingRequests = new();
     private readonly string _encryptionKey;
+    private readonly UdpClient _receivingClient;
+    private readonly UdpClient _sendingClient;
     private readonly ILogger<GuardRailUdpClient> _logger;
     private readonly CancellationTokenSource _cancellationTokenSource = new();
+
+    public IPEndPoint LocalEndPoint { get; }
 
     public IPEndPoint RemoteEndPoint { get; }
 
     public GuardRailUdpClient(
         string encryptionKey,
+        IPEndPoint localEndPoint,
         IPEndPoint remoteEndPoint,
         ILogger<GuardRailUdpClient> logger)
-        : base(
-            remoteEndPoint.Port)
     {
         _encryptionKey = encryptionKey;
-        RemoteEndPoint = remoteEndPoint;
+        _receivingClient = new UdpClient();
+        _sendingClient = new UdpClient();
         _logger = logger;
-        Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, 1);
-        this.ConfigureEncryptedTrafficLogging(_logger);
+        LocalEndPoint = localEndPoint;
+        RemoteEndPoint = remoteEndPoint;
+        _receivingClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, 1);
+        _receivingClient.Client.Bind(LocalEndPoint);
+        _sendingClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, 1);
     }
 
     public event OnUdpRequestReceivedEventHandler? OnUnMatchedRequestReceived;
@@ -67,7 +74,7 @@ public sealed class GuardRailUdpClient : UdpClient
         CancellationToken cancellationToken)
     {
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(_cancellationTokenSource.Token, cancellationToken);
-        await this.SendEncryptedData(
+        await _sendingClient.SendEncryptedData(
             RemoteEndPoint,
             data,
             _encryptionKey,
@@ -114,7 +121,7 @@ public sealed class GuardRailUdpClient : UdpClient
                         out _);
                 });
         _pendingRequests.TryAdd(requestId, incomingData);
-        await this.SendEncryptedData(
+        await _sendingClient.SendEncryptedData(
             RemoteEndPoint,
             $"{requestId}:{commandName}",
             _encryptionKey,
@@ -168,7 +175,7 @@ public sealed class GuardRailUdpClient : UdpClient
                         out _);
                 });
         _pendingRequests.TryAdd(requestId, incomingData);
-        await this.SendEncryptedData(
+        await _sendingClient.SendEncryptedData(
             RemoteEndPoint,
             $"{requestId}{GuardRailCustomConstants.UdpSeparator}{commandName}{GuardRailCustomConstants.UdpSeparator}{requestConverter(requestData)}",
             _encryptionKey,
@@ -216,7 +223,7 @@ public sealed class GuardRailUdpClient : UdpClient
         _pendingRequests.TryAdd(requestId, incomingData);
         try
         {
-            await this.SendEncryptedData(
+            await _sendingClient.SendEncryptedData(
                 RemoteEndPoint,
                 $"{requestId}{GuardRailCustomConstants.UdpSeparator}{commandName}{GuardRailCustomConstants.UdpSeparator}{requestConverter(requestData)}",
                 _encryptionKey,
@@ -250,7 +257,7 @@ public sealed class GuardRailUdpClient : UdpClient
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(_cancellationTokenSource.Token, cancellationToken);
         (string? Response, IPEndPoint ReceivedFrom)? result;
         while (!cts.Token.IsCancellationRequested
-               && (result = await this.ReceiveEncryptedData(_encryptionKey, cts.Token)) != default)
+               && (result = await _receivingClient.ReceiveEncryptedData(_encryptionKey, cts.Token)) != default)
         {
             try
             {
@@ -319,7 +326,7 @@ public sealed class GuardRailUdpClient : UdpClient
                     if (processResult != null)
                     {
                         _logger.LogGuardRailInformation($"{requestId}: Sending {processResult} to {result.Value.ReceivedFrom}");
-                        await this.SendEncryptedData(
+                        await _sendingClient.SendEncryptedData(
                             result.Value.ReceivedFrom,
                             $"{requestId}{GuardRailCustomConstants.UdpSeparator}{commandName}{GuardRailCustomConstants.UdpSeparator}{result}",
                             _encryptionKey,
@@ -336,10 +343,11 @@ public sealed class GuardRailUdpClient : UdpClient
         }
     }
 
-    public new void Dispose()
+    public void Dispose()
     {
         _cancellationTokenSource.Cancel();
         _pendingRequests.Clear();
-        base.Dispose();
+        _receivingClient.Dispose();
+        _sendingClient.Dispose();
     }
 }

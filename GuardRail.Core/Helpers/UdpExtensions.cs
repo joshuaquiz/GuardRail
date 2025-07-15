@@ -12,10 +12,8 @@ public static class UdpExtensions
 {
     private static ILogger<UdpClient>? _logger;
 
-    public static void ConfigureEncryptedTrafficLogging<T>(
-        this T _,
-        ILogger<T> logger)
-        where T : UdpClient
+    public static void ConfigureEncryptedTrafficLogging(
+        ILogger<UdpClient> logger)
     {
         _logger = logger;
     }
@@ -27,7 +25,7 @@ public static class UdpExtensions
         string encryptionKey,
         CancellationToken cancellationToken)
     {
-        _logger?.LogGuardRailDebug($"Sending {data} to non-client endpoint {endPoint}");
+        _logger?.LogGuardRailDebug($"Sending {data} to endpoint {endPoint}");
         await udpClient.SendAsync(
             Encoding.UTF8.GetBytes(
                 Encryption.Encrypt(

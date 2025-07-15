@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Plugin.Fingerprint;
 using Plugin.Fingerprint.Abstractions;
 
